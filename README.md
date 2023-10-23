@@ -1,11 +1,6 @@
-## My Project
+## Connected Mobility Solution on AWS
 
-TODO: Fill this README out!
-
-Be sure to:
-
-* Change the title in this README
-* Edit your repository description on GitHub
+This is a placeholder for the Connected Mobility Solution on AWS solution.
 
 ## Security
 
