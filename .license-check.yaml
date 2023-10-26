@@ -1,0 +1,53 @@
+allowedLicenses:
+- (Apache-2.0 OR MPL-1.1)
+- (BSD-3-Clause OR GPL-2.0)
+- (MIT AND BSD-3-Clause)
+- (MIT AND Zlib)
+- (MIT OR Apache-2.0)
+- (MIT OR CC0-1.0)
+- (WTFPL OR MIT)
+- 0BSD
+- 3-Clause BSD License
+- Apache 1.1
+- Apache 2.0
+- Apache License 2.0
+- Apache Software License
+- Apache Software License; BSD License
+- Apache*
+- Apache-2.0
+- BSD
+- BSD License
+- BSD License, Apache Software License
+- BSD*
+- BSD-2-Clause
+- BSD-3-Clause
+- CC-BY-3.0
+- CC-BY-4.0
+- CC0 1.0 Universal (CC0 1.0) Public Domain Dedication
+- CC0-1.0
+- 'Custom: https://github.com/tmcw/jsonlint'
+- EPL-1.0
+- FreeBSD
+- Freely Distributable
+- Freely Distributable; MIT License
+- GNU General Public License v2 (GPLv2)
+- GNU Lesser General Public License v2 (LGPLv2)
+- ISC
+- ISC License (ISCL)
+- MIT
+- MIT License
+- MIT License, Mozilla Public License 2.0 (MPL 2.0)
+- MIT License; MIT No Attribution License (MIT-0)
+- MIT License; Other/Proprietary License
+- MIT*
+- MPL-2.0
+- Mozilla Public License 2.0 (MPL 2.0)
+- Other/Proprietary License
+- Python Software Foundation License
+- Python Software Foundation License, MIT License
+- The Unlicense (Unlicense)
+- WT*PL
+- WTFPL
+- WTFPL-2.0
+excludedPackages: []
+include: []

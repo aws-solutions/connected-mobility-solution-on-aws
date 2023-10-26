@@ -1,0 +1,238 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+      - id: check-byte-order-marker   # Forbid UTF-8 byte-order markers
+        exclude: (^templates)
+      - id: check-case-conflict       # Check for files with names that would conflict on a case-insensitive
+                                      # filesystem like MacOS HFS+ or Windows FAT.
+        exclude: (^templates)
+      - id: check-json
+        exclude: (^templates)
+      - id: check-yaml
+        exclude: (^source/backstage/examples|^.*/catalog-info.yaml|^templates)
+      - id: check-toml
+        exclude: (^templates)
+      - id: check-merge-conflict
+        exclude: (^templates)
+      - id: check-added-large-files
+        exclude: |
+          (?x)^(
+            ^templates |
+            ^.*/package-lock.json |
+            ^.*/yarn.lock |
+            ^.*/Pipfile.lock
+          )$
+      - id: end-of-file-fixer
+        exclude: (^templates)
+      - id: fix-encoding-pragma
+        exclude: (^templates)
+      - id: trailing-whitespace
+        exclude: (^templates)
+      - id: mixed-line-ending
+        exclude: (^templates)
+      - id: sort-simple-yaml          # Requires explicit files parameter to enable file matching
+        exclude: (^templates)
+      - id: detect-aws-credentials
+        exclude: (^templates)
+        args: ["--credentials-file", "~/.ada/credentials"]
+      - id: detect-private-key
+        exclude: (^templates)
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.5.1
+    hooks:
+      - id: insert-license
+        exclude: (^templates)
+        files: \.py$
+        args:
+          - --license-filepath
+          - ./license_header.txt        # defaults to: LICENSE.txt
+          - --detect-license-in-X-top-lines=3
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.5.1
+    hooks:
+      - id: insert-license
+        exclude: (^templates)
+        files: \.tsx|.ts$
+        args:
+          - --license-filepath
+          - ./license_header.txt        # defaults to: LICENSE.txt
+          - --comment-style
+          - //                            # defaults to:  #
+          - --detect-license-in-X-top-lines=3
+  - repo: https://github.com/psf/black
+    rev: 22.3.0
+    hooks:
+      - id: black
+        exclude: (^templates)
+  - repo: https://github.com/hadialqattan/pycln
+    rev: v2.2.2
+    hooks:
+      - id: pycln
+        exclude: (^templates)
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        name: isort (python)
+        exclude: (^templates)
+        args: ["--profile", "black"]
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.4
+    hooks:
+      - id: bandit
+        exclude: (^templates)
+        args: ["-c", "pyproject.toml"]
+        additional_dependencies: [ "bandit[toml]" ]
+  # - repo: https://github.com/kontrolilo/kontrolilo
+  #   rev: v2.2.0
+  #   hooks:
+  #     - id: license-check-configuration-lint
+  #       exclude: (^templates)
+  #       language: python
+  #     - id: license-check-pipenv
+  #       exclude: (^templates)
+  #       language: python
+  #     - id: license-check-npm
+  #       exclude: (^templates)
+  #       language: python
+  - repo: https://github.com/pypa/pip-audit
+    rev: v2.6.1
+    hooks:
+      - id: pip-audit
+        exclude: (^templates)
+
+  # Local hooks
+  - repo: local
+    hooks:
+      - id: check-bash-syntax
+        exclude: (^templates)
+        name: Check Shell scripts syntax correctness
+        language: system
+        entry: bash -n
+        files: \.sh$
+  - repo: local
+    hooks:
+      - id: detect-empty-files
+        exclude: (^templates)
+        name: Detect empty files in the repo
+        entry: deployment/detect-empty-files.sh
+        language: system
+        pass_filenames: false
+  - repo: local
+    hooks:
+      - id: pylint
+        exclude: (^templates)
+        name: pylint
+        entry: pylint
+        args: ["--extension-pkg-allow-list", "math"]
+        types: [python]
+        language: system
+        require_serial: true
+  - repo: local
+    hooks:
+      - id: mypy
+        exclude: (^templates)
+        name: mypy
+        entry: mypy
+        types_or: [python, pyi]
+        args: ["--strict", "--cache-dir", "/dev/null"]
+        language: system
+        require_serial: true
+  - repo: local
+    hooks:
+      - id: cfn-nag
+        exclude: (^templates)
+        name: cfn-nag
+        entry: deployment/run-cfn-nag.sh
+        files: infrastructure
+        args: ["--no-nested"]
+        language: system
+        types_or: [python, json]
+        pass_filenames: false
+  - repo: local
+    hooks:
+      - id: pytest-jest
+        exclude: (^templates)
+        name: pytest-jest
+        entry: deployment/run-unit-tests.sh
+        args: ["--no-report", "--no-nested"]
+        files: (^source)
+        language: system
+        types_or: [python, javascript, jsx, ts, tsx]
+        pass_filenames: false
+
+
+  # Run module level precommit hooks https://github.com/pre-commit/pre-commit/issues/731#issuecomment-376945745
+  - repo: local
+    hooks:
+      - id: module-alerts-hooks
+        name: CMS Alerts hooks
+        language: script
+        args: ["--module", "alerts", "--files-list"]
+        entry: ./deployment/run_module_hooks.py
+        files: ^templates/modules/cms_alerts_on_aws
+        verbose: true
+        require_serial: true
+
+  - repo: local
+    hooks:
+      - id: module-api-hooks
+        name: CMS API hooks
+        language: script
+        args: ["--module", "api", "--files-list"]
+        entry: ./deployment/run_module_hooks.py
+        files: ^templates/modules/cms_api_on_aws
+        verbose: true
+        require_serial: true
+
+  - repo: local
+    hooks:
+      - id: module-connect-store-hooks
+        name: CMS Connect & Store hooks
+        language: script
+        args: ["--module", "connect_store", "--files-list"]
+        entry: ./deployment/run_module_hooks.py
+        files: ^templates/modules/cms_connect_store_on_aws
+        verbose: true
+        require_serial: true
+  - repo: local
+    hooks:
+      - id: module-ev-battery-health-hooks
+        name: CMS EV Battery Health hooks
+        language: script
+        args: ["--module", "ev_battery_health", "--files-list"]
+        entry: ./deployment/run_module_hooks.py
+        files: ^templates/modules/cms_ev_battery_health_on_aws
+        verbose: true
+        require_serial: true
+  - repo: local
+    hooks:
+      - id: module-provisioning-hooks
+        name: CMS Provisioning hooks
+        language: script
+        args: ["--module", "provisioning", "--files-list"]
+        entry: ./deployment/run_module_hooks.py
+        files: ^templates/modules/cms_provisioning_on_aws
+        verbose: true
+        require_serial: true
+  - repo: local
+    hooks:
+      - id: module-user-authentication-hooks
+        name: CMS User Authentication hooks
+        language: script
+        args: ["--module", "user_authentication", "--files-list"]
+        entry: ./deployment/run_module_hooks.py
+        files: ^templates/modules/cms_user_authentication_on_aws
+        verbose: true
+        require_serial: true
+  - repo: local
+    hooks:
+      - id: module-vehicle-simulator-hooks
+        name: CMS Vehicle Simulator hooks
+        language: script
+        args: ["--module", "vehicle_simulator", "--files-list"]
+        entry: ./deployment/run_module_hooks.py
+        files: ^templates/modules/cms_vehicle_simulator_on_aws
+        verbose: true
+        require_serial: true

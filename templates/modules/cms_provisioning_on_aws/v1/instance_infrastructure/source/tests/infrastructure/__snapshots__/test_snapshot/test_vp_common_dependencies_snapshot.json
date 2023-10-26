@@ -1,0 +1,35 @@
+{
+  "Resources": {
+    "lambdadependencylayerversion80165A25": {
+      "Properties": {
+        "CompatibleArchitectures": [
+          "x86_64",
+          "arm64"
+        ],
+        "CompatibleRuntimes": [
+          "python3.8",
+          "python3.9",
+          "python3.10"
+        ],
+        "Content": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        }
+      },
+      "Type": "AWS::Lambda::LayerVersion"
+    },
+    "vehicleprovisioningdependencylayerarnvalueF5B736C2": {
+      "Properties": {
+        "Description": "Arn for vehicle provisioning dependency layer",
+        "Name": "/dev/cms-provisioning-on-aws-stack-dev/arns/dependency-layer-arn",
+        "Type": "String",
+        "Value": {
+          "Ref": "lambdadependencylayerversion80165A25"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    }
+  }
+}

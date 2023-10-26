@@ -1,0 +1,54 @@
+@startuml cms-vehicle-provisioning-deployment-sequence-diagram
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v14.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/InternetOfThings/IoTCore.puml
+!include AWSPuml/ManagementGovernance/CloudFormation.puml
+!include AWSPuml/SecurityIdentityCompliance/SecretsManager.puml
+
+actor User as user
+
+box Vehicle Provisioning Module Deploy
+participant "$CloudFormationIMG()\nCloud Formation" as cloud_formation << Cloud Formation >>
+participant "$LambdaIMG()\nCustom Resource" as custom_resource << Lambda >>
+participant "$SecretsManagerIMG()\nSecrets Manager" as secrets_manager << Secrets Manager >>
+participant "$IoTCoreIMG()\nIoT Core" as deploy_iot_core << IoT Core>>
+endbox
+
+'Deploy
+user -> cloud_formation++ #CF2465: deploy module
+cloud_formation -> custom_resource++ #D86613: Trigger CREATE
+custom_resource -> deploy_iot_core++ #3F8624: Enable IoT THING events
+custom_resource -> secrets_manager++ #E3242B: Check for claim certificate and private key
+return return claim certificate and private key if found
+custom_resource -> deploy_iot_core: If not found, CreateKeysAndCertificate, store locally
+custom_resource <-- deploy_iot_core:
+custom_resource -> deploy_iot_core: Delete newly created claim certificate
+custom_resource <-- deploy_iot_core:
+custom_resource -> secrets_manager++ #E3242B: Store new claim certificate and private key
+custom_resource -> secrets_manager: Setup secret rotation
+deactivate secrets_manager
+cloud_formation <-- custom_resource: Send cloud formation response
+deactivate custom_resource
+|||
+cloud_formation --> deploy_iot_core: Deployment continues...recreate same claim certificate in IoT Core in ACTIVE status
+cloud_formation --> deploy_iot_core: Deployment continues...attach provisioning template and provisioning policy to claim certificate
+deactivate deploy_iot_core
+|||
+return finish deploy
+|||
+|||
+
+'Destroy
+user -> cloud_formation++ #CF2465: Destroy stack
+cloud_formation -> custom_resource++ #D86613: Trigger DELETE
+custom_resource -> deploy_iot_core++ #3F8624: Detach all targets from provisioning policy
+custom_resource -> deploy_iot_core: Delete claim certificate
+deactivate deploy_iot_core
+return send cloudformation response
+return
+
+@enduml

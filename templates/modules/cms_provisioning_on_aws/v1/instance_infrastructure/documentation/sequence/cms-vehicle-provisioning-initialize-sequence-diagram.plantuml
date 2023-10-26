@@ -1,0 +1,34 @@
+@startuml cms-vehicle-provisioning-initialize-sequence-diagram
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v14.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/InternetOfThings/IoTCore.puml
+
+'Comment out to use default PlantUML sequence formatting
+skinparam participant {
+    BackgroundColor AWS_BG_COLOR
+    BorderColor AWS_BORDER_COLOR
+}
+skinparam sequence {
+    ArrowThickness 2
+    LifeLineBorderColor AWS_COLOR
+    LifeLineBackgroundColor AWS_BORDER_COLOR
+    BoxBorderColor AWS_COLOR
+}
+
+actor Vehicle as vehicle
+
+box Device Initialization
+participant "$IoTCoreIMG()\nIoT Core" as iot_core << IoT Core>>
+endbox
+
+vehicle -> iot_core++ #3F8624: Connect with signed claim certificate
+vehicle <-- iot_core:
+|||
+vehicle -> iot_core: CreateKeysAndCertificate publish
+vehicle <-- iot_core: Return unique vehicle credentials (certificate, public/private key pair)
+deactivate iot_core
+
+@enduml

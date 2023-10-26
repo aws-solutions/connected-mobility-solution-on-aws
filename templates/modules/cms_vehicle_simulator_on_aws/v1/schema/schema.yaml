@@ -1,0 +1,29 @@
+# https://docs.aws.amazon.com/proton/latest/userguide/ag-infrastructure-tmp-files-codebuild.html
+
+schema:
+  format:
+    openapi: "3.0.0"
+  service_input_type: "CMSVehicleSimulator"
+  pipeline_input_type: "PipelineInputs"
+  types:
+    CMSVehicleSimulator:
+      type: object
+      description: "Input properties for CMS Vehicle Simulator Module"
+      properties:
+        user_email:
+          title: "A string option"
+          type: string
+          description: "A string option with min and max length"
+          default: "anemail@isrequi.red"
+          minLength: 1
+          maxLength: 200
+    PipelineInputs:
+      type: object
+      description: "Pipeline input properties"
+      properties:
+        unit_test_command:         # parameter
+          type: string
+          description: "The command to run to unit test the application code"
+          default: "echo 'add your unit test command here'"
+          minLength: 1
+          maxLength: 200

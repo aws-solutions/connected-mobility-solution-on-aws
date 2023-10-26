@@ -1,0 +1,10 @@
+{
+    "/nag-test-stack/nag-test-key/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "test-cdk-id",
+                "reason": "test-cdk-reason"
+            }
+        ]
+    }
+}

@@ -1,0 +1,1977 @@
+{
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "deploymentuuidParameter": {
+      "Default": "/dev/cms/common/config/deployment-uuid",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    }
+  },
+  "Resources": {
+    "AWS679f53fac002430cb0da5b7982bd22872D164C4C": {
+      "DependsOn": [
+        "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 120
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+      "DependsOn": [
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 900
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:PutRetentionPolicy",
+                "logs:DeleteRetentionPolicy"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "Roles": [
+          {
+            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "appregistryapplicationstackassociation": {
+      "Properties": {
+        "Application": {
+          "Fn::GetAtt": [
+            "cmsuserauthenticationappregistryappregistryapplication82EC8543",
+            "Id"
+          ]
+        },
+        "Resource": {
+          "Ref": "AWS::StackId"
+        },
+        "ResourceType": "CFN_STACK"
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::ResourceAssociation"
+    },
+    "cmsuserauthenticationappregistryappregistryapplication82EC8543": {
+      "Properties": {
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "cms-user-authentication-on-aws-stack-dev-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Ref": "deploymentuuidParameter"
+          }
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::Application"
+    },
+    "cmsuserauthenticationappregistryappregistryapplicationattributeassociation6BA32481": {
+      "Properties": {
+        "Application": {
+          "Fn::GetAtt": [
+            "cmsuserauthenticationappregistryappregistryapplication82EC8543",
+            "Id"
+          ]
+        },
+        "AttributeGroup": {
+          "Fn::GetAtt": [
+            "cmsuserauthenticationappregistrydefaultapplicationattributesF90F1C6A",
+            "Id"
+          ]
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroupAssociation"
+    },
+    "cmsuserauthenticationappregistrydefaultapplicationattributesF90F1C6A": {
+      "Properties": {
+        "Attributes": {
+          "ApplicationType": "AWS-Solutions",
+          "SolutionID": "SO0241",
+          "SolutionName": "Connected Mobility Solution on AWS",
+          "Version": "v1.0.0"
+        },
+        "Description": "Attribute group for solution information",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "cms-user-authentication-on-aws-stack-dev-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Ref": "deploymentuuidParameter"
+          }
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroup"
+    },
+    "cmsuserauthenticationcognitomanageuserpooldomaincustomresource23BB766E": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "cmsuserauthenticationcognitouserpoolpolicyA0800BF4"
+      ],
+      "Properties": {
+        "Resource": "ManageUserPoolDomain",
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "cmsuserauthenticationcustomresourcelambdalambdafunction4C38CA11",
+            "Arn"
+          ]
+        },
+        "UserPoolId": {
+          "Ref": "cmsuserauthenticationcognitouserpool42033C47"
+        }
+      },
+      "Type": "Custom::ManageUserPoolDomain",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsuserauthenticationcognitoresourceserverD3F473E2": {
+      "Properties": {
+        "Identifier": "cms-resource-server-dev",
+        "Name": "cms-resource-server-dev",
+        "Scopes": [
+          {
+            "ScopeDescription": "Full access scope for CMS services",
+            "ScopeName": "cms-service"
+          }
+        ],
+        "UserPoolId": {
+          "Ref": "cmsuserauthenticationcognitouserpool42033C47"
+        }
+      },
+      "Type": "AWS::Cognito::UserPoolResourceServer"
+    },
+    "cmsuserauthenticationcognitosecretsmanagerserviceclientsecret31530BDB": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "Description": "Client secret for service app client",
+        "Name": "dev/cms-user-authentication-on-aws-stack-dev/service-client-secret",
+        "SecretString": {
+          "Fn::GetAtt": [
+            "cmsuserauthenticationcognitouserpoolcmsserviceappclientDescribeCognitoUserPoolClient531D365C",
+            "UserPoolClient.ClientSecret"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::SecretsManager::Secret",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsuserauthenticationcognitosecretsmanageruserclientsecretAA2136BE": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "Description": "Client secret for user app client",
+        "Name": "dev/cms-user-authentication-on-aws-stack-dev/user-client-secret",
+        "SecretString": {
+          "Fn::GetAtt": [
+            "cmsuserauthenticationcognitouserpoolcmsuserappclientDescribeCognitoUserPoolClientA7F4330F",
+            "UserPoolClient.ClientSecret"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::SecretsManager::Secret",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsuserauthenticationcognitouserpool42033C47": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AccountRecoverySetting": {
+          "RecoveryMechanisms": [
+            {
+              "Name": "verified_email",
+              "Priority": 1
+            }
+          ]
+        },
+        "AdminCreateUserConfig": {
+          "AllowAdminCreateUserOnly": true,
+          "InviteMessageTemplate": {
+            "EmailMessage": "Hello {username}, you have been invited to join CMS.\nYour temporary password is {####}",
+            "EmailSubject": "Invitation to join Connected Mobility Solution (CMS)!"
+          }
+        },
+        "AliasAttributes": [
+          "email"
+        ],
+        "AutoVerifiedAttributes": [
+          "email"
+        ],
+        "DeviceConfiguration": {
+          "ChallengeRequiredOnNewDevice": true,
+          "DeviceOnlyRememberedOnUserPrompt": true
+        },
+        "EmailVerificationMessage": "The verification code to your new account is {####}",
+        "EmailVerificationSubject": "Verify your new account",
+        "EnabledMfas": [
+          "SOFTWARE_TOKEN_MFA"
+        ],
+        "MfaConfiguration": "ON",
+        "Policies": {
+          "PasswordPolicy": {
+            "MinimumLength": 12,
+            "RequireLowercase": true,
+            "RequireNumbers": true,
+            "RequireSymbols": true,
+            "RequireUppercase": true,
+            "TemporaryPasswordValidityDays": 1
+          }
+        },
+        "Schema": [
+          {
+            "Mutable": false,
+            "Name": "email",
+            "Required": true
+          },
+          {
+            "Mutable": true,
+            "Name": "name",
+            "Required": true
+          }
+        ],
+        "SmsVerificationMessage": "The verification code to your new account is {####}",
+        "UserPoolAddOns": {
+          "AdvancedSecurityMode": "ENFORCED"
+        },
+        "UserPoolTags": {
+          "Solutions:DeploymentUUID": {
+            "Ref": "deploymentuuidParameter"
+          }
+        },
+        "VerificationMessageTemplate": {
+          "DefaultEmailOption": "CONFIRM_WITH_CODE",
+          "EmailMessage": "The verification code to your new account is {####}",
+          "EmailSubject": "Verify your new account",
+          "SmsMessage": "The verification code to your new account is {####}"
+        }
+      },
+      "Type": "AWS::Cognito::UserPool",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "cmsuserauthenticationcognitouserpoolcmsserviceappclient1FA07BA9": {
+      "Properties": {
+        "AccessTokenValidity": 60,
+        "AllowedOAuthFlows": [
+          "client_credentials"
+        ],
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthScopes": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Ref": "cmsuserauthenticationcognitoresourceserverD3F473E2"
+                },
+                "/cms-service"
+              ]
+            ]
+          }
+        ],
+        "AuthSessionValidity": 3,
+        "ClientName": "cms-service-app-client",
+        "EnableTokenRevocation": true,
+        "GenerateSecret": true,
+        "IdTokenValidity": 60,
+        "PreventUserExistenceErrors": "ENABLED",
+        "RefreshTokenValidity": 120,
+        "SupportedIdentityProviders": [
+          "COGNITO"
+        ],
+        "TokenValidityUnits": {
+          "AccessToken": "minutes",
+          "IdToken": "minutes",
+          "RefreshToken": "minutes"
+        },
+        "UserPoolId": {
+          "Ref": "cmsuserauthenticationcognitouserpool42033C47"
+        }
+      },
+      "Type": "AWS::Cognito::UserPoolClient"
+    },
+    "cmsuserauthenticationcognitouserpoolcmsserviceappclientDescribeCognitoUserPoolClient531D365C": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "cmsuserauthenticationcognitouserpoolcmsserviceappclientDescribeCognitoUserPoolClientCustomResourcePolicy3790D1E0"
+      ],
+      "Properties": {
+        "Create": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"service\":\"CognitoIdentityServiceProvider\",\"action\":\"describeUserPoolClient\",\"parameters\":{\"UserPoolId\":\"",
+              {
+                "Ref": "cmsuserauthenticationcognitouserpool42033C47"
+              },
+              "\",\"ClientId\":\"",
+              {
+                "Ref": "cmsuserauthenticationcognitouserpoolcmsserviceappclient1FA07BA9"
+              },
+              "\"},\"physicalResourceId\":{\"id\":\"",
+              {
+                "Ref": "cmsuserauthenticationcognitouserpoolcmsserviceappclient1FA07BA9"
+              },
+              "\"}}"
+            ]
+          ]
+        },
+        "InstallLatestAwsSdk": false,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn"
+          ]
+        },
+        "Update": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"service\":\"CognitoIdentityServiceProvider\",\"action\":\"describeUserPoolClient\",\"parameters\":{\"UserPoolId\":\"",
+              {
+                "Ref": "cmsuserauthenticationcognitouserpool42033C47"
+              },
+              "\",\"ClientId\":\"",
+              {
+                "Ref": "cmsuserauthenticationcognitouserpoolcmsserviceappclient1FA07BA9"
+              },
+              "\"},\"physicalResourceId\":{\"id\":\"",
+              {
+                "Ref": "cmsuserauthenticationcognitouserpoolcmsserviceappclient1FA07BA9"
+              },
+              "\"}}"
+            ]
+          ]
+        }
+      },
+      "Type": "Custom::DescribeCognitoUserPoolClient",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsuserauthenticationcognitouserpoolcmsserviceappclientDescribeCognitoUserPoolClientCustomResourcePolicy3790D1E0": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "cognito-idp:DescribeUserPoolClient",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "cmsuserauthenticationcognitouserpool42033C47",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cmsuserauthenticationcognitouserpoolcmsserviceappclientDescribeCognitoUserPoolClientCustomResourcePolicy3790D1E0",
+        "Roles": [
+          {
+            "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cmsuserauthenticationcognitouserpoolcmsuserappclientCFC65C67": {
+      "Properties": {
+        "AccessTokenValidity": 60,
+        "AllowedOAuthFlows": [
+          "code"
+        ],
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthScopes": [
+          "email",
+          "openid"
+        ],
+        "AuthSessionValidity": 3,
+        "CallbackURLs": [
+          "https://localhost"
+        ],
+        "ClientName": "cms-user-app-client",
+        "EnableTokenRevocation": true,
+        "ExplicitAuthFlows": [
+          "ALLOW_USER_SRP_AUTH",
+          "ALLOW_REFRESH_TOKEN_AUTH"
+        ],
+        "GenerateSecret": true,
+        "IdTokenValidity": 60,
+        "PreventUserExistenceErrors": "ENABLED",
+        "RefreshTokenValidity": 120,
+        "SupportedIdentityProviders": [
+          "COGNITO"
+        ],
+        "TokenValidityUnits": {
+          "AccessToken": "minutes",
+          "IdToken": "minutes",
+          "RefreshToken": "minutes"
+        },
+        "UserPoolId": {
+          "Ref": "cmsuserauthenticationcognitouserpool42033C47"
+        }
+      },
+      "Type": "AWS::Cognito::UserPoolClient"
+    },
+    "cmsuserauthenticationcognitouserpoolcmsuserappclientDescribeCognitoUserPoolClientA7F4330F": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "cmsuserauthenticationcognitouserpoolcmsuserappclientDescribeCognitoUserPoolClientCustomResourcePolicy1DAA35E4"
+      ],
+      "Properties": {
+        "Create": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"service\":\"CognitoIdentityServiceProvider\",\"action\":\"describeUserPoolClient\",\"parameters\":{\"UserPoolId\":\"",
+              {
+                "Ref": "cmsuserauthenticationcognitouserpool42033C47"
+              },
+              "\",\"ClientId\":\"",
+              {
+                "Ref": "cmsuserauthenticationcognitouserpoolcmsuserappclientCFC65C67"
+              },
+              "\"},\"physicalResourceId\":{\"id\":\"",
+              {
+                "Ref": "cmsuserauthenticationcognitouserpoolcmsuserappclientCFC65C67"
+              },
+              "\"}}"
+            ]
+          ]
+        },
+        "InstallLatestAwsSdk": false,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn"
+          ]
+        },
+        "Update": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"service\":\"CognitoIdentityServiceProvider\",\"action\":\"describeUserPoolClient\",\"parameters\":{\"UserPoolId\":\"",
+              {
+                "Ref": "cmsuserauthenticationcognitouserpool42033C47"
+              },
+              "\",\"ClientId\":\"",
+              {
+                "Ref": "cmsuserauthenticationcognitouserpoolcmsuserappclientCFC65C67"
+              },
+              "\"},\"physicalResourceId\":{\"id\":\"",
+              {
+                "Ref": "cmsuserauthenticationcognitouserpoolcmsuserappclientCFC65C67"
+              },
+              "\"}}"
+            ]
+          ]
+        }
+      },
+      "Type": "Custom::DescribeCognitoUserPoolClient",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsuserauthenticationcognitouserpoolcmsuserappclientDescribeCognitoUserPoolClientCustomResourcePolicy1DAA35E4": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "cognito-idp:DescribeUserPoolClient",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "cmsuserauthenticationcognitouserpool42033C47",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cmsuserauthenticationcognitouserpoolcmsuserappclientDescribeCognitoUserPoolClientCustomResourcePolicy1DAA35E4",
+        "Roles": [
+          {
+            "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cmsuserauthenticationcognitouserpoolpolicyA0800BF4": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "cognito-idp:CreateUserPoolDomain",
+                "cognito-idp:DeleteUserPoolDomain",
+                "cognito-idp:DescribeUserPool"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "cmsuserauthenticationcognitouserpool42033C47",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cmsuserauthenticationcognitouserpoolpolicyA0800BF4",
+        "Roles": [
+          {
+            "Ref": "cmsuserauthenticationcustomresourcelambdalambdarole64FA6DFE"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cmsuserauthenticationcreateappclientlambdalambdafunctionA89A5DA5": {
+      "DependsOn": [
+        "cmsuserauthenticationcreateappclientlambdalambdaroleF7D2BA0A"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "User Authentication CreateUserPoolClient Function",
+        "Environment": {
+          "Variables": {
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "cmsuserauthenticationcognitouserpool42033C47"
+            },
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.22/v1.0.0"
+          }
+        },
+        "FunctionName": "cms-user-authentication-on-aws-stack-dev-create-app-client",
+        "Handler": "create_app_client_lambda.main.handler",
+        "Layers": [
+          {
+            "Ref": "cmsuserauthenticationlambdadependencieslambdadependencylayerversionF73DFC91"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsuserauthenticationcreateappclientlambdalambdaroleF7D2BA0A",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "Timeout": 60
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsuserauthenticationcreateappclientlambdalambdafunctionLogRetention8BC3D55B": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsuserauthenticationcreateappclientlambdalambdafunctionA89A5DA5"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsuserauthenticationcreateappclientlambdalambdaroleF7D2BA0A": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-user-authentication-on-aws-stack-dev-create-app-client"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-user-authentication-on-aws-stack-dev-create-app-client:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch-logs-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "cognito-idp:CreateUserPoolClient",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "cmsuserauthenticationcognitouserpool42033C47",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cognito-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsuserauthenticationcustomresourcelambdalambdafunction4C38CA11": {
+      "DependsOn": [
+        "cmsuserauthenticationcustomresourcelambdalambdarole64FA6DFE"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "CMS User Authentication custom resource lambda function",
+        "Environment": {
+          "Variables": {
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.22/v1.0.0"
+          }
+        },
+        "FunctionName": "cms-user-authentication-on-aws-stack-dev-custom-resource-lambda",
+        "Handler": "custom_resource.main.handler",
+        "Layers": [
+          {
+            "Ref": "cmsuserauthenticationlambdadependencieslambdadependencylayerversionF73DFC91"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsuserauthenticationcustomresourcelambdalambdarole64FA6DFE",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "Timeout": 60
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsuserauthenticationcustomresourcelambdalambdafunctionLogRetentionE768B4AD": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsuserauthenticationcustomresourcelambdalambdafunction4C38CA11"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsuserauthenticationcustomresourcelambdalambdarole64FA6DFE": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-user-authentication-on-aws-stack-dev-custom-resource-lambda"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-user-authentication-on-aws-stack-dev-custom-resource-lambda:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsuserauthenticationdeleteappclientlambdalambdafunction300661E3": {
+      "DependsOn": [
+        "cmsuserauthenticationdeleteappclientlambdalambdarole67E7C6E0"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "User Authentication DeleteUserPoolClient Function",
+        "Environment": {
+          "Variables": {
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "cmsuserauthenticationcognitouserpool42033C47"
+            },
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.22/v1.0.0"
+          }
+        },
+        "FunctionName": "cms-user-authentication-on-aws-stack-dev-delete-app-client",
+        "Handler": "delete_app_client_lambda.main.handler",
+        "Layers": [
+          {
+            "Ref": "cmsuserauthenticationlambdadependencieslambdadependencylayerversionF73DFC91"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsuserauthenticationdeleteappclientlambdalambdarole67E7C6E0",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "Timeout": 60
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsuserauthenticationdeleteappclientlambdalambdafunctionLogRetention8A6C1D45": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsuserauthenticationdeleteappclientlambdalambdafunction300661E3"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsuserauthenticationdeleteappclientlambdalambdarole67E7C6E0": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-user-authentication-on-aws-stack-dev-delete-app-client"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-user-authentication-on-aws-stack-dev-delete-app-client:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch-logs-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "cognito-idp:DeleteUserPoolClient",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "cmsuserauthenticationcognitouserpool42033C47",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cognito-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsuserauthenticationlambdadependencieslambdadependencylayerversionF73DFC91": {
+      "Properties": {
+        "CompatibleArchitectures": [
+          "x86_64",
+          "arm64"
+        ],
+        "CompatibleRuntimes": [
+          "python3.8",
+          "python3.9",
+          "python3.10"
+        ],
+        "Content": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        }
+      },
+      "Type": "AWS::Lambda::LayerVersion"
+    },
+    "cmsuserauthenticationmoduleoutputsssmcreateappclientlambdaarnDC2699C0": {
+      "Properties": {
+        "Description": "CMS Create App client lambda function ARN",
+        "Name": "/dev/cms/authentication/create-app-client-lambda/arn",
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Ref": "deploymentuuidParameter"
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "cmsuserauthenticationcreateappclientlambdalambdafunctionA89A5DA5",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsuserauthenticationmoduleoutputsssmdeleteappclientlambdaarn7DA3F645": {
+      "Properties": {
+        "Description": "CMS Delete App client lambda function ARN",
+        "Name": "/dev/cms/authentication/delete-app-client-lambda/arn",
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Ref": "deploymentuuidParameter"
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "cmsuserauthenticationdeleteappclientlambdalambdafunction300661E3",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsuserauthenticationmoduleoutputsssmresourceserveridentifier44F8F885": {
+      "Properties": {
+        "Description": "Unique identifier of the Cognito ResourceServer",
+        "Name": "/dev/cms/authentication/resource-server/identifier",
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Ref": "deploymentuuidParameter"
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "cmsuserauthenticationcognitoresourceserverD3F473E2"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsuserauthenticationmoduleoutputsssmservicecallerscopename2B240ACC": {
+      "Properties": {
+        "Description": "Name of the scope to be used by service callers using the client credentials OAuth flow",
+        "Name": "/dev/cms/authentication/service-caller-scope/name",
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Ref": "deploymentuuidParameter"
+          }
+        },
+        "Type": "String",
+        "Value": "cms-service"
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsuserauthenticationmoduleoutputsssmserviceclientidAD592CC8": {
+      "Properties": {
+        "Description": "App client by services for client credential flow",
+        "Name": "/dev/cms/authentication/service-client/id",
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Ref": "deploymentuuidParameter"
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "cmsuserauthenticationcognitouserpoolcmsserviceappclient1FA07BA9"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsuserauthenticationmoduleoutputsssmserviceclientsecretarn4A0AF712": {
+      "Properties": {
+        "Description": "App client secret ARN for service client secret.",
+        "Name": "/dev/cms/authentication/service-client-secret/secret-arn",
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Ref": "deploymentuuidParameter"
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "cmsuserauthenticationcognitosecretsmanagerserviceclientsecret31530BDB"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsuserauthenticationmoduleoutputsssmtokenvalidationlambdaarn1820861F": {
+      "Properties": {
+        "Description": "Arn for lambda function that validates tokens",
+        "Name": "/dev/cms/authentication/token-validation-lambda/arn",
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Ref": "deploymentuuidParameter"
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "cmsuserauthenticationtokenvalidationlambdalambdafunctionDFF2084E",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsuserauthenticationmoduleoutputsssmupdateappclientlambdaarn5502D21B": {
+      "Properties": {
+        "Description": "CMS Update App client lambda function ARN",
+        "Name": "/dev/cms/authentication/update-app-client-lambda/arn",
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Ref": "deploymentuuidParameter"
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "cmsuserauthenticationupdateappclientlambdalambdafunction4FE923DF",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsuserauthenticationmoduleoutputsssmuserauthenticationlambdaarn969A0290": {
+      "Properties": {
+        "Description": "Arn for lambda function that authenticates users",
+        "Name": "/dev/cms/authentication/user-authentication-lambda/arn",
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Ref": "deploymentuuidParameter"
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "cmsuserauthenticationtokenexchangelambdalambdafunction7E44FA46",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsuserauthenticationmoduleoutputsssmuserpooldomainprefix8EC5028C": {
+      "Properties": {
+        "Description": "Domain prefix used by the Cognito HostedUI",
+        "Name": "/dev/cms/authentication/user-pool/domain-prefix",
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Ref": "deploymentuuidParameter"
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "cmsuserauthenticationcognitomanageuserpooldomaincustomresource23BB766E",
+            "domain_prefix"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsuserauthenticationmoduleoutputsssmuserpoolregion90CD7CAB": {
+      "Properties": {
+        "Description": "AWS Region of the Cognito UserPool",
+        "Name": "/dev/cms/authentication/user-pool/region",
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Ref": "deploymentuuidParameter"
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "AWS::Region"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsuserauthenticationtokenexchangelambdalambdafunction7E44FA46": {
+      "DependsOn": [
+        "cmsuserauthenticationtokenexchangelambdalambdaroleE9E891E8"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "CMS Token Exchange Lambda Function",
+        "Environment": {
+          "Variables": {
+            "DOMAIN_PREFIX": {
+              "Fn::GetAtt": [
+                "cmsuserauthenticationcognitomanageuserpooldomaincustomresource23BB766E",
+                "domain_prefix"
+              ]
+            },
+            "REDIRECT_URI": "https://localhost",
+            "TOKEN_VALIDATION_LAMBDA_ARN": {
+              "Fn::GetAtt": [
+                "cmsuserauthenticationtokenvalidationlambdalambdafunctionDFF2084E",
+                "Arn"
+              ]
+            },
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.22/v1.0.0",
+            "USER_CLIENT_ID": {
+              "Ref": "cmsuserauthenticationcognitouserpoolcmsuserappclientCFC65C67"
+            },
+            "USER_CLIENT_SECRET_ARN": {
+              "Ref": "cmsuserauthenticationcognitosecretsmanageruserclientsecretAA2136BE"
+            },
+            "USER_POOL_REGION": {
+              "Ref": "AWS::Region"
+            }
+          }
+        },
+        "FunctionName": "cms-user-authentication-on-aws-stack-dev-token-exchange",
+        "Handler": "token_exchange_lambda.main.handler",
+        "Layers": [
+          {
+            "Ref": "cmsuserauthenticationlambdadependencieslambdadependencylayerversionF73DFC91"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsuserauthenticationtokenexchangelambdalambdaroleE9E891E8",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "Timeout": 60
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsuserauthenticationtokenexchangelambdalambdafunctionLogRetention544CA771": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsuserauthenticationtokenexchangelambdalambdafunction7E44FA46"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsuserauthenticationtokenexchangelambdalambdaroleE9E891E8": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-user-authentication-on-aws-stack-dev-token-exchange"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-user-authentication-on-aws-stack-dev-token-exchange:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "lambda:InvokeFunction",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "cmsuserauthenticationtokenvalidationlambdalambdafunctionDFF2084E",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "lambda"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "secretsmanager:GetSecretValue",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Ref": "cmsuserauthenticationcognitosecretsmanageruserclientsecretAA2136BE"
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "secretsmanager"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsuserauthenticationtokenvalidationlambdalambdafunctionDFF2084E": {
+      "DependsOn": [
+        "cmsuserauthenticationtokenvalidationlambdalambdarole57E905ED"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "CMS Token Validation Lambda Function",
+        "Environment": {
+          "Variables": {
+            "FORMATTED_CMS_SERVICE_SCOPE": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "cmsuserauthenticationcognitoresourceserverD3F473E2"
+                  },
+                  "/cms-service"
+                ]
+              ]
+            },
+            "SERVICE_CLIENT_ID": {
+              "Ref": "cmsuserauthenticationcognitouserpoolcmsserviceappclient1FA07BA9"
+            },
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.22/v1.0.0",
+            "USER_CLIENT_ID": {
+              "Ref": "cmsuserauthenticationcognitouserpoolcmsuserappclientCFC65C67"
+            },
+            "USER_POOL_ID": {
+              "Ref": "cmsuserauthenticationcognitouserpool42033C47"
+            },
+            "USER_POOL_REGION": {
+              "Ref": "AWS::Region"
+            }
+          }
+        },
+        "FunctionName": "cms-user-authentication-on-aws-stack-dev-token-validation-lambda",
+        "Handler": "token_validation_lambda.main.handler",
+        "Layers": [
+          {
+            "Ref": "cmsuserauthenticationlambdadependencieslambdadependencylayerversionF73DFC91"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsuserauthenticationtokenvalidationlambdalambdarole57E905ED",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "Timeout": 60
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsuserauthenticationtokenvalidationlambdalambdafunctionLogRetention26876683": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsuserauthenticationtokenvalidationlambdalambdafunctionDFF2084E"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsuserauthenticationtokenvalidationlambdalambdarole57E905ED": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-user-authentication-on-aws-stack-dev-token-validation-lambda"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-user-authentication-on-aws-stack-dev-token-validation-lambda:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsuserauthenticationupdateappclientlambdalambdafunction4FE923DF": {
+      "DependsOn": [
+        "cmsuserauthenticationupdateappclientlambdalambdaroleB3E0B0EC"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "User Authentication UpdateUserPoolClient Function",
+        "Environment": {
+          "Variables": {
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "cmsuserauthenticationcognitouserpool42033C47"
+            },
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.22/v1.0.0"
+          }
+        },
+        "FunctionName": "cms-user-authentication-on-aws-stack-dev-update-app-client",
+        "Handler": "update_app_client_lambda.main.handler",
+        "Layers": [
+          {
+            "Ref": "cmsuserauthenticationlambdadependencieslambdadependencylayerversionF73DFC91"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsuserauthenticationupdateappclientlambdalambdaroleB3E0B0EC",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "Timeout": 60
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsuserauthenticationupdateappclientlambdalambdafunctionLogRetention76E6807E": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsuserauthenticationupdateappclientlambdalambdafunction4FE923DF"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsuserauthenticationupdateappclientlambdalambdaroleB3E0B0EC": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-user-authentication-on-aws-stack-dev-update-app-client"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-user-authentication-on-aws-stack-dev-update-app-client:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch-logs-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "cognito-idp:UpdateUserPoolClient",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "cmsuserauthenticationcognitouserpool42033C47",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cognito-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                  ],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}

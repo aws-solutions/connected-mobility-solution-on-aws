@@ -1,0 +1,13 @@
+{
+    "/cms-environment/iot-core-to-cloudwatch-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Wildcard permissions are needed to write to cloudwatch logs.",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:*:log-stream:*"
+                ]
+            }
+        ]
+    }
+}

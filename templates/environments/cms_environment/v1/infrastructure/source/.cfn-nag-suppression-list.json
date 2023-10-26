@@ -1,0 +1,10 @@
+{
+    "/PLACE_HOLDER": {
+        "rules_to_suppress": [
+            {
+                "id": "PLACE_HOLDER",
+                "reason": "No warnings or errors!"
+            }
+        ]
+    }
+}

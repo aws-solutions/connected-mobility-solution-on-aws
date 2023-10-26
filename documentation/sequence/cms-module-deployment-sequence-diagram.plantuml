@@ -1,0 +1,61 @@
+@startuml cms-module-deployment-sequence-diagram
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v13.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/DeveloperTools/CodeBuild.puml
+!include AWSPuml/ManagementGovernance/CloudFormation.puml
+!include AWSPuml/ManagementGovernance/Proton.puml
+!include AWSPuml/Storage/SimpleStorageService.puml
+!include AWSPuml/GroupIcons/Cloud.puml
+!include AWSPuml/GroupIcons/ServerContents.puml
+
+'Comment out to use default PlantUML sequence formatting
+skinparam participant {
+    BackgroundColor AWS_BG_COLOR
+    BorderColor AWS_BORDER_COLOR
+}
+skinparam sequence {
+    ArrowThickness 2
+    LifeLineBorderColor AWS_COLOR
+    LifeLineBackgroundColor AWS_BORDER_COLOR
+    BoxBorderColor AWS_COLOR
+}
+
+actor User as user
+
+box CMS Module Deployment via Backstage
+participant "$ServerContentsIMG()\nBackstage Portal" as backstage << Backstage >>
+participant "$SimpleStorageServiceIMG()\nCMS Assets Bucket" as s3 << S3 Asset >>
+participant "$ProtonIMG()\nProton" as proton << Proton >>
+participant "$CodeBuildIMG()\nProton" as pcb << CodeBuild >>
+participant "$CloudFormationIMG()\nCloudFormation" as cfn << CloudFormation >>
+endbox
+
+user -> backstage++ #777799: setup Backstage template component
+backstage -> s3++ #3F8624: fetch template.yaml for module
+return
+backstage -> proton++ #CC2264: link with Proton service template
+return
+return create template component
+|||
+user -> backstage++ #777799: deploy template component
+backstage -> s3++ #3F8624: write spec.yaml
+return
+|||
+backstage -> proton++ #CC2264: deploy service template
+proton -> pcb++ #3355DA: start CodeBuild steps
+pcb -> pcb: execute module deploy
+pcb -> cfn++ #CC2264: deploy module's infrastructure
+return
+return
+return
+|||
+backstage -> s3++ #3F8624: write catalog-info.yaml
+backstage <-- s3:
+backstage -> backstage: register component
+return
+return
+
+@enduml

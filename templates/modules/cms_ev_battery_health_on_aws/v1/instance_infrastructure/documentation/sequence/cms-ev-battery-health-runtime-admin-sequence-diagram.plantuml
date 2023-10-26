@@ -1,0 +1,67 @@
+@startuml cms-ev-battery-health-runtime-admin-sequence-diagram
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v14.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/SecurityIdentityCompliance/SecretsManager.puml
+!include AWSPuml/Storage/SimpleStorageService.puml
+!include AWSPuml/ManagementGovernance/ManagedGrafana.puml
+!include AWSPuml/Compute/Lambda.puml
+
+
+!define GREEN #3F8624
+!define YELLOW #D86613
+!define RED #E3242B
+!define PINK #CF2465
+!define PURPLE #8b27f5
+
+'Comment out to use default PlantUML sequence formatting
+skinparam participant {
+    BackgroundColor AWS_BG_COLOR
+    BorderColor AWS_BORDER_COLOR
+}
+skinparam sequence {
+    ArrowThickness 2
+    LifeLineBorderColor AWS_COLOR
+    LifeLineBackgroundColor AWS_BORDER_COLOR
+    BoxBorderColor AWS_COLOR
+}
+
+actor Admin as admin
+box CMS EV Battery Health Module Runtime - Admin Workflow
+participant "$SimpleStorageServiceIMG()\nGrafana S3" as grafana_s3 << S3 >>
+participant "$LambdaIMG()\nS3 to Grafana" as s3_to_grafana << Lambda >>
+participant "$SecretsManagerIMG()\nSecrets Manager" as secrets_manager << Secrets Manager >>
+participant "$ManagedGrafanaIMG()\nGrafana" as grafana << Grafana >>
+endbox
+
+admin -> grafana_s3++ GREEN: Update dashboard: Put dashboard object JSON with object prefix cms/dashboards/
+grafana_s3 -> s3_to_grafana++ YELLOW: Trigger Lambda based on PutObject S3 event
+s3_to_grafana -> secrets_manager++ RED: Get Grafana API key secret
+s3_to_grafana <-- secrets_manager
+deactivate secrets_manager
+s3_to_grafana -> grafana++ PINK: Call Grafana HTTP API to update dashboard
+s3_to_grafana <-- grafana: Dashboard updated to new schema
+deactivate grafana
+grafana_s3 <-- s3_to_grafana
+deactivate s3_to_grafana
+admin <-- grafana_s3
+deactivate grafana_s3
+
+|||
+
+admin -> grafana_s3++ GREEN: Update alert rules: Put dashboard object JSON with object prefix cms/alerts/
+grafana_s3 -> s3_to_grafana++ YELLOW: Trigger Lambda based on PutObject S3 event
+s3_to_grafana -> secrets_manager++ RED: Get Grafana API key secret
+s3_to_grafana <-- secrets_manager
+deactivate secrets_manager
+s3_to_grafana -> grafana++ PINK: Call Grafana HTTP API to update alert rules
+s3_to_grafana <-- grafana: Alert rules updated to new schema
+deactivate grafana
+grafana_s3 <-- s3_to_grafana
+deactivate s3_to_grafana
+admin <-- grafana_s3
+deactivate grafana_s3
+
+@enduml

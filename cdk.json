@@ -1,0 +1,22 @@
+{
+    "app": "python3 -m source.infrastructure.app",
+    "watch": {
+        "include": [
+            "**"
+        ],
+        "exclude": [
+            "README.md",
+            "cdk*.json",
+            "requirements*.txt",
+            "source.bat",
+            "**/__init__.py",
+            "python/__pycache__",
+            "tests"
+        ]
+    },
+    "context": {
+        "dep-layer-name": "cms_dependency_layer",
+        "app-location": "source/infrastructure",
+        "nag-enforce": false
+    }
+}

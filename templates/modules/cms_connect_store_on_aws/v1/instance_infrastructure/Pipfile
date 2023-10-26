@@ -1,0 +1,40 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+dataclass-type-validator = ">=0.1.2"
+aws_lambda_powertools = {extras=["tracer", "validation"], version=">=2.4.0"}
+requests = ">=2.28.1"
+arrow = ">=1.2.3"
+attrs = ">=22.1.0"
+cattrs = ">=22.1.0"
+
+[dev-packages]
+aws-cdk-lib = ">=2.63.2"
+boto3 = ">=1.26.0"
+boto3-stubs = {extras = ["essential", "iot", "s3", "secretsmanager"], version = "*"}
+exceptiongroup = "*"
+types-setuptools = ">=65.6.0.1"
+types-requests = ">=2.28.1"
+types-boto3 = ">=1.0.2"
+cdk-nag = "*"
+mypy = "*"
+pre-commit = "*"
+pycln = "*"
+pylint = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+syrupy = "*"
+toml = ">=0.10.2"
+types-python-dateutil = "*"
+types-toml = ">=0.10.2"
+types-urllib3 = "*"
+zipp = "*"
+responses = "*"
+moto = "*"
+
+[requires]
+python_version = "3.10"

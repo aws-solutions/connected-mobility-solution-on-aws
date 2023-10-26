@@ -1,0 +1,525 @@
+{
+  "Outputs": {
+    "Exportcmsvehiclesimulatoronawsstackdevcloudfrontdomainname": {
+      "Export": {
+        "Name": "cms-vehicle-simulator-on-aws-stack-dev-cloud-front-domain-name"
+      },
+      "Value": {
+        "Fn::GetAtt": [
+          "cloudfrontconstructdistributionCloudFrontDistributionFCD6BB51",
+          "DomainName"
+        ]
+      }
+    },
+    "Exportcmsvehiclesimulatoronawsstackdevconsolebucketarn": {
+      "Export": {
+        "Name": "cms-vehicle-simulator-on-aws-stack-dev-console-bucket-arn"
+      },
+      "Value": {
+        "Fn::GetAtt": [
+          "cloudfrontconstructdistributionS3Bucket92816EEB",
+          "Arn"
+        ]
+      }
+    },
+    "Exportcmsvehiclesimulatoronawsstackdevconsolebucketname": {
+      "Export": {
+        "Name": "cms-vehicle-simulator-on-aws-stack-dev-console-bucket-name"
+      },
+      "Value": {
+        "Ref": "cloudfrontconstructdistributionS3Bucket92816EEB"
+      }
+    },
+    "Exportcmsvehiclesimulatoronawsstackdevloggingbucketarn": {
+      "Export": {
+        "Name": "cms-vehicle-simulator-on-aws-stack-dev-logging-bucket-arn"
+      },
+      "Value": {
+        "Fn::GetAtt": [
+          "cloudfrontconstructlogbucket8EA94FFE",
+          "Arn"
+        ]
+      }
+    },
+    "Exportcmsvehiclesimulatoronawsstackdevroutesbucketarn": {
+      "Export": {
+        "Name": "cms-vehicle-simulator-on-aws-stack-dev-routes-bucket-arn"
+      },
+      "Value": {
+        "Fn::GetAtt": [
+          "cloudfrontconstructroutesbucket4BB76AE3",
+          "Arn"
+        ]
+      }
+    }
+  },
+  "Resources": {
+    "cloudfrontconstructdistributionCloudFrontDistributionFCD6BB51": {
+      "Metadata": {
+        "cfn_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "W70",
+              "reason": "Since the distribution uses the CloudFront domain name, CloudFront automatically sets the security policy to TLSv1 regardless of the value of MinimumProtocolVersion"
+            }
+          ]
+        }
+      },
+      "Properties": {
+        "DistributionConfig": {
+          "Comment": "CMS Vehicle Simulator Distribution",
+          "CustomErrorResponses": [
+            {
+              "ErrorCode": 403,
+              "ResponseCode": 200,
+              "ResponsePagePath": "/index.html"
+            },
+            {
+              "ErrorCode": 404,
+              "ResponseCode": 200,
+              "ResponsePagePath": "/index.html"
+            }
+          ],
+          "DefaultCacheBehavior": {
+            "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+            "Compress": true,
+            "ResponseHeadersPolicyId": {
+              "Ref": "cloudfrontconstructdistributionResponseHeadersPolicy72AB5B13"
+            },
+            "TargetOriginId": "vscloudfrontcloudfrontconstructdistributionCloudFrontDistributionOrigin1517BFCF8",
+            "ViewerProtocolPolicy": "redirect-to-https"
+          },
+          "DefaultRootObject": "index.html",
+          "Enabled": true,
+          "HttpVersion": "http2",
+          "IPV6Enabled": true,
+          "Logging": {
+            "Bucket": {
+              "Fn::GetAtt": [
+                "cloudfrontconstructlogbucket8EA94FFE",
+                "RegionalDomainName"
+              ]
+            },
+            "Prefix": "console-cf/"
+          },
+          "Origins": [
+            {
+              "DomainName": {
+                "Fn::GetAtt": [
+                  "cloudfrontconstructdistributionS3Bucket92816EEB",
+                  "RegionalDomainName"
+                ]
+              },
+              "Id": "vscloudfrontcloudfrontconstructdistributionCloudFrontDistributionOrigin1517BFCF8",
+              "S3OriginConfig": {
+                "OriginAccessIdentity": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "origin-access-identity/cloudfront/",
+                      {
+                        "Ref": "cloudfrontconstructdistributionCloudFrontDistributionOrigin1S3OriginD3CB5101"
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Restrictions": {
+            "GeoRestriction": {
+              "Locations": [
+                "US"
+              ],
+              "RestrictionType": "whitelist"
+            }
+          }
+        }
+      },
+      "Type": "AWS::CloudFront::Distribution"
+    },
+    "cloudfrontconstructdistributionCloudFrontDistributionOrigin1S3OriginD3CB5101": {
+      "Properties": {
+        "CloudFrontOriginAccessIdentityConfig": {
+          "Comment": "Identity for vscloudfrontcloudfrontconstructdistributionCloudFrontDistributionOrigin1517BFCF8"
+        }
+      },
+      "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity"
+    },
+    "cloudfrontconstructdistributionResponseHeadersPolicy72AB5B13": {
+      "Properties": {
+        "ResponseHeadersPolicyConfig": {
+          "Comment": "Response header policy for CMS Vehicle Simulator cloudfront distribution",
+          "CustomHeadersConfig": {
+            "Items": [
+              {
+                "Header": "Cache-Control",
+                "Override": true,
+                "Value": "no-store, no-cache"
+              },
+              {
+                "Header": "Pragma",
+                "Override": true,
+                "Value": "no-cache"
+              }
+            ]
+          },
+          "Name": {
+            "Fn::Join": [
+              "",
+              [
+                "response-header-policy-cms-vehicle-simulator-on-aws-stack-dev-",
+                {
+                  "Ref": "AWS::Region"
+                }
+              ]
+            ]
+          },
+          "SecurityHeadersConfig": {
+            "ContentSecurityPolicy": {
+              "ContentSecurityPolicy": "upgrade-insecure-requests;default-src 'none';object-src 'none';base-uri 'none';img-src 'self' https://*.amazonaws.com data: blob:;script-src 'self';style-src 'self' 'unsafe-inline' https:;connect-src 'self' wss://*.amazonaws.com https://*.amazonaws.com;font-src 'self' https:;manifest-src 'self';frame-ancestors 'none';",
+              "Override": true
+            },
+            "ContentTypeOptions": {
+              "Override": true
+            },
+            "FrameOptions": {
+              "FrameOption": "DENY",
+              "Override": true
+            },
+            "ReferrerPolicy": {
+              "Override": true,
+              "ReferrerPolicy": "same-origin"
+            },
+            "StrictTransportSecurity": {
+              "AccessControlMaxAgeSec": 47304000,
+              "IncludeSubdomains": true,
+              "Override": true
+            }
+          }
+        }
+      },
+      "Type": "AWS::CloudFront::ResponseHeadersPolicy"
+    },
+    "cloudfrontconstructdistributionS3Bucket92816EEB": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        },
+        "LifecycleConfiguration": {
+          "Rules": [
+            {
+              "NoncurrentVersionTransitions": [
+                {
+                  "StorageClass": "GLACIER",
+                  "TransitionInDays": 90
+                }
+              ],
+              "Status": "Enabled"
+            }
+          ]
+        },
+        "LoggingConfiguration": {
+          "DestinationBucketName": {
+            "Ref": "cloudfrontconstructlogbucket8EA94FFE"
+          },
+          "LogFilePrefix": "console-s3/"
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "cloudfrontconstructdistributionS3BucketPolicyDE19FE3B": {
+      "Metadata": {
+        "cfn_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "F16",
+              "reason": "Public website bucket policy requires a wildcard principal"
+            }
+          ]
+        }
+      },
+      "Properties": {
+        "Bucket": {
+          "Ref": "cloudfrontconstructdistributionS3Bucket92816EEB"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "cloudfrontconstructdistributionS3Bucket92816EEB",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "cloudfrontconstructdistributionS3Bucket92816EEB",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Principal": {
+                "CanonicalUser": {
+                  "Fn::GetAtt": [
+                    "cloudfrontconstructdistributionCloudFrontDistributionOrigin1S3OriginD3CB5101",
+                    "S3CanonicalUserId"
+                  ]
+                }
+              },
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "cloudfrontconstructdistributionS3Bucket92816EEB",
+                        "Arn"
+                      ]
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Type": "AWS::S3::BucketPolicy"
+    },
+    "cloudfrontconstructlogbucket8EA94FFE": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AccessControl": "LogDeliveryWrite",
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        },
+        "OwnershipControls": {
+          "Rules": [
+            {
+              "ObjectOwnership": "ObjectWriter"
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "cloudfrontconstructlogbucketPolicyB6BCAEF4": {
+      "Properties": {
+        "Bucket": {
+          "Ref": "cloudfrontconstructlogbucket8EA94FFE"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "cloudfrontconstructlogbucket8EA94FFE",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "cloudfrontconstructlogbucket8EA94FFE",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Type": "AWS::S3::BucketPolicy"
+    },
+    "cloudfrontconstructroutesbucket4BB76AE3": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        },
+        "LoggingConfiguration": {
+          "DestinationBucketName": {
+            "Ref": "cloudfrontconstructlogbucket8EA94FFE"
+          },
+          "LogFilePrefix": "routes-bucket-access/"
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "cloudfrontconstructroutesbucketPolicyF79A0220": {
+      "Properties": {
+        "Bucket": {
+          "Ref": "cloudfrontconstructroutesbucket4BB76AE3"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "cloudfrontconstructroutesbucket4BB76AE3",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "cloudfrontconstructroutesbucket4BB76AE3",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "cloudfrontconstructroutesbucket4BB76AE3",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::GetAtt": [
+                    "cloudfrontconstructroutesbucket4BB76AE3",
+                    "Arn"
+                  ]
+                }
+              ],
+              "Sid": "HttpsOnly"
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Type": "AWS::S3::BucketPolicy"
+    }
+  }
+}

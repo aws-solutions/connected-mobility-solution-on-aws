@@ -1,0 +1,166 @@
+{
+    "/cms-backstage-dev/cms-backstage/backstage-cognito-user-pool/backstage-user-pool-domain/CloudFrontDomainName/CustomResourcePolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Resource wildcard for cognito-idp:DescribeUserPoolDomain is required."
+            }
+        ]
+    },
+    "/cms-backstage-dev/cms-backstage/backstage-task-definition-role/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Resource wildcard for ecr:GetAuthorizationToken is required."
+            }
+        ]
+    },
+    "/cms-backstage-dev/cms-backstage/cognito-certificate/CertificateRequestorFunction/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Resource wildcard for ACM actions is required."
+            }
+        ]
+    },
+    "/cms-backstage-dev/cms-backstage/alb-listener-certificate/CertificateRequestorFunction/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Resource wildcard for ACM actions is required."
+            }
+        ]
+    },
+    "/cms-backstage-dev/cms-backstage/backstage-task-definition-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W11",
+                "reason": "Resource wildcards are required on S3 buckets and for Proton actions."
+            },
+            {
+                "id": "W28",
+                "reason": "Explicit name is accepted for this resource."
+            }
+        ]
+    },
+    "/cms-backstage-dev/cms-backstage/cognito-certificate/CertificateRequestorFunction/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W58",
+                "reason": "Automatically created lambda by Lambda Function construct, does not need log permissions."
+            },
+            {
+                "id": "W89",
+                "reason": "VPC not required for this project for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Reserved concurrent executions not required for now."
+            }
+        ]
+    },
+    "/cms-backstage-dev/cms-backstage/alb-listener-certificate/CertificateRequestorFunction/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W58",
+                "reason": "Automatically created lambda by Lambda Function construct, does not need log permissions."
+            },
+            {
+                "id": "W89",
+                "reason": "VPC not required for this project for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Reserved concurrent executions not required for now."
+            }
+        ]
+    },
+    "/cms-backstage-dev/AWS679f53fac002430cb0da5b7982bd2287/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W58",
+                "reason": "Automatically created lambda by Lambda Function construct, does not need log permissions."
+            },
+            {
+                "id": "W89",
+                "reason": "VPC not required for this project for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Reserved concurrent executions not required for now."
+            }
+        ]
+    },
+    "/cms-backstage-dev/cms-backstage/cms-backstage-dev-alb/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W28",
+                "reason": "Explicit name is accepted for this resource."
+            }
+        ]
+    },
+    "/cms-backstage-dev/cms-backstage/backstage-elb-logs-bucket/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W35",
+                "reason": "Server access logs bucket does not need logging configured as it is a log bucket itself."
+            }
+        ]
+    },
+    "/cms-backstage-dev/cms-backstage/backstage-ecs-fargate-service/SecurityGroup/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W40",
+                "reason": "This is expected as it is accessed from the web and auth is in place to prevent unintended users."
+            },
+            {
+                "id": "W5",
+                "reason": "This is expected as it is accessed from the web and auth is in place to prevent unintended users."
+            }
+        ]
+    },
+    "/cms-backstage-dev/cms-backstage/cms-backstage-dev-alb/SecurityGroup/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W9",
+                "reason": "This is expected as it is accessed from the web and auth is in place to prevent unintended users."
+            },
+            {
+                "id": "W2",
+                "reason": "This is expected as it is accessed from the web and auth is in place to prevent unintended users."
+            }
+        ]
+    },
+    "/cms-backstage-env-dev/cms-backstage-env/backstage-aurora-postgres/Secret/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W77",
+                "reason": "AWS managed KMS key is sufficient for SecretsManager Secret."
+            }
+        ]
+    },
+    "/cms-backstage-env-dev/cms-backstage-env/backstage-database-security-group/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W40",
+                "reason": "This is expected as it is accessed from the web and auth is in place to prevent unintended users."
+            },
+            {
+                "id": "W5",
+                "reason": "This is expected as it is accessed from the web and auth is in place to prevent unintended users."
+            }
+        ]
+    },
+    "/cms-backstage-env-dev/cms-backstage-env/backstage-aurora-postgres/RotationSingleUser/SecurityGroup/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W40",
+                "reason": "This is set by password rotation cdk feature .add_rotation_single_user(...)."
+            },
+            {
+                "id": "W5",
+                "reason": "This is set by password rotation cdk feature .add_rotation_single_user(...)."
+            }
+        ]
+    }
+}

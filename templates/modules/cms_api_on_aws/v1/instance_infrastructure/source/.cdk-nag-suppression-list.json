@@ -1,0 +1,86 @@
+{
+    "/cms-api-on-aws-stack-dev/cms-api/appsync-athena-data-source/lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::<cmsapiappsyncathenadatasourceathenaresultcmks3cmkencryptedbucketCEA9B8D2.Arn>/*",
+                    "Resource::<cmsapimoduleinputsssmrootbucketarnParameter61511BDB>/*",
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/cms-api-on-aws-stack-dev-athena-data-source-lambda:log-stream:*"
+                ],
+                "reason": "Wildcard permissions required to get/put all objects in the given bucket."
+            }
+        ]
+    },
+    "/cms-api-on-aws-stack-dev/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM4",
+                "appliesTo": [
+                    "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                ],
+                "reason": "Log retention lambda uses managed policies."
+            }
+        ]
+    },
+    "/cms-api-on-aws-stack-dev/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*"
+                ],
+                "reason": "Log retention lambda uses managed policies which have wildcard permissions."
+            }
+        ]
+    },
+    "/cms-api-on-aws-stack-dev/cms-api/appsync-api/graphql-api-access-log-role/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/appsync/apis/<cmsapiappsyncapigraphqlapi7FD01C2C.ApiId>:log-stream:*"
+                ],
+                "reason": "API access log role requires wildcard for log-stream permissions."
+            }
+        ]
+    },
+    "/cms-api-on-aws-stack-dev/cms-api/appsync-api/graphql-api/lambda-data-source/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::<cmsapiappsyncathenadatasourcelambda6647B8E4.Arn>:*"
+                ],
+                "reason": "The AppSync data source policy sets wild card permissions but is limited to lambda:InvokeFunction on the provided lambda."
+            }
+        ]
+    },
+    "/cms-api-on-aws-stack-dev/cms-api/authorization-lambda/lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/cms-api-on-aws-stack-dev-authorization-lambda:log-stream:*"
+                ],
+                "reason": "API access log role requires wildcard for log-stream permissions."
+            }
+        ]
+    },
+    "/cms-api-on-aws-stack-dev/cms-api/authorization-lambda/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+            }
+        ]
+    },
+    "/cms-api-on-aws-stack-dev/cms-api/appsync-athena-data-source/lambda/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+            }
+        ]
+    }
+}

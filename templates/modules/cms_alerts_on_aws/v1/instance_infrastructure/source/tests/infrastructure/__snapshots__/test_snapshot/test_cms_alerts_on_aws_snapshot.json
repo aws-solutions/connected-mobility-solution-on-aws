@@ -1,0 +1,2783 @@
+{
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "cmsalertsmoduleinputsconstructssmtokenvalidationlambdaarnParameter1CA960BF": {
+      "Default": "/dev/cms/authentication/token-validation-lambda/arn",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "deploymentuuidParameter": {
+      "Default": "/dev/cms/common/config/deployment-uuid",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    }
+  },
+  "Resources": {
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+      "DependsOn": [
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 900
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:PutRetentionPolicy",
+                "logs:DeleteRetentionPolicy"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "Roles": [
+          {
+            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "appregistryapplicationstackassociation": {
+      "Properties": {
+        "Application": {
+          "Fn::GetAtt": [
+            "cmsalertscmsalertsappregistryappregistryapplication0A27860B",
+            "Id"
+          ]
+        },
+        "Resource": {
+          "Ref": "AWS::StackId"
+        },
+        "ResourceType": "CFN_STACK"
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::ResourceAssociation"
+    },
+    "cmsalertsalertslambdadependencieslambdadependencylayerversion38F057EA": {
+      "Properties": {
+        "CompatibleArchitectures": [
+          "x86_64",
+          "arm64"
+        ],
+        "CompatibleRuntimes": [
+          "python3.8",
+          "python3.9",
+          "python3.10"
+        ],
+        "Content": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        }
+      },
+      "Type": "AWS::Lambda::LayerVersion"
+    },
+    "cmsalertsauthconstructauthorizationlambdaDAFC5893": {
+      "DependsOn": [
+        "cmsalertsauthconstructauthorizationlambdarole9B32A517"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "CMS Alerts Authorization Function",
+        "Environment": {
+          "Variables": {
+            "TOKEN_USE": "access",
+            "TOKEN_VALIDATION_LAMBDA_ARN": {
+              "Ref": "cmsalertsmoduleinputsconstructssmtokenvalidationlambdaarnParameter1CA960BF"
+            },
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.10/v1.0.0"
+          }
+        },
+        "FunctionName": "cms-alerts-on-aws-stack-dev-authorization-lambda",
+        "Handler": "authorization.main.handler",
+        "Layers": [
+          {
+            "Ref": "cmsalertsalertslambdadependencieslambdadependencylayerversion38F057EA"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsalertsauthconstructauthorizationlambdarole9B32A517",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "Timeout": 60
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsalertsauthconstructauthorizationlambdaLogRetention82B12BEE": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsalertsauthconstructauthorizationlambdaDAFC5893"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsalertsauthconstructauthorizationlambdaappsyncapiappsync50B5C8FD": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "cmsalertsauthconstructauthorizationlambdaDAFC5893",
+            "Arn"
+          ]
+        },
+        "Principal": "appsync.amazonaws.com"
+      },
+      "Type": "AWS::Lambda::Permission"
+    },
+    "cmsalertsauthconstructauthorizationlambdagraphqlpublishapiappsyncD2CD2A71": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "cmsalertsauthconstructauthorizationlambdaDAFC5893",
+            "Arn"
+          ]
+        },
+        "Principal": "appsync.amazonaws.com"
+      },
+      "Type": "AWS::Lambda::Permission"
+    },
+    "cmsalertsauthconstructauthorizationlambdarole9B32A517": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-alerts-on-aws-stack-dev-authorization-lambda"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-alerts-on-aws-stack-dev-authorization-lambda:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "lambda:InvokeFunction",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Ref": "cmsalertsmoduleinputsconstructssmtokenvalidationlambdaarnParameter1CA960BF"
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "lambda-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsalertscmsalertsappregistryappregistryapplication0A27860B": {
+      "Properties": {
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "cms-alerts-on-aws-stack-dev-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Ref": "deploymentuuidParameter"
+          }
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::Application"
+    },
+    "cmsalertscmsalertsappregistryappregistryapplicationattributeassociationCCFA6E02": {
+      "Properties": {
+        "Application": {
+          "Fn::GetAtt": [
+            "cmsalertscmsalertsappregistryappregistryapplication0A27860B",
+            "Id"
+          ]
+        },
+        "AttributeGroup": {
+          "Fn::GetAtt": [
+            "cmsalertscmsalertsappregistrydefaultapplicationattributes11DBC871",
+            "Id"
+          ]
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroupAssociation"
+    },
+    "cmsalertscmsalertsappregistrydefaultapplicationattributes11DBC871": {
+      "Properties": {
+        "Attributes": {
+          "ApplicationType": "AWS-Solutions",
+          "SolutionID": "SO0241",
+          "SolutionName": "Connected Mobility Solution on AWS",
+          "Version": "v1.0.0"
+        },
+        "Description": "Attribute group for solution information",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "cms-alerts-on-aws-stack-dev-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Ref": "deploymentuuidParameter"
+          }
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroup"
+    },
+    "cmsalertsfrontendapiconstructalertsapiusersubscriptionslambdadatasourceAE258C03": {
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "cmsalertsfrontendapiconstructappsyncapiAB97D3AC",
+            "ApiId"
+          ]
+        },
+        "LambdaConfig": {
+          "LambdaFunctionArn": {
+            "Fn::GetAtt": [
+              "cmsalertsusersubscriptionsconstructusersubscriptionslambdaECD91DCE",
+              "Arn"
+            ]
+          }
+        },
+        "Name": "alertsapiusersubscriptionslambdadatasource",
+        "ServiceRoleArn": {
+          "Fn::GetAtt": [
+            "cmsalertsfrontendapiconstructgraphqlapiservicerole338AA56B",
+            "Arn"
+          ]
+        },
+        "Type": "AWS_LAMBDA"
+      },
+      "Type": "AWS::AppSync::DataSource"
+    },
+    "cmsalertsfrontendapiconstructappsyncapiAB97D3AC": {
+      "Properties": {
+        "AuthenticationType": "AWS_LAMBDA",
+        "LambdaAuthorizerConfig": {
+          "AuthorizerResultTtlInSeconds": 300,
+          "AuthorizerUri": {
+            "Fn::GetAtt": [
+              "cmsalertsauthconstructauthorizationlambdaDAFC5893",
+              "Arn"
+            ]
+          },
+          "IdentityValidationExpression": "^Bearer [\\w-]+\\.[\\w-]+\\.[\\w-]+$"
+        },
+        "LogConfig": {
+          "CloudWatchLogsRoleArn": {
+            "Fn::GetAtt": [
+              "cmsalertsfrontendapiconstructgraphqlapiaccesslogrole035EAB20",
+              "Arn"
+            ]
+          },
+          "FieldLogLevel": "NONE"
+        },
+        "Name": "cms-alerts-on-aws-stack-dev-frontend-api",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "XrayEnabled": true
+      },
+      "Type": "AWS::AppSync::GraphQLApi"
+    },
+    "cmsalertsfrontendapiconstructappsyncapiLogRetention665BAE4A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/appsync/apis/",
+              {
+                "Fn::GetAtt": [
+                  "cmsalertsfrontendapiconstructappsyncapiAB97D3AC",
+                  "ApiId"
+                ]
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsalertsfrontendapiconstructappsyncapiSchema2EA11510": {
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "cmsalertsfrontendapiconstructappsyncapiAB97D3AC",
+            "ApiId"
+          ]
+        },
+        "Definition": "str"
+      },
+      "Type": "AWS::AppSync::GraphQLSchema"
+    },
+    "cmsalertsfrontendapiconstructappsyncapigetusersubscriptionsresolver82CFA0F7": {
+      "DependsOn": [
+        "cmsalertsfrontendapiconstructalertsapiusersubscriptionslambdadatasourceAE258C03",
+        "cmsalertsfrontendapiconstructappsyncapiSchema2EA11510"
+      ],
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "cmsalertsfrontendapiconstructappsyncapiAB97D3AC",
+            "ApiId"
+          ]
+        },
+        "DataSourceName": "alertsapiusersubscriptionslambdadatasource",
+        "FieldName": "getUserSubscriptions",
+        "Kind": "UNIT",
+        "TypeName": "Query"
+      },
+      "Type": "AWS::AppSync::Resolver"
+    },
+    "cmsalertsfrontendapiconstructappsyncapiupdateusersubscriptionsresolver6A965A4B": {
+      "DependsOn": [
+        "cmsalertsfrontendapiconstructalertsapiusersubscriptionslambdadatasourceAE258C03",
+        "cmsalertsfrontendapiconstructappsyncapiSchema2EA11510"
+      ],
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "cmsalertsfrontendapiconstructappsyncapiAB97D3AC",
+            "ApiId"
+          ]
+        },
+        "DataSourceName": "alertsapiusersubscriptionslambdadatasource",
+        "FieldName": "updateUserSubscriptions",
+        "Kind": "UNIT",
+        "TypeName": "Mutation"
+      },
+      "Type": "AWS::AppSync::Resolver"
+    },
+    "cmsalertsfrontendapiconstructgraphqlapiaccesslogrole035EAB20": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "appsync.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Path": "/",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsalertsfrontendapiconstructgraphqlapiaccesslogroleDefaultPolicy60D5DAAB": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":log-group:/aws/appsync/apis/",
+                      {
+                        "Fn::GetAtt": [
+                          "cmsalertsfrontendapiconstructappsyncapiAB97D3AC",
+                          "ApiId"
+                        ]
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":log-group:/aws/appsync/apis/",
+                      {
+                        "Fn::GetAtt": [
+                          "cmsalertsfrontendapiconstructappsyncapiAB97D3AC",
+                          "ApiId"
+                        ]
+                      },
+                      ":log-stream:*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cmsalertsfrontendapiconstructgraphqlapiaccesslogroleDefaultPolicy60D5DAAB",
+        "Roles": [
+          {
+            "Ref": "cmsalertsfrontendapiconstructgraphqlapiaccesslogrole035EAB20"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cmsalertsfrontendapiconstructgraphqlapiservicerole338AA56B": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "appsync.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "lambda:InvokeFunction",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "cmsalertsusersubscriptionsconstructusersubscriptionslambdaECD91DCE",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "lambda-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsalertsincomingalertsconstructalertslambdarole234A1506": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-alerts-on-aws-stack-dev-create-alerts-lambda"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-alerts-on-aws-stack-dev-create-alerts-lambda:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "dynamodb:PutItem",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":dynamodb:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":table/",
+                        {
+                          "Ref": "cmsalertsnotificationconstructnotificationstable6C23B163"
+                        }
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "dynamodb-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "kms:Decrypt",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":kms:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":key/",
+                        {
+                          "Ref": "cmsalertsnotificationconstructnotificationstablekeyF40EF8D4"
+                        }
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "kms-policy-notifications-key"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsalertsincomingalertsconstructalertslambdaroleDefaultPolicy61363FDF": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "sqs:DeleteMessage",
+                "sqs:GetQueueAttributes",
+                "sqs:ReceiveMessage"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "cmsalertssnstosqsconstructsqsqueue8175A889",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "kms:Decrypt",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":kms:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":key/",
+                    {
+                      "Ref": "cmsalertssnstosqsconstructsqsqueuekey1D451DC2"
+                    }
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "sqs:ReceiveMessage",
+                "sqs:ChangeMessageVisibility",
+                "sqs:GetQueueUrl",
+                "sqs:DeleteMessage",
+                "sqs:GetQueueAttributes"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "cmsalertssnstosqsconstructsqsqueue8175A889",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "kms:Decrypt",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "cmsalertssnstosqsconstructsqsqueuekey1D451DC2",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cmsalertsincomingalertsconstructalertslambdaroleDefaultPolicy61363FDF",
+        "Roles": [
+          {
+            "Ref": "cmsalertsincomingalertsconstructalertslambdarole234A1506"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cmsalertsincomingalertsconstructcreatealertslambda7BFED8C1": {
+      "DependsOn": [
+        "cmsalertsincomingalertsconstructalertslambdaroleDefaultPolicy61363FDF",
+        "cmsalertsincomingalertsconstructalertslambdarole234A1506"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "CMS Alerts Lambda Function",
+        "Environment": {
+          "Variables": {
+            "NOTIFICATIONS_TABLE_NAME": {
+              "Ref": "cmsalertsnotificationconstructnotificationstable6C23B163"
+            },
+            "SNS_TOPIC_PREFIX": "CMS",
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.10/v1.0.0"
+          }
+        },
+        "FunctionName": "cms-alerts-on-aws-stack-dev-create-alerts-lambda",
+        "Handler": "create_alerts.main.handler",
+        "Layers": [
+          {
+            "Ref": "cmsalertsalertslambdadependencieslambdadependencylayerversion38F057EA"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsalertsincomingalertsconstructalertslambdarole234A1506",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "Timeout": 30
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsalertsincomingalertsconstructcreatealertslambdaLogRetentionAAE324F3": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsalertsincomingalertsconstructcreatealertslambda7BFED8C1"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsalertsincomingalertsconstructcreatealertslambdaSqsEventSourcecmsalertsonawscmsalertssnstosqsconstructsqsqueue3B9EFB77CCAB2B91": {
+      "Properties": {
+        "BatchSize": 1,
+        "EventSourceArn": {
+          "Fn::GetAtt": [
+            "cmsalertssnstosqsconstructsqsqueue8175A889",
+            "Arn"
+          ]
+        },
+        "FunctionName": {
+          "Ref": "cmsalertsincomingalertsconstructcreatealertslambda7BFED8C1"
+        }
+      },
+      "Type": "AWS::Lambda::EventSourceMapping"
+    },
+    "cmsalertsmoduleoutputsalertsfrontendapiendpointBD018934": {
+      "Properties": {
+        "Name": "/dev/cms/alerts/frontend-api/endpoint",
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Ref": "deploymentuuidParameter"
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "cmsalertsfrontendapiconstructappsyncapiAB97D3AC",
+            "GraphQLUrl"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsalertsmoduleoutputsalertspublishapiendpointA821542F": {
+      "Properties": {
+        "Name": "/dev/cms/alerts/publish-api/endpoint",
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Ref": "deploymentuuidParameter"
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "cmsalertspublishapiconstructgraphqlpublishapi6BB822A6",
+            "GraphQLUrl"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsalertsnotificationconstructdeadletterqueue0DEE187C": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "KmsMasterKeyId": {
+          "Fn::GetAtt": [
+            "cmsalertsnotificationconstructdlqqueuekey09268231",
+            "Arn"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::SQS::Queue",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsalertsnotificationconstructdeadletterqueuePolicyC571A44D": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sqs:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": {
+                "Fn::GetAtt": [
+                  "cmsalertsnotificationconstructdeadletterqueue0DEE187C",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Queues": [
+          {
+            "Ref": "cmsalertsnotificationconstructdeadletterqueue0DEE187C"
+          }
+        ]
+      },
+      "Type": "AWS::SQS::QueuePolicy"
+    },
+    "cmsalertsnotificationconstructdlqqueuekey09268231": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "cmsalertsnotificationconstructnotificationslambdarole4CFD52E4": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "sns:CreateTopic",
+                    "sns:Publish",
+                    "sns:TagResource"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":sns:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":CMS-*"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "sns-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-alerts-on-aws-stack-dev-send-notifications-lambda"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-alerts-on-aws-stack-dev-send-notifications-lambda:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "dynamodb:DescribeStream",
+                    "dynamodb:GetRecords",
+                    "dynamodb:GetShardIterator"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "cmsalertsnotificationconstructnotificationstable6C23B163",
+                      "StreamArn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "dynamodb-stream-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "kms:Decrypt",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":kms:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":key/",
+                        {
+                          "Ref": "cmsalertsnotificationconstructnotificationstablekeyF40EF8D4"
+                        }
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "kms-notifications-table-key-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "kms:Decrypt",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":kms:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":key/",
+                        {
+                          "Ref": "cmsalertsnotificationconstructdlqqueuekey09268231"
+                        }
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "kms-dlq-key-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "kms:Decrypt",
+                    "kms:Encrypt",
+                    "kms:GenerateDataKey"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":kms:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":key/",
+                        {
+                          "Ref": "cmsalertsusersubscriptionsconstructusersubscriptiontopicgeneralkeyD95E7C20"
+                        }
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "kms-subs-topic-key-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "sqs:GetQueueAttributes",
+                    "sqs:GetQueueUrl",
+                    "sqs:SendMessage"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "cmsalertsnotificationconstructdeadletterqueue0DEE187C",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "sqs-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsalertsnotificationconstructnotificationstable6C23B163": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "topic",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "timestamp",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "KeySchema": [
+          {
+            "AttributeName": "topic",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "timestamp",
+            "KeyType": "RANGE"
+          }
+        ],
+        "PointInTimeRecoverySpecification": {
+          "PointInTimeRecoveryEnabled": true
+        },
+        "SSESpecification": {
+          "KMSMasterKeyId": {
+            "Fn::GetAtt": [
+              "cmsalertsnotificationconstructnotificationstablekeyF40EF8D4",
+              "Arn"
+            ]
+          },
+          "SSEEnabled": true,
+          "SSEType": "KMS"
+        },
+        "StreamSpecification": {
+          "StreamViewType": "NEW_IMAGE"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::DynamoDB::Table",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "cmsalertsnotificationconstructnotificationstableeventsourcemapping2B8E37A6": {
+      "Properties": {
+        "BatchSize": 1,
+        "DestinationConfig": {
+          "OnFailure": {
+            "Destination": {
+              "Fn::GetAtt": [
+                "cmsalertsnotificationconstructdeadletterqueue0DEE187C",
+                "Arn"
+              ]
+            }
+          }
+        },
+        "EventSourceArn": {
+          "Fn::GetAtt": [
+            "cmsalertsnotificationconstructnotificationstable6C23B163",
+            "StreamArn"
+          ]
+        },
+        "FunctionName": {
+          "Ref": "cmsalertsnotificationconstructsendnotificationslambda6BB69DF0"
+        },
+        "MaximumRetryAttempts": 3,
+        "StartingPosition": "TRIM_HORIZON"
+      },
+      "Type": "AWS::Lambda::EventSourceMapping"
+    },
+    "cmsalertsnotificationconstructnotificationstablekeyF40EF8D4": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "cmsalertsnotificationconstructsendnotificationslambda6BB69DF0": {
+      "DependsOn": [
+        "cmsalertsnotificationconstructnotificationslambdarole4CFD52E4"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "CMS Alerts Notifications Lambda Function",
+        "Environment": {
+          "Variables": {
+            "DEPLOYMENT_UUID": {
+              "Ref": "deploymentuuidParameter"
+            },
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.10/v1.0.0"
+          }
+        },
+        "FunctionName": "cms-alerts-on-aws-stack-dev-send-notifications-lambda",
+        "Handler": "send_notifications.main.handler",
+        "Layers": [
+          {
+            "Ref": "cmsalertsalertslambdadependencieslambdadependencylayerversion38F057EA"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsalertsnotificationconstructnotificationslambdarole4CFD52E4",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "Timeout": 60
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsalertsnotificationconstructsendnotificationslambdaLogRetentionF079401F": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsalertsnotificationconstructsendnotificationslambda6BB69DF0"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsalertspublishapiconstructalertsapipublishlambdadatasourceCECC12FB": {
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "cmsalertspublishapiconstructgraphqlpublishapi6BB822A6",
+            "ApiId"
+          ]
+        },
+        "LambdaConfig": {
+          "LambdaFunctionArn": {
+            "Fn::GetAtt": [
+              "cmsalertspublishapiconstructpublishlambdaFC5F95FF",
+              "Arn"
+            ]
+          }
+        },
+        "Name": "alertsapipublishlambdadatasource",
+        "ServiceRoleArn": {
+          "Fn::GetAtt": [
+            "cmsalertspublishapiconstructgraphqlapiservicerole9E790837",
+            "Arn"
+          ]
+        },
+        "Type": "AWS_LAMBDA"
+      },
+      "Type": "AWS::AppSync::DataSource"
+    },
+    "cmsalertspublishapiconstructgraphqlapiaccesslogroleB946708E": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "appsync.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Path": "/",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsalertspublishapiconstructgraphqlapiservicerole9E790837": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "appsync.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "lambda:InvokeFunction",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "cmsalertspublishapiconstructpublishlambdaFC5F95FF",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "lambda-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsalertspublishapiconstructgraphqlpublishapi6BB822A6": {
+      "Properties": {
+        "AuthenticationType": "AWS_LAMBDA",
+        "LambdaAuthorizerConfig": {
+          "AuthorizerResultTtlInSeconds": 300,
+          "AuthorizerUri": {
+            "Fn::GetAtt": [
+              "cmsalertsauthconstructauthorizationlambdaDAFC5893",
+              "Arn"
+            ]
+          },
+          "IdentityValidationExpression": "^Bearer [\\w-]+\\.[\\w-]+\\.[\\w-]+$"
+        },
+        "LogConfig": {
+          "CloudWatchLogsRoleArn": {
+            "Fn::GetAtt": [
+              "cmsalertspublishapiconstructgraphqlapiaccesslogroleB946708E",
+              "Arn"
+            ]
+          },
+          "FieldLogLevel": "NONE"
+        },
+        "Name": "cms-alerts-on-aws-stack-dev-publish-api",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "XrayEnabled": true
+      },
+      "Type": "AWS::AppSync::GraphQLApi"
+    },
+    "cmsalertspublishapiconstructgraphqlpublishapiLogRetentionD38E372C": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/appsync/apis/",
+              {
+                "Fn::GetAtt": [
+                  "cmsalertspublishapiconstructgraphqlpublishapi6BB822A6",
+                  "ApiId"
+                ]
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsalertspublishapiconstructgraphqlpublishapiSchema978B9321": {
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "cmsalertspublishapiconstructgraphqlpublishapi6BB822A6",
+            "ApiId"
+          ]
+        },
+        "Definition": "str"
+      },
+      "Type": "AWS::AppSync::GraphQLSchema"
+    },
+    "cmsalertspublishapiconstructgraphqlpublishapipublishuserpreferencesresolver20772413": {
+      "DependsOn": [
+        "cmsalertspublishapiconstructalertsapipublishlambdadatasourceCECC12FB",
+        "cmsalertspublishapiconstructgraphqlpublishapiSchema978B9321"
+      ],
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "cmsalertspublishapiconstructgraphqlpublishapi6BB822A6",
+            "ApiId"
+          ]
+        },
+        "DataSourceName": "alertsapipublishlambdadatasource",
+        "FieldName": "publish",
+        "Kind": "UNIT",
+        "TypeName": "Mutation"
+      },
+      "Type": "AWS::AppSync::Resolver"
+    },
+    "cmsalertspublishapiconstructpublishlambdaFC5F95FF": {
+      "DependsOn": [
+        "cmsalertspublishapiconstructpublishlambdaroleABDF717E"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "CMS Alerts Publish Function",
+        "Environment": {
+          "Variables": {
+            "ALERTS_SNS_TOPIC_ARN": {
+              "Ref": "cmsalertssnstosqsconstructsnstopic5DB29F7E"
+            },
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.10/v1.0.0"
+          }
+        },
+        "FunctionName": "cms-alerts-on-aws-stack-dev-publish-lambda",
+        "Handler": "publish.main.handler",
+        "Layers": [
+          {
+            "Ref": "cmsalertsalertslambdadependencieslambdadependencylayerversion38F057EA"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsalertspublishapiconstructpublishlambdaroleABDF717E",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "Timeout": 60
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsalertspublishapiconstructpublishlambdaLogRetention994F29B8": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsalertspublishapiconstructpublishlambdaFC5F95FF"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsalertspublishapiconstructpublishlambdaroleABDF717E": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "sns:Publish",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Ref": "cmsalertssnstosqsconstructsnstopic5DB29F7E"
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "sns-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "kms:Decrypt",
+                    "kms:Encrypt",
+                    "kms:GenerateDataKey"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":kms:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":key/",
+                        {
+                          "Ref": "cmsalertssnstosqsconstructsnstopickey84847481"
+                        }
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "kms-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-alerts-on-aws-stack-dev-publish-lambda"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-alerts-on-aws-stack-dev-publish-lambda:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsalertssnstosqsconstructEncryptionKey51E32300": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "cmsalertssnstosqsconstructdeadletterqueue79855B5A": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "KmsMasterKeyId": {
+          "Fn::GetAtt": [
+            "cmsalertssnstosqsconstructsqsqueuekey1D451DC2",
+            "Arn"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::SQS::Queue",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsalertssnstosqsconstructdeadletterqueuePolicy0B6F6898": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sqs:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": {
+                "Fn::GetAtt": [
+                  "cmsalertssnstosqsconstructdeadletterqueue79855B5A",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Queues": [
+          {
+            "Ref": "cmsalertssnstosqsconstructdeadletterqueue79855B5A"
+          }
+        ]
+      },
+      "Type": "AWS::SQS::QueuePolicy"
+    },
+    "cmsalertssnstosqsconstructsnstopic5DB29F7E": {
+      "Properties": {
+        "DisplayName": "cms-alerts-on-aws-stack-dev-Topic",
+        "FifoTopic": false,
+        "KmsMasterKeyId": {
+          "Fn::GetAtt": [
+            "cmsalertssnstosqsconstructsnstopickey84847481",
+            "Arn"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::SNS::Topic"
+    },
+    "cmsalertssnstosqsconstructsnstopickey84847481": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "cmsalertssnstosqsconstructsqsqueue8175A889": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "KmsMasterKeyId": {
+          "Fn::GetAtt": [
+            "cmsalertssnstosqsconstructsqsqueuekey1D451DC2",
+            "Arn"
+          ]
+        },
+        "RedrivePolicy": {
+          "deadLetterTargetArn": {
+            "Fn::GetAtt": [
+              "cmsalertssnstosqsconstructdeadletterqueue79855B5A",
+              "Arn"
+            ]
+          },
+          "maxReceiveCount": 1
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "VisibilityTimeout": 31
+      },
+      "Type": "AWS::SQS::Queue",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsalertssnstosqsconstructsqsqueuePolicy0FAD020B": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sqs:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": {
+                "Fn::GetAtt": [
+                  "cmsalertssnstosqsconstructsqsqueue8175A889",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "sqs:SendMessage",
+              "Condition": {
+                "ArnEquals": {
+                  "aws:SourceArn": {
+                    "Ref": "cmsalertssnstosqsconstructsnstopic5DB29F7E"
+                  }
+                }
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "sns.amazonaws.com"
+              },
+              "Resource": {
+                "Fn::GetAtt": [
+                  "cmsalertssnstosqsconstructsqsqueue8175A889",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Queues": [
+          {
+            "Ref": "cmsalertssnstosqsconstructsqsqueue8175A889"
+          }
+        ]
+      },
+      "Type": "AWS::SQS::QueuePolicy"
+    },
+    "cmsalertssnstosqsconstructsqsqueuecmsalertsonawscmsalertssnstosqsconstructsnstopic432033FBD23C2811": {
+      "DependsOn": [
+        "cmsalertssnstosqsconstructsqsqueuePolicy0FAD020B"
+      ],
+      "Properties": {
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "cmsalertssnstosqsconstructsqsqueue8175A889",
+            "Arn"
+          ]
+        },
+        "Protocol": "sqs",
+        "TopicArn": {
+          "Ref": "cmsalertssnstosqsconstructsnstopic5DB29F7E"
+        }
+      },
+      "Type": "AWS::SNS::Subscription"
+    },
+    "cmsalertssnstosqsconstructsqsqueuekey1D451DC2": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:GenerateDataKey"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "sns.amazonaws.com"
+              },
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:GenerateDataKey*"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "sns.amazonaws.com"
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "cmsalertsusersubscriptionsconstructuseremailsubscriptionstableA74BB966": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "email",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "topic_key",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "KeySchema": [
+          {
+            "AttributeName": "email",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "topic_key",
+            "KeyType": "RANGE"
+          }
+        ],
+        "PointInTimeRecoverySpecification": {
+          "PointInTimeRecoveryEnabled": true
+        },
+        "SSESpecification": {
+          "KMSMasterKeyId": {
+            "Fn::GetAtt": [
+              "cmsalertsusersubscriptionsconstructusersubscriptionstablekey2A0C6A38",
+              "Arn"
+            ]
+          },
+          "SSEEnabled": true,
+          "SSEType": "KMS"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::DynamoDB::Table",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "cmsalertsusersubscriptionsconstructusersubscriptionslambdaECD91DCE": {
+      "DependsOn": [
+        "cmsalertsusersubscriptionsconstructusersubscriptionslambdaroleF826DC9D"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "CMS Alerts User Subscriptions Function",
+        "Environment": {
+          "Variables": {
+            "ALARM_TYPES": "[\"VEHICLE_ALARM\", \"EV_BATTERY_HEALTH_ALARM\"]",
+            "DEPLOYMENT_UUID": {
+              "Ref": "deploymentuuidParameter"
+            },
+            "SNS_TOPIC_GENERAL_KEY_ID": {
+              "Ref": "cmsalertsusersubscriptionsconstructusersubscriptiontopicgeneralkeyD95E7C20"
+            },
+            "SNS_TOPIC_PREFIX": "CMS",
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.10/v1.0.0",
+            "USER_EMAIL_SUBSCRIPTIONS_TABLE": {
+              "Ref": "cmsalertsusersubscriptionsconstructuseremailsubscriptionstableA74BB966"
+            }
+          }
+        },
+        "FunctionName": "cms-alerts-on-aws-stack-dev-user-subscriptions-lambda",
+        "Handler": "user_subscriptions.main.handler",
+        "Layers": [
+          {
+            "Ref": "cmsalertsalertslambdadependencieslambdadependencylayerversion38F057EA"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsalertsusersubscriptionsconstructusersubscriptionslambdaroleF826DC9D",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "Timeout": 60
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsalertsusersubscriptionsconstructusersubscriptionslambdaInvoke442oDR1cXBYTBDDcFxfhJMvaRE7IoYDH4R6r7tti1fYD8888EFF": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "cmsalertsusersubscriptionsconstructusersubscriptionslambdaECD91DCE",
+            "Arn"
+          ]
+        },
+        "Principal": "appsync.amazonaws.com"
+      },
+      "Type": "AWS::Lambda::Permission"
+    },
+    "cmsalertsusersubscriptionsconstructusersubscriptionslambdaLogRetention8CFCEB29": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsalertsusersubscriptionsconstructusersubscriptionslambdaECD91DCE"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsalertsusersubscriptionsconstructusersubscriptionslambdaroleF826DC9D": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "sns:Subscribe",
+                    "sns:Unsubscribe",
+                    "sns:CreateTopic",
+                    "sns:TagResource"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":sns:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":CMS-*"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "sns-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-alerts-on-aws-stack-dev-user-subscriptions-lambda"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-alerts-on-aws-stack-dev-user-subscriptions-lambda:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "dynamodb:PutItem",
+                    "dynamodb:GetItem",
+                    "dynamodb:DeleteItem",
+                    "dynamodb:Query",
+                    "dynamodb:BatchWriteItem"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "cmsalertsusersubscriptionsconstructuseremailsubscriptionstableA74BB966",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "dynamodb-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "kms:Decrypt",
+                    "kms:Encrypt",
+                    "kms:GenerateDataKey"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":kms:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":key/",
+                        {
+                          "Ref": "cmsalertsusersubscriptionsconstructusersubscriptionstablekey2A0C6A38"
+                        }
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "kms-subs-table-key-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsalertsusersubscriptionsconstructusersubscriptionstablekey2A0C6A38": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "cmsalertsusersubscriptionsconstructusersubscriptiontopicgeneralkeyD95E7C20": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                  ],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}

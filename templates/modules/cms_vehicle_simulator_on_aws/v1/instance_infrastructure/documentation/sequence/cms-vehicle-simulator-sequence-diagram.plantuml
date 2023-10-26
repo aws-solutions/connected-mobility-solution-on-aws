@@ -1,0 +1,90 @@
+@startuml cms-vehicle-simulator-sequence-diagram
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v13.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/ApplicationIntegration/APIGateway.puml
+!include AWSPuml/General/Internetalt1.puml
+!include AWSPuml/Database/DynamoDB.puml
+!include AWSPuml/ApplicationIntegration/StepFunctions.puml
+!include AWSPuml/InternetOfThings/IoTMQTTProtocol.puml
+
+'Comment out to use default PlantUML sequence formatting
+skinparam participant {
+    BackgroundColor AWS_BG_COLOR
+    BorderColor AWS_BORDER_COLOR
+}
+skinparam sequence {
+    ArrowThickness 2
+    LifeLineBorderColor AWS_COLOR
+    LifeLineBackgroundColor AWS_BORDER_COLOR
+    BoxBorderColor AWS_COLOR
+}
+
+actor User as user
+box AWS Cloud
+'Instead of using ...Participant(), native creole img tags can be used
+participant "$APIGatewayIMG()\nDevice API\nGET, PUT, POST, OPTIONS" as api << API Gateway >>
+participant "$LambdaIMG()\nVehicle Simulator\nDevice API" as device_lambda << Lambda >>
+participant "$LambdaIMG()\nVehicle Simulator\nSimulation API" as simulation_lambda << Lambda >>
+participant "$LambdaIMG()\nVehicle Simulator\nTemplate API" as template_lambda << Lambda >>
+participant "$LambdaIMG()\nVehicle Simulator\nProvisioning" as provisioning_lambda << Lambda >>
+participant "$DynamoDBIMG()\nDeviceTypes Table" as device_db << DynamoDB >>
+participant "$DynamoDBIMG()\nSimulations Table" as simulation_db << DynamoDB >>
+participant "$DynamoDBIMG()\nTemplates Table" as template_db << DynamoDB >>
+participant "$StepFunctionsIMG()\nSimulator Step Function" as step_fns << Step Function >>
+participant "$StepFunctionsIMG()\nStep Function Loop" as step_fns_loop << Step Function >>
+participant "$LambdaIMG()\nVehicle Simulator\nExecute Sim" as execute_sim_lambda << Lambda >>
+participant "$IoTMQTTProtocolIMG()\nCMS MQTT Topics" as iot << IoT Core >>
+endbox
+
+'Use shortcut syntax for activation with colored lifelines and return keyword
+user -> api++ #CC2264: POST /devices/types
+api -> device_lambda++ #D86613: Create device type
+device_lambda -> device_db++ #3355DA: Put Item
+return
+return device type payload
+return
+|||
+user -> api++ #CC2264: POST /simulations
+api -> simulation_lambda++ #D86613: Create simulation
+simulation_lambda -> simulation_db++ #3355DA: Put Item
+return
+return simulation payload
+return
+|||
+user -> api++ #CC2264: POST /template
+api -> template_lambda++ #D86613: Create template
+template_lambda -> template_db++ #3355DA: Put Item
+return
+return template payload
+return
+|||
+user -> api++ #CC2264: PUT /simulations/<id>
+api -> simulation_lambda++ #D86613: Start simulation
+simulation_lambda -> step_fns++ #CC2264: Start state machine
+step_fns -> step_fns: Map to device type count
+device_db <- step_fns++ #3355DA: Fetch device type information
+return
+step_fns -> step_fns: Map to device total count
+provisioning_lambda <- step_fns++ #D86613: Provision simulated vehicles
+return
+|||
+step_fns --> step_fns_loop++ #CC2264: start loop
+step_fns_loop -> execute_sim_lambda++ #D86613: Execute sim
+execute_sim_lambda -> iot: Publish simulation payload
+return
+step_fns_loop -> step_fns_loop: Check simulation duration
+step_fns_loop -> step_fns_loop: Execute delay
+step_fns_loop -> step_fns_loop: Repeat loop
+return simulation lapsed
+|||
+simulation_db <- step_fns++ #3355DA: Update completed simulation status to "sleeping"
+return
+return
+return success, simulation payload
+return
+
+@enduml

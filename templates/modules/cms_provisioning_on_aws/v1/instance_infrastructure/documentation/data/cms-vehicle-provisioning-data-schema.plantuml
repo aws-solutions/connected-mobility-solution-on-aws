@@ -1,0 +1,27 @@
+@startuml
+!define table(x) class x << (T,#FFAAAA) >>
+!define primary_key(x) <u>x</u>
+hide methods
+hide stereotypes
+
+table(AuthorizedVehicle) {
+  primary_key(vin:str)
+  make:str
+  model:str
+  year:str
+  allow_provisioning:bool
+}
+
+table(ProvisionedVehicle) {
+  primary_key(vin:str)
+  certificate_id:str
+  make:str
+  model:str
+  year:str
+  region:str
+  thing_name:str
+  certificate_status:str
+  has_vehicle_connected_once:bool
+}
+
+@enduml

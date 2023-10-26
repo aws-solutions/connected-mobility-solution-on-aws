@@ -1,0 +1,93 @@
+{
+  "name": "cms-vehicle-simulator-console",
+  "description": "CMS Vehicle Simulator frontend user interface",
+  "version": "3.0.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "engines": {
+    "npm": ">=8.0.0 < 10.0.0",
+    "node": "18 || 20"
+  },
+  "dependencies": {
+    "@aws-amplify/api": "^5.0.29",
+    "@aws-amplify/auth": "^5.3.3",
+    "@aws-amplify/core": "^5.1.12",
+    "@aws-amplify/geo": "^2.0.29",
+    "@aws-amplify/interactions": "^5.0.29",
+    "@aws-amplify/storage": "^5.2.3",
+    "@aws-amplify/ui-react": "^4.6.0",
+    "@maplibre/maplibre-gl-geocoder": "^1.5.0",
+    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/jest": "^29.5.1",
+    "@types/node": "18.16.6",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.1",
+    "@types/react-router-dom": "^5.3.3",
+    "aws-amplify": "^5.1.4",
+    "aws-sdk": "^2.1374.0",
+    "bootstrap": "^5.2.3",
+    "bootstrap-icons": "^1.10.5",
+    "maplibre-gl": "^2.4.0",
+    "maplibre-gl-js-amplify": "^3.0.5",
+    "moment": "^2.29.4",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.7.4",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.10.0",
+    "react-scripts": "^5.0.1",
+    "typescript": "5.1.6",
+    "web-vitals": "^3.3.1"
+  },
+  "overrides": {
+    "nth-check": "^2.0.1",
+    "typescript": "5.1.6",
+    "@babel/traverse": "^7.23.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "GENERATE_SOURCEMAP=true INLINE_RUNTIME_CHUNK=false react-scripts build",
+    "test": "react-scripts test --coverage --watchAll=false --silent",
+    "eject": "react-scripts eject",
+    "prettier": "prettier --write \"./src/**/*.{js,jsx,ts,tsx}\""
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "prettier": "^3.0.1"
+  },
+  "jest": {
+    "coverageThreshold": {
+      "global": {
+        "lines": 80
+      }
+    },
+    "moduleNameMapper": {
+      "^[^\\S]+(.*?)\\.css$": "<rootDir>/src/__mocks__/styleMock.ts"
+    },
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!src/App.tsx",
+      "!src/index.tsx",
+      "!src/reportWebVitals.ts"
+    ]
+  }
+}

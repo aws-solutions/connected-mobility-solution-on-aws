@@ -1,0 +1,184 @@
+{
+  "Outputs": {
+    "Exportcmsvehiclesimulatoronawsstackdevidentitypoolref": {
+      "Export": {
+        "Name": "cms-vehicle-simulator-on-aws-stack-dev-identity-pool-ref"
+      },
+      "Value": {
+        "Ref": "cognitoconstructidentitypool43E0CD8B"
+      }
+    },
+    "Exportcmsvehiclesimulatoronawsstackdevuserpoolarn": {
+      "Export": {
+        "Name": "cms-vehicle-simulator-on-aws-stack-dev-user-pool-arn"
+      },
+      "Value": {
+        "Fn::GetAtt": [
+          "cognitoconstructuserpool7FE8E0EE",
+          "Arn"
+        ]
+      }
+    },
+    "Exportcmsvehiclesimulatoronawsstackdevuserpoolclientid": {
+      "Export": {
+        "Name": "cms-vehicle-simulator-on-aws-stack-dev-user-pool-client-id"
+      },
+      "Value": {
+        "Ref": "cognitoconstructuserpoolclient83626E74"
+      }
+    },
+    "Exportcmsvehiclesimulatoronawsstackdevuserpoolid": {
+      "Export": {
+        "Name": "cms-vehicle-simulator-on-aws-stack-dev-user-pool-id"
+      },
+      "Value": {
+        "Ref": "cognitoconstructuserpool7FE8E0EE"
+      }
+    }
+  },
+  "Resources": {
+    "cognitoconstructidentitypool43E0CD8B": {
+      "Properties": {
+        "AllowUnauthenticatedIdentities": false,
+        "CognitoIdentityProviders": [
+          {
+            "ClientId": {
+              "Ref": "cognitoconstructuserpoolclient83626E74"
+            },
+            "ProviderName": {
+              "Fn::GetAtt": [
+                "cognitoconstructuserpool7FE8E0EE",
+                "ProviderName"
+              ]
+            },
+            "ServerSideTokenCheck": false
+          }
+        ]
+      },
+      "Type": "AWS::Cognito::IdentityPool"
+    },
+    "cognitoconstructuserpool7FE8E0EE": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "AccountRecoverySetting": {
+          "RecoveryMechanisms": [
+            {
+              "Name": "verified_phone_number",
+              "Priority": 1
+            },
+            {
+              "Name": "verified_email",
+              "Priority": 2
+            }
+          ]
+        },
+        "AdminCreateUserConfig": {
+          "AllowAdminCreateUserOnly": true,
+          "InviteMessageTemplate": {
+            "EmailMessage": {
+              "Fn::Join": [
+                "",
+                [
+                  "\n                    <p>\n                        You are invited to join CMS Vehicle Simulator.<br />\n                        https://",
+                  {
+                    "Fn::ImportValue": "cms-vehicle-simulator-on-aws-stack-dev-cloud-front-domain-name"
+                  },
+                  "\n                    </p>\n                    <p>\n                        Please sign in to CMS Vehicle Simulator using the temporary credentials below:<br />\n                        Username: <strong>{username}</strong><br />Password: <strong>{####}</strong>\n                    </p>\n                "
+                ]
+              ]
+            },
+            "EmailSubject": "[CMS Vehicle Simulator] Login information"
+          }
+        },
+        "AutoVerifiedAttributes": [
+          "email"
+        ],
+        "EmailVerificationMessage": "The verification code to your new account is {####}",
+        "EmailVerificationSubject": "Verify your new account",
+        "Policies": {
+          "PasswordPolicy": {
+            "MinimumLength": 12,
+            "RequireLowercase": true,
+            "RequireNumbers": true,
+            "RequireSymbols": true,
+            "RequireUppercase": true
+          }
+        },
+        "SmsVerificationMessage": "The verification code to your new account is {####}",
+        "UserPoolAddOns": {
+          "AdvancedSecurityMode": "ENFORCED"
+        },
+        "UserPoolName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-user-pool"
+            ]
+          ]
+        },
+        "UsernameAttributes": [
+          "email"
+        ],
+        "VerificationMessageTemplate": {
+          "DefaultEmailOption": "CONFIRM_WITH_CODE",
+          "EmailMessage": "The verification code to your new account is {####}",
+          "EmailSubject": "Verify your new account",
+          "SmsMessage": "The verification code to your new account is {####}"
+        }
+      },
+      "Type": "AWS::Cognito::UserPool",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cognitoconstructuserpoolclient83626E74": {
+      "Properties": {
+        "AccessTokenValidity": 60,
+        "AllowedOAuthFlows": [
+          "code"
+        ],
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthScopes": [
+          "profile",
+          "phone",
+          "email",
+          "openid",
+          "aws.cognito.signin.user.admin"
+        ],
+        "AuthSessionValidity": 3,
+        "CallbackURLs": [
+          "https://example.com"
+        ],
+        "ClientName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-userpool-client"
+            ]
+          ]
+        },
+        "EnableTokenRevocation": true,
+        "GenerateSecret": false,
+        "IdTokenValidity": 60,
+        "PreventUserExistenceErrors": "ENABLED",
+        "RefreshTokenValidity": 120,
+        "SupportedIdentityProviders": [
+          "COGNITO"
+        ],
+        "TokenValidityUnits": {
+          "AccessToken": "minutes",
+          "IdToken": "minutes",
+          "RefreshToken": "minutes"
+        },
+        "UserPoolId": {
+          "Ref": "cognitoconstructuserpool7FE8E0EE"
+        }
+      },
+      "Type": "AWS::Cognito::UserPoolClient"
+    }
+  }
+}

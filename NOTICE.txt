@@ -1,0 +1,277 @@
+Connected Mobility Solution on AWS
+Licensed under the Apache License Version 2.0 (the "License"). You may not use this file except
+in compliance with the License. A copy of the License is located at http://www.apache.org/licenses/
+or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+
+**********************
+THIRD PARTY COMPONENTS
+**********************
+This software includes third party software subject to the following copyrights:
+
+@aws-amplify/api under the Apache License 2.0
+@aws-amplify/auth under the Apache License 2.0
+@aws-amplify/core under the Apache License 2.0
+@aws-amplify/geo under the Apache License 2.0
+@aws-amplify/interactions under the Apache License 2.0
+@aws-amplify/storage under the Apache License 2.0
+@aws-amplify/ui-react under the Apache License 2.0
+@aws-crypto/sha256-js under the Apache License 2.0
+@aws-sdk/client-cognito-identity-provider under the Apache License 2.0
+@aws-sdk/client-eks under the Apache License 2.0
+@aws-sdk/client-secrets-manager under the Apache License 2.0
+@aws-sdk/client-sts under the Apache License 2.0
+@aws-sdk/credential-providers under the Apache License 2.0
+@aws-sdk/signature-v4 under the Apache License 2.0
+@aws/aws-codeservices-backend-plugin-for-backstage under the Apache License 2.0
+@aws/aws-codeservices-plugin-for-backstage under the Apache License 2.0
+@aws/aws-proton-backend-plugin-for-backstage under the Apache License 2.0
+@aws/aws-proton-plugin-for-backstage under the Apache License 2.0
+@backstage/app-defaults under the Apache License 2.0
+@backstage/backend-common under the Apache License 2.0
+@backstage/backend-tasks under the Apache License 2.0
+@backstage/catalog-client under the Apache License 2.0
+@backstage/catalog-model under the Apache License 2.0
+@backstage/cli under the Apache License 2.0
+@backstage/config under the Apache License 2.0
+@backstage/core-app-api under the Apache License 2.0
+@backstage/core-components under the Apache License 2.0
+@backstage/core-plugin-api under the Apache License 2.0
+@backstage/integration-react under the Apache License 2.0
+@backstage/plugin-api-docs under the Apache License 2.0
+@backstage/plugin-app-backend under the Apache License 2.0
+@backstage/plugin-auth-backend under the Apache License 2.0
+@backstage/plugin-auth-node under the Apache License 2.0
+@backstage/plugin-catalog under the Apache License 2.0
+@backstage/plugin-catalog-backend under the Apache License 2.0
+@backstage/plugin-catalog-backend-module-gitlab under the Apache License 2.0
+@backstage/plugin-catalog-common under the Apache License 2.0
+@backstage/plugin-catalog-graph under the Apache License 2.0
+@backstage/plugin-catalog-import under the Apache License 2.0
+@backstage/plugin-catalog-react under the Apache License 2.0
+@backstage/plugin-code-coverage-backend under the Apache License 2.0
+@backstage/plugin-events-backend under the Apache License 2.0
+@backstage/plugin-events-backend-module-gitlab under the Apache License 2.0
+@backstage/plugin-github-actions under the Apache License 2.0
+@backstage/plugin-home under the Apache License 2.0
+@backstage/plugin-org under the Apache License 2.0
+@backstage/plugin-permission-common under the Apache License 2.0
+@backstage/plugin-permission-node under the Apache License 2.0
+@backstage/plugin-permission-react under the Apache License 2.0
+@backstage/plugin-proxy-backend under the Apache License 2.0
+@backstage/plugin-scaffolder under the Apache License 2.0
+@backstage/plugin-scaffolder-backend under the Apache License 2.0
+@backstage/plugin-scaffolder-backend-module-gitlab under the Apache License 2.0
+@backstage/plugin-search under the Apache License 2.0
+@backstage/plugin-search-backend under the Apache License 2.0
+@backstage/plugin-search-backend-module-pg under the Apache License 2.0
+@backstage/plugin-search-backend-node under the Apache License 2.0
+@backstage/plugin-search-react under the Apache License 2.0
+@backstage/plugin-tech-radar under the Apache License 2.0
+@backstage/plugin-techdocs under the Apache License 2.0
+@backstage/plugin-techdocs-backend under the Apache License 2.0
+@backstage/plugin-techdocs-module-addons-contrib under the Apache License 2.0
+@backstage/plugin-techdocs-react under the Apache License 2.0
+@backstage/plugin-user-settings under the Apache License 2.0
+@backstage/test-utils under the Apache License 2.0
+@backstage/theme under the Apache License 2.0
+@immobiliarelabs/backstage-plugin-gitlab under the Apache License 2.0
+@immobiliarelabs/backstage-plugin-gitlab-backend under the Apache License 2.0
+@roadiehq/backstage-plugin-home-rss under the Apache License 2.0
+@spotify/prettier-config under the Apache License 2.0
+arrow under the Apache License 2.0
+aws-amplify under the Apache License 2.0
+aws-cdk-lib under the Apache License 2.0
+aws-cdk.asset-awscli-v1 under the Apache License 2.0
+aws-cdk.asset-kubectl-v20 under the Apache License 2.0
+aws-cdk.asset-node-proxy-agent-v5 under the Apache License 2.0
+aws-cdk.asset-node-proxy-agent-v6 under the Apache License 2.0
+aws-sam-translator under the Apache License 2.0
+aws-xray-sdk under the Apache License 2.0
+boto3 under the Apache License 2.0
+botocore under the Apache License 2.0
+cdk-nag under the Apache License 2.0
+chalice under the Apache License 2.0
+connected-mobility-solution-on-aws under the Apache License 2.0
+constructs under the Apache License 2.0
+coverage under the Apache License 2.0
+cryptography under the Apache License 2.0
+docker under the Apache License 2.0
+dockerode under the Apache License 2.0
+grafanalib under the Apache License 2.0
+importlib-resources under the Apache License 2.0
+jsii under the Apache License 2.0
+jsonschema-spec under the Apache License 2.0
+license-expression under the Apache License 2.0
+maplibre-gl-js-amplify under the Apache License 2.0
+moto under the Apache License 2.0
+openapi-spec-validator under the Apache License 2.0
+pathable under the Apache License 2.0
+python-editor under the Apache License 2.0
+regex under the Apache License 2.0
+responses under the Apache License 2.0
+rsa under the Apache License 2.0
+s3transfer under the Apache License 2.0
+types-pyasn1 under the Apache License 2.0
+types-python-dateutil under the Apache License 2.0
+types-python-jose under the Apache License 2.0
+types-PyYAML under the Apache License 2.0
+types-setuptools under the Apache License 2.0
+typescript under the Apache License 2.0
+web-vitals under the Apache License 2.0
+websocket-client under the Apache License 2.0
+
+@material-ui/core under the Massachusetts Institute of Technology (MIT) license
+@material-ui/icons under the Massachusetts Institute of Technology (MIT) license
+@testing-library/jest-dom under the Massachusetts Institute of Technology (MIT) license
+@testing-library/react under the Massachusetts Institute of Technology (MIT) license
+@testing-library/user-event under the Massachusetts Institute of Technology (MIT) license
+@types/cookie-parser under the Massachusetts Institute of Technology (MIT) license
+@types/dockerode under the Massachusetts Institute of Technology (MIT) license
+@types/express under the Massachusetts Institute of Technology (MIT) license
+@types/express-serve-static-core under the Massachusetts Institute of Technology (MIT) license
+@types/jest under the Massachusetts Institute of Technology (MIT) license
+@types/luxon under the Massachusetts Institute of Technology (MIT) license
+@types/node under the Massachusetts Institute of Technology (MIT) license
+@types/passport-oauth2 under the Massachusetts Institute of Technology (MIT) license
+@types/react-dom under the Massachusetts Institute of Technology (MIT) license
+@types/react-router-dom under the Massachusetts Institute of Technology (MIT) license
+@types/sanitize-html under the Massachusetts Institute of Technology (MIT) license
+app under the Massachusetts Institute of Technology (MIT) license
+attrs under the Massachusetts Institute of Technology (MIT) license
+aws-lambda-powertools under the Massachusetts Institute of Technology (MIT) license
+backoff under the Massachusetts Institute of Technology (MIT) license
+better-sqlite3 under the Massachusetts Institute of Technology (MIT) license
+blessed under the Massachusetts Institute of Technology (MIT) license
+bootstrap under the Massachusetts Institute of Technology (MIT) license
+bootstrap-icons under the Massachusetts Institute of Technology (MIT) license
+boto3-stubs under the Massachusetts Institute of Technology (MIT) license
+botocore-stubs under the Massachusetts Institute of Technology (MIT) license
+cattrs under the Massachusetts Institute of Technology (MIT) license
+cffi under the Massachusetts Institute of Technology (MIT) license
+cfgv under the Massachusetts Institute of Technology (MIT) license
+cfn-lint under the Massachusetts Institute of Technology (MIT) license
+colored under the Massachusetts Institute of Technology (MIT) license
+concurrently under the Massachusetts Institute of Technology (MIT) license
+cookie-parser under the Massachusetts Institute of Technology (MIT) license
+cross-env under the Massachusetts Institute of Technology (MIT) license
+cypress under the Massachusetts Institute of Technology (MIT) license
+dataclass-type-validator under the Massachusetts Institute of Technology (MIT) license
+dparse under the Massachusetts Institute of Technology (MIT) license
+ecdsa under the Massachusetts Institute of Technology (MIT) license
+eslint-plugin-cypress under the Massachusetts Institute of Technology (MIT) license
+exceptiongroup under the Massachusetts Institute of Technology (MIT) license
+express-promise-router under the Massachusetts Institute of Technology (MIT) license
+graphql-core under the Massachusetts Institute of Technology (MIT) license
+history under the Massachusetts Institute of Technology (MIT) license
+identify under the Massachusetts Institute of Technology (MIT) license
+iniconfig under the Massachusetts Institute of Technology (MIT) license
+inquirer under the Massachusetts Institute of Technology (MIT) license
+isort under the Massachusetts Institute of Technology (MIT) license
+jmespath under the Massachusetts Institute of Technology (MIT) license
+jschema-to-python under the Massachusetts Institute of Technology (MIT) license
+jsondiff under the Massachusetts Institute of Technology (MIT) license
+jsonschema under the Massachusetts Institute of Technology (MIT) license
+junit-xml under the Massachusetts Institute of Technology (MIT) license
+jwt-decode under the Massachusetts Institute of Technology (MIT) license
+lerna under the Massachusetts Institute of Technology (MIT) license
+lodash under the Massachusetts Institute of Technology (MIT) license
+markdown-to-json under the Massachusetts Institute of Technology (MIT) license
+minimist under the Massachusetts Institute of Technology (MIT) license
+moment under the Massachusetts Institute of Technology (MIT) license
+mypy under the Massachusetts Institute of Technology (MIT) license License
+mypy-extensions under the Massachusetts Institute of Technology (MIT) license
+node-gyp under the Massachusetts Institute of Technology (MIT) license
+passport under the Massachusetts Institute of Technology (MIT) license
+passport-oauth2 under the Massachusetts Institute of Technology (MIT) license
+pg under the Massachusetts Institute of Technology (MIT) license
+platformdirs under the Massachusetts Institute of Technology (MIT) license
+pluggy under the Massachusetts Institute of Technology (MIT) license
+pre-commit under the Massachusetts Institute of Technology (MIT) license
+prettier under the Massachusetts Institute of Technology (MIT) license
+publication under the Massachusetts Institute of Technology (MIT) license
+py-partiql-parser under the Massachusetts Institute of Technology (MIT) license
+pycln under the Massachusetts Institute of Technology (MIT) license
+pydantic under the Massachusetts Institute of Technology (MIT) license
+pyjsparser under the Massachusetts Institute of Technology (MIT) license
+pyrsistent under the Massachusetts Institute of Technology (MIT) license
+pytest under the Massachusetts Institute of Technology (MIT) license
+pytest-cov under the Massachusetts Institute of Technology (MIT) license
+pytest-mock under the Massachusetts Institute of Technology (MIT) license
+python-jose under the Massachusetts Institute of Technology (MIT) license
+react under the Massachusetts Institute of Technology (MIT) license
+react-bootstrap under the Massachusetts Institute of Technology (MIT) license
+react-dom under the Massachusetts Institute of Technology (MIT) license
+react-router under the Massachusetts Institute of Technology (MIT) license
+react-router-dom under the Massachusetts Institute of Technology (MIT) license
+react-scripts under the Massachusetts Institute of Technology (MIT) license
+react-use under the Massachusetts Institute of Technology (MIT) license
+readchar under the Massachusetts Institute of Technology (MIT) license
+rfc3339-validator under the Massachusetts Institute of Technology (MIT) license
+ruamel.yaml under the Massachusetts Institute of Technology (MIT) license license
+ruamel.yaml.clib under the Massachusetts Institute of Technology (MIT) license
+safety under the Massachusetts Institute of Technology (MIT) license
+sanitize-html under the Massachusetts Institute of Technology (MIT) license
+sarif-om under the Massachusetts Institute of Technology (MIT) license
+start-server-and-test under the Massachusetts Institute of Technology (MIT) license
+tomli under the Massachusetts Institute of Technology (MIT) license
+tomlkit under the Massachusetts Institute of Technology (MIT) license
+typeguard under the Massachusetts Institute of Technology (MIT) license
+typer under the Massachusetts Institute of Technology (MIT) license
+types-awscrt under the Massachusetts Institute of Technology (MIT) license
+types-boto3 under the Massachusetts Institute of Technology (MIT) license
+types-s3transfer under the Massachusetts Institute of Technology (MIT) license
+typing-inspect under the Massachusetts Institute of Technology (MIT) license
+virtualenv under the Massachusetts Institute of Technology (MIT) license
+winston under the Massachusetts Institute of Technology (MIT) license
+xml2js under the Massachusetts Institute of Technology (MIT) license
+xmltodict under the Massachusetts Institute of Technology (MIT) license
+
+boolean.py under the BSD-2-Clause
+lazy-object-proxy under the BSD-2-Clause
+pyasn1 under the BSD-2-Clause
+
+click under the BSD-3-Clause
+dill under the BSD-3-Clause
+Jinja2 under the BSD-3-Clause
+jsonpickle under the BSD-3-Clause
+MarkupSafe under the BSD-3-Clause
+openapi-schema-validator under the BSD-3-Clause
+
+jsonpatch under the Modified BSD License
+jsonpointer under the Modified BSD License
+
+fastjsonschema under the BSD license
+maplibre-gl under the BSD License
+mpmath under the BSD license
+networkx under the BSD license
+nodeenv under the BSD license
+pycparser under the BSD license
+sshpubkeys under the BSD license
+sympy under the BSD license
+Werkzeug under the BSD license
+wrapt under the BSD license
+
+filelock under the Unlicense license
+pyhumps under the Unlicense license
+
+@maplibre/maplibre-gl-geocoder under ISC license
+
+astroid under the LGPL-2.1 license
+
+distlib under the PSF-2.0 license
+
+mccabe under Expat license
+
+pylint under the GPL-2.0 license
+
+python-dateutil under the Apache License 2.0 and BSD License (Dual license)
+
+libcst under the Massachusetts Institute of Technology (MIT) and PSF license (Dual license)
+
+pathspec under the Mozilla Public License 2.0 (MPL 2.0)
+
+typing_extensions under the PSF license
+
+uuid under Unknown license
