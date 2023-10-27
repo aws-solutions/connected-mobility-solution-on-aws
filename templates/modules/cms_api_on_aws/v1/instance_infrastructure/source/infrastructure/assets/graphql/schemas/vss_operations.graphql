@@ -1,0 +1,11 @@
+type Query @aws_lambda {
+  getVehicle(
+    # VIN of the vehicle that you want to request data for.
+    vin: String!
+  ): Vehicle
+
+  listVehicles(
+    # page number of paginated results
+    page: Int
+  ): [Vehicle]
+}

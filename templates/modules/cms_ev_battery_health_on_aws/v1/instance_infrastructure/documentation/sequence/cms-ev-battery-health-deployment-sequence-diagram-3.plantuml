@@ -1,0 +1,83 @@
+@startuml cms-ev-battery-health-deployment-sequence-diagram-3
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v14.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/ManagementGovernance/CloudFormation.puml
+!include AWSPuml/SecurityIdentityCompliance/SecretsManager.puml
+!include AWSPuml/Storage/SimpleStorageService.puml
+!include AWSPuml/ManagementGovernance/ManagedGrafana.puml
+
+!define GREEN #3F8624
+!define YELLOW #D86613
+!define RED #E3242B
+!define PINK #CF2465
+
+'Comment out to use default PlantUML sequence formatting
+skinparam participant {
+    BackgroundColor AWS_BG_COLOR
+    BorderColor AWS_BORDER_COLOR
+}
+skinparam sequence {
+    ArrowThickness 2
+    LifeLineBorderColor AWS_COLOR
+    LifeLineBackgroundColor AWS_BORDER_COLOR
+    BoxBorderColor AWS_COLOR
+}
+
+actor User as user
+box CMS EV Battery Health Module Deployment - Part 3
+participant "$CloudFormationIMG()\nCloudformation" as cf << Cloudformation >>
+participant "$LambdaIMG()\nCustom Resource" as custom_resource << Lambda >>
+participant "$SimpleStorageServiceIMG()\nS3" as s3 << S3 >>
+participant "$LambdaIMG()\nS3 to Grafana" as s3_to_grafana << Lambda >>
+participant "$SecretsManagerIMG()\nSecrets Manager" as secrets_manager << Secrets Manager >>
+participant "$ManagedGrafanaIMG()\nGrafana" as grafana << Grafana >>
+endbox
+
+user -> cf++ PINK: Continue deploy
+
+cf -> custom_resource++ YELLOW: Trigger CREATE: Provision Alerting in the Grafana workspace
+custom_resource -> grafana++ PINK: Update workspace configuration to support Unified Alerting
+custom_resource <-- grafana
+deactivate grafana
+cf <-- custom_resource
+deactivate custom_resource
+
+|||
+
+cf -> custom_resource++ YELLOW: Trigger CREATE: Grafana Alerts
+custom_resource -> custom_resource: Create Grafana alerts JSON data model
+custom_resource -> s3++ GREEN: Upload alerts JSON to Grafana Assets bucket
+s3 -> s3_to_grafana++ YELLOW: Trigger Lambda event on object creation with prefix cms/alerts in the Grafana assets S3 bucket
+s3_to_grafana -> secrets_manager++ RED: Get Grafana API key from secret
+s3_to_grafana <-- secrets_manager
+deactivate secrets_manager
+s3_to_grafana -> grafana++ PINK: Call the Grafana alert rules API with the JSON stored in the S3 bucket
+s3_to_grafana <-- grafana
+deactivate grafana
+s3 <-- s3_to_grafana
+deactivate s3_to_grafana
+custom_resource <-- s3
+deactivate s3
+cf <-- custom_resource
+deactivate custom_resource
+
+|||
+
+cf -> custom_resource++ YELLOW: Trigger CREATE: Set Alert Configuration
+custom_resource -> secrets_manager++ RED: Get Grafana API key from secret
+custom_resource <-- secrets_manager
+deactivate secrets_manager
+custom_resource -> grafana++ PINK: Call the Create alert contact point and Create notification policy Grafana APIs
+custom_resource <-- grafana
+deactivate grafana
+cf <-- custom_resource
+deactivate custom_resource
+
+user <-- cf: Continue deploy
+deactivate cf
+
+@enduml

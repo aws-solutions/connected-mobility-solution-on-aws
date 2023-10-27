@@ -1,0 +1,23 @@
+type Alarm {
+  alarmType: String!
+  vin: String!
+}
+
+input AlarmInput {
+    alarmType: String!
+    emailEnabled: Boolean!
+    vin: String!
+}
+
+type UserPreference {
+  email: String!
+  alarms: [Alarm!]!
+}
+
+type Query {
+  getUserSubscriptions(email: String!): UserPreference
+}
+
+type Mutation {
+  updateUserSubscriptions(email: String!, alarms: [AlarmInput!]!): Boolean
+}

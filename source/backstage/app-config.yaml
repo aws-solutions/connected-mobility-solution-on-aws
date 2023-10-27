@@ -1,0 +1,134 @@
+app:
+  title: ${BACKSTAGE_NAME}
+  baseUrl: ${WEB_SCHEME}://${WEB_HOSTNAME}
+
+organization:
+  name: ${BACKSTAGE_ORG}
+
+backend:
+  # Used for enabling authentication, secret is shared by all backend plugins
+  # See https://backstage.io/docs/auth/service-to-service-auth for
+  # information on the format
+  auth:
+    keys:
+      - secret: ${BACKEND_SECRET}
+  baseUrl: ${BACKEND_SCHEME}://${BACKEND_HOSTNAME}
+
+  listen:
+    port: 8080
+
+  csp:
+    connect-src: ["'self'", 'http:', 'https:']
+    # Content-Security-Policy directives follow the Helmet format: https://helmetjs.github.io/#reference
+    # Default Helmet Content-Security-Policy values can be removed by setting the key to false
+  cors:
+    origin:
+      - ${WEB_SCHEME}://${WEB_HOSTNAME}:${WEB_PORT}
+      - ${WEB_SCHEME}://${WEB_HOSTNAME}
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+  # This is for local development only, it is not recommended to use this in production
+  # The production database configuration is stored in app-config.production.yaml
+  database:
+    client: pg
+    connection:
+      host: ${POSTGRES_HOST}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
+  cache:
+    store: memory
+  # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
+
+#Enable this to allow connections to externally hosted repositories. s3 integration works automatically via IAM and isn't needed here
+# integrations:
+# gitlab:
+#   - host: gitlab.aws.dev
+#     baseUrl: https://gitlab.aws.dev/
+#     apiBaseUrl: https://gitlab.aws.dev/api/v4
+#     token: ${GITLAB_TOKEN}
+#     allowedKinds: [Component, System, API, Group, User, Resource, Location, Template]
+# github:
+#   - host: github.com
+#     # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
+#     # about setting up the GitHub integration here: https://backstage.io/docs/getting-started/configuration#setting-up-a-github-integration
+#     token: ${GITHUB_TOKEN}
+#     allowedKinds: [Component, System, API, Group, User, Resource, Location, Template]
+### Example for how to add your GitHub Enterprise instance using the API:
+# - host: ghe.example.net
+#   apiBaseUrl: https://ghe.example.net/api/v3
+#   token: ${GHE_TOKEN}
+
+# proxy:
+#   '/rss/reddit':
+#     target: 'https://www.reddit.com/r/'
+#   '/rss/hacker-news':
+#     target: 'https://hnrss.org/'
+
+### Example for how to add a proxy endpoint for the frontend.
+### A typical reason to do this is to handle HTTPS and CORS for internal services.
+# '/test':
+#   target: 'https://example.com'
+#   changeOrigin: true
+
+# Reference documentation http://backstage.io/docs/features/techdocs/configuration
+# Note: After experimenting with basic setup, use CI/CD to generate docs
+# and an external cloud storage when deploying TechDocs for production use-case.
+# https://backstage.io/docs/features/techdocs/how-to-guides#how-to-migrate-from-techdocs-basic-to-recommended-deployment-approach
+techdocs:
+  builder: 'local' # Alternatives - 'external'
+  generator:
+    runIn: 'docker' # Alternatives - 'local'
+  publisher:
+    type: 'local' # Alternatives - 'awsS3'. Read documentation for using alternatives.
+
+auth:
+  session:
+    secret: ${BACKEND_SECRET}
+
+  auth:
+    keys:
+      - secret: ${BACKEND_SECRET}
+
+  providers:
+    cognito:
+      development:
+        userPoolId: ${COGNITO_USERPOOL_ID}
+        clientId: ${COGNITO_CLIENT_ID}
+
+    # github:
+    #   development:
+    #     clientId: ${AUTH_GITHUB_CLIENT_ID}
+    #     clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+
+scaffolder:
+  # see https://backstage.io/docs/features/software-templates/configuration for software template options
+
+s3-catalog:
+  bucketName: ${BACKSTAGE_CATALOG_BUCKET_NAME}
+  prefix: ${BACKSTAGE_CATALOG_BUCKET_KEY_PREFIX}
+  region: ${BACKSTAGE_CATALOG_BUCKET_REGION}
+
+catalog:
+  providers:
+    awsS3:
+      cmsModuleTemplateResourceBucket:
+        bucketName: ${CMS_RESOURCE_BUCKET_NAME}
+        prefix: ${CMS_RESOURCE_BUCKET_TEMPLATE_KEY_PREFIX}
+        region: ${CMS_RESOURCE_BUCKET_REGION}
+        schedule:
+          frequency:
+            minutes: ${CMS_RESOURCE_BUCKET_TEMPLATE_CHECK_FREQ}
+          timeout: { minutes: 3 }
+  rules:
+    - allow: [Component, System, API, Group, User, Resource, Location, Template]
+  # locations:
+  ## Uncomment these lines to add more example data
+  # - type: url
+  #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
+
+  ## Uncomment these lines to add an example org
+  # - type: url
+  #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme-corp.yaml
+  #   rules:
+  #     - allow: [User, Group]

@@ -1,0 +1,6206 @@
+{
+  "type": "object",
+  "properties": {
+    "adas": {
+      "type": "object",
+      "properties": {
+        "abs": {
+          "type": "object",
+          "properties": {
+            "isenabled": {
+              "type": "boolean"
+            },
+            "isengaged": {
+              "type": "boolean"
+            },
+            "iserror": {
+              "type": "boolean"
+            }
+          }
+        },
+        "activeautonomylevel": {
+          "type": "string",
+          "length": 20,
+          "enum": [
+            "SAE_0",
+            "SAE_1",
+            "SAE_2_DISENGAGING",
+            "SAE_2",
+            "SAE_3_DISENGAGING",
+            "SAE_3",
+            "SAE_4_DISENGAGING",
+            "SAE_4",
+            "SAE_5"
+          ]
+        },
+        "cruisecontrol": {
+          "type": "object",
+          "properties": {
+            "isactive": {
+              "type": "boolean"
+            },
+            "isenabled": {
+              "type": "boolean"
+            },
+            "iserror": {
+              "type": "boolean"
+            },
+            "speedset": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            }
+          }
+        },
+        "dms": {
+          "type": "object",
+          "properties": {
+            "isenabled": {
+              "type": "boolean"
+            },
+            "iserror": {
+              "type": "boolean"
+            },
+            "iswarning": {
+              "type": "boolean"
+            }
+          }
+        },
+        "eba": {
+          "type": "object",
+          "properties": {
+            "isenabled": {
+              "type": "boolean"
+            },
+            "isengaged": {
+              "type": "boolean"
+            },
+            "iserror": {
+              "type": "boolean"
+            }
+          }
+        },
+        "ebd": {
+          "type": "object",
+          "properties": {
+            "isenabled": {
+              "type": "boolean"
+            },
+            "isengaged": {
+              "type": "boolean"
+            },
+            "iserror": {
+              "type": "boolean"
+            }
+          }
+        },
+        "esc": {
+          "type": "object",
+          "properties": {
+            "isenabled": {
+              "type": "boolean"
+            },
+            "isengaged": {
+              "type": "boolean"
+            },
+            "iserror": {
+              "type": "boolean"
+            },
+            "isstrongcrosswinddetected": {
+              "type": "boolean"
+            },
+            "roadfriction": {
+              "type": "object",
+              "properties": {
+                "lowerbound": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "mostprobable": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "upperbound": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            }
+          }
+        },
+        "lanedeparturedetection": {
+          "type": "object",
+          "properties": {
+            "isenabled": {
+              "type": "boolean"
+            },
+            "iserror": {
+              "type": "boolean"
+            },
+            "iswarning": {
+              "type": "boolean"
+            }
+          }
+        },
+        "obstacledetection": {
+          "type": "object",
+          "properties": {
+            "isenabled": {
+              "type": "boolean"
+            },
+            "iserror": {
+              "type": "boolean"
+            },
+            "iswarning": {
+              "type": "boolean"
+            }
+          }
+        },
+        "poweroptimizelevel": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "supportedautonomylevel": {
+          "type": "string",
+          "length": 20,
+          "enum": [
+            "SAE_0",
+            "SAE_1",
+            "SAE_2",
+            "SAE_3",
+            "SAE_4",
+            "SAE_5"
+          ]
+        },
+        "tcs": {
+          "type": "object",
+          "properties": {
+            "isenabled": {
+              "type": "boolean"
+            },
+            "isengaged": {
+              "type": "boolean"
+            },
+            "iserror": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "acceleration": {
+      "type": "object",
+      "properties": {
+        "lateral": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "longitudinal": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "vertical": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        }
+      }
+    },
+    "angularvelocity": {
+      "type": "object",
+      "properties": {
+        "pitch": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "roll": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "yaw": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        }
+      }
+    },
+    "averagespeed": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "precision": 0.0001
+    },
+    "body": {
+      "type": "object",
+      "properties": {
+        "bodytype": {
+          "type": "string",
+          "length": 20
+        },
+        "hood": {
+          "type": "object",
+          "properties": {
+            "isopen": {
+              "type": "boolean"
+            }
+          }
+        },
+        "horn": {
+          "type": "object",
+          "properties": {
+            "isactive": {
+              "type": "boolean"
+            }
+          }
+        },
+        "lights": {
+          "type": "object",
+          "properties": {
+            "backup": {
+              "type": "object",
+              "properties": {
+                "isdefect": {
+                  "type": "boolean"
+                },
+                "ison": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "beam": {
+              "type": "object",
+              "properties": {
+                "high": {
+                  "type": "object",
+                  "properties": {
+                    "isdefect": {
+                      "type": "boolean"
+                    },
+                    "ison": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "low": {
+                  "type": "object",
+                  "properties": {
+                    "isdefect": {
+                      "type": "boolean"
+                    },
+                    "ison": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            },
+            "brake": {
+              "type": "object",
+              "properties": {
+                "isactive": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "INACTIVE",
+                    "ACTIVE",
+                    "ADAPTIVE"
+                  ]
+                },
+                "isdefect": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "directionindicator": {
+              "type": "object",
+              "properties": {
+                "left": {
+                  "type": "object",
+                  "properties": {
+                    "isdefect": {
+                      "type": "boolean"
+                    },
+                    "issignaling": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "right": {
+                  "type": "object",
+                  "properties": {
+                    "isdefect": {
+                      "type": "boolean"
+                    },
+                    "issignaling": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            },
+            "fog": {
+              "type": "object",
+              "properties": {
+                "front": {
+                  "type": "object",
+                  "properties": {
+                    "isdefect": {
+                      "type": "boolean"
+                    },
+                    "ison": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "rear": {
+                  "type": "object",
+                  "properties": {
+                    "isdefect": {
+                      "type": "boolean"
+                    },
+                    "ison": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            },
+            "hazard": {
+              "type": "object",
+              "properties": {
+                "isdefect": {
+                  "type": "boolean"
+                },
+                "issignaling": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "ishighbeamswitchon": {
+              "type": "boolean"
+            },
+            "licenseplate": {
+              "type": "object",
+              "properties": {
+                "isdefect": {
+                  "type": "boolean"
+                },
+                "ison": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "lightswitch": {
+              "type": "string",
+              "length": 20,
+              "enum": [
+                "OFF",
+                "POSITION",
+                "DAYTIME_RUNNING_LIGHTS",
+                "AUTO",
+                "BEAM"
+              ]
+            },
+            "parking": {
+              "type": "object",
+              "properties": {
+                "isdefect": {
+                  "type": "boolean"
+                },
+                "ison": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "running": {
+              "type": "object",
+              "properties": {
+                "isdefect": {
+                  "type": "boolean"
+                },
+                "ison": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "mirrors": {
+          "type": "object",
+          "properties": {
+            "driverside": {
+              "type": "object",
+              "properties": {
+                "isheatingon": {
+                  "type": "boolean"
+                },
+                "pan": {
+                  "type": "integer",
+                  "minimum": -100,
+                  "maximum": 100
+                },
+                "tilt": {
+                  "type": "integer",
+                  "minimum": -100,
+                  "maximum": 100
+                }
+              }
+            },
+            "passengerside": {
+              "type": "object",
+              "properties": {
+                "isheatingon": {
+                  "type": "boolean"
+                },
+                "pan": {
+                  "type": "integer",
+                  "minimum": -100,
+                  "maximum": 100
+                },
+                "tilt": {
+                  "type": "integer",
+                  "minimum": -100,
+                  "maximum": 100
+                }
+              }
+            }
+          }
+        },
+        "poweroptimizelevel": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "raindetection": {
+          "type": "object",
+          "properties": {
+            "intensity": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            }
+          }
+        },
+        "rearmainspoilerposition": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "refuelposition": {
+          "type": "string",
+          "length": 20,
+          "enum": [
+            "FRONT_LEFT",
+            "FRONT_RIGHT",
+            "MIDDLE_LEFT",
+            "MIDDLE_RIGHT",
+            "REAR_LEFT",
+            "REAR_RIGHT"
+          ]
+        },
+        "trunk": {
+          "type": "object",
+          "properties": {
+            "front": {
+              "type": "object",
+              "properties": {
+                "islighton": {
+                  "type": "boolean"
+                },
+                "islocked": {
+                  "type": "boolean"
+                },
+                "isopen": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "rear": {
+              "type": "object",
+              "properties": {
+                "islighton": {
+                  "type": "boolean"
+                },
+                "islocked": {
+                  "type": "boolean"
+                },
+                "isopen": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "windshield": {
+          "type": "object",
+          "properties": {
+            "front": {
+              "type": "object",
+              "properties": {
+                "isheatingon": {
+                  "type": "boolean"
+                },
+                "washerfluid": {
+                  "type": "object",
+                  "properties": {
+                    "islevellow": {
+                      "type": "boolean"
+                    },
+                    "level": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 100
+                    }
+                  }
+                },
+                "wiping": {
+                  "type": "object",
+                  "properties": {
+                    "intensity": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    "iswipersworn": {
+                      "type": "boolean"
+                    },
+                    "mode": {
+                      "type": "string",
+                      "length": 20,
+                      "enum": [
+                        "OFF",
+                        "SLOW",
+                        "MEDIUM",
+                        "FAST",
+                        "INTERVAL",
+                        "RAIN_SENSOR"
+                      ]
+                    },
+                    "system": {
+                      "type": "object",
+                      "properties": {
+                        "actualposition": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        },
+                        "drivecurrent": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        },
+                        "frequency": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        },
+                        "isblocked": {
+                          "type": "boolean"
+                        },
+                        "isendingwipecycle": {
+                          "type": "boolean"
+                        },
+                        "isoverheated": {
+                          "type": "boolean"
+                        },
+                        "ispositionreached": {
+                          "type": "boolean"
+                        },
+                        "iswipererror": {
+                          "type": "boolean"
+                        },
+                        "iswiping": {
+                          "type": "boolean"
+                        },
+                        "mode": {
+                          "type": "string",
+                          "length": 20,
+                          "enum": [
+                            "STOP_HOLD",
+                            "WIPE",
+                            "PLANT_MODE",
+                            "EMERGENCY_STOP"
+                          ]
+                        },
+                        "targetposition": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        }
+                      }
+                    },
+                    "wiperwear": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 100
+                    }
+                  }
+                }
+              }
+            },
+            "rear": {
+              "type": "object",
+              "properties": {
+                "isheatingon": {
+                  "type": "boolean"
+                },
+                "washerfluid": {
+                  "type": "object",
+                  "properties": {
+                    "islevellow": {
+                      "type": "boolean"
+                    },
+                    "level": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 100
+                    }
+                  }
+                },
+                "wiping": {
+                  "type": "object",
+                  "properties": {
+                    "intensity": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    "iswipersworn": {
+                      "type": "boolean"
+                    },
+                    "mode": {
+                      "type": "string",
+                      "length": 20,
+                      "enum": [
+                        "OFF",
+                        "SLOW",
+                        "MEDIUM",
+                        "FAST",
+                        "INTERVAL",
+                        "RAIN_SENSOR"
+                      ]
+                    },
+                    "system": {
+                      "type": "object",
+                      "properties": {
+                        "actualposition": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        },
+                        "drivecurrent": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        },
+                        "frequency": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        },
+                        "isblocked": {
+                          "type": "boolean"
+                        },
+                        "isendingwipecycle": {
+                          "type": "boolean"
+                        },
+                        "isoverheated": {
+                          "type": "boolean"
+                        },
+                        "ispositionreached": {
+                          "type": "boolean"
+                        },
+                        "iswipererror": {
+                          "type": "boolean"
+                        },
+                        "iswiping": {
+                          "type": "boolean"
+                        },
+                        "mode": {
+                          "type": "string",
+                          "length": 20,
+                          "enum": [
+                            "STOP_HOLD",
+                            "WIPE",
+                            "PLANT_MODE",
+                            "EMERGENCY_STOP"
+                          ]
+                        },
+                        "targetposition": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        }
+                      }
+                    },
+                    "wiperwear": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 100
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "cabin": {
+      "type": "object",
+      "properties": {
+        "convertible": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "length": 20,
+              "enum": [
+                "UNDEFINED",
+                "CLOSED",
+                "OPEN",
+                "CLOSING",
+                "OPENING",
+                "STALLED"
+              ]
+            }
+          }
+        },
+        "door": {
+          "type": "object",
+          "properties": {
+            "row1": {
+              "type": "object",
+              "properties": {
+                "driverside": {
+                  "type": "object",
+                  "properties": {
+                    "ischildlockactive": {
+                      "type": "boolean"
+                    },
+                    "islocked": {
+                      "type": "boolean"
+                    },
+                    "isopen": {
+                      "type": "boolean"
+                    },
+                    "shade": {
+                      "type": "object",
+                      "properties": {
+                        "position": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "switch": {
+                          "type": "string",
+                          "length": 20,
+                          "enum": [
+                            "INACTIVE",
+                            "CLOSE",
+                            "OPEN",
+                            "ONE_SHOT_CLOSE",
+                            "ONE_SHOT_OPEN"
+                          ]
+                        }
+                      }
+                    },
+                    "window": {
+                      "type": "object",
+                      "properties": {
+                        "isopen": {
+                          "type": "boolean"
+                        },
+                        "position": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "switch": {
+                          "type": "string",
+                          "length": 20,
+                          "enum": [
+                            "INACTIVE",
+                            "CLOSE",
+                            "OPEN",
+                            "ONE_SHOT_CLOSE",
+                            "ONE_SHOT_OPEN"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "passengerside": {
+                  "type": "object",
+                  "properties": {
+                    "ischildlockactive": {
+                      "type": "boolean"
+                    },
+                    "islocked": {
+                      "type": "boolean"
+                    },
+                    "isopen": {
+                      "type": "boolean"
+                    },
+                    "shade": {
+                      "type": "object",
+                      "properties": {
+                        "position": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "switch": {
+                          "type": "string",
+                          "length": 20,
+                          "enum": [
+                            "INACTIVE",
+                            "CLOSE",
+                            "OPEN",
+                            "ONE_SHOT_CLOSE",
+                            "ONE_SHOT_OPEN"
+                          ]
+                        }
+                      }
+                    },
+                    "window": {
+                      "type": "object",
+                      "properties": {
+                        "isopen": {
+                          "type": "boolean"
+                        },
+                        "position": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "switch": {
+                          "type": "string",
+                          "length": 20,
+                          "enum": [
+                            "INACTIVE",
+                            "CLOSE",
+                            "OPEN",
+                            "ONE_SHOT_CLOSE",
+                            "ONE_SHOT_OPEN"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "row2": {
+              "type": "object",
+              "properties": {
+                "driverside": {
+                  "type": "object",
+                  "properties": {
+                    "ischildlockactive": {
+                      "type": "boolean"
+                    },
+                    "islocked": {
+                      "type": "boolean"
+                    },
+                    "isopen": {
+                      "type": "boolean"
+                    },
+                    "shade": {
+                      "type": "object",
+                      "properties": {
+                        "position": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "switch": {
+                          "type": "string",
+                          "length": 20,
+                          "enum": [
+                            "INACTIVE",
+                            "CLOSE",
+                            "OPEN",
+                            "ONE_SHOT_CLOSE",
+                            "ONE_SHOT_OPEN"
+                          ]
+                        }
+                      }
+                    },
+                    "window": {
+                      "type": "object",
+                      "properties": {
+                        "isopen": {
+                          "type": "boolean"
+                        },
+                        "position": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "switch": {
+                          "type": "string",
+                          "length": 20,
+                          "enum": [
+                            "INACTIVE",
+                            "CLOSE",
+                            "OPEN",
+                            "ONE_SHOT_CLOSE",
+                            "ONE_SHOT_OPEN"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "passengerside": {
+                  "type": "object",
+                  "properties": {
+                    "ischildlockactive": {
+                      "type": "boolean"
+                    },
+                    "islocked": {
+                      "type": "boolean"
+                    },
+                    "isopen": {
+                      "type": "boolean"
+                    },
+                    "shade": {
+                      "type": "object",
+                      "properties": {
+                        "position": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "switch": {
+                          "type": "string",
+                          "length": 20,
+                          "enum": [
+                            "INACTIVE",
+                            "CLOSE",
+                            "OPEN",
+                            "ONE_SHOT_CLOSE",
+                            "ONE_SHOT_OPEN"
+                          ]
+                        }
+                      }
+                    },
+                    "window": {
+                      "type": "object",
+                      "properties": {
+                        "isopen": {
+                          "type": "boolean"
+                        },
+                        "position": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "switch": {
+                          "type": "string",
+                          "length": 20,
+                          "enum": [
+                            "INACTIVE",
+                            "CLOSE",
+                            "OPEN",
+                            "ONE_SHOT_CLOSE",
+                            "ONE_SHOT_OPEN"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "doorcount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10,
+          "default": 4
+        },
+        "driverposition": {
+          "type": "string",
+          "length": 20,
+          "enum": [
+            "LEFT",
+            "MIDDLE",
+            "RIGHT"
+          ]
+        },
+        "hvac": {
+          "type": "object",
+          "properties": {
+            "ambientairtemperature": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "isairconditioningactive": {
+              "type": "boolean"
+            },
+            "isfrontdefrosteractive": {
+              "type": "boolean"
+            },
+            "isreardefrosteractive": {
+              "type": "boolean"
+            },
+            "isrecirculationactive": {
+              "type": "boolean"
+            },
+            "poweroptimizelevel": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "station": {
+              "type": "object",
+              "properties": {
+                "row1": {
+                  "type": "object",
+                  "properties": {
+                    "driver": {
+                      "type": "object",
+                      "properties": {
+                        "airdistribution": {
+                          "type": "string",
+                          "length": 20,
+                          "enum": [
+                            "UP",
+                            "MIDDLE",
+                            "DOWN"
+                          ]
+                        },
+                        "fanspeed": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "temperature": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        }
+                      }
+                    },
+                    "passenger": {
+                      "type": "object",
+                      "properties": {
+                        "airdistribution": {
+                          "type": "string",
+                          "length": 20,
+                          "enum": [
+                            "UP",
+                            "MIDDLE",
+                            "DOWN"
+                          ]
+                        },
+                        "fanspeed": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "temperature": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        }
+                      }
+                    }
+                  }
+                },
+                "row2": {
+                  "type": "object",
+                  "properties": {
+                    "driver": {
+                      "type": "object",
+                      "properties": {
+                        "airdistribution": {
+                          "type": "string",
+                          "length": 20,
+                          "enum": [
+                            "UP",
+                            "MIDDLE",
+                            "DOWN"
+                          ]
+                        },
+                        "fanspeed": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "temperature": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        }
+                      }
+                    },
+                    "passenger": {
+                      "type": "object",
+                      "properties": {
+                        "airdistribution": {
+                          "type": "string",
+                          "length": 20,
+                          "enum": [
+                            "UP",
+                            "MIDDLE",
+                            "DOWN"
+                          ]
+                        },
+                        "fanspeed": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "temperature": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        }
+                      }
+                    }
+                  }
+                },
+                "row3": {
+                  "type": "object",
+                  "properties": {
+                    "driver": {
+                      "type": "object",
+                      "properties": {
+                        "airdistribution": {
+                          "type": "string",
+                          "length": 20,
+                          "enum": [
+                            "UP",
+                            "MIDDLE",
+                            "DOWN"
+                          ]
+                        },
+                        "fanspeed": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "temperature": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        }
+                      }
+                    },
+                    "passenger": {
+                      "type": "object",
+                      "properties": {
+                        "airdistribution": {
+                          "type": "string",
+                          "length": 20,
+                          "enum": [
+                            "UP",
+                            "MIDDLE",
+                            "DOWN"
+                          ]
+                        },
+                        "fanspeed": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "temperature": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        }
+                      }
+                    }
+                  }
+                },
+                "row4": {
+                  "type": "object",
+                  "properties": {
+                    "driver": {
+                      "type": "object",
+                      "properties": {
+                        "airdistribution": {
+                          "type": "string",
+                          "length": 20,
+                          "enum": [
+                            "UP",
+                            "MIDDLE",
+                            "DOWN"
+                          ]
+                        },
+                        "fanspeed": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "temperature": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        }
+                      }
+                    },
+                    "passenger": {
+                      "type": "object",
+                      "properties": {
+                        "airdistribution": {
+                          "type": "string",
+                          "length": 20,
+                          "enum": [
+                            "UP",
+                            "MIDDLE",
+                            "DOWN"
+                          ]
+                        },
+                        "fanspeed": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 100
+                        },
+                        "temperature": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "infotainment": {
+          "type": "object",
+          "properties": {
+            "hmi": {
+              "type": "object",
+              "properties": {
+                "brightness": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "currentlanguage": {
+                  "type": "string",
+                  "length": 20
+                },
+                "dateformat": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "YYYY_MM_DD",
+                    "DD_MM_YYYY",
+                    "MM_DD_YYYY",
+                    "YY_MM_DD",
+                    "DD_MM_YY",
+                    "MM_DD_YY"
+                  ]
+                },
+                "daynightmode": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "DAY",
+                    "NIGHT"
+                  ]
+                },
+                "displayoffduration": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "distanceunit": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "MILES",
+                    "KILOMETERS"
+                  ]
+                },
+                "eveconomyunits": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "MILES_PER_KILOWATT_HOUR",
+                    "KILOMETERS_PER_KILOWATT_HOUR",
+                    "KILOWATT_HOURS_PER_100_MILES",
+                    "KILOWATT_HOURS_PER_100_KILOMETERS",
+                    "WATT_HOURS_PER_MILE",
+                    "WATT_HOURS_PER_KILOMETER"
+                  ]
+                },
+                "evenergyunits": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "WATT_HOURS",
+                    "AMPERE_HOURS",
+                    "KILOWATT_HOURS"
+                  ]
+                },
+                "fontsize": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "STANDARD",
+                    "LARGE",
+                    "EXTRA_LARGE"
+                  ]
+                },
+                "fueleconomyunits": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "MPG_UK",
+                    "MPG_US",
+                    "MILES_PER_LITER",
+                    "KILOMETERS_PER_LITER",
+                    "LITERS_PER_100_KILOMETERS"
+                  ]
+                },
+                "fuelvolumeunit": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "LITER",
+                    "GALLON_US",
+                    "GALLON_UK"
+                  ]
+                },
+                "isscreenalwayson": {
+                  "type": "boolean"
+                },
+                "lastactiontime": {
+                  "type": "string",
+                  "length": 20
+                },
+                "speedunit": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "METERS_PER_SECOND",
+                    "MILES_PER_HOUR",
+                    "KILOMETERS_PER_HOUR"
+                  ]
+                },
+                "temperatureunit": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "C",
+                    "F"
+                  ]
+                },
+                "timeformat": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "HR_12",
+                    "HR_24"
+                  ]
+                },
+                "tirepressureunit": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "PSI",
+                    "KPA",
+                    "BAR"
+                  ]
+                }
+              }
+            },
+            "media": {
+              "type": "object",
+              "properties": {
+                "action": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "UNKNOWN",
+                    "STOP",
+                    "PLAY",
+                    "FAST_FORWARD",
+                    "FAST_BACKWARD",
+                    "SKIP_FORWARD",
+                    "SKIP_BACKWARD"
+                  ]
+                },
+                "declineduri": {
+                  "type": "string",
+                  "length": 20
+                },
+                "played": {
+                  "type": "object",
+                  "properties": {
+                    "album": {
+                      "type": "string",
+                      "length": 20
+                    },
+                    "artist": {
+                      "type": "string",
+                      "length": 20
+                    },
+                    "playbackrate": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "precision": 0.0001
+                    },
+                    "source": {
+                      "type": "string",
+                      "length": 20,
+                      "enum": [
+                        "UNKNOWN",
+                        "SIRIUS_XM",
+                        "AM",
+                        "FM",
+                        "DAB",
+                        "TV",
+                        "CD",
+                        "DVD",
+                        "AUX",
+                        "USB",
+                        "DISK",
+                        "BLUETOOTH",
+                        "INTERNET",
+                        "VOICE",
+                        "BEEP"
+                      ]
+                    },
+                    "track": {
+                      "type": "string",
+                      "length": 20
+                    },
+                    "uri": {
+                      "type": "string",
+                      "length": 20
+                    }
+                  }
+                },
+                "selecteduri": {
+                  "type": "string",
+                  "length": 20
+                },
+                "volume": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              }
+            },
+            "navigation": {
+              "type": "object",
+              "properties": {
+                "destinationset": {
+                  "type": "object",
+                  "properties": {
+                    "latitude": {
+                      "type": "number",
+                      "minimum": -90,
+                      "maximum": 90,
+                      "precision": 0.0001
+                    },
+                    "longitude": {
+                      "type": "number",
+                      "minimum": -180,
+                      "maximum": 180,
+                      "precision": 0.0001
+                    }
+                  }
+                },
+                "guidancevoice": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "STANDARD_MALE",
+                    "STANDARD_FEMALE",
+                    "ETC"
+                  ]
+                },
+                "mute": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "MUTED",
+                    "ALERT_ONLY",
+                    "UNMUTED"
+                  ]
+                },
+                "volume": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              }
+            },
+            "poweroptimizelevel": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "smartphoneprojection": {
+              "type": "object",
+              "properties": {
+                "active": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "NONE",
+                    "ACTIVE",
+                    "INACTIVE"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "USB",
+                    "BLUETOOTH",
+                    "WIFI"
+                  ]
+                },
+                "supportedmode": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "ANDROID_AUTO",
+                    "APPLE_CARPLAY",
+                    "MIRROR_LINK",
+                    "OTHER"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "iswindowchildlockengaged": {
+          "type": "boolean"
+        },
+        "light": {
+          "type": "object",
+          "properties": {
+            "ambientlight": {
+              "type": "object",
+              "properties": {
+                "row1": {
+                  "type": "object",
+                  "properties": {
+                    "driverside": {
+                      "type": "object",
+                      "properties": {
+                        "color": {
+                          "type": "string",
+                          "length": 20
+                        },
+                        "intensity": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 100
+                        },
+                        "islighton": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "passengerside": {
+                      "type": "object",
+                      "properties": {
+                        "color": {
+                          "type": "string",
+                          "length": 20
+                        },
+                        "intensity": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 100
+                        },
+                        "islighton": {
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  }
+                },
+                "row2": {
+                  "type": "object",
+                  "properties": {
+                    "driverside": {
+                      "type": "object",
+                      "properties": {
+                        "color": {
+                          "type": "string",
+                          "length": 20
+                        },
+                        "intensity": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 100
+                        },
+                        "islighton": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "passengerside": {
+                      "type": "object",
+                      "properties": {
+                        "color": {
+                          "type": "string",
+                          "length": 20
+                        },
+                        "intensity": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 100
+                        },
+                        "islighton": {
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "interactivelightbar": {
+              "type": "object",
+              "properties": {
+                "color": {
+                  "type": "string",
+                  "length": 20
+                },
+                "effect": {
+                  "type": "string",
+                  "length": 20
+                },
+                "intensity": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100
+                },
+                "islighton": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "isdomeon": {
+              "type": "boolean"
+            },
+            "isgloveboxon": {
+              "type": "boolean"
+            },
+            "perceivedambientlight": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "spotlight": {
+              "type": "object",
+              "properties": {
+                "row1": {
+                  "type": "object",
+                  "properties": {
+                    "driverside": {
+                      "type": "object",
+                      "properties": {
+                        "color": {
+                          "type": "string",
+                          "length": 20
+                        },
+                        "intensity": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 100
+                        },
+                        "islighton": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "passengerside": {
+                      "type": "object",
+                      "properties": {
+                        "color": {
+                          "type": "string",
+                          "length": 20
+                        },
+                        "intensity": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 100
+                        },
+                        "islighton": {
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  }
+                },
+                "row2": {
+                  "type": "object",
+                  "properties": {
+                    "driverside": {
+                      "type": "object",
+                      "properties": {
+                        "color": {
+                          "type": "string",
+                          "length": 20
+                        },
+                        "intensity": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 100
+                        },
+                        "islighton": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "passengerside": {
+                      "type": "object",
+                      "properties": {
+                        "color": {
+                          "type": "string",
+                          "length": 20
+                        },
+                        "intensity": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 100
+                        },
+                        "islighton": {
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  }
+                },
+                "row3": {
+                  "type": "object",
+                  "properties": {
+                    "driverside": {
+                      "type": "object",
+                      "properties": {
+                        "color": {
+                          "type": "string",
+                          "length": 20
+                        },
+                        "intensity": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 100
+                        },
+                        "islighton": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "passengerside": {
+                      "type": "object",
+                      "properties": {
+                        "color": {
+                          "type": "string",
+                          "length": 20
+                        },
+                        "intensity": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 100
+                        },
+                        "islighton": {
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  }
+                },
+                "row4": {
+                  "type": "object",
+                  "properties": {
+                    "driverside": {
+                      "type": "object",
+                      "properties": {
+                        "color": {
+                          "type": "string",
+                          "length": 20
+                        },
+                        "intensity": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 100
+                        },
+                        "islighton": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "passengerside": {
+                      "type": "object",
+                      "properties": {
+                        "color": {
+                          "type": "string",
+                          "length": 20
+                        },
+                        "intensity": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 100
+                        },
+                        "islighton": {
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "poweroptimizelevel": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "rearshade": {
+          "type": "object",
+          "properties": {
+            "position": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "switch": {
+              "type": "string",
+              "length": 20,
+              "enum": [
+                "INACTIVE",
+                "CLOSE",
+                "OPEN",
+                "ONE_SHOT_CLOSE",
+                "ONE_SHOT_OPEN"
+              ]
+            }
+          }
+        },
+        "rearviewmirror": {
+          "type": "object",
+          "properties": {
+            "dimminglevel": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            }
+          }
+        },
+        "seat": {
+          "type": "object",
+          "properties": {
+            "row1": {
+              "type": "object",
+              "properties": {
+                "driverside": {
+                  "type": "object",
+                  "properties": {
+                    "airbag": {
+                      "type": "object",
+                      "properties": {
+                        "isdeployed": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "backrest": {
+                      "type": "object",
+                      "properties": {
+                        "lumbar": {
+                          "type": "object",
+                          "properties": {
+                            "height": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 10
+                            },
+                            "support": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 100,
+                              "precision": 0.0001
+                            }
+                          }
+                        },
+                        "recline": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        },
+                        "sidebolster": {
+                          "type": "object",
+                          "properties": {
+                            "support": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 100,
+                              "precision": 0.0001
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "headrest": {
+                      "type": "object",
+                      "properties": {
+                        "angle": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        },
+                        "height": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        }
+                      }
+                    },
+                    "heating": {
+                      "type": "integer",
+                      "minimum": -100,
+                      "maximum": 100
+                    },
+                    "height": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    "isbelted": {
+                      "type": "boolean"
+                    },
+                    "isoccupied": {
+                      "type": "boolean"
+                    },
+                    "massage": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 100
+                    },
+                    "occupant": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "object",
+                          "properties": {
+                            "issuer": {
+                              "type": "string",
+                              "length": 20
+                            },
+                            "subject": {
+                              "type": "string",
+                              "length": 20
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "position": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    "seating": {
+                      "type": "object",
+                      "properties": {
+                        "length": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        }
+                      }
+                    },
+                    "switch": {
+                      "type": "object",
+                      "properties": {
+                        "backrest": {
+                          "type": "object",
+                          "properties": {
+                            "isreclinebackwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isreclineforwardengaged": {
+                              "type": "boolean"
+                            },
+                            "lumbar": {
+                              "type": "object",
+                              "properties": {
+                                "isdownengaged": {
+                                  "type": "boolean"
+                                },
+                                "islesssupportengaged": {
+                                  "type": "boolean"
+                                },
+                                "ismoresupportengaged": {
+                                  "type": "boolean"
+                                },
+                                "isupengaged": {
+                                  "type": "boolean"
+                                }
+                              }
+                            },
+                            "sidebolster": {
+                              "type": "object",
+                              "properties": {
+                                "islesssupportengaged": {
+                                  "type": "boolean"
+                                },
+                                "ismoresupportengaged": {
+                                  "type": "boolean"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "headrest": {
+                          "type": "object",
+                          "properties": {
+                            "isbackwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isdownengaged": {
+                              "type": "boolean"
+                            },
+                            "isforwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isupengaged": {
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "isbackwardengaged": {
+                          "type": "boolean"
+                        },
+                        "iscoolerengaged": {
+                          "type": "boolean"
+                        },
+                        "isdownengaged": {
+                          "type": "boolean"
+                        },
+                        "isforwardengaged": {
+                          "type": "boolean"
+                        },
+                        "istiltbackwardengaged": {
+                          "type": "boolean"
+                        },
+                        "istiltforwardengaged": {
+                          "type": "boolean"
+                        },
+                        "isupengaged": {
+                          "type": "boolean"
+                        },
+                        "iswarmerengaged": {
+                          "type": "boolean"
+                        },
+                        "massage": {
+                          "type": "object",
+                          "properties": {
+                            "isdecreaseengaged": {
+                              "type": "boolean"
+                            },
+                            "isincreaseengaged": {
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "seating": {
+                          "type": "object",
+                          "properties": {
+                            "isbackwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isforwardengaged": {
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "tilt": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "precision": 0.0001
+                    }
+                  }
+                },
+                "middle": {
+                  "type": "object",
+                  "properties": {
+                    "airbag": {
+                      "type": "object",
+                      "properties": {
+                        "isdeployed": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "backrest": {
+                      "type": "object",
+                      "properties": {
+                        "lumbar": {
+                          "type": "object",
+                          "properties": {
+                            "height": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 10
+                            },
+                            "support": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 100,
+                              "precision": 0.0001
+                            }
+                          }
+                        },
+                        "recline": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        },
+                        "sidebolster": {
+                          "type": "object",
+                          "properties": {
+                            "support": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 100,
+                              "precision": 0.0001
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "headrest": {
+                      "type": "object",
+                      "properties": {
+                        "angle": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        },
+                        "height": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        }
+                      }
+                    },
+                    "heating": {
+                      "type": "integer",
+                      "minimum": -100,
+                      "maximum": 100
+                    },
+                    "height": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    "isbelted": {
+                      "type": "boolean"
+                    },
+                    "isoccupied": {
+                      "type": "boolean"
+                    },
+                    "massage": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 100
+                    },
+                    "occupant": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "object",
+                          "properties": {
+                            "issuer": {
+                              "type": "string",
+                              "length": 20
+                            },
+                            "subject": {
+                              "type": "string",
+                              "length": 20
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "position": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    "seating": {
+                      "type": "object",
+                      "properties": {
+                        "length": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        }
+                      }
+                    },
+                    "switch": {
+                      "type": "object",
+                      "properties": {
+                        "backrest": {
+                          "type": "object",
+                          "properties": {
+                            "isreclinebackwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isreclineforwardengaged": {
+                              "type": "boolean"
+                            },
+                            "lumbar": {
+                              "type": "object",
+                              "properties": {
+                                "isdownengaged": {
+                                  "type": "boolean"
+                                },
+                                "islesssupportengaged": {
+                                  "type": "boolean"
+                                },
+                                "ismoresupportengaged": {
+                                  "type": "boolean"
+                                },
+                                "isupengaged": {
+                                  "type": "boolean"
+                                }
+                              }
+                            },
+                            "sidebolster": {
+                              "type": "object",
+                              "properties": {
+                                "islesssupportengaged": {
+                                  "type": "boolean"
+                                },
+                                "ismoresupportengaged": {
+                                  "type": "boolean"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "headrest": {
+                          "type": "object",
+                          "properties": {
+                            "isbackwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isdownengaged": {
+                              "type": "boolean"
+                            },
+                            "isforwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isupengaged": {
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "isbackwardengaged": {
+                          "type": "boolean"
+                        },
+                        "iscoolerengaged": {
+                          "type": "boolean"
+                        },
+                        "isdownengaged": {
+                          "type": "boolean"
+                        },
+                        "isforwardengaged": {
+                          "type": "boolean"
+                        },
+                        "istiltbackwardengaged": {
+                          "type": "boolean"
+                        },
+                        "istiltforwardengaged": {
+                          "type": "boolean"
+                        },
+                        "isupengaged": {
+                          "type": "boolean"
+                        },
+                        "iswarmerengaged": {
+                          "type": "boolean"
+                        },
+                        "massage": {
+                          "type": "object",
+                          "properties": {
+                            "isdecreaseengaged": {
+                              "type": "boolean"
+                            },
+                            "isincreaseengaged": {
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "seating": {
+                          "type": "object",
+                          "properties": {
+                            "isbackwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isforwardengaged": {
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "tilt": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "precision": 0.0001
+                    }
+                  }
+                },
+                "passengerside": {
+                  "type": "object",
+                  "properties": {
+                    "airbag": {
+                      "type": "object",
+                      "properties": {
+                        "isdeployed": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "backrest": {
+                      "type": "object",
+                      "properties": {
+                        "lumbar": {
+                          "type": "object",
+                          "properties": {
+                            "height": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 10
+                            },
+                            "support": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 100,
+                              "precision": 0.0001
+                            }
+                          }
+                        },
+                        "recline": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        },
+                        "sidebolster": {
+                          "type": "object",
+                          "properties": {
+                            "support": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 100,
+                              "precision": 0.0001
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "headrest": {
+                      "type": "object",
+                      "properties": {
+                        "angle": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        },
+                        "height": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        }
+                      }
+                    },
+                    "heating": {
+                      "type": "integer",
+                      "minimum": -100,
+                      "maximum": 100
+                    },
+                    "height": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    "isbelted": {
+                      "type": "boolean"
+                    },
+                    "isoccupied": {
+                      "type": "boolean"
+                    },
+                    "massage": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 100
+                    },
+                    "occupant": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "object",
+                          "properties": {
+                            "issuer": {
+                              "type": "string",
+                              "length": 20
+                            },
+                            "subject": {
+                              "type": "string",
+                              "length": 20
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "position": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    "seating": {
+                      "type": "object",
+                      "properties": {
+                        "length": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        }
+                      }
+                    },
+                    "switch": {
+                      "type": "object",
+                      "properties": {
+                        "backrest": {
+                          "type": "object",
+                          "properties": {
+                            "isreclinebackwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isreclineforwardengaged": {
+                              "type": "boolean"
+                            },
+                            "lumbar": {
+                              "type": "object",
+                              "properties": {
+                                "isdownengaged": {
+                                  "type": "boolean"
+                                },
+                                "islesssupportengaged": {
+                                  "type": "boolean"
+                                },
+                                "ismoresupportengaged": {
+                                  "type": "boolean"
+                                },
+                                "isupengaged": {
+                                  "type": "boolean"
+                                }
+                              }
+                            },
+                            "sidebolster": {
+                              "type": "object",
+                              "properties": {
+                                "islesssupportengaged": {
+                                  "type": "boolean"
+                                },
+                                "ismoresupportengaged": {
+                                  "type": "boolean"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "headrest": {
+                          "type": "object",
+                          "properties": {
+                            "isbackwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isdownengaged": {
+                              "type": "boolean"
+                            },
+                            "isforwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isupengaged": {
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "isbackwardengaged": {
+                          "type": "boolean"
+                        },
+                        "iscoolerengaged": {
+                          "type": "boolean"
+                        },
+                        "isdownengaged": {
+                          "type": "boolean"
+                        },
+                        "isforwardengaged": {
+                          "type": "boolean"
+                        },
+                        "istiltbackwardengaged": {
+                          "type": "boolean"
+                        },
+                        "istiltforwardengaged": {
+                          "type": "boolean"
+                        },
+                        "isupengaged": {
+                          "type": "boolean"
+                        },
+                        "iswarmerengaged": {
+                          "type": "boolean"
+                        },
+                        "massage": {
+                          "type": "object",
+                          "properties": {
+                            "isdecreaseengaged": {
+                              "type": "boolean"
+                            },
+                            "isincreaseengaged": {
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "seating": {
+                          "type": "object",
+                          "properties": {
+                            "isbackwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isforwardengaged": {
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "tilt": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "precision": 0.0001
+                    }
+                  }
+                }
+              }
+            },
+            "row2": {
+              "type": "object",
+              "properties": {
+                "driverside": {
+                  "type": "object",
+                  "properties": {
+                    "airbag": {
+                      "type": "object",
+                      "properties": {
+                        "isdeployed": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "backrest": {
+                      "type": "object",
+                      "properties": {
+                        "lumbar": {
+                          "type": "object",
+                          "properties": {
+                            "height": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 10
+                            },
+                            "support": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 100,
+                              "precision": 0.0001
+                            }
+                          }
+                        },
+                        "recline": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        },
+                        "sidebolster": {
+                          "type": "object",
+                          "properties": {
+                            "support": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 100,
+                              "precision": 0.0001
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "headrest": {
+                      "type": "object",
+                      "properties": {
+                        "angle": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        },
+                        "height": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        }
+                      }
+                    },
+                    "heating": {
+                      "type": "integer",
+                      "minimum": -100,
+                      "maximum": 100
+                    },
+                    "height": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    "isbelted": {
+                      "type": "boolean"
+                    },
+                    "isoccupied": {
+                      "type": "boolean"
+                    },
+                    "massage": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 100
+                    },
+                    "occupant": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "object",
+                          "properties": {
+                            "issuer": {
+                              "type": "string",
+                              "length": 20
+                            },
+                            "subject": {
+                              "type": "string",
+                              "length": 20
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "position": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    "seating": {
+                      "type": "object",
+                      "properties": {
+                        "length": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        }
+                      }
+                    },
+                    "switch": {
+                      "type": "object",
+                      "properties": {
+                        "backrest": {
+                          "type": "object",
+                          "properties": {
+                            "isreclinebackwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isreclineforwardengaged": {
+                              "type": "boolean"
+                            },
+                            "lumbar": {
+                              "type": "object",
+                              "properties": {
+                                "isdownengaged": {
+                                  "type": "boolean"
+                                },
+                                "islesssupportengaged": {
+                                  "type": "boolean"
+                                },
+                                "ismoresupportengaged": {
+                                  "type": "boolean"
+                                },
+                                "isupengaged": {
+                                  "type": "boolean"
+                                }
+                              }
+                            },
+                            "sidebolster": {
+                              "type": "object",
+                              "properties": {
+                                "islesssupportengaged": {
+                                  "type": "boolean"
+                                },
+                                "ismoresupportengaged": {
+                                  "type": "boolean"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "headrest": {
+                          "type": "object",
+                          "properties": {
+                            "isbackwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isdownengaged": {
+                              "type": "boolean"
+                            },
+                            "isforwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isupengaged": {
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "isbackwardengaged": {
+                          "type": "boolean"
+                        },
+                        "iscoolerengaged": {
+                          "type": "boolean"
+                        },
+                        "isdownengaged": {
+                          "type": "boolean"
+                        },
+                        "isforwardengaged": {
+                          "type": "boolean"
+                        },
+                        "istiltbackwardengaged": {
+                          "type": "boolean"
+                        },
+                        "istiltforwardengaged": {
+                          "type": "boolean"
+                        },
+                        "isupengaged": {
+                          "type": "boolean"
+                        },
+                        "iswarmerengaged": {
+                          "type": "boolean"
+                        },
+                        "massage": {
+                          "type": "object",
+                          "properties": {
+                            "isdecreaseengaged": {
+                              "type": "boolean"
+                            },
+                            "isincreaseengaged": {
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "seating": {
+                          "type": "object",
+                          "properties": {
+                            "isbackwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isforwardengaged": {
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "tilt": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "precision": 0.0001
+                    }
+                  }
+                },
+                "middle": {
+                  "type": "object",
+                  "properties": {
+                    "airbag": {
+                      "type": "object",
+                      "properties": {
+                        "isdeployed": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "backrest": {
+                      "type": "object",
+                      "properties": {
+                        "lumbar": {
+                          "type": "object",
+                          "properties": {
+                            "height": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 10
+                            },
+                            "support": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 100,
+                              "precision": 0.0001
+                            }
+                          }
+                        },
+                        "recline": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        },
+                        "sidebolster": {
+                          "type": "object",
+                          "properties": {
+                            "support": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 100,
+                              "precision": 0.0001
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "headrest": {
+                      "type": "object",
+                      "properties": {
+                        "angle": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        },
+                        "height": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        }
+                      }
+                    },
+                    "heating": {
+                      "type": "integer",
+                      "minimum": -100,
+                      "maximum": 100
+                    },
+                    "height": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    "isbelted": {
+                      "type": "boolean"
+                    },
+                    "isoccupied": {
+                      "type": "boolean"
+                    },
+                    "massage": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 100
+                    },
+                    "occupant": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "object",
+                          "properties": {
+                            "issuer": {
+                              "type": "string",
+                              "length": 20
+                            },
+                            "subject": {
+                              "type": "string",
+                              "length": 20
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "position": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    "seating": {
+                      "type": "object",
+                      "properties": {
+                        "length": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        }
+                      }
+                    },
+                    "switch": {
+                      "type": "object",
+                      "properties": {
+                        "backrest": {
+                          "type": "object",
+                          "properties": {
+                            "isreclinebackwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isreclineforwardengaged": {
+                              "type": "boolean"
+                            },
+                            "lumbar": {
+                              "type": "object",
+                              "properties": {
+                                "isdownengaged": {
+                                  "type": "boolean"
+                                },
+                                "islesssupportengaged": {
+                                  "type": "boolean"
+                                },
+                                "ismoresupportengaged": {
+                                  "type": "boolean"
+                                },
+                                "isupengaged": {
+                                  "type": "boolean"
+                                }
+                              }
+                            },
+                            "sidebolster": {
+                              "type": "object",
+                              "properties": {
+                                "islesssupportengaged": {
+                                  "type": "boolean"
+                                },
+                                "ismoresupportengaged": {
+                                  "type": "boolean"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "headrest": {
+                          "type": "object",
+                          "properties": {
+                            "isbackwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isdownengaged": {
+                              "type": "boolean"
+                            },
+                            "isforwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isupengaged": {
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "isbackwardengaged": {
+                          "type": "boolean"
+                        },
+                        "iscoolerengaged": {
+                          "type": "boolean"
+                        },
+                        "isdownengaged": {
+                          "type": "boolean"
+                        },
+                        "isforwardengaged": {
+                          "type": "boolean"
+                        },
+                        "istiltbackwardengaged": {
+                          "type": "boolean"
+                        },
+                        "istiltforwardengaged": {
+                          "type": "boolean"
+                        },
+                        "isupengaged": {
+                          "type": "boolean"
+                        },
+                        "iswarmerengaged": {
+                          "type": "boolean"
+                        },
+                        "massage": {
+                          "type": "object",
+                          "properties": {
+                            "isdecreaseengaged": {
+                              "type": "boolean"
+                            },
+                            "isincreaseengaged": {
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "seating": {
+                          "type": "object",
+                          "properties": {
+                            "isbackwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isforwardengaged": {
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "tilt": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "precision": 0.0001
+                    }
+                  }
+                },
+                "passengerside": {
+                  "type": "object",
+                  "properties": {
+                    "airbag": {
+                      "type": "object",
+                      "properties": {
+                        "isdeployed": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "backrest": {
+                      "type": "object",
+                      "properties": {
+                        "lumbar": {
+                          "type": "object",
+                          "properties": {
+                            "height": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 10
+                            },
+                            "support": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 100,
+                              "precision": 0.0001
+                            }
+                          }
+                        },
+                        "recline": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        },
+                        "sidebolster": {
+                          "type": "object",
+                          "properties": {
+                            "support": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 100,
+                              "precision": 0.0001
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "headrest": {
+                      "type": "object",
+                      "properties": {
+                        "angle": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        },
+                        "height": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        }
+                      }
+                    },
+                    "heating": {
+                      "type": "integer",
+                      "minimum": -100,
+                      "maximum": 100
+                    },
+                    "height": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    "isbelted": {
+                      "type": "boolean"
+                    },
+                    "isoccupied": {
+                      "type": "boolean"
+                    },
+                    "massage": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 100
+                    },
+                    "occupant": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "object",
+                          "properties": {
+                            "issuer": {
+                              "type": "string",
+                              "length": 20
+                            },
+                            "subject": {
+                              "type": "string",
+                              "length": 20
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "position": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    "seating": {
+                      "type": "object",
+                      "properties": {
+                        "length": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 10
+                        }
+                      }
+                    },
+                    "switch": {
+                      "type": "object",
+                      "properties": {
+                        "backrest": {
+                          "type": "object",
+                          "properties": {
+                            "isreclinebackwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isreclineforwardengaged": {
+                              "type": "boolean"
+                            },
+                            "lumbar": {
+                              "type": "object",
+                              "properties": {
+                                "isdownengaged": {
+                                  "type": "boolean"
+                                },
+                                "islesssupportengaged": {
+                                  "type": "boolean"
+                                },
+                                "ismoresupportengaged": {
+                                  "type": "boolean"
+                                },
+                                "isupengaged": {
+                                  "type": "boolean"
+                                }
+                              }
+                            },
+                            "sidebolster": {
+                              "type": "object",
+                              "properties": {
+                                "islesssupportengaged": {
+                                  "type": "boolean"
+                                },
+                                "ismoresupportengaged": {
+                                  "type": "boolean"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "headrest": {
+                          "type": "object",
+                          "properties": {
+                            "isbackwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isdownengaged": {
+                              "type": "boolean"
+                            },
+                            "isforwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isupengaged": {
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "isbackwardengaged": {
+                          "type": "boolean"
+                        },
+                        "iscoolerengaged": {
+                          "type": "boolean"
+                        },
+                        "isdownengaged": {
+                          "type": "boolean"
+                        },
+                        "isforwardengaged": {
+                          "type": "boolean"
+                        },
+                        "istiltbackwardengaged": {
+                          "type": "boolean"
+                        },
+                        "istiltforwardengaged": {
+                          "type": "boolean"
+                        },
+                        "isupengaged": {
+                          "type": "boolean"
+                        },
+                        "iswarmerengaged": {
+                          "type": "boolean"
+                        },
+                        "massage": {
+                          "type": "object",
+                          "properties": {
+                            "isdecreaseengaged": {
+                              "type": "boolean"
+                            },
+                            "isincreaseengaged": {
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "seating": {
+                          "type": "object",
+                          "properties": {
+                            "isbackwardengaged": {
+                              "type": "boolean"
+                            },
+                            "isforwardengaged": {
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "tilt": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "precision": 0.0001
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "seatposcount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10,
+          "default": [
+            2,
+            3
+          ]
+        },
+        "seatrowcount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10,
+          "default": 2
+        },
+        "sunroof": {
+          "type": "object",
+          "properties": {
+            "position": {
+              "type": "integer",
+              "minimum": -100,
+              "maximum": 100
+            },
+            "shade": {
+              "type": "object",
+              "properties": {
+                "position": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "switch": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "INACTIVE",
+                    "CLOSE",
+                    "OPEN",
+                    "ONE_SHOT_CLOSE",
+                    "ONE_SHOT_OPEN"
+                  ]
+                }
+              }
+            },
+            "switch": {
+              "type": "string",
+              "length": 20,
+              "enum": [
+                "INACTIVE",
+                "CLOSE",
+                "OPEN",
+                "ONE_SHOT_CLOSE",
+                "ONE_SHOT_OPEN",
+                "TILT_UP",
+                "TILT_DOWN"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "cargovolume": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "precision": 0.0001
+    },
+    "chassis": {
+      "type": "object",
+      "properties": {
+        "accelerator": {
+          "type": "object",
+          "properties": {
+            "pedalposition": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            }
+          }
+        },
+        "axle": {
+          "type": "object",
+          "properties": {
+            "row1": {
+              "type": "object",
+              "properties": {
+                "axlewidth": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "steeringangle": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "tireaspectratio": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "tirediameter": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "tirewidth": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "trackwidth": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "treadwidth": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "wheel": {
+                  "type": "object",
+                  "properties": {
+                    "left": {
+                      "type": "object",
+                      "properties": {
+                        "brake": {
+                          "type": "object",
+                          "properties": {
+                            "fluidlevel": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 100
+                            },
+                            "isbrakesworn": {
+                              "type": "boolean"
+                            },
+                            "isfluidlevellow": {
+                              "type": "boolean"
+                            },
+                            "padwear": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 100
+                            }
+                          }
+                        },
+                        "speed": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        },
+                        "tire": {
+                          "type": "object",
+                          "properties": {
+                            "ispressurelow": {
+                              "type": "boolean"
+                            },
+                            "pressure": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 10
+                            },
+                            "temperature": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 100,
+                              "precision": 0.0001
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "right": {
+                      "type": "object",
+                      "properties": {
+                        "brake": {
+                          "type": "object",
+                          "properties": {
+                            "fluidlevel": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 100
+                            },
+                            "isbrakesworn": {
+                              "type": "boolean"
+                            },
+                            "isfluidlevellow": {
+                              "type": "boolean"
+                            },
+                            "padwear": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 100
+                            }
+                          }
+                        },
+                        "speed": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        },
+                        "tire": {
+                          "type": "object",
+                          "properties": {
+                            "ispressurelow": {
+                              "type": "boolean"
+                            },
+                            "pressure": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 10
+                            },
+                            "temperature": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 100,
+                              "precision": 0.0001
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "wheelcount": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "wheeldiameter": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "wheelwidth": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            },
+            "row2": {
+              "type": "object",
+              "properties": {
+                "axlewidth": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "steeringangle": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "tireaspectratio": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "tirediameter": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "tirewidth": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "trackwidth": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "treadwidth": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "wheel": {
+                  "type": "object",
+                  "properties": {
+                    "left": {
+                      "type": "object",
+                      "properties": {
+                        "brake": {
+                          "type": "object",
+                          "properties": {
+                            "fluidlevel": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 100
+                            },
+                            "isbrakesworn": {
+                              "type": "boolean"
+                            },
+                            "isfluidlevellow": {
+                              "type": "boolean"
+                            },
+                            "padwear": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 100
+                            }
+                          }
+                        },
+                        "speed": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        },
+                        "tire": {
+                          "type": "object",
+                          "properties": {
+                            "ispressurelow": {
+                              "type": "boolean"
+                            },
+                            "pressure": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 10
+                            },
+                            "temperature": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 100,
+                              "precision": 0.0001
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "right": {
+                      "type": "object",
+                      "properties": {
+                        "brake": {
+                          "type": "object",
+                          "properties": {
+                            "fluidlevel": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 100
+                            },
+                            "isbrakesworn": {
+                              "type": "boolean"
+                            },
+                            "isfluidlevellow": {
+                              "type": "boolean"
+                            },
+                            "padwear": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 100
+                            }
+                          }
+                        },
+                        "speed": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 100,
+                          "precision": 0.0001
+                        },
+                        "tire": {
+                          "type": "object",
+                          "properties": {
+                            "ispressurelow": {
+                              "type": "boolean"
+                            },
+                            "pressure": {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 10
+                            },
+                            "temperature": {
+                              "type": "number",
+                              "minimum": 0,
+                              "maximum": 100,
+                              "precision": 0.0001
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "wheelcount": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "wheeldiameter": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "wheelwidth": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            }
+          }
+        },
+        "axlecount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10,
+          "default": 2
+        },
+        "brake": {
+          "type": "object",
+          "properties": {
+            "isdriveremergencybrakingdetected": {
+              "type": "boolean"
+            },
+            "pedalposition": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            }
+          }
+        },
+        "parkingbrake": {
+          "type": "object",
+          "properties": {
+            "isautoapplyenabled": {
+              "type": "boolean"
+            },
+            "isengaged": {
+              "type": "boolean"
+            }
+          }
+        },
+        "steeringwheel": {
+          "type": "object",
+          "properties": {
+            "angle": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "extension": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "tilt": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            }
+          }
+        },
+        "wheelbase": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        }
+      }
+    },
+    "connectivity": {
+      "type": "object",
+      "properties": {
+        "isconnectivityavailable": {
+          "type": "boolean"
+        }
+      }
+    },
+    "curbweight": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "currentlocation": {
+      "type": "object",
+      "properties": {
+        "altitude": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "gnssreceiver": {
+          "type": "object",
+          "properties": {
+            "fixtype": {
+              "type": "string",
+              "length": 20,
+              "enum": [
+                "NONE",
+                "TWO_D",
+                "TWO_D_SATELLITE_BASED_AUGMENTATION",
+                "TWO_D_GROUND_BASED_AUGMENTATION",
+                "TWO_D_SATELLITE_AND_GROUND_BASED_AUGMENTATION",
+                "THREE_D",
+                "THREE_D_SATELLITE_BASED_AUGMENTATION",
+                "THREE_D_GROUND_BASED_AUGMENTATION",
+                "THREE_D_SATELLITE_AND_GROUND_BASED_AUGMENTATION"
+              ]
+            },
+            "mountingposition": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "z": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                }
+              }
+            }
+          }
+        },
+        "heading": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 360,
+          "precision": 0.0001
+        },
+        "horizontalaccuracy": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "latitude": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90,
+          "precision": 0.0001
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180,
+          "precision": 0.0001
+        },
+        "timestamp": {
+          "type": "string",
+          "length": 20
+        },
+        "verticalaccuracy": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        }
+      }
+    },
+    "currentoverallweight": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "driver": {
+      "type": "object",
+      "properties": {
+        "attentiveprobability": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "distractionlevel": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "fatiguelevel": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "heartrate": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "identifier": {
+          "type": "object",
+          "properties": {
+            "issuer": {
+              "type": "string",
+              "length": 20
+            },
+            "subject": {
+              "type": "string",
+              "length": 20
+            }
+          }
+        },
+        "iseyesonroad": {
+          "type": "boolean"
+        },
+        "ishandsonwheel": {
+          "type": "boolean"
+        }
+      }
+    },
+    "emissionsco2": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "exterior": {
+      "type": "object",
+      "properties": {
+        "airtemperature": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "humidity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "lightintensity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        }
+      }
+    },
+    "grossweight": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "height": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "isbrokendown": {
+      "type": "boolean"
+    },
+    "ismoving": {
+      "type": "boolean"
+    },
+    "length": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "lowvoltagebattery": {
+      "type": "object",
+      "properties": {
+        "currentcurrent": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "currentvoltage": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "nominalcapacity": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "nominalvoltage": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        }
+      }
+    },
+    "lowvoltagesystemstate": {
+      "type": "string",
+      "length": 20,
+      "enum": [
+        "UNDEFINED",
+        "LOCK",
+        "OFF",
+        "ACC",
+        "ON",
+        "START"
+      ]
+    },
+    "maxtowballweight": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "maxtowweight": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "obd": {
+      "type": "object",
+      "properties": {
+        "absoluteload": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "acceleratorpositiond": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "acceleratorpositione": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "acceleratorpositionf": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "airstatus": {
+          "type": "string",
+          "length": 20
+        },
+        "ambientairtemperature": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "barometricpressure": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "catalyst": {
+          "type": "object",
+          "properties": {
+            "bank1": {
+              "type": "object",
+              "properties": {
+                "temperature1": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "temperature2": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            },
+            "bank2": {
+              "type": "object",
+              "properties": {
+                "temperature1": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "temperature2": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            }
+          }
+        },
+        "commandedegr": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "commandedevap": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "commandedequivalenceratio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "controlmodulevoltage": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "coolanttemperature": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "dtclist": {
+          "type": "string",
+          "length": 20
+        },
+        "distancesincedtcclear": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "distancewithmil": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "drivecyclestatus": {
+          "type": "object",
+          "properties": {
+            "dtccount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "ignitiontype": {
+              "type": "string",
+              "length": 20,
+              "enum": [
+                "SPARK",
+                "COMPRESSION"
+              ]
+            },
+            "ismilon": {
+              "type": "boolean"
+            }
+          }
+        },
+        "egrerror": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "evapvaporpressure": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "evapvaporpressureabsolute": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "evapvaporpressurealternate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "engineload": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "enginespeed": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "ethanolpercent": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "freezedtc": {
+          "type": "string",
+          "length": 20
+        },
+        "fuelinjectiontiming": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "fuellevel": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "fuelpressure": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "fuelrailpressureabsolute": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "fuelrailpressuredirect": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "fuelrailpressurevac": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "fuelrate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "fuelstatus": {
+          "type": "string",
+          "length": 20
+        },
+        "fueltype": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 23
+        },
+        "hybridbatteryremaining": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "intaketemp": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "isptoactive": {
+          "type": "boolean"
+        },
+        "longtermfueltrim1": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "longtermfueltrim2": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "longtermo2trim1": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "longtermo2trim2": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "longtermo2trim3": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "longtermo2trim4": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "maf": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "map": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "maxmaf": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "o2": {
+          "type": "object",
+          "properties": {
+            "sensor1": {
+              "type": "object",
+              "properties": {
+                "shorttermfueltrim": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "voltage": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            },
+            "sensor2": {
+              "type": "object",
+              "properties": {
+                "shorttermfueltrim": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "voltage": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            },
+            "sensor3": {
+              "type": "object",
+              "properties": {
+                "shorttermfueltrim": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "voltage": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            },
+            "sensor4": {
+              "type": "object",
+              "properties": {
+                "shorttermfueltrim": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "voltage": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            },
+            "sensor5": {
+              "type": "object",
+              "properties": {
+                "shorttermfueltrim": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "voltage": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            },
+            "sensor6": {
+              "type": "object",
+              "properties": {
+                "shorttermfueltrim": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "voltage": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            },
+            "sensor7": {
+              "type": "object",
+              "properties": {
+                "shorttermfueltrim": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "voltage": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            },
+            "sensor8": {
+              "type": "object",
+              "properties": {
+                "shorttermfueltrim": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "voltage": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            }
+          }
+        },
+        "o2wr": {
+          "type": "object",
+          "properties": {
+            "sensor1": {
+              "type": "object",
+              "properties": {
+                "current": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "lambda": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "voltage": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            },
+            "sensor2": {
+              "type": "object",
+              "properties": {
+                "current": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "lambda": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "voltage": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            },
+            "sensor3": {
+              "type": "object",
+              "properties": {
+                "current": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "lambda": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "voltage": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            },
+            "sensor4": {
+              "type": "object",
+              "properties": {
+                "current": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "lambda": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "voltage": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            },
+            "sensor5": {
+              "type": "object",
+              "properties": {
+                "current": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "lambda": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "voltage": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            },
+            "sensor6": {
+              "type": "object",
+              "properties": {
+                "current": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "lambda": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "voltage": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            },
+            "sensor7": {
+              "type": "object",
+              "properties": {
+                "current": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "lambda": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "voltage": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            },
+            "sensor8": {
+              "type": "object",
+              "properties": {
+                "current": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "lambda": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "voltage": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            }
+          }
+        },
+        "obdstandards": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "oiltemperature": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "oxygensensorsin2banks": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "oxygensensorsin4banks": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "pidsa": {
+          "type": "string",
+          "length": 20,
+          "enum": [
+            "01",
+            "02",
+            "03",
+            "04",
+            "05",
+            "06",
+            "07",
+            "08",
+            "09",
+            "0A",
+            "0B",
+            "0C",
+            "0D",
+            "0E",
+            "0F",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "19",
+            "1A",
+            "1B",
+            "1C",
+            "1D",
+            "1E",
+            "1F",
+            "20"
+          ]
+        },
+        "pidsb": {
+          "type": "string",
+          "length": 20,
+          "enum": [
+            "21",
+            "22",
+            "23",
+            "24",
+            "25",
+            "26",
+            "27",
+            "28",
+            "29",
+            "2A",
+            "2B",
+            "2C",
+            "2D",
+            "2E",
+            "2F",
+            "30",
+            "31",
+            "32",
+            "33",
+            "34",
+            "35",
+            "36",
+            "37",
+            "38",
+            "39",
+            "3A",
+            "3B",
+            "3C",
+            "3D",
+            "3E",
+            "3F",
+            "40"
+          ]
+        },
+        "pidsc": {
+          "type": "string",
+          "length": 20,
+          "enum": [
+            "41",
+            "42",
+            "43",
+            "44",
+            "45",
+            "46",
+            "47",
+            "48",
+            "49",
+            "4A",
+            "4B",
+            "4C",
+            "4D",
+            "4E",
+            "4F",
+            "50",
+            "51",
+            "52",
+            "53",
+            "54",
+            "55",
+            "56",
+            "57",
+            "58",
+            "59",
+            "5A",
+            "5B",
+            "5C",
+            "5D",
+            "5E",
+            "5F",
+            "60"
+          ]
+        },
+        "relativeacceleratorposition": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "relativethrottleposition": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "runtime": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "runtimemil": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "shorttermfueltrim1": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "shorttermfueltrim2": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "shorttermo2trim1": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "shorttermo2trim2": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "shorttermo2trim3": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "shorttermo2trim4": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "speed": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "status": {
+          "type": "object",
+          "properties": {
+            "dtccount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "ignitiontype": {
+              "type": "string",
+              "length": 20,
+              "enum": [
+                "SPARK",
+                "COMPRESSION"
+              ]
+            },
+            "ismilon": {
+              "type": "boolean"
+            }
+          }
+        },
+        "throttleactuator": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "throttleposition": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "throttlepositionb": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "throttlepositionc": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "timesincedtccleared": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "timingadvance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "warmupssincedtcclear": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        }
+      }
+    },
+    "poweroptimizelevel": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "powertrain": {
+      "type": "object",
+      "properties": {
+        "accumulatedbrakingenergy": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "combustionengine": {
+          "type": "object",
+          "properties": {
+            "aspirationtype": {
+              "type": "string",
+              "length": 20,
+              "default": "UNKNOWN",
+              "enum": [
+                "UNKNOWN",
+                "NATURAL",
+                "SUPERCHARGER",
+                "TURBOCHARGER"
+              ]
+            },
+            "bore": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "compressionratio": {
+              "type": "string",
+              "length": 20
+            },
+            "configuration": {
+              "type": "string",
+              "length": 20,
+              "default": "UNKNOWN",
+              "enum": [
+                "UNKNOWN",
+                "STRAIGHT",
+                "V",
+                "BOXER",
+                "W",
+                "ROTARY",
+                "RADIAL",
+                "SQUARE",
+                "H",
+                "U",
+                "OPPOSED",
+                "X"
+              ]
+            },
+            "dieselexhaustfluid": {
+              "type": "object",
+              "properties": {
+                "capacity": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "islevellow": {
+                  "type": "boolean"
+                },
+                "level": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "range": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                }
+              }
+            },
+            "dieselparticulatefilter": {
+              "type": "object",
+              "properties": {
+                "deltapressure": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "inlettemperature": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "outlettemperature": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            },
+            "displacement": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "ect": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "eop": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "eot": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "enginecode": {
+              "type": "string",
+              "length": 20
+            },
+            "enginecoolantcapacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "enginehours": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "engineoilcapacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "engineoillevel": {
+              "type": "string",
+              "length": 20,
+              "enum": [
+                "CRITICALLY_LOW",
+                "LOW",
+                "NORMAL",
+                "HIGH",
+                "CRITICALLY_HIGH"
+              ]
+            },
+            "idlehours": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "isrunning": {
+              "type": "boolean"
+            },
+            "maf": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "map": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "maxpower": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "maxtorque": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "numberofcylinders": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "numberofvalvespercylinder": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "oilliferemaining": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "power": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "speed": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "strokelength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "tps": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "torque": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            }
+          }
+        },
+        "electricmotor": {
+          "type": "object",
+          "properties": {
+            "coolanttemperature": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "enginecode": {
+              "type": "string",
+              "length": 20
+            },
+            "maxpower": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "maxregenpower": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "maxregentorque": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "maxtorque": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "power": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "speed": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "temperature": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "torque": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            }
+          }
+        },
+        "fuelsystem": {
+          "type": "object",
+          "properties": {
+            "absolutelevel": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "averageconsumption": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "consumptionsincestart": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "hybridtype": {
+              "type": "string",
+              "length": 20,
+              "default": "UNKNOWN",
+              "enum": [
+                "UNKNOWN",
+                "NOT_APPLICABLE",
+                "STOP_START",
+                "BELT_ISG",
+                "CIMG",
+                "PHEV"
+              ]
+            },
+            "instantconsumption": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "isenginestopstartenabled": {
+              "type": "boolean"
+            },
+            "isfuellevellow": {
+              "type": "boolean"
+            },
+            "isfuelportflapopen": {
+              "type": "boolean"
+            },
+            "range": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "refuelportposition": {
+              "type": "string",
+              "length": 20,
+              "enum": [
+                "FRONT_LEFT",
+                "FRONT_MIDDLE",
+                "FRONT_RIGHT",
+                "REAR_LEFT",
+                "REAR_MIDDLE",
+                "REAR_RIGHT",
+                "LEFT_FRONT",
+                "LEFT_MIDDLE",
+                "LEFT_REAR",
+                "RIGHT_FRONT",
+                "RIGHT_MIDDLE",
+                "RIGHT_REAR"
+              ]
+            },
+            "relativelevel": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "supportedfuel": {
+              "type": "string",
+              "length": 20,
+              "enum": [
+                "E5_95",
+                "E5_98",
+                "E10_95",
+                "E10_98",
+                "E85",
+                "B7",
+                "B10",
+                "B20",
+                "B30",
+                "B100",
+                "XTL",
+                "LPG",
+                "CNG",
+                "LNG",
+                "H2",
+                "OTHER"
+              ]
+            },
+            "supportedfueltypes": {
+              "type": "string",
+              "length": 20,
+              "enum": [
+                "GASOLINE",
+                "DIESEL",
+                "E85",
+                "LPG",
+                "CNG",
+                "LNG",
+                "H2",
+                "OTHER"
+              ]
+            },
+            "tankcapacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "timeremaining": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            }
+          }
+        },
+        "poweroptimizelevel": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "range": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "timeremaining": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "tractionbattery": {
+          "type": "object",
+          "properties": {
+            "accumulatedchargedenergy": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "accumulatedchargedthroughput": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "accumulatedconsumedenergy": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "accumulatedconsumedthroughput": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "cellvoltage": {
+              "type": "object",
+              "properties": {
+                "cellvoltages": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "idmax": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "idmin": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "max": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "min": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            },
+            "charging": {
+              "type": "object",
+              "properties": {
+                "averagepower": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "chargecurrent": {
+                  "type": "object",
+                  "properties": {
+                    "dc": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "precision": 0.0001
+                    },
+                    "phase1": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "precision": 0.0001
+                    },
+                    "phase2": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "precision": 0.0001
+                    },
+                    "phase3": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "precision": 0.0001
+                    }
+                  }
+                },
+                "chargelimit": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "default": 100
+                },
+                "chargeplugtype": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "IEC_TYPE_1_AC",
+                    "IEC_TYPE_2_AC",
+                    "IEC_TYPE_3_AC",
+                    "IEC_TYPE_4_DC",
+                    "IEC_TYPE_1_CCS_DC",
+                    "IEC_TYPE_2_CCS_DC",
+                    "TESLA_ROADSTER",
+                    "TESLA_HPWC",
+                    "TESLA_SUPERCHARGER",
+                    "GBT_AC",
+                    "GBT_DC",
+                    "OTHER"
+                  ]
+                },
+                "chargeportflap": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "OPEN",
+                    "CLOSED"
+                  ]
+                },
+                "chargeportposition": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "FRONT_LEFT",
+                    "FRONT_MIDDLE",
+                    "FRONT_RIGHT",
+                    "REAR_LEFT",
+                    "REAR_MIDDLE",
+                    "REAR_RIGHT",
+                    "LEFT_FRONT",
+                    "LEFT_MIDDLE",
+                    "LEFT_REAR",
+                    "RIGHT_FRONT",
+                    "RIGHT_MIDDLE",
+                    "RIGHT_REAR"
+                  ]
+                },
+                "chargeporttype": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "IEC_TYPE_1_AC",
+                    "IEC_TYPE_2_AC",
+                    "IEC_TYPE_3_AC",
+                    "IEC_TYPE_4_DC",
+                    "IEC_TYPE_1_CCS_DC",
+                    "IEC_TYPE_2_CCS_DC",
+                    "TESLA_ROADSTER",
+                    "TESLA_HPWC",
+                    "TESLA_SUPERCHARGER",
+                    "GBT_AC",
+                    "GBT_DC",
+                    "OTHER"
+                  ]
+                },
+                "chargerate": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "chargevoltage": {
+                  "type": "object",
+                  "properties": {
+                    "dc": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "precision": 0.0001
+                    },
+                    "phase1": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "precision": 0.0001
+                    },
+                    "phase2": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "precision": 0.0001
+                    },
+                    "phase3": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "precision": 0.0001
+                    }
+                  }
+                },
+                "evseid": {
+                  "type": "string",
+                  "length": 20
+                },
+                "ischargeportflapopen": {
+                  "type": "boolean"
+                },
+                "ischarging": {
+                  "type": "boolean"
+                },
+                "ischargingcableconnected": {
+                  "type": "boolean"
+                },
+                "ischargingcablelocked": {
+                  "type": "boolean"
+                },
+                "isdischarging": {
+                  "type": "boolean"
+                },
+                "location": {
+                  "type": "object",
+                  "properties": {
+                    "altitude": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "precision": 0.0001
+                    },
+                    "latitude": {
+                      "type": "number",
+                      "minimum": -90,
+                      "maximum": 90,
+                      "precision": 0.0001
+                    },
+                    "longitude": {
+                      "type": "number",
+                      "minimum": -180,
+                      "maximum": 180,
+                      "precision": 0.0001
+                    }
+                  }
+                },
+                "maxpower": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "maximumchargingcurrent": {
+                  "type": "object",
+                  "properties": {
+                    "dc": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "precision": 0.0001
+                    },
+                    "phase1": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "precision": 0.0001
+                    },
+                    "phase2": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "precision": 0.0001
+                    },
+                    "phase3": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "precision": 0.0001
+                    }
+                  }
+                },
+                "mode": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "DEACTIVATED",
+                    "AUTOMATIC",
+                    "TRIGGERED",
+                    "TIMER",
+                    "PROFILE",
+                    "EXTERNAL_ENTITY",
+                    "MANUAL",
+                    "GRID"
+                  ]
+                },
+                "powerloss": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "startstopcharging": {
+                  "type": "string",
+                  "length": 20,
+                  "enum": [
+                    "START",
+                    "STOP"
+                  ]
+                },
+                "temperature": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "timetocomplete": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "timer": {
+                  "type": "object",
+                  "properties": {
+                    "mode": {
+                      "type": "string",
+                      "length": 20,
+                      "enum": [
+                        "INACTIVE",
+                        "START_TIME",
+                        "END_TIME"
+                      ]
+                    },
+                    "time": {
+                      "type": "string",
+                      "length": 20
+                    }
+                  }
+                }
+              }
+            },
+            "currentcurrent": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "currentpower": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "currentvoltage": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "dcdc": {
+              "type": "object",
+              "properties": {
+                "powerloss": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "temperature": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            },
+            "errorcodes": {
+              "type": "string",
+              "length": 20
+            },
+            "grosscapacity": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "id": {
+              "type": "string",
+              "length": 20
+            },
+            "isgroundconnected": {
+              "type": "boolean"
+            },
+            "ispowerconnected": {
+              "type": "boolean"
+            },
+            "maxvoltage": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "netcapacity": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "nominalvoltage": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "powerloss": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "productiondate": {
+              "type": "string",
+              "length": 20
+            },
+            "range": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "stateofcharge": {
+              "type": "object",
+              "properties": {
+                "current": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100.0,
+                  "precision": 0.0001
+                },
+                "currentenergy": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "displayed": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100.0,
+                  "precision": 0.0001
+                }
+              }
+            },
+            "stateofhealth": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "temperature": {
+              "type": "object",
+              "properties": {
+                "average": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "celltemperature": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "max": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                },
+                "min": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100,
+                  "precision": 0.0001
+                }
+              }
+            },
+            "timeremaining": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            }
+          }
+        },
+        "transmission": {
+          "type": "object",
+          "properties": {
+            "clutchengagement": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "clutchwear": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "currentgear": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "difflockfrontengagement": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "difflockrearengagement": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "drivetype": {
+              "type": "string",
+              "length": 20,
+              "default": "UNKNOWN",
+              "enum": [
+                "UNKNOWN",
+                "FORWARD_WHEEL_DRIVE",
+                "REAR_WHEEL_DRIVE",
+                "ALL_WHEEL_DRIVE"
+              ]
+            },
+            "gearchangemode": {
+              "type": "string",
+              "length": 20,
+              "enum": [
+                "MANUAL",
+                "AUTOMATIC"
+              ]
+            },
+            "gearcount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "iselectricalpowertrainengaged": {
+              "type": "boolean"
+            },
+            "islowrangeengaged": {
+              "type": "boolean"
+            },
+            "isparklockengaged": {
+              "type": "boolean"
+            },
+            "performancemode": {
+              "type": "string",
+              "length": 20,
+              "enum": [
+                "NORMAL",
+                "SPORT",
+                "ECONOMY",
+                "SNOW",
+                "RAIN"
+              ]
+            },
+            "selectedgear": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "temperature": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "torquedistribution": {
+              "type": "number",
+              "minimum": -100,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "travelleddistance": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "precision": 0.0001
+            },
+            "type": {
+              "type": "string",
+              "length": 20,
+              "default": "UNKNOWN",
+              "enum": [
+                "UNKNOWN",
+                "SEQUENTIAL",
+                "H",
+                "AUTOMATIC",
+                "DSG",
+                "CVT"
+              ]
+            }
+          }
+        },
+        "type": {
+          "type": "string",
+          "length": 20,
+          "enum": [
+            "COMBUSTION",
+            "HYBRID",
+            "ELECTRIC"
+          ]
+        }
+      }
+    },
+    "roofload": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "service": {
+      "type": "object",
+      "properties": {
+        "distancetoservice": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "precision": 0.0001
+        },
+        "isservicedue": {
+          "type": "boolean"
+        },
+        "timetoservice": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        }
+      }
+    },
+    "speed": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "precision": 0.0001
+    },
+    "starttime": {
+      "type": "string",
+      "length": 20,
+      "default": "0000-01-01T00:00Z"
+    },
+    "trailer": {
+      "type": "object",
+      "properties": {
+        "isconnected": {
+          "type": "boolean"
+        }
+      }
+    },
+    "traveleddistance": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "precision": 0.0001
+    },
+    "traveleddistancesincestart": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "precision": 0.0001
+    },
+    "tripduration": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "precision": 0.0001
+    },
+    "tripmeterreading": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "precision": 0.0001
+    },
+    "vehicleidentification": {
+      "type": "object",
+      "properties": {
+        "acrisscode": {
+          "type": "string",
+          "length": 20
+        },
+        "bodytype": {
+          "type": "string",
+          "length": 20
+        },
+        "brand": {
+          "type": "string",
+          "length": 20
+        },
+        "datevehiclefirstregistered": {
+          "type": "string",
+          "length": 20
+        },
+        "knownvehicledamages": {
+          "type": "string",
+          "length": 20
+        },
+        "licenseplate": {
+          "type": "string",
+          "length": 20
+        },
+        "meetsemissionstandard": {
+          "type": "string",
+          "length": 20
+        },
+        "model": {
+          "type": "string",
+          "length": 20
+        },
+        "optionalextras": {
+          "type": "string",
+          "length": 20
+        },
+        "productiondate": {
+          "type": "string",
+          "length": 20
+        },
+        "purchasedate": {
+          "type": "string",
+          "length": 20
+        },
+        "vin": {
+          "type": "string",
+          "length": 17
+        },
+        "vehicleconfiguration": {
+          "type": "string",
+          "length": 20
+        },
+        "vehicleexteriorcolor": {
+          "type": "string",
+          "length": 20
+        },
+        "vehicleinteriorcolor": {
+          "type": "string",
+          "length": 20
+        },
+        "vehicleinteriortype": {
+          "type": "string",
+          "length": 20
+        },
+        "vehiclemodeldate": {
+          "type": "string",
+          "length": 20
+        },
+        "vehicleseatingcapacity": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "vehiclespecialusage": {
+          "type": "string",
+          "length": 20
+        },
+        "wmi": {
+          "type": "string",
+          "length": 3
+        },
+        "year": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        }
+      }
+    },
+    "versionvss": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "length": 20,
+          "default": "dev"
+        },
+        "major": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10,
+          "default": 4
+        },
+        "minor": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10,
+          "default": 1
+        },
+        "patch": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        }
+      }
+    },
+    "width": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10
+    }
+  }
+}

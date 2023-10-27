@@ -1,0 +1,56 @@
+# https://docs.aws.amazon.com/proton/latest/userguide/ag-infrastructure-tmp-files-codebuild.html
+
+schema:
+  format:
+    openapi: "3.0.0"
+  service_input_type: "CMSProvisioning"
+  pipeline_input_type: "PipelineInputs"
+  types:
+    CMSProvisioning:
+      type: object
+      description: "Input properties for CMS Provisioning Module"
+      properties:
+        a_number:
+          title: "A number option"
+          type: number
+          description: "A number with a min and max"
+          default: 80
+          minimum: 0
+          maximum: 65535
+        an_enum:
+          title: "A string option from list (default: x-small)"
+          type: string
+          description: "An enum of sizes"
+          enum: ["x-small", "small", "medium", "large", "x-large"]
+          default: "x-small"
+        a_string:
+          title: "A string option"
+          type: string
+          description: "A string option with min and max length"
+          default: "public.ecr.aws/nginx/nginx:stable"
+          minLength: 1
+          maxLength: 200
+        a_boolean:
+          title: "A boolean option"
+          type: boolean
+          description: "This is false"
+          default: false
+        env_vars:
+          title: "Environment variables"
+          description: "Example: ENV_VAR_1=VALUE"
+          type: array
+          example:
+            - "ENV_VAR1=TEST1"
+            - "ENV_VAR2=TEST2"
+          items:
+            type: string
+    PipelineInputs:
+      type: object
+      description: "Pipeline input properties"
+      properties:
+        unit_test_command:         # parameter
+          type: string
+          description: "The command to run to unit test the application code"
+          default: "echo 'add your unit test command here'"
+          minLength: 1
+          maxLength: 200

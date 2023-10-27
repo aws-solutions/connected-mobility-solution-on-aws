@@ -1,0 +1,47 @@
+@startuml cms-ev-battery-health-deployment-sequence-diagram-4
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v14.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/ManagementGovernance/CloudFormation.puml
+!include AWSPuml/ApplicationIntegration/SimpleNotificationServiceTopic.puml
+
+!define GREEN #3F8624
+!define YELLOW #D86613
+!define RED #E3242B
+!define PINK #CF2465
+
+'Comment out to use default PlantUML sequence formatting
+skinparam participant {
+    BackgroundColor AWS_BG_COLOR
+    BorderColor AWS_BORDER_COLOR
+}
+skinparam sequence {
+    ArrowThickness 2
+    LifeLineBorderColor AWS_COLOR
+    LifeLineBackgroundColor AWS_BORDER_COLOR
+    BoxBorderColor AWS_COLOR
+}
+
+actor User as user
+box CMS EV Battery Health Module Deployment - Part 4
+participant "$CloudFormationIMG()\nCloudformation" as cf << Cloudformation >>
+participant "$SimpleNotificationServiceTopicIMG()\nSNS Topic" as sns << SNS >>
+participant "$LambdaIMG()\nProcess Alerts" as process_alerts << Lambda >>
+endbox
+
+user -> cf++ PINK: Continue deploy
+
+cf -> sns++ PINK: Create SNS topic as contact point for Grafana alerts
+sns -> process_alerts++ YELLOW: Setup Process Alerts Lambda as a subscriber to the SNS topic
+sns <-- process_alerts
+deactivate process_alerts
+cf <-- sns
+deactivate sns
+
+user <-- cf: Finish deploy
+deactivate cf
+
+@enduml

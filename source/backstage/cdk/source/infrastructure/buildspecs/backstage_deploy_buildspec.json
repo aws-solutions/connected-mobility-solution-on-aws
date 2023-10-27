@@ -1,0 +1,17 @@
+{
+    "version": "0.2",
+    "env": {"variables": {}},
+    "phases": {
+        "install": {
+            "runtime-versions": {"nodejs": 18},
+            "commands": ["npm install -g aws-cdk"]
+        },
+        "build": {
+            "commands": [
+                "cd cdk",
+                "pipenv install --dev",
+                "STACK_TARGET=\"cms-backstage-$STAGE\" pipenv run cdk deploy --context \"backstage-image-tag\"=\"$CODEBUILD_RESOLVED_SOURCE_VERSION\" --require-approval never"
+            ]
+        }
+    }
+}

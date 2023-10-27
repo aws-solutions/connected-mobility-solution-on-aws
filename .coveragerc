@@ -1,0 +1,12 @@
+[report]
+fail_under = 80.0
+omit =
+    **/deployment/*
+    **/__init__.py
+    setup.py
+    **/tests/*
+    source/infrastructure/app.py
+    source/backstage/cdk/source/infrastructure/app.py
+    **/*_dependency_layer/**/*
+    **/*_dep_layer/**/*
+    **/*-dep-layer/**/*

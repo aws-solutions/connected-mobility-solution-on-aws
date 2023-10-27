@@ -1,0 +1,231 @@
+{
+    "/cms-dev/cms-pipelines/backend-secret/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W77",
+                "reason": "Rotating this type of secret is currently not supported; it will require a simple rotation lambda."
+            }
+        ]
+    },
+    "/cms-dev/cms-pipelines/backstage-code-pipeline/ArtifactsBucket/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W35",
+                "reason": "An artifact bucket does not need S3 bucket for access logs"
+            }
+        ]
+    },
+    "/cms-dev/cms-pipelines/backstage-deploy-role/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Pipelines default role policy is least privilege."
+            },
+            {
+                "id": "W76",
+                "reason": "It is a large default policy"
+            }
+        ]
+    },
+    "/cms-dev/cms-pipelines/backstage-build-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "F3",
+                "reason": "Pipeline creates and reads multiple secrets."
+            },
+            {
+                "id": "W28",
+                "reason": "CDK role id is not known"
+            }
+        ]
+    },
+    "/cms-dev/cms-pipelines/backstage-deploy-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W28",
+                "reason": "CDK role id is not known"
+            }
+        ]
+    },
+    "/cms-dev/cms-pipelines/backstage-build-role/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "F4",
+                "reason": "Pipelines default role policy is least privilege."
+            },
+            {
+                "id": "W12",
+                "reason": "Pipelines default role policy is least privilege."
+            },
+            {
+                "id": "W76",
+                "reason": "It is a large default policy"
+            }
+        ]
+    },
+    "/cms-dev/cms-pipelines/backstage-pipeline-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "F3",
+                "reason": "Pipeline creates and reads multiple secrets."
+            },
+            {
+                "id": "W28",
+                "reason": "CDK role id is not known"
+            }
+        ]
+    },
+    "/cms-dev/cms-pipelines/backstage-pipeline-role/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Pipelines default role policy is least privilege."
+            },
+            {
+                "id": "W76",
+                "reason": "It is a large default policy"
+            }
+        ]
+    },
+    "/cms-dev/cms-pipelines/backstage-code-pipeline/Source-Stage-Backstage/Source/CodePipelineActionRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Pipelines default role policy is least privilege."
+            },
+            {
+                "id": "W76",
+                "reason": "It is a large default policy"
+            }
+        ]
+    },
+    "/cms-dev/cms-pipelines/cms-vpc/publicSubnet1/Subnet": {
+        "rules_to_suppress": [
+            {
+                "id": "W33",
+                "reason": "EC2 Subnet should not have MapPublicIpOnLaunch set to true"
+            }
+        ]
+    },
+    "/cms-dev/cms-pipelines/cms-vpc/publicSubnet2/Subnet": {
+        "rules_to_suppress": [
+            {
+                "id": "W33",
+                "reason": "EC2 Subnet should not have MapPublicIpOnLaunch set to true"
+            }
+        ]
+    },
+    "/cms-dev/cms-pipelines/cms-vpc-log-group/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W84",
+                "reason": "CloudWatchLogs LogGroup should specify a KMS Key Id to encrypt the log data"
+            },
+            {
+                "id": "W86",
+                "reason": "Its important that customer can retain logs as long as they want, they can change the retention period if they want"
+            }
+        ]
+    },
+    "/cms-dev/cms-pipelines/backstage-ecr/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W28",
+                "reason": "Resource found with an explicit name, this disallows updates that require replacement of this resource"
+            }
+        ]
+    },
+    "/cms-dev/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W58",
+                "reason": "Automatically created lambda by CustomDeployment, does not need log permissions"
+            },
+            {
+                "id": "W89",
+                "reason": "Custom resource lambda only use during stack creation process, can be outside vpc for now"
+            },
+            {
+                "id": "W92",
+                "reason": "No need to define ReservedConcurrentExecutions for custom deployment lambda"
+            }
+        ]
+    },
+    "/cms-dev/cms-custom-resource/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W89",
+                "reason": "Custom resource lambda only use during stack creation process, can be outside vpc for now"
+            },
+            {
+                "id": "W92",
+                "reason": "No need to define ReservedConcurrentExecutions for custom resource lambda"
+            }
+        ]
+    },
+    "/cms-dev/cms-proton-environment/custom-resource-policy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W76",
+                "reason": "IAM Policy is least privileged"
+            }
+        ]
+    },
+    "/cms-dev/cms-proton-environment/proton-log-bucket/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W35",
+                "reason": "log bucket does not require access logging"
+            },
+            {
+                "id": "W41",
+                "reason": "log bucket does not allow customer managed encryption"
+            }
+        ]
+    },
+    "/cms-dev/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Log retention lambda uses managed policies that use wildcard permissions."
+            }
+        ]
+    },
+    "/cms-dev/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W58",
+                "reason": "Automatically created lambda by Lambda Function construct, does not need log permissions"
+            },
+            {
+                "id": "W89",
+                "reason": "Log retention lambda can be outside vpc for now"
+            },
+            {
+                "id": "W92",
+                "reason": "No need to define ReservedConcurrentExecutions for log retention lambda"
+            }
+        ]
+    },
+    "/cms-dev/cms-metrics/cmdp-metrics-lambda/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W89",
+                "reason": "Custom resource lambda only use during stack creation process, can be outside vpc for now"
+            },
+            {
+                "id": "W92",
+                "reason": "No need to define ReservedConcurrentExecutions for custom deployment lambda"
+            }
+        ]
+    },
+    "/cms-dev/cms-metrics/metrics-reporting-lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W11",
+                "reason": "Wildcard permission is necessary to gather cloudwatch metrics"
+            }
+        ]
+
+    }
+}

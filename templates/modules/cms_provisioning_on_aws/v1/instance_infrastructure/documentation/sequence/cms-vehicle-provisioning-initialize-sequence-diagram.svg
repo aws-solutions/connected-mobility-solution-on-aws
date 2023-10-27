@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="456px" preserveAspectRatio="none" style="width:325px;height:456px;background:#FFFFFF;" version="1.1" viewBox="0 0 325 456" width="325px" zoomAndPan="magnify"><defs/><g><rect fill="#DDDDDD" height="444.1016" style="stroke:#232F3E;stroke-width:0.5;" width="149" x="170.5" y="6"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="143" x="173.5" y="18.0669">Device Initialization</text><rect fill="#3F8624" height="136.8438" style="stroke:#232F3E;stroke-width:1.0;" width="10" x="240" y="180.6641"/><line style="stroke:#232F3E;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="33" x2="33" y1="136.7266" y2="335.5078"/><line style="stroke:#232F3E;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="244.5" x2="244.5" y1="136.7266" y2="335.5078"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="50" x="5" y="133.4248">Vehicle</text><ellipse cx="33" cy="68.9297" fill="#E2E2F0" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><path d="M33,76.9297 L33,103.9297 M20,84.9297 L46,84.9297 M33,103.9297 L20,118.9297 M33,103.9297 L46,118.9297 " fill="none" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="50" x="5" y="347.5029">Vehicle</text><ellipse cx="33" cy="359.3047" fill="#E2E2F0" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><path d="M33,367.3047 L33,394.3047 M20,375.3047 L46,375.3047 M33,394.3047 L20,409.3047 M33,394.3047 L46,409.3047 " fill="none" style="stroke:#181818;stroke-width:0.5;"/><rect fill="#FFFFFF" height="110.5938" rx="2.5" ry="2.5" style="stroke:#FF9900;stroke-width:0.5;" width="91" x="199.5" y="25.1328"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="77" x="206.5" y="45.1279">«IoT Core»</text><image height="64" width="64" x="213" xlink:href="data:image/png;base64,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" y="48.4297"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="58" x="216" y="125.4248">IoT Core</text><rect fill="#FFFFFF" height="110.5938" rx="2.5" ry="2.5" style="stroke:#FF9900;stroke-width:0.5;" width="91" x="199.5" y="334.5078"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="77" x="206.5" y="354.5029">«IoT Core»</text><image height="64" width="64" x="213" xlink:href="data:image/png;base64,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" y="357.8047"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="58" x="216" y="434.7998">IoT Core</text><rect fill="#3F8624" height="136.8438" style="stroke:#232F3E;stroke-width:1.0;" width="10" x="240" y="180.6641"/><polygon fill="#666666" points="228,176.6641,238,180.6641,228,184.6641,232,180.6641" style="stroke:#666666;stroke-width:1.0;"/><line style="stroke:#666666;stroke-width:2.0;" x1="33" x2="234" y1="180.6641" y2="180.6641"/><text fill="#666666" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="127" x="71" y="161.8652">Connect with signed</text><text fill="#666666" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="99" x="87" y="175.834">claim certificate</text><polygon fill="#666666" points="44,190.6641,34,194.6641,44,198.6641,40,194.6641" style="stroke:#666666;stroke-width:1.0;"/><line style="stroke:#666666;stroke-width:2.0;stroke-dasharray:2.0,2.0;" x1="38" x2="239" y1="194.6641" y2="194.6641"/><polygon fill="#666666" points="228,257.6016,238,261.6016,228,265.6016,232,261.6016" style="stroke:#666666;stroke-width:1.0;"/><line style="stroke:#666666;stroke-width:2.0;" x1="33" x2="234" y1="261.6016" y2="261.6016"/><text fill="#666666" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="158" x="57.5" y="242.8027">CreateKeysAndCertificate</text><text fill="#666666" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="45" x="114" y="256.7715">publish</text><polygon fill="#666666" points="44,313.5078,34,317.5078,44,321.5078,40,317.5078" style="stroke:#666666;stroke-width:1.0;"/><line style="stroke:#666666;stroke-width:2.0;stroke-dasharray:2.0,2.0;" x1="38" x2="244" y1="317.5078" y2="317.5078"/><text fill="#666666" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="136" x="69" y="284.7402">Return unique vehicle</text><text fill="#666666" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="146" x="64" y="298.709">credentials (certificate,</text><text fill="#666666" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="142" x="68" y="312.6777">public/private key pair)</text><!--MD5=[21a0ad6d6b2ba9da092b9e9a356c725b]
+@startuml cms-vehicle-provisioning-initialize-sequence-diagram
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v14.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/InternetOfThings/IoTCore.puml
+
+'Comment out to use default PlantUML sequence formatting
+skinparam participant {
+    BackgroundColor AWS_BG_COLOR
+    BorderColor AWS_BORDER_COLOR
+}
+skinparam sequence {
+    ArrowThickness 2
+    LifeLineBorderColor AWS_COLOR
+    LifeLineBackgroundColor AWS_BORDER_COLOR
+    BoxBorderColor AWS_COLOR
+}
+
+actor Vehicle as vehicle
+
+box Device Initialization
+participant "$IoTCoreIMG()\nIoT Core" as iot_core << IoT Core>>
+endbox
+
+vehicle -> iot_core++ #3F8624: Connect with signed claim certificate
+vehicle <- - iot_core:
+|||
+vehicle -> iot_core: CreateKeysAndCertificate publish
+vehicle <- - iot_core: Return unique vehicle credentials (certificate, public/private key pair)
+deactivate iot_core
+
+@enduml
+
+@startuml cms-vehicle-provisioning-initialize-sequence-diagram
+
+
+
+
+
+
+skinparam defaultTextAlignment center
+
+skinparam PackageTitleAlignment Left
+
+skinparam wrapWidth 200
+skinparam maxMessageSize 150
+
+skinparam rectangle {
+    StereotypeFontSize 12
+}
+
+skinparam Arrow {
+    Color #666666
+    FontColor #666666
+    FontSize 12
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+sprite $IoTCore [64x64/16z] {
+xPO7Wjim30I789h__-4SBt2tP4hfEQrx6PG5REdqIeSE7ShSpqPdg6dkoYmWQgODT4ToqAodWkHsFAwlZBQHRznbDFecNF7JdJhM6yqcUUJHJK16X9p1lTBV
+o2J6FJB3TsOQMvOisfqJkv1zfKhe_dRq4ilM2ElRbBnhKLUd83mdJnMzGNobltXbK8Exd4eiZ-wvDiFlu-RoEhVsOXnyDpuc1lmKsQ5X9wU1NQkSvOqMrNyA
+UkNdwY-hbJvi4NoXooLho_Oei95ljZYHfsZ5NwShvCfswSrp_86dPqLPaj2pkaJ0YozSQ1-FR_QRptLrR3YbQf-yguxs7PyvSFWONOngW1myW9HtKmea7Kaj
+lcV7inFp_yAC-LdnUie6M_x9OpHymuzzY7cyBBpXRRpU8Y5k-Dny74k82v-ZdOsAHYk-GUmx3-XzN9-zcnyZDRWzCiAmHFVorV-VulF3jiXnVTAXGuU-0G
+}
+
+
+skinparam rectangle<<IoTCore>> {
+    BackgroundColor #FFFFFF
+    BorderColor #FF9900
+}
+
+skinparam participant {
+    BackgroundColor #FFFFFF
+    BorderColor #FF9900
+}
+skinparam sequence {
+    ArrowThickness 2
+    LifeLineBorderColor #232F3E
+    LifeLineBackgroundColor #FF9900
+    BoxBorderColor #232F3E
+}
+
+actor Vehicle as vehicle
+
+box Device Initialization
+participant "<img data:image/png;base64,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{scale=1}>\nIoT Core" as iot_core << IoT Core>>
+endbox
+
+vehicle -> iot_core++ #3F8624: Connect with signed claim certificate
+vehicle <- - iot_core:
+|||
+vehicle -> iot_core: CreateKeysAndCertificate publish
+vehicle <- - iot_core: Return unique vehicle credentials (certificate, public/private key pair)
+deactivate iot_core
+
+@enduml
+
+PlantUML version 1.2022.7(Mon Aug 22 17:01:30 UTC 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

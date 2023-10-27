@@ -1,0 +1,60 @@
+{
+  "name": "cms-backstage",
+  "version": "1.0.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "description": "Backstage implementation preconfigured to work with CMS",
+  "engines": {
+    "node": "18 || 20"
+  },
+  "scripts": {
+    "dev": "concurrently \"yarn start\" \"yarn start-backend\"",
+    "start": "yarn workspace app start",
+    "start-backend": "yarn workspace backend start",
+    "build:backend": "yarn workspace backend build",
+    "build:all": "backstage-cli repo build --all",
+    "build-image": "yarn workspace backend build-image",
+    "tsc": "tsc",
+    "tsc:full": "tsc --skipLibCheck false --incremental false",
+    "clean": "backstage-cli repo clean",
+    "test": "backstage-cli repo test",
+    "test:all": "backstage-cli repo test --coverage",
+    "lint": "backstage-cli repo lint --since origin/mainline",
+    "lint:all": "backstage-cli repo lint",
+    "prettier:check": "prettier --check .",
+    "new": "backstage-cli new --scope internal"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "plugins/*"
+    ]
+  },
+  "devDependencies": {
+    "@backstage/cli": "^0.23.0",
+    "@spotify/prettier-config": "^15.0.0",
+    "@types/supertest": "^2.0.14",
+    "concurrently": "^8.0.1",
+    "lerna": "^7.1.5",
+    "node-gyp": "^9.3.1",
+    "prettier": "3",
+    "typescript": "^5.1.6",
+    "xml2js": "^0.5.0",
+    "yaml": "^2.2.2"
+  },
+  "resolutions": {
+    "@types/react": "^17",
+    "@babel/traverse": "^7.23.2",
+    "browserify-sign": "^4.2.2"
+  },
+  "prettier": "@spotify/prettier-config",
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mjs,cjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  }
+}

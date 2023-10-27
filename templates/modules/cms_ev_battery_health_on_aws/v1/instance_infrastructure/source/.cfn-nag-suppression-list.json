@@ -1,0 +1,206 @@
+{
+    "/cms-ev-battery-health-on-aws-stack-dev/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Wildcard permissions are required by the log retention lambda. This lambda is created by the aws_lambda.Function construct"
+            }
+        ]
+    },
+    "/cms-ev-battery-health-on-aws-stack-dev/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Wildcard permissions are required by the bucket notifications lambda. This lambda is created by the aws_s3.Bucket construct."
+            }
+        ]
+    },
+    "/cms-ev-battery-health-on-aws-stack-dev/cms-ev-battery-health/cms-ev-grafana-api-key-construct/rotate-secret-lambda-role/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Wildcard permissions required to give secretsmanager permission to invoke the lambda function."
+            }
+        ]
+    },
+    "/cms-ev-battery-health-on-aws-stack-dev/cms-ev-battery-health/cms-ev-athena-data-source-construct/grafana-workspace-policy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W76",
+                "reason": "The IAM policy is large as it provides all permissions related to configuring Athena as a data source."
+            }
+        ]
+    },
+    "/cms-ev-battery-health-on-aws-stack-dev/cms-ev-battery-health/cms-ev-grafana-api-key-construct/secret/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W77",
+                "reason": "AWS managed KMS key is sufficient for SecretsManager Secret."
+            }
+        ]
+    },
+    "/cms-ev-battery-health-on-aws-stack-dev/cms-ev-battery-health/cms-ev-s3-to-grafana-construct/assets-server-access-logs-bucket/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W35",
+                "reason": "Server access logs bucket does not need logging configured as it is a log bucket itself."
+            }
+        ]
+    },
+    "/cms-ev-battery-health-on-aws-stack-dev/cms-ev-battery-health/cms-ev-provision-alerts-construct/custom-resource-provider/framework-onEvent/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W58",
+                "reason": "Automatically created lambda by Lambda Function construct, does not need log permissions"
+            },
+            {
+                "id": "W89",
+                "reason": "Ignore VPC requirements for Lambda functions for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-ev-battery-health-on-aws-stack-dev/cms-ev-battery-health/cms-ev-provision-alerts-construct/custom-resource-provider/framework-onTimeout/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W58",
+                "reason": "Automatically created lambda by Lambda Function construct, does not need log permissions"
+            },
+            {
+                "id": "W89",
+                "reason": "Ignore VPC requirements for Lambda functions for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-ev-battery-health-on-aws-stack-dev/cms-ev-battery-health/cms-ev-provision-alerts-construct/custom-resource-provider/framework-isComplete/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W58",
+                "reason": "Automatically created lambda by Lambda Function construct, does not need log permissions"
+            },
+            {
+                "id": "W89",
+                "reason": "Ignore VPC requirements for Lambda functions for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-ev-battery-health-on-aws-stack-dev/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler": {
+        "rules_to_suppress": [
+            {
+                "id": "W58",
+                "reason": "Automatically created lambda by Lambda Function construct, does not need log permissions"
+            },
+            {
+                "id": "W89",
+                "reason": "Ignore VPC requirements for Lambda functions for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-ev-battery-health-on-aws-stack-dev/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W58",
+                "reason": "Automatically created lambda by Lambda Function construct, does not need log permissions"
+            },
+            {
+                "id": "W89",
+                "reason": "Ignore VPC requirements for Lambda functions for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-ev-battery-health-on-aws-stack-dev/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W58",
+                "reason": "Automatically created lambda by Lambda Function construct, does not need log permissions"
+            },
+            {
+                "id": "W89",
+                "reason": "Ignore VPC requirements for Lambda functions for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-ev-battery-health-on-aws-stack-dev/cms-ev-battery-health/cms-ev-provision-alerts-construct/check-workspace-active-lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W89",
+                "reason": "Ignore VPC requirements for Lambda functions for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-ev-battery-health-on-aws-stack-dev/cms-ev-battery-health/cms-ev-process-alerts-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W89",
+                "reason": "Ignore VPC requirements for Lambda functions for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-ev-battery-health-on-aws-stack-dev/cms-ev-battery-health/cms-ev-s3-to-grafana-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W89",
+                "reason": "Ignore VPC requirements for Lambda functions for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-ev-battery-health-on-aws-stack-dev/cms-ev-battery-health/cms-ev-grafana-api-key-construct/rotate-secret-lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W89",
+                "reason": "Ignore VPC requirements for Lambda functions for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-ev-battery-health-on-aws-stack-dev/cms-ev-battery-health/cms-ev-custom-resource-lambda-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W89",
+                "reason": "Ignore VPC requirements for Lambda functions for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    }
+}

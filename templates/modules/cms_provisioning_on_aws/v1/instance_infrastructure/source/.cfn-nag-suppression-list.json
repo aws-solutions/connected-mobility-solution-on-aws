@@ -1,0 +1,154 @@
+{
+    "/cms-provisioning-on-aws-stack-dev/cms-provisioning/auxiliary-lambdas-stack/custom-resource-lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W11",
+                "reason": "Need wildcard resource permissions for iot:CreateKeysAndCertificate"
+            }
+        ]
+    },
+    "/cms-provisioning-on-aws-stack-dev/cms-provisioning/auxiliary-lambdas-stack/custom-resource-lambda/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W89",
+                "reason": "Ignore VPC requirements for Lambda functions for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-provisioning-on-aws-stack-dev/cms-provisioning/iot-claim-provisioning-stack/iot-core-provisioning-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W11",
+                "reason": "Need wildcard resource permissions for iot:RegisterThing, iot:CreatePolicy"
+            }
+        ]
+    },
+    "/cms-provisioning-on-aws-stack-dev/cms-provisioning/iot-claim-provisioning-stack/claim-certificate-provisioning-policy": {
+        "rules_to_suppress": [
+            {
+                "id": "W39",
+                "reason": "Need wildcard resource permissions for iot:Connect"
+            }
+        ]
+    },
+    "/cms-provisioning-on-aws-stack-dev/cms-provisioning/provisioning-lambdas-stack/post-provision-hook-lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W11",
+                "reason": "wildcard resource is necessary for certain iot actions"
+            }
+        ]
+    },
+    "/cms-provisioning-on-aws-stack-dev/cms-provisioning/provisioning-lambdas-stack/pre-provisioning-hook-lambda/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W89",
+                "reason": "Ignore VPC requirements for Lambda functions for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-provisioning-on-aws-stack-dev/cms-provisioning/provisioning-lambdas-stack/post-provisioning-hook-lambda/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W89",
+                "reason": "Ignore VPC requirements for Lambda functions for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-provisioning-on-aws-stack-dev/cms-provisioning/provisioning-lambdas-stack/initial-connection-lambda/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W89",
+                "reason": "Ignore VPC requirements for Lambda functions for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-provisioning-on-aws-stack-dev/cms-provisioning/auxiliary-lambdas-stack/rotate-secret-lambda/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W89",
+                "reason": "Ignore VPC requirements for Lambda functions for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            },
+            {
+                "id": "W11",
+                "reason": "Need wildcard resource permissions for iot:CreateKeysAndCertificate."
+            }
+        ]
+    },
+    "/cms-provisioning-on-aws-stack-dev/cms-provisioning/auxiliary-lambdas-stack/rotate-secret-lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W11",
+                "reason": "Need wildcard resource permissions for iot:CreateKeysAndCertificate."
+            }
+        ]
+    },
+    "/cms-provisioning-on-aws-stack-dev/cms-provisioning/auxiliary-lambdas-stack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Log retention lambda uses managed policies that use wildcard permissions."
+            }
+        ]
+    },
+    "/cms-provisioning-on-aws-stack-dev/cms-provisioning/auxiliary-lambdas-stack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W58",
+                "reason": "Automatically created lambda by Lambda Function construct, does not need log permissions"
+            },
+            {
+                "id": "W89",
+                "reason": "Log retention lambda can be outside vpc for now"
+            },
+            {
+                "id": "W92",
+                "reason": "No need to define ReservedConcurrentExecutions for log retention lambda"
+            }
+        ]
+    },
+    "/cms-provisioning-on-aws-stack-dev/cms-provisioning/provisioning-lambdas-stack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Log retention lambda uses managed policies that use wildcard permissions."
+            }
+        ]
+    },
+    "/cms-provisioning-on-aws-stack-dev/cms-provisioning/provisioning-lambdas-stack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W58",
+                "reason": "Automatically created lambda by Lambda Function construct, does not need log permissions"
+            },
+            {
+                "id": "W89",
+                "reason": "Log retention lambda can be outside vpc for now"
+            },
+            {
+                "id": "W92",
+                "reason": "No need to define ReservedConcurrentExecutions for log retention lambda"
+            }
+        ]
+    }
+}

@@ -1,0 +1,27 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+enum STATUS {
+  FAILURE
+  SUCCESS
+}
+
+enum AlarmType {
+  VEHICLE_ALARM
+  EV_BATTERY_HEALTH_ALARM
+}
+
+type Response {
+  status: STATUS!
+  message: String
+}
+
+type Mutation {
+  publish(vin: String!, alarmType: AlarmType!, message: String!): Response!
+}
+
+type Query {
+  ping: String @deprecated(reason: "https://github.com/graphql/graphql-spec/issues/490")
+}

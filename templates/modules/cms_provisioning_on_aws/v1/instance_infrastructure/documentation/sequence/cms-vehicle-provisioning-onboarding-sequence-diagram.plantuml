@@ -1,0 +1,98 @@
+@startuml cms-vehicle-provisioning-onboarding-sequence-diagram
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v14.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/Database/DynamoDB.puml
+!include AWSPuml/InternetOfThings/IoTCore.puml
+!include AWSPuml/InternetOfThings/IoTRule.puml
+!include AWSPuml/InternetOfThings/IoTMQTTProtocol.puml
+
+'Comment out to use default PlantUML sequence formatting
+skinparam participant {
+    BackgroundColor AWS_BG_COLOR
+    BorderColor AWS_BORDER_COLOR
+}
+skinparam sequence {
+    ArrowThickness 2
+    LifeLineBorderColor AWS_COLOR
+    LifeLineBackgroundColor AWS_BORDER_COLOR
+    BoxBorderColor AWS_COLOR
+}
+
+actor Vehicle as vehicle
+
+box Vehicle Provisioning Onboarding
+participant "$IoTCoreIMG()\nIoT Core" as provisioning_iot_core << IoT Core>>
+participant "$IoTMQTTProtocolIMG()\nIoT MQTT Topics" as mqtt << IoT Core >>
+participant "$IoTRuleIMG()\nVehicle Provisioning\nIoT Rule" as iot_rule << IoT Rule>>
+participant "$LambdaIMG()\nVehicle Provisioning\nPre-Provision" as pre_provision << Lambda >>
+participant "$LambdaIMG()\nVehicle Provisioning\nPost Provision" as post_provision << Lambda >>
+participant "$LambdaIMG()\nVehicle Provisioning\nInitial Connection" as initial_connection << Lambda >>
+participant "$DynamoDBIMG()\nVehicle Provisioning\nAuthorized Vehicles" as authorized_vehicles << DynamoDB Table >>
+participant "$DynamoDBIMG()\nVehicle Provisioning\nProvisioned Vehicles" as provisioned_vehicles << DynamoDB Table >>
+endbox
+
+'Pre Provision
+vehicle -> provisioning_iot_core++ #3F8624: RegisterThing publish with vehicle credentials
+provisioning_iot_core -> pre_provision++ #D86613: Invoke pre-provision hook from template
+pre_provision -> provisioned_vehicles++ #3355DA: Get existing certificates for this vin
+return return existing certificates
+provisioning_iot_core <- pre_provision: Deactivate existing certificates (they will be deleted in post-provision)
+provisioning_iot_core --> pre_provision:
+pre_provision -> provisioned_vehicles++ #3355DA: Set deactivated certificate statuses to INACTIVE
+return
+|||
+pre_provision -> authorized_vehicles++ #3355DA: Check if vehicle is authorized to provision
+return
+pre_provision -> provisioned_vehicles++ #3355DA: Insert new vehicle record with certificate status PENDING_ACTIVIATION
+return
+|||
+provisioning_iot_core <- pre_provision: If provisioning not allowed, delete pending certificate
+pre_provision -> provisioned_vehicles++ #3355DA: If provisioning not allowed, set new certificate status to DELETED
+return
+return return allowProvisioning
+|||
+provisioning_iot_core -> provisioning_iot_core: If provisioning allowed, create/update IoT Thing
+provisioning_iot_core -> provisioning_iot_core: Create vehicle's policy and attach to their unique certificate
+provisioning_iot_core -> provisioning_iot_core: Activate the vehicle's unique certificate
+|||
+|||
+
+'Post Provision
+provisioning_iot_core -> mqtt: Publish to thing CREATED or UPDATED topic
+deactivate provisioning_iot_core
+activate mqtt #3F8624
+mqtt -> iot_rule: Trigger
+deactivate mqtt
+activate iot_rule #3F8624
+iot_rule -> post_provision: Invoke
+deactivate iot_rule
+activate post_provision #D86613
+post_provision -> provisioned_vehicles++ #3355DA: Set vehicle record's certificate status to ACTIVE
+return
+post_provision -> provisioned_vehicles++ #3355DA: Get existing certificates for this vin
+return
+provisioning_iot_core <- post_provision++ #3F8624: Delete existing certificates in INACTIVE status
+return
+post_provision -> provisioned_vehicles++ #3355DA: Set deleted certificate's status to DELETED
+return
+deactivate post_provision
+|||
+|||
+
+'Initial Connection
+vehicle -> mqtt++ #3F8624: Publish to vehicleactive topic
+mqtt -> iot_rule: Trigger
+deactivate mqtt
+activate iot_rule #3F8624
+iot_rule -> initial_connection: Invoke
+deactivate iot_rule
+activate initial_connection #D86613
+initial_connection -> provisioned_vehicles++ #3355DA: Set has_vehicle_connected_once to true
+return
+deactivate initial_connection
+
+@enduml

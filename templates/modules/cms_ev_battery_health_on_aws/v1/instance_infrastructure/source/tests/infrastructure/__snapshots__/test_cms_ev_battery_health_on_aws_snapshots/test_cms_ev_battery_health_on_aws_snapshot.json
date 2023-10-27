@@ -1,0 +1,4053 @@
+{
+  "Mappings": {
+    "ServiceprincipalMap": {
+      "af-south-1": {
+        "states": "states.af-south-1.amazonaws.com"
+      },
+      "ap-east-1": {
+        "states": "states.ap-east-1.amazonaws.com"
+      },
+      "ap-northeast-1": {
+        "states": "states.ap-northeast-1.amazonaws.com"
+      },
+      "ap-northeast-2": {
+        "states": "states.ap-northeast-2.amazonaws.com"
+      },
+      "ap-northeast-3": {
+        "states": "states.ap-northeast-3.amazonaws.com"
+      },
+      "ap-south-1": {
+        "states": "states.ap-south-1.amazonaws.com"
+      },
+      "ap-south-2": {
+        "states": "states.ap-south-2.amazonaws.com"
+      },
+      "ap-southeast-1": {
+        "states": "states.ap-southeast-1.amazonaws.com"
+      },
+      "ap-southeast-2": {
+        "states": "states.ap-southeast-2.amazonaws.com"
+      },
+      "ap-southeast-3": {
+        "states": "states.ap-southeast-3.amazonaws.com"
+      },
+      "ap-southeast-4": {
+        "states": "states.ap-southeast-4.amazonaws.com"
+      },
+      "ca-central-1": {
+        "states": "states.ca-central-1.amazonaws.com"
+      },
+      "cn-north-1": {
+        "states": "states.cn-north-1.amazonaws.com"
+      },
+      "cn-northwest-1": {
+        "states": "states.cn-northwest-1.amazonaws.com"
+      },
+      "eu-central-1": {
+        "states": "states.eu-central-1.amazonaws.com"
+      },
+      "eu-central-2": {
+        "states": "states.eu-central-2.amazonaws.com"
+      },
+      "eu-north-1": {
+        "states": "states.eu-north-1.amazonaws.com"
+      },
+      "eu-south-1": {
+        "states": "states.eu-south-1.amazonaws.com"
+      },
+      "eu-south-2": {
+        "states": "states.eu-south-2.amazonaws.com"
+      },
+      "eu-west-1": {
+        "states": "states.eu-west-1.amazonaws.com"
+      },
+      "eu-west-2": {
+        "states": "states.eu-west-2.amazonaws.com"
+      },
+      "eu-west-3": {
+        "states": "states.eu-west-3.amazonaws.com"
+      },
+      "il-central-1": {
+        "states": "states.il-central-1.amazonaws.com"
+      },
+      "me-central-1": {
+        "states": "states.me-central-1.amazonaws.com"
+      },
+      "me-south-1": {
+        "states": "states.me-south-1.amazonaws.com"
+      },
+      "sa-east-1": {
+        "states": "states.sa-east-1.amazonaws.com"
+      },
+      "us-east-1": {
+        "states": "states.us-east-1.amazonaws.com"
+      },
+      "us-east-2": {
+        "states": "states.us-east-2.amazonaws.com"
+      },
+      "us-gov-east-1": {
+        "states": "states.us-gov-east-1.amazonaws.com"
+      },
+      "us-gov-west-1": {
+        "states": "states.us-gov-west-1.amazonaws.com"
+      },
+      "us-iso-east-1": {
+        "states": "states.amazonaws.com"
+      },
+      "us-iso-west-1": {
+        "states": "states.amazonaws.com"
+      },
+      "us-isob-east-1": {
+        "states": "states.amazonaws.com"
+      },
+      "us-west-1": {
+        "states": "states.us-west-1.amazonaws.com"
+      },
+      "us-west-2": {
+        "states": "states.us-west-2.amazonaws.com"
+      }
+    }
+  },
+  "Outputs": {
+    "cmsevbatteryhealthcmsevbatteryhealthgrafanaworkspaceurl7718D0A1": {
+      "Description": "CMS EV Battery Health Grafana workspace URL.",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Fn::GetAtt": [
+                "cmsevbatteryhealthcmsevgrafanaworkspaceconstructworkspace3848B5C7",
+                "Endpoint"
+              ]
+            }
+          ]
+        ]
+      }
+    }
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "cmsevbatteryhealthcmsevmoduleinputsconstructgluedatabasenameParameter32E7BEE4": {
+      "Default": "/dev/cms/telemetry/glue-database/name",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "cmsevbatteryhealthcmsevmoduleinputsconstructssmalertspublishendpointurlParameter1CB38871": {
+      "Default": "/dev/cms/alerts/publish-api/endpoint",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "cmsevbatteryhealthcmsevmoduleinputsconstructssmathenaresultsbucketarnParameter44AC02BF": {
+      "Default": "/dev/cms/api/athena-result-bucket/arn",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "cmsevbatteryhealthcmsevmoduleinputsconstructssmathenaresultsbucketkeyarnParameterF3E64751": {
+      "Default": "/dev/cms/api/athena-result-bucket/key-arn",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "cmsevbatteryhealthcmsevmoduleinputsconstructssmathenaworkgroupnameParameterD895F338": {
+      "Default": "/dev/cms/api/athena-workgroup/name",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "cmsevbatteryhealthcmsevmoduleinputsconstructssmauthenticationresourceserveridParameter102D3168": {
+      "Default": "/dev/cms/authentication/resource-server/identifier",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "cmsevbatteryhealthcmsevmoduleinputsconstructssmauthenticationservicecallerscopeParameterBF4471F8": {
+      "Default": "/dev/cms/authentication/service-caller-scope/name",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "cmsevbatteryhealthcmsevmoduleinputsconstructssmauthenticationserviceclientidParameter7DDA7A9B": {
+      "Default": "/dev/cms/authentication/service-client/id",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "cmsevbatteryhealthcmsevmoduleinputsconstructssmauthenticationserviceclientsecretarnParameter96B0CE96": {
+      "Default": "/dev/cms/authentication/service-client-secret/secret-arn",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "cmsevbatteryhealthcmsevmoduleinputsconstructssmauthenticationuserpooldomainParameterB7E2CB69": {
+      "Default": "/dev/cms/authentication/user-pool/domain-prefix",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "cmsevbatteryhealthcmsevmoduleinputsconstructssmauthenticationuserpoolregionParameterB4D73345": {
+      "Default": "/dev/cms/authentication/user-pool/region",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "cmsevbatteryhealthcmsevmoduleinputsconstructssmgluedatacatalognameParameter88767A43": {
+      "Default": "/dev/cms/telemetry/glue-data-catalog/name",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "cmsevbatteryhealthcmsevmoduleinputsconstructssmglueregistrynameParameterEB245B56": {
+      "Default": "/dev/cms/telemetry/glue-registry/name",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "cmsevbatteryhealthcmsevmoduleinputsconstructssmglueschemaarnParameter4AB87BCB": {
+      "Default": "/dev/cms/telemetry/glue-schema/arn",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "cmsevbatteryhealthcmsevmoduleinputsconstructssmgluetablenameParameter170526B8": {
+      "Default": "/dev/cms/telemetry/glue-table/name",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "cmsevbatteryhealthcmsevmoduleinputsconstructssmstoragebucketarnParameterB84B9F8C": {
+      "Default": "/dev/cms/telemetry/s3-storage-bucket/arn",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "cmsevbatteryhealthcmsevmoduleinputsconstructssmstoragebucketkeyarnParameter6B0772F4": {
+      "Default": "/dev/cms/telemetry/s3-storage-bucket/key-arn",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "deploymentuuidParameter": {
+      "Default": "/dev/cms/common/config/deployment-uuid",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    }
+  },
+  "Resources": {
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691": {
+      "DependsOn": [
+        "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36",
+        "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC"
+      ],
+      "Properties": {
+        "Code": {
+          "ZipFile": "import boto3  # type: ignore\nimport json\nimport logging\nimport urllib.request\n\ns3 = boto3.client(\"s3\")\n\nEVENTBRIDGE_CONFIGURATION = 'EventBridgeConfiguration'\n\nCONFIGURATION_TYPES = [\"TopicConfigurations\", \"QueueConfigurations\", \"LambdaFunctionConfigurations\"]\n\ndef handler(event: dict, context):\n  response_status = \"SUCCESS\"\n  error_message = \"\"\n  try:\n    props = event[\"ResourceProperties\"]\n    bucket = props[\"BucketName\"]\n    notification_configuration = props[\"NotificationConfiguration\"]\n    request_type = event[\"RequestType\"]\n    managed = props.get('Managed', 'true').lower() == 'true'\n    stack_id = event['StackId']\n\n    if managed:\n      config = handle_managed(request_type, notification_configuration)\n    else:\n      config = handle_unmanaged(bucket, stack_id, request_type, notification_configuration)\n\n    put_bucket_notification_configuration(bucket, config)\n  except Exception as e:\n    logging.exception(\"Failed to put bucket notification configuration\")\n    response_status = \"FAILED\"\n    error_message = f\"Error: {str(e)}. \"\n  finally:\n    submit_response(event, context, response_status, error_message)\n\ndef handle_managed(request_type, notification_configuration):\n  if request_type == 'Delete':\n    return {}\n  return notification_configuration\n\ndef handle_unmanaged(bucket, stack_id, request_type, notification_configuration):\n  external_notifications = find_external_notifications(bucket, stack_id)\n\n  if request_type == 'Delete':\n    return external_notifications\n\n  def with_id(notification):\n    notification['Id'] = f\"{stack_id}-{hash(json.dumps(notification, sort_keys=True))}\"\n    return notification\n\n  notifications = {}\n  for t in CONFIGURATION_TYPES:\n    external = external_notifications.get(t, [])\n    incoming = [with_id(n) for n in notification_configuration.get(t, [])]\n    notifications[t] = external + incoming\n\n  if EVENTBRIDGE_CONFIGURATION in notification_configuration:\n    notifications[EVENTBRIDGE_CONFIGURATION] = notification_configuration[EVENTBRIDGE_CONFIGURATION]\n  elif EVENTBRIDGE_CONFIGURATION in external_notifications:\n    notifications[EVENTBRIDGE_CONFIGURATION] = external_notifications[EVENTBRIDGE_CONFIGURATION]\n\n  return notifications\n\ndef find_external_notifications(bucket, stack_id):\n  existing_notifications = get_bucket_notification_configuration(bucket)\n  external_notifications = {}\n  for t in CONFIGURATION_TYPES:\n    external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'].startswith(f\"{stack_id}-\")]\n\n  if EVENTBRIDGE_CONFIGURATION in existing_notifications:\n    external_notifications[EVENTBRIDGE_CONFIGURATION] = existing_notifications[EVENTBRIDGE_CONFIGURATION]\n\n  return external_notifications\n\ndef get_bucket_notification_configuration(bucket):\n  return s3.get_bucket_notification_configuration(Bucket=bucket)\n\ndef put_bucket_notification_configuration(bucket, notification_configuration):\n  s3.put_bucket_notification_configuration(Bucket=bucket, NotificationConfiguration=notification_configuration)\n\ndef submit_response(event: dict, context, response_status: str, error_message: str):\n  response_body = json.dumps(\n    {\n      \"Status\": response_status,\n      \"Reason\": f\"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}\",\n      \"PhysicalResourceId\": event.get(\"PhysicalResourceId\") or event[\"LogicalResourceId\"],\n      \"StackId\": event[\"StackId\"],\n      \"RequestId\": event[\"RequestId\"],\n      \"LogicalResourceId\": event[\"LogicalResourceId\"],\n      \"NoEcho\": False,\n    }\n  ).encode(\"utf-8\")\n  headers = {\"content-type\": \"\", \"content-length\": str(len(response_body))}\n  try:\n    req = urllib.request.Request(url=event[\"ResponseURL\"], headers=headers, data=response_body, method=\"PUT\")\n    with urllib.request.urlopen(req) as response:\n      print(response.read().decode(\"utf-8\"))\n    print(\"Status code: \" + response.reason)\n  except Exception as e:\n      print(\"send(..) failed executing request.urlopen(..): \" + str(e))\n"
+        },
+        "Description": "AWS CloudFormation handler for \"Custom::S3BucketNotifications\" resources (@aws-cdk/aws-s3)",
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.9",
+        "Timeout": 300
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:PutBucketNotification",
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36",
+        "Roles": [
+          {
+            "Ref": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
+      "DependsOn": [
+        "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": {
+          "Fn::Join": [
+            "",
+            [
+              "Lambda function for auto-deleting objects in ",
+              {
+                "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F"
+              },
+              " S3 bucket."
+            ]
+          ]
+        },
+        "Handler": "index.handler",
+        "MemorySize": 128,
+        "Role": {
+          "Fn::GetAtt": [
+            "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 900
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+      "DependsOn": [
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 900
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:PutRetentionPolicy",
+                "logs:DeleteRetentionPolicy"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "Roles": [
+          {
+            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "appregistryapplicationstackassociation": {
+      "Properties": {
+        "Application": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevbatteryhealthappregistryappregistryapplicationE99838C3",
+            "Id"
+          ]
+        },
+        "Resource": {
+          "Ref": "AWS::StackId"
+        },
+        "ResourceType": "CFN_STACK"
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::ResourceAssociation"
+    },
+    "cmsevbatteryhealthcmsevathenadatasourceconstructcreategrafanaathenadatasourcecustomresourceD9DE0F82": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevgrafanaapikeyconstructapikeyrotationschedule0A948B6F",
+        "cmsevbatteryhealthcmsevgrafanaapikeyconstructcreategrafanaapikeycustomresource754F7DF5",
+        "cmsevbatteryhealthcmsevgrafanaapikeyconstructcustomresourcepolicyB8CDE3B1",
+        "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdafunctionInvokeN0a2GKfZP0JmDqDEVhhu6A0TUv3NyNbk4YMFKNc1E295B96",
+        "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdafunctionLogRetention769383D9",
+        "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdafunctionF5B62C66",
+        "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdafunctionsecretsmanagerinvokerotatesecretlambdapermissionE4388A74",
+        "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdaroleDefaultPolicy163676DD",
+        "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdarole224EE954",
+        "cmsevbatteryhealthcmsevgrafanaapikeyconstructsecretPolicyCF6DE5A8",
+        "cmsevbatteryhealthcmsevgrafanaapikeyconstructsecret4718134D"
+      ],
+      "Properties": {
+        "DataSourceProperties": {
+          "catalog": {
+            "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmgluedatacatalognameParameter88767A43"
+          },
+          "database": {
+            "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructgluedatabasenameParameter32E7BEE4"
+          },
+          "defaultRegion": {
+            "Ref": "AWS::Region"
+          },
+          "workgroup": {
+            "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmathenaworkgroupnameParameterD895F338"
+          }
+        },
+        "DataSourceType": "grafana-athena-datasource",
+        "GrafanaApiKeySecretArn": {
+          "Ref": "cmsevbatteryhealthcmsevgrafanaapikeyconstructsecret4718134D"
+        },
+        "GrafanaWorkspaceEndpoint": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevgrafanaworkspaceconstructworkspace3848B5C7",
+            "Endpoint"
+          ]
+        },
+        "Resource": "CreateGrafanaDataSource",
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdafunction8C748299",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::CreateGrafanaDataSource",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsevbatteryhealthcmsevathenadatasourceconstructcustomresourcepolicy8A98036C": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "secretsmanager:GetSecretValue",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "cmsevbatteryhealthcmsevgrafanaapikeyconstructsecret4718134D"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cmsevbatteryhealthcmsevathenadatasourceconstructcustomresourcepolicy8A98036C",
+        "Roles": [
+          {
+            "Ref": "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdarole635C9FF7"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cmsevbatteryhealthcmsevathenadatasourceconstructgrafanaworkspacepolicy9D683CB1": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "athena:GetDatabase",
+                "athena:GetDataCatalog",
+                "athena:GetTableMetadata",
+                "athena:ListDatabases",
+                "athena:ListDataCatalogs",
+                "athena:ListTableMetadata",
+                "athena:ListWorkGroups"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":athena:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":workgroup/",
+                      {
+                        "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmathenaworkgroupnameParameterD895F338"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":athena:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":datacatalog/",
+                      {
+                        "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmgluedatacatalognameParameter88767A43"
+                      }
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "athena:GetQueryExecution",
+                "athena:GetQueryResults",
+                "athena:GetWorkGroup",
+                "athena:StartQueryExecution",
+                "athena:StopQueryExecution"
+              ],
+              "Condition": {
+                "Null": {
+                  "aws:ResourceTag/GrafanaDataSource": "false"
+                }
+              },
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":athena:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":workgroup/",
+                    {
+                      "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmathenaworkgroupnameParameterD895F338"
+                    }
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": "glue:GetSchemaVersion",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmglueschemaarnParameter4AB87BCB"
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":glue:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":registry/",
+                      {
+                        "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmglueregistrynameParameterEB245B56"
+                      }
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "glue:GetDatabase",
+                "glue:GetDatabases"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":glue:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":database/",
+                    {
+                      "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructgluedatabasenameParameter32E7BEE4"
+                    }
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "glue:GetTable",
+                "glue:GetTables"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":glue:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":catalog"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":glue:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":database/",
+                      {
+                        "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructgluedatabasenameParameter32E7BEE4"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":glue:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":table/",
+                      {
+                        "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructgluedatabasenameParameter32E7BEE4"
+                      },
+                      "/",
+                      {
+                        "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmgluetablenameParameter170526B8"
+                      }
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "s3:GetBucketLocation",
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:ListBucketMultipartUploads",
+                "s3:ListMultipartUploadParts",
+                "s3:AbortMultipartUpload",
+                "s3:CreateBucket",
+                "s3:PutObject"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmathenaresultsbucketarnParameter44AC02BF"
+                      },
+                      "*"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmstoragebucketarnParameterB84B9F8C"
+                      },
+                      "*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "kms:Decrypt",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmstoragebucketkeyarnParameter6B0772F4"
+              }
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:Encrypt",
+                "kms:GenerateDataKey"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmathenaresultsbucketkeyarnParameterF3E64751"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cmsevbatteryhealthcmsevathenadatasourceconstructgrafanaworkspacepolicy9D683CB1",
+        "Roles": [
+          {
+            "Ref": "cmsevbatteryhealthcmsevgrafanaworkspaceconstructworkspaceroleA0BB2724"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cmsevbatteryhealthcmsevbatteryhealthappregistryappregistryapplicationE99838C3": {
+      "Properties": {
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "cms-ev-battery-health-on-aws-stack-dev-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Ref": "deploymentuuidParameter"
+          }
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::Application"
+    },
+    "cmsevbatteryhealthcmsevbatteryhealthappregistryappregistryapplicationattributeassociation943BD508": {
+      "Properties": {
+        "Application": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevbatteryhealthappregistryappregistryapplicationE99838C3",
+            "Id"
+          ]
+        },
+        "AttributeGroup": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevbatteryhealthappregistrydefaultapplicationattributesB47DA85F",
+            "Id"
+          ]
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroupAssociation"
+    },
+    "cmsevbatteryhealthcmsevbatteryhealthappregistrydefaultapplicationattributesB47DA85F": {
+      "Properties": {
+        "Attributes": {
+          "ApplicationType": "AWS-Solutions",
+          "SolutionID": "SO0241",
+          "SolutionName": "Connected Mobility Solution on AWS",
+          "Version": "v1.0.0"
+        },
+        "Description": "Attribute group for solution information",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "cms-ev-battery-health-on-aws-stack-dev-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Ref": "deploymentuuidParameter"
+          }
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroup"
+    },
+    "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdafunction8C748299": {
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdarole635C9FF7"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "CMS EV battery health custom resource lambda function",
+        "Environment": {
+          "Variables": {
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.0"
+          }
+        },
+        "FunctionName": "cms-ev-battery-health-on-aws-stack-dev-custom-resource-lambda",
+        "Handler": "custom_resource.main.handler",
+        "Layers": [
+          {
+            "Ref": "cmsevbatteryhealthcmsevlambdadependenciesconstructlambdadependencylayerversion11513BCE"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdarole635C9FF7",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "Timeout": 60
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdafunctionLogRetention10F35948": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdafunction8C748299"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdarole635C9FF7": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-ev-battery-health-on-aws-stack-dev-custom-resource-lambda"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-ev-battery-health-on-aws-stack-dev-custom-resource-lambda:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsevbatteryhealthcmsevgrafanaalertsconstructcreategrafanaalertsanduploadtos3customresource8B410F6A": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevathenadatasourceconstructcreategrafanaathenadatasourcecustomresourceD9DE0F82",
+        "cmsevbatteryhealthcmsevathenadatasourceconstructcustomresourcepolicy8A98036C",
+        "cmsevbatteryhealthcmsevathenadatasourceconstructgrafanaworkspacepolicy9D683CB1",
+        "cmsevbatteryhealthcmsevgrafanaalertsconstructcustomresourcepolicy1ADE80A4",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionLogRetention9B634BD8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdarole200D2F06",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourcepolicy12AC68A2",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteLogRetentionEE21DD23",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisComplete52D76927",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRoleDefaultPolicy3764386C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRole971C2059",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventLogRetention4F353817",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEvent59ADA250",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRoleDefaultPolicyA192C42A",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRole02E05541",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutLogRetention865B49B0",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructenablealertingcustomresourcecustomresource4949C95D"
+      ],
+      "Properties": {
+        "AlertsS3ObjectKeyPrefix": "cms/alerts/",
+        "DataSources": {
+          "grafana-athena-datasource": {
+            "athena_table": {
+              "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmgluetablenameParameter170526B8"
+            },
+            "data_source": {
+              "Fn::GetAtt": [
+                "cmsevbatteryhealthcmsevathenadatasourceconstructcreategrafanaathenadatasourcecustomresourceD9DE0F82",
+                "datasource"
+              ]
+            }
+          }
+        },
+        "GrafanaS3Bucket": {
+          "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F"
+        },
+        "Resource": "CreateGrafanaAlertsAndUploadToS3",
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdafunction8C748299",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::CreateGrafanaAlertsAndUploadToS3",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsevbatteryhealthcmsevgrafanaalertsconstructcustomresourcepolicy1ADE80A4": {
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevathenadatasourceconstructcreategrafanaathenadatasourcecustomresourceD9DE0F82",
+        "cmsevbatteryhealthcmsevathenadatasourceconstructcustomresourcepolicy8A98036C",
+        "cmsevbatteryhealthcmsevathenadatasourceconstructgrafanaworkspacepolicy9D683CB1",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionLogRetention9B634BD8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdarole200D2F06",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourcepolicy12AC68A2",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteLogRetentionEE21DD23",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisComplete52D76927",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRoleDefaultPolicy3764386C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRole971C2059",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventLogRetention4F353817",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEvent59ADA250",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRoleDefaultPolicyA192C42A",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRole02E05541",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutLogRetention865B49B0",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructenablealertingcustomresourcecustomresource4949C95D"
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:PutObject",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F",
+                        "Arn"
+                      ]
+                    },
+                    "/cms/alerts/*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:Encrypt",
+                "kms:GenerateDataKey"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "cmsevbatteryhealthcmsevs3tografanaconstructassetss3key66D99BF0",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cmsevbatteryhealthcmsevgrafanaalertsconstructcustomresourcepolicy1ADE80A4",
+        "Roles": [
+          {
+            "Ref": "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdarole635C9FF7"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cmsevbatteryhealthcmsevgrafanaapikeyconstructapikeyrotationschedule0A948B6F": {
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdafunctionInvokeN0a2GKfZP0JmDqDEVhhu6A0TUv3NyNbk4YMFKNc1E295B96"
+      ],
+      "Properties": {
+        "RotateImmediatelyOnUpdate": false,
+        "RotationLambdaARN": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdafunctionF5B62C66",
+            "Arn"
+          ]
+        },
+        "RotationRules": {
+          "AutomaticallyAfterDays": 29
+        },
+        "SecretId": {
+          "Ref": "cmsevbatteryhealthcmsevgrafanaapikeyconstructsecret4718134D"
+        }
+      },
+      "Type": "AWS::SecretsManager::RotationSchedule"
+    },
+    "cmsevbatteryhealthcmsevgrafanaapikeyconstructcreategrafanaapikeycustomresource754F7DF5": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevgrafanaapikeyconstructcustomresourcepolicyB8CDE3B1"
+      ],
+      "Properties": {
+        "GrafanaApiKeyExpirationDays": "30",
+        "GrafanaApiKeySecretArn": {
+          "Ref": "cmsevbatteryhealthcmsevgrafanaapikeyconstructsecret4718134D"
+        },
+        "GrafanaWorkspaceId": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevgrafanaworkspaceconstructworkspace3848B5C7",
+            "Id"
+          ]
+        },
+        "Resource": "CreateGrafanaApiKey",
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdafunction8C748299",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::CreateGrafanaApiKey",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsevbatteryhealthcmsevgrafanaapikeyconstructcustomresourcepolicyB8CDE3B1": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "secretsmanager:PutSecretValue",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "cmsevbatteryhealthcmsevgrafanaapikeyconstructsecret4718134D"
+              }
+            },
+            {
+              "Action": "grafana:CreateWorkspaceApiKey",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":grafana:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":/workspaces/",
+                    {
+                      "Fn::GetAtt": [
+                        "cmsevbatteryhealthcmsevgrafanaworkspaceconstructworkspace3848B5C7",
+                        "Id"
+                      ]
+                    }
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cmsevbatteryhealthcmsevgrafanaapikeyconstructcustomresourcepolicyB8CDE3B1",
+        "Roles": [
+          {
+            "Ref": "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdarole635C9FF7"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdafunctionF5B62C66": {
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdaroleDefaultPolicy163676DD",
+        "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdarole224EE954"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "CMS EV battery health rotate secret lambda function",
+        "Environment": {
+          "Variables": {
+            "GRAFANA_API_KEY_EXPIRATION_DAYS": "30",
+            "GRAFANA_WORKSPACE_ENDPOINT": {
+              "Fn::GetAtt": [
+                "cmsevbatteryhealthcmsevgrafanaworkspaceconstructworkspace3848B5C7",
+                "Endpoint"
+              ]
+            },
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.0"
+          }
+        },
+        "FunctionName": "cms-ev-battery-health-on-aws-stack-dev-rotate-secret-lambda",
+        "Handler": "rotate_secret.main.handler",
+        "Layers": [
+          {
+            "Ref": "cmsevbatteryhealthcmsevlambdadependenciesconstructlambdadependencylayerversion11513BCE"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdarole224EE954",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "Timeout": 60
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdafunctionInvokeN0a2GKfZP0JmDqDEVhhu6A0TUv3NyNbk4YMFKNc1E295B96": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdafunctionF5B62C66",
+            "Arn"
+          ]
+        },
+        "Principal": "secretsmanager.amazonaws.com"
+      },
+      "Type": "AWS::Lambda::Permission"
+    },
+    "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdafunctionLogRetention769383D9": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdafunctionF5B62C66"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdafunctionsecretsmanagerinvokerotatesecretlambdapermissionE4388A74": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdafunctionF5B62C66",
+            "Arn"
+          ]
+        },
+        "Principal": "secretsmanager.amazonaws.com",
+        "SourceAccount": {
+          "Ref": "AWS::AccountId"
+        }
+      },
+      "Type": "AWS::Lambda::Permission"
+    },
+    "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdarole224EE954": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "secretsmanager:GetSecretValue",
+                    "secretsmanager:PutSecretValue",
+                    "secretsmanager:DescribeSecret",
+                    "secretsmanager:UpdateSecretVersionStage"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":secretsmanager:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":secret:dev/cms-ev-battery-health-on-aws-stack-dev/grafana-api-key"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "secrets-manager-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "grafana:CreateWorkspaceApiKey",
+                    "grafana:DeleteWorkspaceApiKey"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":grafana:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":/workspaces/",
+                        {
+                          "Fn::GetAtt": [
+                            "cmsevbatteryhealthcmsevgrafanaworkspaceconstructworkspace3848B5C7",
+                            "Id"
+                          ]
+                        }
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "grafana-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-ev-battery-health-on-aws-stack-dev-rotate-secret-lambda"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-ev-battery-health-on-aws-stack-dev-rotate-secret-lambda:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdaroleDefaultPolicy163676DD": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "secretsmanager:DescribeSecret",
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:PutSecretValue",
+                "secretsmanager:UpdateSecretVersionStage"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "cmsevbatteryhealthcmsevgrafanaapikeyconstructsecret4718134D"
+              }
+            },
+            {
+              "Action": "secretsmanager:GetRandomPassword",
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdaroleDefaultPolicy163676DD",
+        "Roles": [
+          {
+            "Ref": "cmsevbatteryhealthcmsevgrafanaapikeyconstructrotatesecretlambdarole224EE954"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cmsevbatteryhealthcmsevgrafanaapikeyconstructsecret4718134D": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "GenerateSecretString": {},
+        "Name": "dev/cms-ev-battery-health-on-aws-stack-dev/grafana-api-key",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::SecretsManager::Secret",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsevbatteryhealthcmsevgrafanaapikeyconstructsecretPolicyCF6DE5A8": {
+      "Properties": {
+        "ResourcePolicy": {
+          "Statement": [
+            {
+              "Action": "secretsmanager:DeleteSecret",
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "SecretId": {
+          "Ref": "cmsevbatteryhealthcmsevgrafanaapikeyconstructsecret4718134D"
+        }
+      },
+      "Type": "AWS::SecretsManager::ResourcePolicy"
+    },
+    "cmsevbatteryhealthcmsevgrafanadashboardconstructcreategrafanadashboardanduploadtos3customresourceD5E19EC1": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevathenadatasourceconstructcreategrafanaathenadatasourcecustomresourceD9DE0F82",
+        "cmsevbatteryhealthcmsevathenadatasourceconstructcustomresourcepolicy8A98036C",
+        "cmsevbatteryhealthcmsevathenadatasourceconstructgrafanaworkspacepolicy9D683CB1",
+        "cmsevbatteryhealthcmsevgrafanadashboardconstructcustomresourcepolicy9FF14333"
+      ],
+      "Properties": {
+        "DashboardS3ObjectKeyPrefix": "cms/dashboards/",
+        "DataSources": {
+          "grafana-athena-datasource": {
+            "athena_table": {
+              "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmgluetablenameParameter170526B8"
+            },
+            "data_source": {
+              "Fn::GetAtt": [
+                "cmsevbatteryhealthcmsevathenadatasourceconstructcreategrafanaathenadatasourcecustomresourceD9DE0F82",
+                "datasource"
+              ]
+            }
+          }
+        },
+        "GrafanaS3Bucket": {
+          "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F"
+        },
+        "Resource": "CreateGrafanaDashboardAndUploadToS3",
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdafunction8C748299",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::CreateGrafanaDashboardAndUploadToS3",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsevbatteryhealthcmsevgrafanadashboardconstructcustomresourcepolicy9FF14333": {
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevathenadatasourceconstructcreategrafanaathenadatasourcecustomresourceD9DE0F82",
+        "cmsevbatteryhealthcmsevathenadatasourceconstructcustomresourcepolicy8A98036C",
+        "cmsevbatteryhealthcmsevathenadatasourceconstructgrafanaworkspacepolicy9D683CB1"
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:PutObject",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F",
+                        "Arn"
+                      ]
+                    },
+                    "/cms/dashboards/*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:Encrypt",
+                "kms:GenerateDataKey"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "cmsevbatteryhealthcmsevs3tografanaconstructassetss3key66D99BF0",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cmsevbatteryhealthcmsevgrafanadashboardconstructcustomresourcepolicy9FF14333",
+        "Roles": [
+          {
+            "Ref": "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdarole635C9FF7"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cmsevbatteryhealthcmsevgrafanaworkspaceconstructworkspace3848B5C7": {
+      "Properties": {
+        "AccountAccessType": "CURRENT_ACCOUNT",
+        "AuthenticationProviders": [
+          "AWS_SSO"
+        ],
+        "DataSources": [
+          "ATHENA"
+        ],
+        "Description": "Grafana workspace for EV Battery Health Monitoring.",
+        "GrafanaVersion": "9.4",
+        "Name": "ev-battery-health-grafana-workspace-dev",
+        "NotificationDestinations": [
+          "SNS"
+        ],
+        "PermissionType": "CUSTOMER_MANAGED",
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevgrafanaworkspaceconstructworkspaceroleA0BB2724",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::Grafana::Workspace"
+    },
+    "cmsevbatteryhealthcmsevgrafanaworkspaceconstructworkspaceroleA0BB2724": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "grafana.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsevbatteryhealthcmsevlambdadependenciesconstructlambdadependencylayerversion11513BCE": {
+      "Properties": {
+        "CompatibleArchitectures": [
+          "x86_64",
+          "arm64"
+        ],
+        "CompatibleRuntimes": [
+          "python3.8",
+          "python3.9",
+          "python3.10"
+        ],
+        "Content": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        }
+      },
+      "Type": "AWS::Lambda::LayerVersion"
+    },
+    "cmsevbatteryhealthcmsevmoduleoutputsconstructssmgrafanaendpoint2C06DC71": {
+      "Properties": {
+        "Description": "EV Battery Health Dashboard Grafana Endpoint",
+        "Name": "/dev/cms/ev-battery-health/grafana-workspace-endpoint/url",
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Ref": "deploymentuuidParameter"
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevgrafanaworkspaceconstructworkspace3848B5C7",
+            "Endpoint"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsevbatteryhealthcmsevprocessalertsconstructalertcontactpointsnstopic24EA80A7": {
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionLogRetention9B634BD8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdarole200D2F06",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourcepolicy12AC68A2",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteLogRetentionEE21DD23",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisComplete52D76927",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRoleDefaultPolicy3764386C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRole971C2059",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventLogRetention4F353817",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEvent59ADA250",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRoleDefaultPolicyA192C42A",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRole02E05541",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutLogRetention865B49B0",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructenablealertingcustomresourcecustomresource4949C95D"
+      ],
+      "Properties": {
+        "KmsMasterKeyId": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevprocessalertsconstructalertcontactpointsnstopicencryptionkey08E34E6E",
+            "Arn"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "TopicName": "grafana-alerts-cms-ev-battery-health-on-aws-stack-dev"
+      },
+      "Type": "AWS::SNS::Topic"
+    },
+    "cmsevbatteryhealthcmsevprocessalertsconstructalertcontactpointsnstopicencryptionkey08E34E6E": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionLogRetention9B634BD8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdarole200D2F06",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourcepolicy12AC68A2",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteLogRetentionEE21DD23",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisComplete52D76927",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRoleDefaultPolicy3764386C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRole971C2059",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventLogRetention4F353817",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEvent59ADA250",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRoleDefaultPolicyA192C42A",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRole02E05541",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutLogRetention865B49B0",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructenablealertingcustomresourcecustomresource4949C95D"
+      ],
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsevbatteryhealthcmsevprocessalertsconstructcustomresourcepolicy7357EB4A": {
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionLogRetention9B634BD8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdarole200D2F06",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourcepolicy12AC68A2",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteLogRetentionEE21DD23",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisComplete52D76927",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRoleDefaultPolicy3764386C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRole971C2059",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventLogRetention4F353817",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEvent59ADA250",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRoleDefaultPolicyA192C42A",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRole02E05541",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutLogRetention865B49B0",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructenablealertingcustomresourcecustomresource4949C95D"
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "secretsmanager:GetSecretValue",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "cmsevbatteryhealthcmsevgrafanaapikeyconstructsecret4718134D"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cmsevbatteryhealthcmsevprocessalertsconstructcustomresourcepolicy7357EB4A",
+        "Roles": [
+          {
+            "Ref": "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdarole635C9FF7"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cmsevbatteryhealthcmsevprocessalertsconstructgrafanaworkspacepolicyB4A16B42": {
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionLogRetention9B634BD8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdarole200D2F06",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourcepolicy12AC68A2",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteLogRetentionEE21DD23",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisComplete52D76927",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRoleDefaultPolicy3764386C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRole971C2059",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventLogRetention4F353817",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEvent59ADA250",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRoleDefaultPolicyA192C42A",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRole02E05541",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutLogRetention865B49B0",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructenablealertingcustomresourcecustomresource4949C95D"
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "sns:Publish",
+                "sns:GetTopicAttributes",
+                "sns:ListTagsForResource"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":sns:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":grafana-alerts-cms-ev-battery-health-on-aws-stack-dev"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:GenerateDataKey"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "cmsevbatteryhealthcmsevprocessalertsconstructalertcontactpointsnstopicencryptionkey08E34E6E",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cmsevbatteryhealthcmsevprocessalertsconstructgrafanaworkspacepolicyB4A16B42",
+        "Roles": [
+          {
+            "Ref": "cmsevbatteryhealthcmsevgrafanaworkspaceconstructworkspaceroleA0BB2724"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cmsevbatteryhealthcmsevprocessalertsconstructlambdafunctionAllowInvokecmsevbatteryhealthonawsstackcmsevbatteryhealthcmsevprocessalertsconstructalertcontactpointsnstopic9EF33678DE0B4C20": {
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionLogRetention9B634BD8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdarole200D2F06",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourcepolicy12AC68A2",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteLogRetentionEE21DD23",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisComplete52D76927",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRoleDefaultPolicy3764386C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRole971C2059",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventLogRetention4F353817",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEvent59ADA250",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRoleDefaultPolicyA192C42A",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRole02E05541",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutLogRetention865B49B0",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructenablealertingcustomresourcecustomresource4949C95D"
+      ],
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevprocessalertsconstructlambdafunctionBF403BA4",
+            "Arn"
+          ]
+        },
+        "Principal": "sns.amazonaws.com",
+        "SourceArn": {
+          "Ref": "cmsevbatteryhealthcmsevprocessalertsconstructalertcontactpointsnstopic24EA80A7"
+        }
+      },
+      "Type": "AWS::Lambda::Permission"
+    },
+    "cmsevbatteryhealthcmsevprocessalertsconstructlambdafunctionBF403BA4": {
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevprocessalertsconstructlambdarole0859F6F1",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionLogRetention9B634BD8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdarole200D2F06",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourcepolicy12AC68A2",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteLogRetentionEE21DD23",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisComplete52D76927",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRoleDefaultPolicy3764386C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRole971C2059",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventLogRetention4F353817",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEvent59ADA250",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRoleDefaultPolicyA192C42A",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRole02E05541",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutLogRetention865B49B0",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructenablealertingcustomresourcecustomresource4949C95D"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "CMS EV Battery Health process alerts lambda.",
+        "Environment": {
+          "Variables": {
+            "ALERTS_PUBLISH_ENDPOINT_URL": {
+              "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmalertspublishendpointurlParameter1CB38871"
+            },
+            "AUTHENTICATION_RESOURCE_SERVER_ID": {
+              "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmauthenticationresourceserveridParameter102D3168"
+            },
+            "AUTHENTICATION_SERVICE_CALLER_SCOPE": {
+              "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmauthenticationservicecallerscopeParameterBF4471F8"
+            },
+            "AUTHENTICATION_SERVICE_CLIENT_ID": {
+              "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmauthenticationserviceclientidParameter7DDA7A9B"
+            },
+            "AUTHENTICATION_SERVICE_CLIENT_SECRET_ARN": {
+              "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmauthenticationserviceclientsecretarnParameter96B0CE96"
+            },
+            "AUTHENTICATION_USER_POOL_DOMAIN": {
+              "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmauthenticationuserpooldomainParameterB7E2CB69"
+            },
+            "AUTHENTICATION_USER_POOL_REGION": {
+              "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmauthenticationuserpoolregionParameterB4D73345"
+            },
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.0"
+          }
+        },
+        "FunctionName": "cms-ev-battery-health-on-aws-stack-dev-process-alerts-lambda",
+        "Handler": "process_alerts.main.handler",
+        "Layers": [
+          {
+            "Ref": "cmsevbatteryhealthcmsevlambdadependenciesconstructlambdadependencylayerversion11513BCE"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevprocessalertsconstructlambdarole0859F6F1",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "Timeout": 60
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsevbatteryhealthcmsevprocessalertsconstructlambdafunctionLogRetention7244160C": {
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionLogRetention9B634BD8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdarole200D2F06",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourcepolicy12AC68A2",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteLogRetentionEE21DD23",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisComplete52D76927",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRoleDefaultPolicy3764386C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRole971C2059",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventLogRetention4F353817",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEvent59ADA250",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRoleDefaultPolicyA192C42A",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRole02E05541",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutLogRetention865B49B0",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructenablealertingcustomresourcecustomresource4949C95D"
+      ],
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsevbatteryhealthcmsevprocessalertsconstructlambdafunctionBF403BA4"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsevbatteryhealthcmsevprocessalertsconstructlambdafunctionalertcontactpointsnstopicDFC209A7": {
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionLogRetention9B634BD8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdarole200D2F06",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourcepolicy12AC68A2",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteLogRetentionEE21DD23",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisComplete52D76927",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRoleDefaultPolicy3764386C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRole971C2059",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventLogRetention4F353817",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEvent59ADA250",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRoleDefaultPolicyA192C42A",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRole02E05541",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutLogRetention865B49B0",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructenablealertingcustomresourcecustomresource4949C95D"
+      ],
+      "Properties": {
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevprocessalertsconstructlambdafunctionBF403BA4",
+            "Arn"
+          ]
+        },
+        "Protocol": "lambda",
+        "TopicArn": {
+          "Ref": "cmsevbatteryhealthcmsevprocessalertsconstructalertcontactpointsnstopic24EA80A7"
+        }
+      },
+      "Type": "AWS::SNS::Subscription"
+    },
+    "cmsevbatteryhealthcmsevprocessalertsconstructlambdarole0859F6F1": {
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionLogRetention9B634BD8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdarole200D2F06",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourcepolicy12AC68A2",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteLogRetentionEE21DD23",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisComplete52D76927",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRoleDefaultPolicy3764386C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRole971C2059",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventLogRetention4F353817",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEvent59ADA250",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRoleDefaultPolicyA192C42A",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRole02E05541",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutLogRetention865B49B0",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructenablealertingcustomresourcecustomresource4949C95D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-ev-battery-health-on-aws-stack-dev-process-alerts-lambda"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-ev-battery-health-on-aws-stack-dev-process-alerts-lambda:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "secretsmanager:GetSecretValue",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmauthenticationserviceclientsecretarnParameter96B0CE96"
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "secretsmanager-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsevbatteryhealthcmsevprocessalertsconstructsetgrafanaalertconfigurationcustomresourceA6D68054": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevprocessalertsconstructcustomresourcepolicy7357EB4A",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionLogRetention9B634BD8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdarole200D2F06",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourcepolicy12AC68A2",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteLogRetentionEE21DD23",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisComplete52D76927",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRoleDefaultPolicy3764386C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRole971C2059",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventLogRetention4F353817",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEvent59ADA250",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRoleDefaultPolicyA192C42A",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRole02E05541",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutLogRetention865B49B0",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructenablealertingcustomresourcecustomresource4949C95D"
+      ],
+      "Properties": {
+        "GrafanaAlertsSnsTopicArn": {
+          "Ref": "cmsevbatteryhealthcmsevprocessalertsconstructalertcontactpointsnstopic24EA80A7"
+        },
+        "GrafanaApiKeySecretArn": {
+          "Ref": "cmsevbatteryhealthcmsevgrafanaapikeyconstructsecret4718134D"
+        },
+        "GrafanaWorkspaceEndpoint": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevgrafanaworkspaceconstructworkspace3848B5C7",
+            "Endpoint"
+          ]
+        },
+        "Resource": "SetGrafanaAlertConfiguration",
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdafunction8C748299",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::SetGrafanaAlertConfiguration",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C": {
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdarole200D2F06"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "Lambda that checks if grafana workspace is active.",
+        "Environment": {
+          "Variables": {
+            "GRAFANA_WORKSPACE_ID": {
+              "Fn::GetAtt": [
+                "cmsevbatteryhealthcmsevgrafanaworkspaceconstructworkspace3848B5C7",
+                "Id"
+              ]
+            },
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.0"
+          }
+        },
+        "FunctionName": "cms-ev-battery-health-on-aws-stack-dev-workspace-active-lambda",
+        "Handler": "check_workspace_active.main.handler",
+        "Layers": [
+          {
+            "Ref": "cmsevbatteryhealthcmsevlambdadependenciesconstructlambdadependencylayerversion11513BCE"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdarole200D2F06",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "Timeout": 60
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionLogRetention9B634BD8": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdarole200D2F06": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "grafana:DescribeWorkspace",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":grafana:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":/workspaces/",
+                        {
+                          "Fn::GetAtt": [
+                            "cmsevbatteryhealthcmsevgrafanaworkspaceconstructworkspace3848B5C7",
+                            "Id"
+                          ]
+                        }
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "grafana-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-ev-battery-health-on-aws-stack-dev-workspace-active-lambda"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-ev-battery-health-on-aws-stack-dev-workspace-active-lambda:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourcepolicy12AC68A2": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "grafana:UpdateWorkspaceConfiguration",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":grafana:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":/workspaces/",
+                    {
+                      "Fn::GetAtt": [
+                        "cmsevbatteryhealthcmsevgrafanaworkspaceconstructworkspace3848B5C7",
+                        "Id"
+                      ]
+                    }
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourcepolicy12AC68A2",
+        "Roles": [
+          {
+            "Ref": "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdarole635C9FF7"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisComplete52D76927": {
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRoleDefaultPolicy3764386C",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRole971C2059"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "AWS CDK resource provider framework - isComplete (Default/cms-ev-battery-health-on-aws-stack/cms-ev-battery-health/cms-ev-provision-alerts-construct/custom-resource-provider)",
+        "Environment": {
+          "Variables": {
+            "USER_IS_COMPLETE_FUNCTION_ARN": {
+              "Fn::GetAtt": [
+                "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C",
+                "Arn"
+              ]
+            },
+            "USER_ON_EVENT_FUNCTION_ARN": {
+              "Fn::GetAtt": [
+                "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdafunction8C748299",
+                "Arn"
+              ]
+            }
+          }
+        },
+        "Handler": "framework.isComplete",
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRole971C2059",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs18.x",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "Timeout": 900
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteLogRetentionEE21DD23": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisComplete52D76927"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRole971C2059": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRoleDefaultPolicy3764386C": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdafunction8C748299",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdafunction8C748299",
+                          "Arn"
+                        ]
+                      },
+                      ":*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C",
+                          "Arn"
+                        ]
+                      },
+                      ":*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRoleDefaultPolicy3764386C",
+        "Roles": [
+          {
+            "Ref": "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisCompleteServiceRole971C2059"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEvent59ADA250": {
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRoleDefaultPolicyA192C42A",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRole02E05541"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "AWS CDK resource provider framework - onEvent (Default/cms-ev-battery-health-on-aws-stack/cms-ev-battery-health/cms-ev-provision-alerts-construct/custom-resource-provider)",
+        "Environment": {
+          "Variables": {
+            "USER_IS_COMPLETE_FUNCTION_ARN": {
+              "Fn::GetAtt": [
+                "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C",
+                "Arn"
+              ]
+            },
+            "USER_ON_EVENT_FUNCTION_ARN": {
+              "Fn::GetAtt": [
+                "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdafunction8C748299",
+                "Arn"
+              ]
+            },
+            "WAITER_STATE_MACHINE_ARN": {
+              "Ref": "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670"
+            }
+          }
+        },
+        "FunctionName": "alert-provision-custom-resource-provider-dev",
+        "Handler": "framework.onEvent",
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRole02E05541",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs18.x",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "Timeout": 900
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventLogRetention4F353817": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEvent59ADA250"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRole02E05541": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRoleDefaultPolicyA192C42A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdafunction8C748299",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdafunction8C748299",
+                          "Arn"
+                        ]
+                      },
+                      ":*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C",
+                          "Arn"
+                        ]
+                      },
+                      ":*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "states:StartExecution",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRoleDefaultPolicyA192C42A",
+        "Roles": [
+          {
+            "Ref": "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEventServiceRole02E05541"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E": {
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "AWS CDK resource provider framework - onTimeout (Default/cms-ev-battery-health-on-aws-stack/cms-ev-battery-health/cms-ev-provision-alerts-construct/custom-resource-provider)",
+        "Environment": {
+          "Variables": {
+            "USER_IS_COMPLETE_FUNCTION_ARN": {
+              "Fn::GetAtt": [
+                "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C",
+                "Arn"
+              ]
+            },
+            "USER_ON_EVENT_FUNCTION_ARN": {
+              "Fn::GetAtt": [
+                "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdafunction8C748299",
+                "Arn"
+              ]
+            }
+          }
+        },
+        "Handler": "framework.onTimeout",
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs18.x",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "Timeout": 900
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutLogRetention865B49B0": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdafunction8C748299",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "cmsevbatteryhealthcmsevcustomresourcelambdaconstructlambdafunction8C748299",
+                          "Arn"
+                        ]
+                      },
+                      ":*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "cmsevbatteryhealthcmsevprovisionalertsconstructcheckworkspaceactivelambdafunctionBB5CD62C",
+                          "Arn"
+                        ]
+                      },
+                      ":*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
+        "Roles": [
+          {
+            "Ref": "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670": {
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8"
+      ],
+      "Properties": {
+        "DefinitionString": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"StartAt\":\"framework-isComplete-task\",\"States\":{\"framework-isComplete-task\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"States.ALL\"],\"IntervalSeconds\":5,\"MaxAttempts\":360,\"BackoffRate\":1}],\"Catch\":[{\"ErrorEquals\":[\"States.ALL\"],\"Next\":\"framework-onTimeout-task\"}],\"Type\":\"Task\",\"Resource\":\"",
+              {
+                "Fn::GetAtt": [
+                  "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisComplete52D76927",
+                  "Arn"
+                ]
+              },
+              "\"},\"framework-onTimeout-task\":{\"End\":true,\"Type\":\"Task\",\"Resource\":\"",
+              {
+                "Fn::GetAtt": [
+                  "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
+                  "Arn"
+                ]
+              },
+              "\"}}}"
+            ]
+          ]
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::StepFunctions::StateMachine"
+    },
+    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": {
+                  "Fn::FindInMap": [
+                    "ServiceprincipalMap",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    "states"
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisComplete52D76927",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisComplete52D76927",
+                          "Arn"
+                        ]
+                      },
+                      ":*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
+                          "Arn"
+                        ]
+                      },
+                      ":*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
+        "Roles": [
+          {
+            "Ref": "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cmsevbatteryhealthcmsevprovisionalertsconstructenablealertingcustomresourcecustomresource4949C95D": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "DoNotSendCFResponse": "True",
+        "GrafanaWorkspaceId": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevgrafanaworkspaceconstructworkspace3848B5C7",
+            "Id"
+          ]
+        },
+        "Resource": "EnableGrafanaAlerting",
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonEvent59ADA250",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::EnableGrafanaAlerting",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "KMSMasterKeyID": {
+                  "Fn::GetAtt": [
+                    "cmsevbatteryhealthcmsevs3tografanaconstructassetss3key66D99BF0",
+                    "Arn"
+                  ]
+                },
+                "SSEAlgorithm": "aws:kms"
+              }
+            }
+          ]
+        },
+        "LoggingConfiguration": {
+          "DestinationBucketName": {
+            "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructassetsserveraccesslogsbucketBDCF1868"
+          }
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "Tags": [
+          {
+            "Key": "aws-cdk:auto-delete-objects",
+            "Value": "true"
+          },
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucketAllowBucketNotificationsTocmsevbatteryhealthonawsstackcmsevbatteryhealthcmsevs3tografanaconstructlambdafunction595E8EFE9DA51D6F": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevs3tografanaconstructlambdafunction9C211D30",
+            "Arn"
+          ]
+        },
+        "Principal": "s3.amazonaws.com",
+        "SourceAccount": {
+          "Ref": "AWS::AccountId"
+        },
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::Lambda::Permission"
+    },
+    "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucketAutoDeleteObjectsCustomResource91D4C99C": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucketPolicyF73877F7"
+      ],
+      "Properties": {
+        "BucketName": {
+          "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F"
+        },
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::S3AutoDeleteObjects",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucketNotifications20A2DFE0": {
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucketAllowBucketNotificationsTocmsevbatteryhealthonawsstackcmsevbatteryhealthcmsevs3tografanaconstructlambdafunction595E8EFE9DA51D6F"
+      ],
+      "Properties": {
+        "BucketName": {
+          "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F"
+        },
+        "Managed": true,
+        "NotificationConfiguration": {
+          "LambdaFunctionConfigurations": [
+            {
+              "Events": [
+                "s3:ObjectCreated:*"
+              ],
+              "Filter": {
+                "Key": {
+                  "FilterRules": [
+                    {
+                      "Name": "prefix",
+                      "Value": "cms/dashboards/"
+                    }
+                  ]
+                }
+              },
+              "LambdaFunctionArn": {
+                "Fn::GetAtt": [
+                  "cmsevbatteryhealthcmsevs3tografanaconstructlambdafunction9C211D30",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Events": [
+                "s3:ObjectCreated:*"
+              ],
+              "Filter": {
+                "Key": {
+                  "FilterRules": [
+                    {
+                      "Name": "prefix",
+                      "Value": "cms/alerts/"
+                    }
+                  ]
+                }
+              },
+              "LambdaFunctionArn": {
+                "Fn::GetAtt": [
+                  "cmsevbatteryhealthcmsevs3tografanaconstructlambdafunction9C211D30",
+                  "Arn"
+                ]
+              }
+            }
+          ]
+        },
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::S3BucketNotifications"
+    },
+    "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucketPolicyF73877F7": {
+      "Properties": {
+        "Bucket": {
+          "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "s3:PutBucketPolicy",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::GetAtt": [
+                    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+                    "Arn"
+                  ]
+                }
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Type": "AWS::S3::BucketPolicy"
+    },
+    "cmsevbatteryhealthcmsevs3tografanaconstructassetss3key66D99BF0": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsevbatteryhealthcmsevs3tografanaconstructassetsserveraccesslogsbucketBDCF1868": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AccessControl": "LogDeliveryWrite",
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "KMSMasterKeyID": {
+                  "Fn::GetAtt": [
+                    "cmsevbatteryhealthcmsevs3tografanaconstructassetsserveraccesslogss3key2950DCA1",
+                    "Arn"
+                  ]
+                },
+                "SSEAlgorithm": "aws:kms"
+              }
+            }
+          ]
+        },
+        "OwnershipControls": {
+          "Rules": [
+            {
+              "ObjectOwnership": "ObjectWriter"
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "cmsevbatteryhealthcmsevs3tografanaconstructassetsserveraccesslogsbucketPolicy0C298153": {
+      "Properties": {
+        "Bucket": {
+          "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructassetsserveraccesslogsbucketBDCF1868"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "cmsevbatteryhealthcmsevs3tografanaconstructassetsserveraccesslogsbucketBDCF1868",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "cmsevbatteryhealthcmsevs3tografanaconstructassetsserveraccesslogsbucketBDCF1868",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Type": "AWS::S3::BucketPolicy"
+    },
+    "cmsevbatteryhealthcmsevs3tografanaconstructassetsserveraccesslogss3key2950DCA1": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:Encrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "logging.s3.amazonaws.com"
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsevbatteryhealthcmsevs3tografanaconstructlambdafunction9C211D30": {
+      "DependsOn": [
+        "cmsevbatteryhealthcmsevs3tografanaconstructlambdarole2F85C615"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "CMS EV battery health update s3 assets to grafana lambda function",
+        "Environment": {
+          "Variables": {
+            "ALERTS_S3_OBJECT_KEY_PREFIX": "cms/alerts/",
+            "DASHBOARD_S3_OBJECT_KEY_PREFIX": "cms/dashboards/",
+            "GRAFANA_API_KEY_SECRET_ARN": {
+              "Ref": "cmsevbatteryhealthcmsevgrafanaapikeyconstructsecret4718134D"
+            },
+            "GRAFANA_WORKSPACE_ENDPOINT": {
+              "Fn::GetAtt": [
+                "cmsevbatteryhealthcmsevgrafanaworkspaceconstructworkspace3848B5C7",
+                "Endpoint"
+              ]
+            },
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.0"
+          }
+        },
+        "FunctionName": "cms-ev-battery-health-on-aws-stack-dev-s3-to-grafana-lambda",
+        "Handler": "s3_to_grafana.main.handler",
+        "Layers": [
+          {
+            "Ref": "cmsevbatteryhealthcmsevlambdadependenciesconstructlambdadependencylayerversion11513BCE"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsevbatteryhealthcmsevs3tografanaconstructlambdarole2F85C615",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ],
+        "Timeout": 60
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsevbatteryhealthcmsevs3tografanaconstructlambdafunctionLogRetention07E17A9D": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructlambdafunction9C211D30"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsevbatteryhealthcmsevs3tografanaconstructlambdarole2F85C615": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "secretsmanager:GetSecretValue",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Ref": "cmsevbatteryhealthcmsevgrafanaapikeyconstructsecret4718134D"
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "secretsmanager-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "s3:GetObject",
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          {
+                            "Fn::GetAtt": [
+                              "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F",
+                              "Arn"
+                            ]
+                          },
+                          "/cms/dashboards/*"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          {
+                            "Fn::GetAtt": [
+                              "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F",
+                              "Arn"
+                            ]
+                          },
+                          "/cms/alerts/*"
+                        ]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Action": "kms:Decrypt",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "cmsevbatteryhealthcmsevs3tografanaconstructassetss3key66D99BF0",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "s3-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-ev-battery-health-on-aws-stack-dev-s3-to-grafana-lambda"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/cms-ev-battery-health-on-aws-stack-dev-s3-to-grafana-lambda:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Ref": "deploymentuuidParameter"
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                  ],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}

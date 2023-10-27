@@ -1,0 +1,36 @@
+# https://docs.aws.amazon.com/proton/latest/userguide/ag-infrastructure-tmp-files-codebuild.html
+
+infrastructure:
+  templates:
+    - rendering_engine: codebuild
+      settings:
+        image: aws/codebuild/amazonlinux2-x86_64-standard:5.0
+        runtimes:
+          nodejs: 18
+        provision:
+          # Run when create/update is triggered for environment or service
+          # Install dependencies
+          - npm install -g aws-cdk@latest --force
+          - pipenv install --dev
+          - cd source/console
+          - npm install
+          - npm run build
+          - cd ../..
+          - pipenv run cdk deploy --require-approval never --parameters useremail={{ service_instance.inputs.user_email }} --outputs-file cdk-outputs.json
+
+          # Script to convert CFN outputs into outputs for Proton
+          # If no outputs are defined comment this out, jq will throw an error
+          - chmod +x ./cdk-to-proton.sh
+          - cat cdk-outputs.json | ./cdk-to-proton.sh > proton-outputs.json
+
+          # Notify AWS Proton of deployment status
+          - aws proton notify-resource-deployment-status-change --resource-arn $RESOURCE_ARN --outputs file://./proton-outputs.json
+        deprovision:
+          # Install dependencies and destroy resources
+          - npm install -g aws-cdk@latest --force
+          - pipenv install --dev
+          - cd source/console
+          - npm install
+          - npm run build
+          - cd ../..
+          - pipenv run cdk destroy --force

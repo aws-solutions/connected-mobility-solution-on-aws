@@ -1,0 +1,97 @@
+@startuml cms-ev-battery-health-deployment-sequence-diagram-1
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v14.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/ManagementGovernance/CloudFormation.puml
+!include AWSPuml/SecurityIdentityCompliance/SecretsManager.puml
+!include AWSPuml/Storage/SimpleStorageService.puml
+!include AWSPuml/ManagementGovernance/ManagedGrafana.puml
+!include AWSPuml/SecurityIdentityCompliance/IAMIdentityCenter.puml
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/ManagementGovernance/CloudFormation.puml
+!include AWSPuml/ManagementGovernance/SystemsManagerParameterStore.puml
+!include AWSPuml/ApplicationIntegration/MQ.puml
+!include AWSPuml/ApplicationIntegration/SimpleNotificationServiceTopic.puml
+
+!define GREEN #3F8624
+!define YELLOW #D86613
+!define RED #E3242B
+!define PINK #CF2465
+
+'Comment out to use default PlantUML sequence formatting
+skinparam participant {
+    BackgroundColor AWS_BG_COLOR
+    BorderColor AWS_BORDER_COLOR
+}
+skinparam sequence {
+    ArrowThickness 2
+    LifeLineBorderColor AWS_COLOR
+    LifeLineBackgroundColor AWS_BORDER_COLOR
+    BoxBorderColor AWS_COLOR
+}
+
+actor User as user
+box CMS EV Battery Health Module Deployment - Part 1
+participant "$CloudFormationIMG()\nCloudformation" as cf << Cloudformation >>
+participant "$SystemsManagerParameterStoreIMG()\nSSM Parameter Store" as ssm << SSM >>
+participant "$LambdaIMG()\nCustom Resource" as custom_resource << Lambda >>
+participant "$SecretsManagerIMG()\nSecrets Manager" as secrets_manager << Secrets Manager >>
+participant "$LambdaIMG()\nSecret Rotation" as secret_rotation << Lambda >>
+participant "$ManagedGrafanaIMG()\nGrafana" as grafana << Grafana >>
+participant "$IAMIdentityCenterIMG()\nIAM Identity Center" as iam << IAM Identity Center >>
+endbox
+
+user -> cf++ PINK: Deploy module
+
+cf -> grafana++ PINK: Create Grafana workspace
+grafana -> iam++ RED: Setup IAM Identity Center Authentication
+grafana <-- iam
+deactivate iam
+cf <-- grafana
+deactivate grafana
+
+|||
+
+cf -> custom_resource++ YELLOW: Trigger CREATE: Grafana API Key
+custom_resource -> grafana++ PINK: Create Grafana Workspace API key
+custom_resource <-- grafana
+deactivate grafana
+
+|||
+
+custom_resource -> secrets_manager++ RED: Store Grafana Workspace API key as a secret
+secrets_manager -> secret_rotation++ YELLOW: Configure secret rotation for the API key secret
+secrets_manager <-- secret_rotation
+deactivate secret_rotation
+custom_resource <-- secrets_manager
+deactivate secrets_manager
+cf <-- custom_resource
+deactivate custom_resource
+
+|||
+
+cf -> ssm++ PINK: Get Athena, Glue and S3 configuration parameters for VSS telemetry storage
+cf <-- ssm
+deactivate ssm
+
+|||
+
+cf -> custom_resource++ YELLOW: Trigger CREATE: Athena Data Source
+custom_resource -> secrets_manager++ RED: Get Grafana API key from secret
+custom_resource <-- secrets_manager
+deactivate secrets_manager
+custom_resource -> grafana++ PINK: Create an Athena data source for Grafana
+custom_resource <-- grafana
+deactivate grafana
+cf <-- custom_resource
+deactivate custom_resource
+
+|||
+
+user <-- cf: Continue deploy
+deactivate cf
+
+@enduml
