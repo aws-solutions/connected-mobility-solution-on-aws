@@ -218,7 +218,7 @@
             "PROVISIONED_VEHICLES_TABLE_NAME": {
               "Ref": "provisionedvehiclestable1D94D49A"
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.5/v1.0.0"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.5/v1.0.1"
           }
         },
         "FunctionName": "cms-provisioning-on-aws-stack-dev-initial-connection-lambda",
@@ -675,7 +675,7 @@
               "Ref": "provisionedvehiclestable1D94D49A"
             },
             "PROVISIONING_TEMPLATE_NAME": "cms-vehicle-provisioning-template",
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.5/v1.0.0"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.5/v1.0.1"
           }
         },
         "FunctionName": "cms-provisioning-on-aws-stack-dev-post-provisioning-lambda",
@@ -1000,7 +1000,7 @@
             "PROVISIONED_VEHICLES_TABLE_NAME": {
               "Ref": "provisionedvehiclestable1D94D49A"
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.5/v1.0.0"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.5/v1.0.1"
           }
         },
         "FunctionName": "cms-provisioning-on-aws-stack-dev-pre-provisioning-lambda",

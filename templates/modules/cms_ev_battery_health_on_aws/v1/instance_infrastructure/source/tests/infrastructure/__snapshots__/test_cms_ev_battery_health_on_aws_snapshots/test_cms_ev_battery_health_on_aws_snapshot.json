@@ -865,7 +865,7 @@
           "ApplicationType": "AWS-Solutions",
           "SolutionID": "SO0241",
           "SolutionName": "Connected Mobility Solution on AWS",
-          "Version": "v1.0.0"
+          "Version": "v1.0.1"
         },
         "Description": "Attribute group for solution information",
         "Name": {
@@ -905,7 +905,7 @@
         "Description": "CMS EV battery health custom resource lambda function",
         "Environment": {
           "Variables": {
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.0"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.1"
           }
         },
         "FunctionName": "cms-ev-battery-health-on-aws-stack-dev-custom-resource-lambda",
@@ -1295,7 +1295,7 @@
                 "Endpoint"
               ]
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.0"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.1"
           }
         },
         "FunctionName": "cms-ev-battery-health-on-aws-stack-dev-rotate-secret-lambda",
@@ -2129,7 +2129,7 @@
             "AUTHENTICATION_USER_POOL_REGION": {
               "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmauthenticationuserpoolregionParameterB4D73345"
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.0"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.1"
           }
         },
         "FunctionName": "cms-ev-battery-health-on-aws-stack-dev-process-alerts-lambda",
@@ -2431,7 +2431,7 @@
                 "Id"
               ]
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.0"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.1"
           }
         },
         "FunctionName": "cms-ev-battery-health-on-aws-stack-dev-workspace-active-lambda",
@@ -3818,7 +3818,7 @@
                 "Endpoint"
               ]
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.0"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.1"
           }
         },
         "FunctionName": "cms-ev-battery-health-on-aws-stack-dev-s3-to-grafana-lambda",

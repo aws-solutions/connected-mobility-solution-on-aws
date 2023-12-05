@@ -16,7 +16,7 @@ class UserAuthenticationConstantsClass:
     MODULE_NAME: str = "cms-user-authentication-on-aws"
     SOLUTION_NAME: str = "Connected Mobility Solution on AWS"
     SOLUTION_ID: str = "SO0241"
-    SOLUTION_VERSION: str = "v1.0.0"
+    SOLUTION_VERSION: str = "v1.0.1"
     APPLICATION_TYPE: str = "AWS-Solutions"
     CAPABILITY_ID = "CMS.22"
     USER_AGENT_STRING: str = f"AWSSOLUTION/{SOLUTION_ID}/{SOLUTION_VERSION} AWSSOLUTION-CAPABILITY/{CAPABILITY_ID}/{SOLUTION_VERSION}"

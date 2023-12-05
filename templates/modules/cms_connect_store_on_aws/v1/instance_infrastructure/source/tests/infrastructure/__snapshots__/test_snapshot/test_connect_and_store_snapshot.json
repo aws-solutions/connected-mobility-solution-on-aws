@@ -181,7 +181,7 @@
           "ApplicationType": "AWS-Solutions",
           "SolutionID": "SO0241",
           "SolutionName": "Connected Mobility Solution on AWS",
-          "Version": "v1.0.0"
+          "Version": "v1.0.1"
         },
         "Description": "Attribute group for solution information",
         "Name": {
@@ -242,7 +242,7 @@
             "AUTHENTICATION_USER_POOL_REGION": {
               "Ref": "connectstoreconnectstoremoduleinputsconstructssmauthenticationuserpoolregionParameter062424AC"
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.0 AWSSOLUTION-CAPABILITY/CMS.3/v1.0.0"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.3/v1.0.1"
           }
         },
         "FunctionName": "cms-connect-store-on-aws-stack-dev-vehicle-alarm",
