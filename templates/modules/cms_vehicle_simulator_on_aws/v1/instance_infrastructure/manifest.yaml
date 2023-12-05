@@ -5,13 +5,15 @@ infrastructure:
     - rendering_engine: codebuild
       settings:
         image: aws/codebuild/amazonlinux2-x86_64-standard:5.0
-        runtimes:
-          nodejs: 18
         provision:
           # Run when create/update is triggered for environment or service
           # Install dependencies
+          - n 18.17.1
           - npm install -g aws-cdk@latest --force
-          - pipenv install --dev
+          - pyenv install 3.10.9
+          - pyenv global 3.10.9
+          - pyenv exec pip install pipenv
+          - pipenv install --dev --python 3.10.9
           - cd source/console
           - npm install
           - npm run build
@@ -27,8 +29,12 @@ infrastructure:
           - aws proton notify-resource-deployment-status-change --resource-arn $RESOURCE_ARN --outputs file://./proton-outputs.json
         deprovision:
           # Install dependencies and destroy resources
+          - n 18.17.1
           - npm install -g aws-cdk@latest --force
-          - pipenv install --dev
+          - pyenv install 3.10.9
+          - pyenv global 3.10.9
+          - pyenv exec pip install pipenv
+          - pipenv install --dev --python 3.10.9
           - cd source/console
           - npm install
           - npm run build

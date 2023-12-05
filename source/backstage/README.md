@@ -2,18 +2,19 @@
 
 **[Connected Mobility Solution on AWS](https://aws.amazon.com/solutions/implementations/connected-mobility-solution-on-aws/)** | **[🚧 Feature request](https://github.com/aws-solutions/connected-mobility-solution-on-aws/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=)** | **[🐛 Bug Report](https://github.com/aws-solutions/connected-mobility-solution-on-aws/issues/new?assignees=&labels=bug&template=bug_report.md&title=)** | **[❓ General Question](https://github.com/aws-solutions/connected-mobility-solution-on-aws/issues/new?assignees=&labels=question&template=general_question.md&title=)**
 
-**Note**: If you want to use the solution without building from source, navigate to the [AWS Solution Page](https://dummy.com).
+**Note**: If you want to use the solution without building from source, navigate to the
+[AWS Solution Page](https://aws.amazon.com/solutions/implementations/connected-mobility-solution-on-aws/).
 
 ## Table of Contents
 
 - [Connected Mobility Solution on AWS - Backstage Module](#connected-mobility-solution-on-aws---backstage-module)
   - [Table of Contents](#table-of-contents)
   - [Solution Overview](#solution-overview)
+  - [Architecture Diagram](#architecture-diagram)
   - [AWS CDK and Solutions Constructs](#aws-cdk-and-solutions-constructs)
   - [Customizing the Module](#customizing-the-module)
   - [Prerequisites](#prerequisites)
-    - [Optional but Helpful](#optional-but-helpful)
-    - [MacOS Installation Instructions](#macos-installation-instructions)
+      - [MacOS Installation Instructions](#macos-installation-instructions)
     - [Clone the Repository](#clone-the-repository)
     - [Unit Test](#unit-test)
     - [Build](#build)
@@ -33,7 +34,11 @@ and functional interface to manage and deploy software. CMS modules are configur
 deeper features into the Backstage design.
 
 For more information and a detailed deployment guide, visit the
-[CMS Backstage Module](https://aws.amazon.com/solutions/implementations/cms-backstage/) solution page.
+[CMS Backstage Module](https://docs.aws.amazon.com/solutions/latest/connected-mobility-solution-on-aws/backstage-module.html) solution page.
+
+## Architecture Diagram
+
+![CMS Backstage Architecture Diagram](./documentation/architecture/cms-backstage-architecture-diagram.svg)
 
 ## AWS CDK and Solutions Constructs
 
@@ -52,11 +57,12 @@ In addition to the AWS Solutions Constructs, the solution uses AWS CDK directly 
 - [NVM](https://github.com/nvm-sh/nvm)
 - [NPM 8+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [Node 18+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
-- [Pipenv](https://pipenv.pypa.io/en/latest/installation/)
+- [Pipenv](https://pipenv.pypa.io/en/latest/installation.html)
 
-#### Optional but Helpful
+Required For Local Development Only:
 
-- Pyenv [Github Repository](https://github.com/pyenv/pyenv)
+- [Docker](https://www.docker.com/products/docker-desktop/)
+- [Docker Compose v1](https://docs.docker.com/compose/install/) (v2 is included with Docker)
 
 #### MacOS Installation Instructions
 
@@ -148,9 +154,10 @@ Basic usage should stay within the free tier.
 
 ## Collection of Operational Metrics
 
-This solution collects anonymous operational metrics to help AWS improve the quality and features of the solution. For
-more information, including how to disable this capability, please see the
-[implementation guide](https://docs.aws.amazon.com/solutions/latest/cms-backstage/operational-metrics.html).
+This solution collects anonymous operational metrics to help AWS improve
+the quality and features of the solution. For more information, including
+how to disable this capability, please see the
+[implementation guide](https://docs.aws.amazon.com/solutions/latest/connected-mobility-solution-on-aws/operational-metrics.html).
 
 ## License
 
@@ -158,9 +165,7 @@ Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License").
 You may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
+You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

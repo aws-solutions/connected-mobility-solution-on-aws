@@ -67,7 +67,9 @@ class BackstageEnvConstruct(Construct):
         self.database = aws_rds.ServerlessCluster(
             self,
             "backstage-aurora-postgres",
-            engine=aws_rds.DatabaseClusterEngine.AURORA_POSTGRESQL,
+            engine=aws_rds.DatabaseClusterEngine.aurora_postgres(
+                version=aws_rds.AuroraPostgresEngineVersion.VER_13_9
+            ),
             parameter_group=self.parameter_group,
             credentials=pg_admin,
             vpc=vpc,

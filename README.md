@@ -2,9 +2,10 @@
 
 **[Connected Mobility Solution on AWS](https://aws.amazon.com/solutions/implementations/connected-mobility-solution-on-aws/)** | **[🚧 Feature request](https://github.com/aws-solutions/connected-mobility-solution-on-aws/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=)** | **[🐛 Bug Report](https://github.com/aws-solutions/connected-mobility-solution-on-aws/issues/new?assignees=&labels=bug&template=bug_report.md&title=)** | **[❓ General Question](https://github.com/aws-solutions/connected-mobility-solution-on-aws/issues/new?assignees=&labels=question&template=general_question.md&title=)**
 
-**Note**: If you want to use the solution without building from source, navigate to the [AWS Solution Page](https://solution-page.com).
+**Note**: If you want to use the solution without building from source,
+navigate to the [AWS Solution Page](https://aws.amazon.com/solutions/implementations/connected-mobility-solution-on-aws/).
 
-<font size="5"> **If you want to jump straight into building and deploying, [click here](##Deployment-Setup/Pre-requisites)**</font>
+**If you want to jump straight into building and deploying, [click here](#deployment-prerequisites)**
 
 ## Table of Contents
 - [Connected Mobility Solution on AWS](#connected-mobility-solution-on-aws)
@@ -31,7 +32,8 @@
       - [Pipenv](#pipenv)
       - [AWS CLI](#aws-cli)
       - [AWS CDK Toolkit](#aws-cdk-toolkit)
-    - [Solution Dependency Installation](#solution-dependency-installation)
+      - [Verify Required Tool Installations](#verify-required-tool-installations)
+    - [Install Solution Dependencies](#install-solution-dependencies)
     - [Create a Route53 Hosted Zone](#create-a-route53-hosted-zone)
     - [Setup environment variables](#setup-environment-variables)
       - [Create a *.env* file (preferred method)](#create-a-env-file-preferred-method)
@@ -40,9 +42,9 @@
   - [Deploy](#deploy)
     - [Deployment Pre-Requisites](#deployment-pre-requisites)
     - [Run CDK Bootstrap](#run-cdk-bootstrap)
-    - [Upload S3 Deployment Assets (Backstage `template.yaml`s and AWS Proton service template `.tar`s)](#upload-s3-deployment-assets-backstage-templateyamls-and-aws-proton-service-template-tars)
+    - [Upload S3 Deployment Assets](#upload-s3-deployment-assets)
     - [Deploy the Automotive Cloud Developer Portal (ACDP)](#deploy-the-automotive-cloud-developer-portal-acdp)
-    - [Monitoring the Automotive Cloud Developer Portal Deployment](#monitoring-the-automotive-cloud-developer-portal-deployment)
+    - [Monitoring the ACDP Deployment](#monitoring-the-acdp-deployment)
     - [Bootstrap Proton](#bootstrap-proton)
     - [Deploy CMS Modules via Backstage](#deploy-cms-modules-via-backstage)
       - [CMS Module Deployment Order](#cms-module-deployment-order)
@@ -129,14 +131,14 @@ To deploy CMS on AWS, a variety of tools are required. These deploy instructions
 - [Pyenv](https://github.com/pyenv/pyenv)
 - [Python](https://www.python.org/)
 - [Pip](https://pypi.org/project/pip/)
-- [Pipenv](https://pipenv.pypa.io/en/latest/installation/)
+- [Pipenv](https://pipenv.pypa.io/en/latest/installation.html)
 - [AWS CLI](https://docs.aws.amazon.com/cli/)
 - [AWS CDK Toolkit](https://docs.aws.amazon.com/cdk/v2/guide/cli.html)
 
 ### Required Tool Versions
 
-Certain tools also require specific versions. See the table below for the appropriate versions. Following the provided install instructions
-will install the correct verions.
+Certain tools also require specific versions. See the table below for the appropriate versions. Following the
+provided install instructions will install the correct versions.
 
 For tools not listed here, stable versions should work appropriately.
 
@@ -147,6 +149,9 @@ For tools not listed here, stable versions should work appropriately.
 | [Python](https://www.python.org)                                              | 3.10.9     |
 
 ### Clone the Repository
+
+If you have not done so, first clone the repository, and then `cd` into the created directory. If you have
+already cloned the repository, ensure you still `cd` into the solution's directory.
 
 ```bash
 git clone https://github.com/aws-solutions/connected-mobility-solution-on-aws.git
@@ -164,7 +169,8 @@ Otherwise, please visit the installation guide provided by the tool's publisher 
 
 #### NVM
 
-Follow the [nvm installation guide](https://github.com/nvm-sh/nvm#installing-and-updating) to install NVM. Ensure your installation properly set your path by running the script below.
+Follow the [nvm installation guide](https://github.com/nvm-sh/nvm#installing-and-updating) to install NVM.
+Ensure your installation properly set your path by running the script below.
 
 ```bash
 nvm --version
@@ -178,12 +184,13 @@ nvm install
 nvm use
 ```
 
-For more information see the [nvm usage guide](https://github.com/nvm-sh/nvm#usage) for installing the correct version of Node.
-Manually installing Node without the use of nvm is not recommended.
+For more information see the [nvm usage guide](https://github.com/nvm-sh/nvm#usage) for installing the correct
+version of Node. Manually installing Node without the use of nvm is not recommended.
 
 #### Yarn
 
-Follow the [yarn installation guide](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable). Ensure your installation properly set your path by running the script below.
+Follow the [yarn installation guide](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable). Ensure your
+installation properly set your path by running the script below.
 
 ```bash
 yarn --version
@@ -192,8 +199,9 @@ yarn --version
 
 #### Pyenv
 
-Follow the [pyenv installation guide](https://github.com/pyenv/pyenv#automatic-installer) to install Pyenv. You will likely need to manually add Pyenv to your PATH by following the
-provided instructions. Ensure your installation properly set your path by running the script below.
+Follow the [pyenv installation guide](https://github.com/pyenv/pyenv#automatic-installer) to install Pyenv.
+You will likely need to manually add Pyenv to your PATH by following the provided instructions. Ensure your
+installation properly set your path by running the script below.
 
 ```bash
 pyenv --version
@@ -206,13 +214,14 @@ pyenv --version
 pyenv install -s
 ```
 
-For more information see the [pyenv usage guide](https://github.com/pyenv/pyenv#usage) for installing the correct version of Python.
-Manually installing Python without the use of pyenv is not recommended.
+For more information see the [pyenv usage guide](https://github.com/pyenv/pyenv#usage) for installing the
+correct version of Python. Manually installing Python without the use of pyenv is not recommended.
 
 #### Pipenv
 
-Follow the [pipenv installation guide](https://pipenv.pypa.io/en/latest/installation/) to install Pipenv. You will likely need to manually add Pipenv to your PATH by following the
-provided instructions. Ensure your installation properly set your PATH by running the script below.
+Follow the [pipenv installation guide](https://pipenv.pypa.io/en/latest/installation.html) to install Pipenv.
+You will likely need to manually add Pipenv to your PATH by following the provided instructions. Ensure your
+installation properly set your PATH by running the script below.
 
 ```bash
 pipenv --version
@@ -221,9 +230,11 @@ pipenv --version
 
 #### AWS CLI
 
-Follow the installation instructions laid out in the [AWS CLI install page](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
-This install is OS specific, and includes multiple options for both a system wide, and user specific install. Follow the install instructions most appropriate to you.
-Ensure your installation properly set your PATH by running the script below.
+Follow the installation instructions laid out in the
+[AWS CLI install page](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
+This install is OS specific, and includes multiple options for both a system wide, and user specific
+install. Follow the install instructions most appropriate to you. Ensure your installation properly
+set your PATH by running the script below.
 
 ```bash
 aws --version
@@ -232,15 +243,24 @@ aws --version
 
 #### AWS CDK Toolkit
 
-Follow the [installation guide](https://docs.aws.amazon.com/cdk/v2/guide/cli.html) to install the AWS CDK toolkit. Ensure your installation properly set your PATH
-by running the script below.
+Follow the [installation guide](https://docs.aws.amazon.com/cdk/v2/guide/cli.html) to install the
+AWS CDK toolkit. Ensure your installation properly set your PATH by running the script below.
 
 ```bash
 cdk --version
 # Expected Output: x.xxx.x (build ...)
 ```
 
-### Solution Dependency Installation
+#### Verify Required Tool Installations
+
+Run the following command to verify the proper installation of all of the tools listed above. If
+any errors are displayed, attempt to reinstall that tool.
+
+```bash
+make verify-required-tools
+```
+
+### Install Solution Dependencies
 
 Now that you have the correct tools, you can install the dependencies used by the solution using `make install`.
 After installing, we will activate the environment which contains the dependencies.
@@ -254,14 +274,16 @@ source ./.venv/bin/activate
 
 To deploy the solution, a Route53 Hosted Zone is required to be setup in your account.
 You will provide the domain for this hosted zone in the following step when you setup your environment variables.
-This is a manual step. For more details, see [Working with hosted zones](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-working-with.html).
+This is a manual step. For more details, see
+[Working with hosted zones](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-working-with.html).
 
 ### Setup environment variables
 
 To deploy the solution, a variety of environment variables are required. These environment variables will be used to
 provide the context to your CDK deployment.
 
-- `ROUTE53_BASE_DOMAIN` is optional, if unset the base domain will be assumed to be the same as the `ROUTE53_ZONE_NAME` variable. This must be set to a superset of the `ROUTE53_ZONE_NAME` (e.g. *Optional-Sub-Domain.`ROUTE53_ZONE_NAME`*).
+- `ROUTE53_BASE_DOMAIN` is optional, if unset the base domain will be assumed to be the same as the `ROUTE53_ZONE_NAME`
+variable. This must be set to a superset of the `ROUTE53_ZONE_NAME` (e.g. *Optional-Sub-Domain.`ROUTE53_ZONE_NAME`*).
   - The Route53 Zone Name can be found from the Route53 Hosted Zone you setup in the previous step. Use the AWS console to find this domain.
 - `BACKSTAGE_TEMPLATE_S3_UPDATE_REFRESH_MINS` should be set to something small such as `1 minute` for development.
 It is recommended to have longer refresh intervals for cost savings in production environments.
@@ -307,8 +329,9 @@ make check-cdk-env
 make cdk-context
 ```
 
-This will display your current CDK context which will be used for your deployment. Ensure the environment variables look correct
-and that all the expected values are displayed. If not, please retry setting your environment variables.
+This will first verify you have the required tools and environment variables setup. It will then display your
+current CDK context which will be used for your deployment. Ensure the values look as expected, and if not,
+alter your .env file or environment variables appropriately.
 
 ## Deploy
 
@@ -316,11 +339,12 @@ Refer to the [deployment diagram](#architecture-diagrams) for a detailed walk-th
 
 ### Deployment Pre-Requisites
 
-Ensure you've followed the steps in the [deployment-setup/pre-requisites](##Deployment-Setup/Pre-requisites) section.
-- Pre-requisite tools installed. Refer to the [Prerequisites](###Install-Pre-requisite-Tools-(OSX/Linux)) section for details.
-- Solution dependencies installed. Refer to the [Solution Dependency Installation](###Solution-Dependency-Installation) sections for details.
-- A Route53 Hosted Zone in the deployment account. Refer to the [Create a Route53 Hosted Zone](###Create-a-Route53-Hosted-Zone) section for details.
-- Environment variables set. Refer to the [Setup environment variables](###Setup-environment-variables) section for details.
+Ensure you've followed the steps in the previous [deployment prerequisites](##deployment-prerequisites) section.
+- Prerequisite tools installed. Refer to the [install required tools](#install-required-tools-osxlinux)) section for details.
+- Solution dependencies installed. Refer to the [install solution dependencies](#install-solution-dependencies) sections for details.
+- A Route53 Hosted Zone in the deployment account. Refer to the
+[create an Amazon Route 53 Hosted Zone](#create-an-amazon-route-53-hosted-zone) section for details.
+- Environment variables set. Refer to the [setup environment variables](#setup-environment-variables) section for details.
 
 ### Run CDK Bootstrap
 
@@ -331,7 +355,9 @@ Run the following make command to perform this bootstrap.
 make bootstrap
 ```
 
-### Upload S3 Deployment Assets (Backstage `template.yaml`s and AWS Proton service template `.tar`s)
+### Upload S3 Deployment Assets
+- Backstage `template.yaml` files
+- AWS Proton Service Template `.tar` files
 
 The following command will upload the necessary assets to S3 which allow for the deployment of CMS modules via Backstage.
 This includes the `template.yaml` files used to instruct Backstage, as well as the `.tar` files for each module which provide
@@ -349,7 +375,7 @@ Running this deployment will first deploy the ACDP, followed by the execution of
 make deploy
 ```
 
-### Monitoring the Automotive Cloud Developer Portal Deployment
+### Monitoring the ACDP Deployment
 
 After the CDK deployment is completed, browse to [CodePipeline](https://console.aws.amazon.com/codesuite/codepipeline/pipelines)
 in the AWS console and verify that the "Backstage-Pipeline" execution completes successfully.
@@ -358,16 +384,20 @@ in the AWS console and verify that the "Backstage-Pipeline" execution completes 
 
 After the pipeline has completed, the deployment can be considered successfully complete and Backstage is ready for use.
 
-> **NOTE:** It can take up to **10 minutes** after the Backstage pipeline completes for Amazon Cognito's auth domain to become available for use with Backstage. If your Backstage domain will not load, please wait and try again.
+> **NOTE:** It can take up to **10 minutes** after the Backstage pipeline completes for Amazon Cognito's auth domain to become
+> available for use with Backstage. If your Backstage domain will not load, please wait and try again.
 
 ### Bootstrap Proton
 
-> **NOTE:** The S3 location where deployment assets were uploaded to is in your AWS account, and should have a name of the format `<AWS_ACCOUNT>-cms-resources-<AWS_REGION>`
+> **NOTE:** The S3 location where deployment assets were uploaded to is in your AWS account, and should have a
+> name of the format `<AWS_ACCOUNT>-cms-resources-<AWS_REGION>`
 
-1. Sign in the [AWS Management Console](https://aws.amazon.com/console/), select your Region, and navigate to the [AWS Proton Service Templates](https://console.aws.amazon.com/proton/home/templates/services) page.
+1. Sign in the [AWS Management Console](https://aws.amazon.com/console/), select your Region, and navigate to the
+[AWS Proton Service Templates](https://console.aws.amazon.com/proton/home/#/templates/services) page.
 2. Select `Create service template` for each module template you wish to register.
   ![Proton Create Service Template](documentation/images/readme/proton-create-service-template.png)
-3. Fill in the required fields (The following instructions detail how to register the CMS Vehicle Simulator Module template. The same steps can be applied to other modules as well by selecting the proper s3 path)
+3. Fill in the required fields (The following instructions detail how to register the CMS Vehicle Simulator Module
+template. The same steps can be applied to other modules as well by selecting the proper s3 path)
    1. Select the `Use your own template bundle in S3 Option`
 
       ![Proton S3 bundle option](documentation/images/readme/proton-s3-bundle.png)
@@ -376,7 +406,8 @@ After the pipeline has completed, the deployment can be considered successfully 
       ![Proton Browse S3](documentation/images/readme/proton-browse-s3.png)
 
       ![Proton Choose Bucket](documentation/images/readme/proton-choose-bucket.png)
-   3. Locate the latest tar for the vehicle_simulator module template (the Amazon S3 path should be of the format `../<SOLUTION_VERSION>/modules/<MODULE_NAME>/proton/`) Press the `Choose` button
+   3. Locate the latest tar for the vehicle_simulator module template (the Amazon S3 path should be of the
+   format `../<SOLUTION_VERSION>/modules/<MODULE_NAME>/proton/`) Press the `Choose` button
       ![Proton Choose Template Object](documentation/images/readme/proton-choose-template-tar.png)
    4. In the repository, locate the [Vehicle Simulator Proton Template YAML](templates/modules/cms_vehicle_simulator_on_aws/template.yaml) and find the template name under the `metadataName` property. This will be under the `aws:proton:create-service` action. Use it to populate the `Service template name`
       ![Proton Find Template Name](documentation/images/readme/proton-module-template-name.png)
@@ -384,7 +415,8 @@ After the pipeline has completed, the deployment can be considered successfully 
    5. Set the `Compatible environment templates` to `cms_environment`
       ![Proton Template Compatible Env Setting](documentation/images/readme/proton-template-compatible-env-setting.png)
    6. Leave the remaining settings as default and click `Create Service Template`.
-   7. After you receive a message stating `Successfully created service template cms_vehicle_simulator_on_aws.`, then select template version `1.0` and click `Publish` to make it available for use by Backstage
+   7. After you receive a message stating `Successfully created service template cms_vehicle_simulator_on_aws.`, then select
+   template version `1.0` and click `Publish` to make it available for use by Backstage
       ![Proton Publish Template Version](documentation/images/readme/proton-publish-template-version.png)
 
 ### Deploy CMS Modules via Backstage
@@ -550,7 +582,7 @@ The following commands assume the stage is `dev`, for other stages, replace `dev
    Navigate to CloudFormation and delete the `cms-environment` and `cms-dev` stacks.
 
    > **WARNING:** This is your last opportunity to capture the deployment UUID. Please make sure you have captured
-   it using the make command specified in step 1 of the [Teardown](##Teardown) section.
+   it using the make command specified in step 1 of the [Teardown](#teardown) section.
 
    ![Delete CMS Dev Stack](documentation/images/readme/cfn-delete-cms-dev-stack.png)
 
@@ -574,7 +606,8 @@ The following commands assume the stage is `dev`, for other stages, replace `dev
    --query "ResourceTagMappingList[*].ResourceARN"
    ```
 
-   This query results in a list of ARNs to assist you with locating the resources in the AWS Console. Resources can then be manually deleted, or deleted via a script, utilizing the resource ARNs where appropriate.
+   This query results in a list of ARNs to assist you with locating the resources in the AWS Console. Resources can then be
+   manually deleted, or deleted via a script, utilizing the resource ARNs where appropriate.
 
    > **WARNING:** Some resources may take some time to cleanup after CloudFormation finishes tearing down, and could show in the
    output even if they no longer exist.  For example, Amazon VPC, Fargate, and Amazon ECS resources can remain queryable for up to
@@ -626,7 +659,7 @@ POWERTOOLS_LOGGER_LOG_EVENT="true"
 ```
 
 For other logging options and methods for enabling event logging,
-see the [AWS Lambda Powertools documentation](https://pypi.org/project/aws-lambda-powertools/0.9.3/).
+see the [AWS Lambda Powertools documentation](https://docs.powertools.aws.dev/lambda/python/latest/core/logger/).
 
 #### Backstage logs
 By default, the solution's deployment instructions deploy the ACDP and Backstage with a log level of "INFO".
@@ -661,9 +694,7 @@ Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License").
 You may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
+You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
