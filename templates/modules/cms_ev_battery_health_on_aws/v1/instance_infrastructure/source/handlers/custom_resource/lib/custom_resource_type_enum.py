@@ -21,6 +21,7 @@ class CustomResourceType:
         ENABLE_GRAFANA_ALERTING = "EnableGrafanaAlerting"
         SET_GRAFANA_ALERT_CONFIGURATION = "SetGrafanaAlertConfiguration"
         CREATE_GRAFANA_ALERTS_AND_UPLOAD_TO_S3 = "CreateGrafanaAlertsAndUploadToS3"
+        INSTALL_GRAFANA_PLUGIN = "InstallGrafanaPlugin"
 
     class StatusType(Enum):
         SUCCESS = "SUCCESS"

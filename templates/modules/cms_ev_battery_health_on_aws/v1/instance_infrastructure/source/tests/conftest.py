@@ -13,6 +13,7 @@ from .fixtures.fixture_custom_resource import (
     fixture_custom_resource_enable_grafana_alerting_event,
     fixture_custom_resource_event,
     fixture_custom_resource_set_grafana_alert_configuration_event,
+    fixture_custom_resource_install_grafana_plugin_event,
 )
 from .fixtures.fixture_process_alerts import fixture_process_alerts_event
 from .fixtures.fixture_rotate_secret import (

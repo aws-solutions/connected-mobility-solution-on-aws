@@ -55,5 +55,6 @@ def test_s3_to_grafana_alerts_fails(
 ) -> None:
     with patch("requests.post") as mocked_request_post:
         mocked_request_post.return_value.ok = False
+        mocked_request_post.return_value.status_code = 400
         with pytest.raises(GrafanaApiError):
             handler(event=s3_to_grafana_alerts_event, context=context)

@@ -45,7 +45,11 @@
   "resolutions": {
     "@types/react": "^17",
     "@babel/traverse": "^7.23.2",
-    "browserify-sign": "^4.2.2"
+    "browserify-sign": "^4.2.2",
+    "@octokit/webhooks": "^10.9.2",
+    "octokit": "^3.1.2",
+    "follow-redirects": "^1.15.4",
+    "swagger-ui-react": "5.10.5"
   },
   "prettier": "@spotify/prettier-config",
   "lint-staged": {

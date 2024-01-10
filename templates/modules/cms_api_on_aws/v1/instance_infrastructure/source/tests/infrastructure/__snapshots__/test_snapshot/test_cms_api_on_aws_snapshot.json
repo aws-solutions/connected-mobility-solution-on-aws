@@ -204,7 +204,7 @@
           "ApplicationType": "AWS-Solutions",
           "SolutionID": "SO0241",
           "SolutionName": "Connected Mobility Solution on AWS",
-          "Version": "v1.0.1"
+          "Version": "v1.0.2"
         },
         "Description": "Attribute group for solution information",
         "Name": {
@@ -803,8 +803,8 @@
               "Ref": "cmsapimoduleinputsssmoperationalreportmetricsenabledParameterEBD14CF8"
             },
             "SOLUTION_ID": "SO0241",
-            "SOLUTION_VERSION": "v1.0.1",
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.12/v1.0.1"
+            "SOLUTION_VERSION": "v1.0.2",
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.12/v1.0.2"
           }
         },
         "FunctionName": "cms-api-on-aws-stack-dev-athena-data-source-lambda",
@@ -1208,7 +1208,7 @@
             "TOKEN_VALIDATION_LAMBDA_ARN": {
               "Ref": "cmsapimoduleinputsssmtokenvalidationlambdaarnParameter5DC16C8D"
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.12/v1.0.1"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.12/v1.0.2"
           }
         },
         "FunctionName": "cms-api-on-aws-stack-dev-authorization-lambda",
