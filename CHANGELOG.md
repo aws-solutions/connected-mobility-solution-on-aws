@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2024-01-10
+
+### Fixed
+
+- Updated Grafana workspace in EV Battery Health module to include
+plugin management and install Amazon Athena plugin
+- Added resolution for octokit package to mitigate vulnerability
+- Added resolution for follow-redirects package to mitigate vulnerability
+- Added resolution for swagger-ui-react package to address Backstage build failure
+- Removed `yarn tsc:full` from backstage image build
+- Add ignore pattern for Axios in vehicle simulator to ensure correct version usage
+
 ## [1.0.1] - 2023-11-15
 
 ### Fixed

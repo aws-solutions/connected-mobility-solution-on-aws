@@ -21,7 +21,7 @@ class BackstageConstantsClass:
     SOLUTION_NAME: str = "Connected Mobility Solution on AWS"
     APPLICATION_TYPE: str = "AWS-Solutions"
     SOLUTION_ID: str = "SO0241"
-    SOLUTION_VERSION: str = "v1.0.0"
+    SOLUTION_VERSION: str = "v1.0.2"
     CAPABILITY_ID = "CMS.6"
     USER_AGENT_STRING: str = f"AWSSOLUTION/{SOLUTION_ID}/{SOLUTION_VERSION} AWSSOLUTION-CAPABILITY/{CAPABILITY_ID}/{SOLUTION_VERSION}"
 

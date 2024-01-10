@@ -44,6 +44,7 @@ class GrafanaWorkspaceConstruct(Construct):
             notification_destinations=notification_destinations,
             data_sources=data_sources,
             role_arn=self.workspace_role.role_arn,
+            plugin_admin_enabled=True,
         )
 
     def add_policy_to_grafana_workspace(self, policy: aws_iam.Policy) -> None:

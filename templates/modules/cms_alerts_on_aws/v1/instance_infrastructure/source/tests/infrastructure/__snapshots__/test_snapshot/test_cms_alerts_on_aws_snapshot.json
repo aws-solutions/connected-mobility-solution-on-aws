@@ -147,7 +147,7 @@
             "TOKEN_VALIDATION_LAMBDA_ARN": {
               "Ref": "cmsalertsmoduleinputsconstructssmtokenvalidationlambdaarnParameter1CA960BF"
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.10/v1.0.1"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.10/v1.0.2"
           }
         },
         "FunctionName": "cms-alerts-on-aws-stack-dev-authorization-lambda",
@@ -373,7 +373,7 @@
           "ApplicationType": "AWS-Solutions",
           "SolutionID": "SO0241",
           "SolutionName": "Connected Mobility Solution on AWS",
-          "Version": "v1.0.1"
+          "Version": "v1.0.2"
         },
         "Description": "Attribute group for solution information",
         "Name": {
@@ -944,7 +944,7 @@
               "Ref": "cmsalertsnotificationconstructnotificationstable6C23B163"
             },
             "SNS_TOPIC_PREFIX": "CMS",
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.10/v1.0.1"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.10/v1.0.2"
           }
         },
         "FunctionName": "cms-alerts-on-aws-stack-dev-create-alerts-lambda",
@@ -1559,7 +1559,7 @@
             "DEPLOYMENT_UUID": {
               "Ref": "deploymentuuidParameter"
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.10/v1.0.1"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.10/v1.0.2"
           }
         },
         "FunctionName": "cms-alerts-on-aws-stack-dev-send-notifications-lambda",
@@ -1818,7 +1818,7 @@
             "ALERTS_SNS_TOPIC_ARN": {
               "Ref": "cmsalertssnstosqsconstructsnstopic5DB29F7E"
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.10/v1.0.1"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.10/v1.0.2"
           }
         },
         "FunctionName": "cms-alerts-on-aws-stack-dev-publish-lambda",
@@ -2411,7 +2411,7 @@
               "Ref": "cmsalertsusersubscriptionsconstructusersubscriptiontopicgeneralkeyD95E7C20"
             },
             "SNS_TOPIC_PREFIX": "CMS",
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.10/v1.0.1",
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.10/v1.0.2",
             "USER_EMAIL_SUBSCRIPTIONS_TABLE": {
               "Ref": "cmsalertsusersubscriptionsconstructuseremailsubscriptionstableA74BB966"
             }

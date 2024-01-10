@@ -139,13 +139,15 @@ def update_grafana_alerts(
         },
         timeout=10,
     )
-    if not folder_response.ok:
+    if folder_response.ok:
+        logger.info(
+            "Successfully created folder for alerts!",
+            extra={"response": folder_response.json()},
+        )
+    elif folder_response.status_code == 409:
+        logger.info("Folder already exists!", extra={"response": folder_response.text})
+    elif folder_response.status_code >= 400:
         raise GrafanaApiError(folder_response.text)
-
-    logger.info(
-        "Successfully created folder for alerts!",
-        extra={"response": folder_response.json()},
-    )
 
     # create alert rules
     alert_rules_response = requests.post(
@@ -155,7 +157,7 @@ def update_grafana_alerts(
         timeout=10,
     )
     if not alert_rules_response.ok:
-        raise GrafanaApiError(folder_response.text)
+        raise GrafanaApiError(alert_rules_response.text)
 
     logger.info(
         "Successfully created alert rules!",

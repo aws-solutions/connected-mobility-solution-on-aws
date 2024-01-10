@@ -106,6 +106,11 @@ class AthenaDataSourceConstruct(Construct):
                         resources=[
                             Stack.of(self).format_arn(
                                 service="glue",
+                                resource="catalog",
+                                arn_format=ArnFormat.NO_RESOURCE_NAME,
+                            ),
+                            Stack.of(self).format_arn(
+                                service="glue",
                                 resource="database",
                                 arn_format=ArnFormat.SLASH_RESOURCE_NAME,
                                 resource_name=athena_data_source_properties.glue_database_name,

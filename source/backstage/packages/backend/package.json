@@ -63,6 +63,9 @@
     "@types/uuid": "^9.0.2",
     "supertest": "^6.3.3"
   },
+  "resolutions": {
+    "follow-redirects": "^1.15.4"
+  },
   "files": [
     "dist"
   ]

@@ -310,7 +310,7 @@
             "SOLUTION_ID": {
               "Ref": "simulatorconstructssmsolutionidParameter309B25A9"
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.1/v1.0.1",
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.1/v1.0.2",
             "VERSION": {
               "Fn::ImportValue": "cms-vehicle-simulator-on-aws-stack-dev-solution-version"
             }
@@ -642,7 +642,7 @@
               "Ref": "simulatorconstructssmsolutionidParameter309B25A9"
             },
             "TOPIC_PREFIX": "cms/data/simulated",
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.1/v1.0.1",
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.1/v1.0.2",
             "VERSION": {
               "Fn::ImportValue": "cms-vehicle-simulator-on-aws-stack-dev-solution-version"
             }
@@ -992,7 +992,7 @@
               "Ref": "simulatorconstructssmsolutionidParameter309B25A9"
             },
             "TOPIC_PREFIX": "cms/data/simulated",
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.1/v1.0.1",
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.1/v1.0.2",
             "VERSION": {
               "Fn::ImportValue": "cms-vehicle-simulator-on-aws-stack-dev-solution-version"
             }

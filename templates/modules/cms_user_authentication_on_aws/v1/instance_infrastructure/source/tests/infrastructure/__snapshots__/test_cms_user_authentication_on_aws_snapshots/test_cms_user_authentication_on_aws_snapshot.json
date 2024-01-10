@@ -207,7 +207,7 @@
           "ApplicationType": "AWS-Solutions",
           "SolutionID": "SO0241",
           "SolutionName": "Connected Mobility Solution on AWS",
-          "Version": "v1.0.1"
+          "Version": "v1.0.2"
         },
         "Description": "Attribute group for solution information",
         "Name": {
@@ -699,7 +699,7 @@
             "COGNITO_USER_POOL_ID": {
               "Ref": "cmsuserauthenticationcognitouserpool42033C47"
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.22/v1.0.1"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.22/v1.0.2"
           }
         },
         "FunctionName": "cms-user-authentication-on-aws-stack-dev-create-app-client",
@@ -869,7 +869,7 @@
         "Description": "CMS User Authentication custom resource lambda function",
         "Environment": {
           "Variables": {
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.22/v1.0.1"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.22/v1.0.2"
           }
         },
         "FunctionName": "cms-user-authentication-on-aws-stack-dev-custom-resource-lambda",
@@ -1023,7 +1023,7 @@
             "COGNITO_USER_POOL_ID": {
               "Ref": "cmsuserauthenticationcognitouserpool42033C47"
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.22/v1.0.1"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.22/v1.0.2"
           }
         },
         "FunctionName": "cms-user-authentication-on-aws-stack-dev-delete-app-client",
@@ -1418,7 +1418,7 @@
                 "Arn"
               ]
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.22/v1.0.1",
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.22/v1.0.2",
             "USER_CLIENT_ID": {
               "Ref": "cmsuserauthenticationcognitouserpoolcmsuserappclientCFC65C67"
             },
@@ -1626,7 +1626,7 @@
             "SERVICE_CLIENT_ID": {
               "Ref": "cmsuserauthenticationcognitouserpoolcmsserviceappclient1FA07BA9"
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.22/v1.0.1",
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.22/v1.0.2",
             "USER_CLIENT_ID": {
               "Ref": "cmsuserauthenticationcognitouserpoolcmsuserappclientCFC65C67"
             },
@@ -1790,7 +1790,7 @@
             "COGNITO_USER_POOL_ID": {
               "Ref": "cmsuserauthenticationcognitouserpool42033C47"
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.1 AWSSOLUTION-CAPABILITY/CMS.22/v1.0.1"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.22/v1.0.2"
           }
         },
         "FunctionName": "cms-user-authentication-on-aws-stack-dev-update-app-client",

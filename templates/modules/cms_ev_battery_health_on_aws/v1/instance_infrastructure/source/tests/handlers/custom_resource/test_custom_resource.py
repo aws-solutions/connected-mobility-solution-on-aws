@@ -30,6 +30,7 @@ from ....handlers.custom_resource.main import (
     create_grafana_data_source,
     enable_grafana_alerting,
     handler,
+    install_grafana_plugin,
     send_cloud_formation_response,
     set_grafana_alert_configuration,
 )
@@ -157,6 +158,38 @@ def test_create_grafana_api_key(
 
     assert isinstance(api_key_secret["key"], str)
     assert isinstance(api_key_secret["workspaceId"], str)
+
+
+def test_install_grafana_plugin_success(
+    custom_resource_install_grafana_plugin_event: Dict[str, Any],
+    mocker: MagicMock,
+) -> None:
+    mocked_requests: MagicMock = mocker.patch("requests.post")
+    mocked_requests.return_value.ok = True
+
+    with patch("botocore.client.BaseClient._make_api_call", new=mock_make_api_call):
+        install_grafana_plugin(
+            event=custom_resource_install_grafana_plugin_event
+        )
+
+    mocked_requests.assert_called_once()
+
+
+def test_install_grafana_plugin_fail(
+    custom_resource_install_grafana_plugin_event: Dict[str, Any],
+    mocker: MagicMock,
+) -> None:
+    mocked_requests: MagicMock = mocker.patch("requests.post")
+    mocked_requests.return_value.ok = False
+    mocked_requests.return_value.status_code = 400
+
+    with patch("botocore.client.BaseClient._make_api_call", new=mock_make_api_call):
+        with pytest.raises(GrafanaApiError):
+            install_grafana_plugin(
+                event=custom_resource_install_grafana_plugin_event
+            )
+
+    mocked_requests.assert_called_once()
 
 
 def test_create_grafana_data_source_success(

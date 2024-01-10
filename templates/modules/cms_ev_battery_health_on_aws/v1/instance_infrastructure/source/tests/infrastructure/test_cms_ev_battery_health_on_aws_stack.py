@@ -23,7 +23,7 @@ def test_grafana_workspace() -> None:
 
 def test_iam_policy() -> None:
     template.has_resource("AWS::IAM::Policy", {})
-    template.resource_count_is("AWS::IAM::Policy", 15)
+    template.resource_count_is("AWS::IAM::Policy", 16)
 
 
 def test_iam_role() -> None:

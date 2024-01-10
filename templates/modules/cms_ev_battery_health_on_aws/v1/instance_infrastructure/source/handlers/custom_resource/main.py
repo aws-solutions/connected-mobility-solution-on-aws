@@ -78,6 +78,7 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
         CustomResourceType.ResourceType.ENABLE_GRAFANA_ALERTING.value: enable_grafana_alerting,
         CustomResourceType.ResourceType.SET_GRAFANA_ALERT_CONFIGURATION.value: set_grafana_alert_configuration,
         CustomResourceType.ResourceType.CREATE_GRAFANA_ALERTS_AND_UPLOAD_TO_S3.value: create_grafana_alerts_and_upload_to_s3,
+        CustomResourceType.ResourceType.INSTALL_GRAFANA_PLUGIN.value: install_grafana_plugin,
     }
 
     try:
@@ -157,6 +158,45 @@ def create_grafana_api_key(event: Dict[str, Any]) -> None:
             "Successfully stored the grafana api key in a secret: %s",
             grafana_api_key_secret_arn,
         )
+
+
+@tracer.capture_method
+def install_grafana_plugin(event: Dict[str, Any]) -> Dict[str, Any]:
+    if event["RequestType"] in [
+        CustomResourceType.RequestType.CREATE.value,
+    ]:
+        grafana_workspace_endpoint = event["ResourceProperties"][
+            "GrafanaWorkspaceEndpoint"
+        ]
+        grafana_api_key_secret_arn = event["ResourceProperties"][
+            "GrafanaApiKeySecretArn"
+        ]
+        plugin_name = event["ResourceProperties"]["PluginName"]
+
+        api_key = json.loads(
+            get_secrets_manager_client().get_secret_value(
+                SecretId=grafana_api_key_secret_arn,
+            )["SecretString"]
+        )["key"]
+        logger.info("Successfully retrived grafana api key from the secret.")
+
+        response = requests.post(
+            url=f"https://{grafana_workspace_endpoint}/api/plugins/{plugin_name}/install",
+            headers={
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {api_key}",
+            },
+            timeout=10,
+        )
+        if response.ok:
+            logger.info(
+                f"Successfully installed {plugin_name} plugin for in the Grafana workspace!"
+            )
+        elif response.status_code == 409:
+            logger.info(f"{plugin_name} plugin already installed!")
+        elif response.status_code >= 400:
+            raise GrafanaApiError(response.text)
 
 
 @tracer.capture_method

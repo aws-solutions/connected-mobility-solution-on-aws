@@ -18,6 +18,7 @@ from .constructs.custom_resource_lambda import CustomResourceLambdaConstruct
 from .constructs.grafana_alerts import GrafanaAlertsConstruct
 from .constructs.grafana_api_key import GrafanaApiKeyConstruct
 from .constructs.grafana_dashboard import GrafanaDashboardConstruct
+from .constructs.grafana_plugins import GrafanaPluginsConstruct
 from .constructs.grafana_workspace import GrafanaWorkspaceConstruct
 from .constructs.lambda_dependency import LambdaDependenciesConstruct
 from .constructs.module_integration import ModuleInputsConstruct, ModuleOutputsConstruct
@@ -86,6 +87,14 @@ class CmsEVBatteryHealthConstruct(Construct):
             dependency_layer=lambda_dependencies.dependency_layer,
             grafana_workspace_endpoint=grafana_workspace.workspace.attr_endpoint,
             grafana_workspace_id=grafana_workspace.workspace.attr_id,
+            custom_resource_lambda_construct=custom_resource_lambda,
+        )
+
+        GrafanaPluginsConstruct(
+            self,
+            "cms-ev-install-plugins-construct",
+            grafana_workspace_endpoint=grafana_workspace.workspace.attr_endpoint,
+            grafana_api_key_construct=grafana_api_key,
             custom_resource_lambda_construct=custom_resource_lambda,
         )
 

@@ -44,6 +44,21 @@ def fixture_custom_resource_create_grafana_api_key_event(
     yield custom_resource_event
 
 
+@pytest.fixture(name="custom_resource_install_grafana_plugin_event")
+def fixture_custom_resource_install_grafana_plugin_event(
+    custom_resource_event: Dict[str, Any],
+    grafana_api_key_secret: CreateSecretResponseTypeDef,
+) -> Generator[Dict[str, Any], None, None]:
+    custom_resource_event["RequestType"] = CustomResourceType.RequestType.CREATE.value
+    custom_resource_event["ResourceProperties"] = {
+        "Resource": CustomResourceType.ResourceType.INSTALL_GRAFANA_PLUGIN.value,
+        "GrafanaWorkspaceEndpoint": "test-endpoint.com",
+        "GrafanaApiKeySecretArn": grafana_api_key_secret["ARN"],
+        "PluginName": "test-plugin-name",
+    }
+    yield custom_resource_event
+
+
 @pytest.fixture(name="custom_resource_create_grafana_data_source_event")
 def fixture_custom_resource_create_grafana_data_source_event(
     custom_resource_event: Dict[str, Any],

@@ -20,7 +20,7 @@ class CmsConstantsClass:
     MODULE_NAME: str = f"Connected-mobility-solution-on-aws-{STAGE}"
     SOLUTION_NAME: str = "Connected Mobility Solution on AWS"
     SOLUTION_ID: str = "SO0241"
-    SOLUTION_VERSION: str = "v1.0.1"
+    SOLUTION_VERSION: str = "v1.0.2"
     APPLICATION_TYPE: str = "AWS-Solutions"
     USER_AGENT_STRING: str = f"AWSSOLUTION/{SOLUTION_ID}/{SOLUTION_VERSION}"
 
