@@ -31,7 +31,7 @@
     ]
   },
   "devDependencies": {
-    "@backstage/cli": "^0.23.0",
+    "@backstage/cli": "^0.23.1",
     "@spotify/prettier-config": "^15.0.0",
     "@types/supertest": "^2.0.14",
     "concurrently": "^8.0.1",
@@ -49,7 +49,9 @@
     "@octokit/webhooks": "^10.9.2",
     "octokit": "^3.1.2",
     "follow-redirects": "^1.15.4",
-    "swagger-ui-react": "5.10.5"
+    "swagger-ui-react": "5.10.5",
+    "ip": "2.0.1",
+    "@backstage/backend-app-api": "^0.5.11"
   },
   "prettier": "@spotify/prettier-config",
   "lint-staged": {

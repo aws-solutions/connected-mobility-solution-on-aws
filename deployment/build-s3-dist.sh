@@ -56,8 +56,8 @@ if [ -z "$dist_bucket_name" ] || [ -z "$template_bucket_name" ] || [ -z "$soluti
   template_bucket_name=${template_bucket_name:-"connected-mobility-solution-on-aws"}
   read -p "Solution Name [connected-mobility-solution-on-aws]: " solution_name
   solution_name=${solution_name:-"connected-mobility-solution-on-aws"}
-  read -p "Solution Version [v1.0.2]: " solution_version
-  solution_version=${solution_version:-"v1.0.2"}
+  read -p "Solution Version [v1.0.3]: " solution_version
+  solution_version=${solution_version:-"v1.0.3"}
 fi
 
 dashed_version="${solution_version//./$'_'}"

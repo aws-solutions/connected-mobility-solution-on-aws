@@ -15,7 +15,7 @@ urllib3 = "<2"
 [dev-packages]
 aws-cdk-lib = ">=2.63.2"
 aws-secretsmanager-caching = "*"
-"aws-solutions-constructs.aws-cloudfront-s3" = ">=2.26.0"
+"aws-solutions-constructs.aws-cloudfront-s3" = "2.45.0"
 "aws-solutions-constructs.aws-lambda-stepfunctions" = ">=2.26.0"
 awsiotsdk = "*"
 boto3 = ">=1.26.0"

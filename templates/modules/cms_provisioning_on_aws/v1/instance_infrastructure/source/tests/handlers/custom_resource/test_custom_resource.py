@@ -16,7 +16,7 @@ import botocore
 import pytest
 from aws_lambda_powertools.utilities.typing import LambdaContext
 from botocore.exceptions import ClientError
-from moto import mock_iot, mock_secretsmanager  # type: ignore[import-untyped]
+from moto import mock_aws  # type: ignore[import-untyped]
 
 # Connected Mobility Solution on AWS
 from ....handlers.custom_resource.custom_resource import (
@@ -57,6 +57,8 @@ class CustomResourceAPICallBooleans:
 
 # pylint: disable=protected-access
 orig = botocore.client.BaseClient._make_api_call  # type: ignore
+
+
 # pylint: disable=too-many-return-statements, inconsistent-return-statements
 def mock_make_api_call(self: Any, operation_name: str, kwarg: Any) -> Any:
     setattr(CustomResourceAPICallBooleans, operation_name, True)
@@ -66,8 +68,7 @@ def mock_make_api_call(self: Any, operation_name: str, kwarg: Any) -> Any:
     return orig(self, operation_name, kwarg)
 
 
-@mock_iot
-@mock_secretsmanager
+@mock_aws
 def test_handler(
     custom_resource_load_or_create_iot_credentials_event: Dict[str, Any],
     context: LambdaContext,
@@ -140,8 +141,7 @@ def test_send_cloud_formation_response(
     )
 
 
-@mock_iot
-@mock_secretsmanager
+@mock_aws
 def test_create_iot_credentials(
     custom_resource_load_or_create_iot_credentials_event: Dict[str, Any]
 ) -> None:
@@ -171,8 +171,7 @@ def test_create_iot_credentials(
     assert secret["keyPair"]["PublicKey"]
 
 
-@mock_iot
-@mock_secretsmanager
+@mock_aws
 def test_load_iot_credentials(
     custom_resource_load_or_create_iot_credentials_event: Dict[str, Any]
 ) -> None:

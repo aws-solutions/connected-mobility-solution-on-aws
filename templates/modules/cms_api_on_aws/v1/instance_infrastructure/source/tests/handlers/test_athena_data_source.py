@@ -11,7 +11,7 @@ from unittest.mock import MagicMock
 # Third Party Libraries
 import boto3
 from aws_lambda_powertools.utilities.typing import LambdaContext
-from moto.athena import mock_athena  # type: ignore[import-untyped]
+from moto import mock_aws  # type: ignore[import-untyped]
 
 # Connected Mobility Solution on AWS
 from ...handlers.athena_data_source.lib.query_config import (
@@ -32,7 +32,7 @@ def test_handler(
     assert isinstance(response, list)
 
 
-@mock_athena
+@mock_aws
 def test_execute_query() -> None:
     athena_client = boto3.client("athena")
 

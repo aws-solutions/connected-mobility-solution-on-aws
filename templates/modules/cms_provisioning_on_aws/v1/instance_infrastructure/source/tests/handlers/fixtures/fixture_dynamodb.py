@@ -9,7 +9,7 @@ from typing import Generator
 # Third Party Libraries
 import boto3
 import pytest
-from moto import mock_dynamodb  # type: ignore[import-untyped]
+from moto import mock_aws  # type: ignore[import-untyped]
 from mypy_boto3_dynamodb.service_resource import DynamoDBServiceResource, Table
 
 # Connected Mobility Solution on AWS
@@ -19,7 +19,7 @@ from ....handlers.provisioning.lib.dynamo_table_name_key_enum import DynamoTable
 
 @pytest.fixture(name="mock_dynamodb_resource")
 def fixture_mock_dynamodb_resource() -> Generator[DynamoDBServiceResource, None, None]:
-    with mock_dynamodb():
+    with mock_aws():
         dynamodb = boto3.resource("dynamodb")
         yield dynamodb
 

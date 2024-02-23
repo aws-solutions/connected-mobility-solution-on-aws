@@ -14,7 +14,7 @@ import botocore
 import pytest
 from aws_lambda_powertools.utilities.typing import LambdaContext
 from botocore.exceptions import ClientError
-from moto import mock_iot  # type: ignore
+from moto import mock_aws  # type: ignore
 from mypy_boto3_dynamodb.service_resource import Table
 
 # Connected Mobility Solution on AWS
@@ -73,7 +73,7 @@ def mock_make_api_call(self: Any, operation_name: str, kwarg: Any) -> Any:
     return orig(self, operation_name, kwarg)
 
 
-@mock_iot
+@mock_aws
 def test_handler_valid_provisioning_allowed(
     setup_authorized_vehicles_table_provisioning_allowed: Table,
     setup_provisioned_vehicles_table_empty: Table,
@@ -85,7 +85,7 @@ def test_handler_valid_provisioning_allowed(
     assert response["allowProvisioning"]
 
 
-@mock_iot
+@mock_aws
 def test_handler_valid_provisioning_denied(
     setup_authorized_vehicles_table_provisioning_denied: Table,
     setup_provisioned_vehicles_table_empty: Table,
@@ -98,7 +98,7 @@ def test_handler_valid_provisioning_denied(
     assert not response["allowProvisioning"]
 
 
-@mock_iot
+@mock_aws
 def test_handler_valid_vehicle_not_found(
     setup_authorized_vehicles_table_empty: Table,
     setup_provisioned_vehicles_table_empty: Table,
@@ -120,7 +120,7 @@ def test_handler_invalid(
     assert not response["allowProvisioning"]
 
 
-@mock_iot
+@mock_aws
 def test_deactivate_existing_certificates_success(
     setup_provisioned_vehicles_table_active: Table,
 ) -> None:

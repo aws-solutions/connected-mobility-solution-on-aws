@@ -12,7 +12,7 @@ from unittest.mock import MagicMock
 
 # Third Party Libraries
 from aws_lambda_powertools.utilities.typing import LambdaContext
-from moto import mock_iotdata  # type: ignore[import-untyped]
+from moto import mock_aws  # type: ignore[import-untyped]
 
 # Connected Mobility Solution on AWS
 from ....handlers.stepfunction.handlers import data_sim_handler
@@ -24,7 +24,7 @@ MAX_LON = 180
 MIN_LON = -180
 
 
-@mock_iotdata
+@mock_aws
 def test_lambda_handler(
     simulate_data_event: Dict[str, Any], context: LambdaContext, mocker: MagicMock
 ) -> None:

@@ -275,3 +275,7 @@ pathspec under the Mozilla Public License 2.0 (MPL 2.0)
 typing_extensions under the PSF license
 
 uuid under Unknown license
+
+aws-encryption-sdk under Apache Software License (Apache License 2.0)
+
+jsonpath-ng under Apache Software License (Apache 2.0)

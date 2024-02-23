@@ -12,7 +12,7 @@ from unittest.mock import MagicMock
 # Third Party Libraries
 import boto3
 from aws_lambda_powertools.utilities.typing import LambdaContext
-from moto import mock_cognitoidp, mock_s3  # type: ignore
+from moto import mock_aws  # type: ignore
 
 # Connected Mobility Solution on AWS
 from ....handlers.custom_resource import custom_resource
@@ -86,7 +86,7 @@ def test_send_cloud_formation_response(
     )
 
 
-@mock_s3
+@mock_aws
 def test_create_console_config(custom_resource_create_event: Dict[str, Any]) -> None:
     destination_bucket = "TestDestinationBucket"
     config_file_name = "TestConfigFileName"
@@ -137,7 +137,7 @@ def test_detach_iot_policy(
     assert mocked_iot.call_count == len(test_targets["targets"]) + 1
 
 
-@mock_cognitoidp
+@mock_aws
 def test_create_userpool_user(custom_resource_create_event: Dict[str, Any]) -> None:
     cognito = boto3.client("cognito-idp")
     user_pool = cognito.create_user_pool(PoolName="TestUserPool")

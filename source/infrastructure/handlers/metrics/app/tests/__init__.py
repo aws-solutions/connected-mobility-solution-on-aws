@@ -19,7 +19,7 @@ class UnitTestCommon(unittest.TestCase):
 
 def set_common_env_variables() -> None:
     os.environ["SOLUTION_ID"] = "SO0241"
-    os.environ["SOLUTION_VERSION"] = "v1.0.2"
+    os.environ["SOLUTION_VERSION"] = "v1.0.3"
     os.environ["AWS_ACCOUNT_ID"] = "0123456789123"
     os.environ["AWS_REGION"] = "us-east-1"
     os.environ["DEPLOYMENT_UUID"] = "DUMMY"
@@ -37,7 +37,7 @@ def get_solution_resource_tags(
             "Value": module_name,
         },
         {"Key": "Solutions:DeploymentUUID", "Value": deployment_uuid},
-        {"Key": "Solutions:SolutionVersion", "Value": "v1.0.2"},
+        {"Key": "Solutions:SolutionVersion", "Value": "v1.0.3"},
         {"Key": "Solutions:ApplicationType", "Value": "AWS-Solutions"},
         {
             "Key": "Solutions:SolutionName",

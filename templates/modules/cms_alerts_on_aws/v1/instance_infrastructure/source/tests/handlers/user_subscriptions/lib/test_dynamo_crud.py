@@ -8,13 +8,13 @@ from typing import Any, Dict
 # Third Party Libraries
 import boto3
 import pytest
-from moto import mock_dynamodb  # type: ignore
+from moto import mock_aws  # type: ignore
 
 # Connected Mobility Solution on AWS
 from .....handlers.user_subscriptions.lib.dynamo_crud import DynHelpers
 
 
-@mock_dynamodb  # type: ignore
+@mock_aws  # type: ignore
 def test_dyn_resource() -> None:
     dynamo = DynHelpers.dyn_resource()
     assert dynamo and DynHelpers.dynamo_object

@@ -12,7 +12,7 @@ from unittest.mock import patch
 import boto3
 import pytest
 from aws_lambda_powertools.utilities.typing import LambdaContext
-from moto import mock_s3, mock_secretsmanager  # type: ignore
+from moto import mock_aws  # type: ignore
 from mypy_boto3_secretsmanager.type_defs import CreateSecretResponseTypeDef
 
 # Connected Mobility Solution on AWS
@@ -46,7 +46,7 @@ def fixture_grafana_api_key_secret_metadata() -> Dict[str, Any]:
 def fixture_grafana_api_key_secret(
     grafana_api_key_secret_metadata: Dict[str, Any],
 ) -> Generator[CreateSecretResponseTypeDef, None, None]:
-    with mock_secretsmanager():
+    with mock_aws():
         secretsmanager_client = boto3.client("secretsmanager")
 
         grafana_api_key = {
@@ -65,10 +65,10 @@ def fixture_grafana_api_key_secret(
 
 
 @pytest.fixture(name="service_client_credentials_secret")
-def fixture_service_client_credentials_secret() -> Generator[
-    CreateSecretResponseTypeDef, None, None
-]:
-    with mock_secretsmanager():
+def fixture_service_client_credentials_secret() -> (
+    Generator[CreateSecretResponseTypeDef, None, None]
+):
+    with mock_aws():
         secretsmanager_client = boto3.client("secretsmanager")
 
         secret = secretsmanager_client.create_secret(
@@ -82,7 +82,7 @@ def fixture_service_client_credentials_secret() -> Generator[
 
 @pytest.fixture(name="s3_dashboard_bucket")
 def fixture_s3_dashboard_bucket() -> Generator[str, None, None]:
-    with mock_s3():
+    with mock_aws():
         s3_client = boto3.client("s3")
 
         dashboard_bucket_name = "test-dashboard-bucket"

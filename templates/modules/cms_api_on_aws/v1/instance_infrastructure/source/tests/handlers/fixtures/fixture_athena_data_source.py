@@ -9,12 +9,12 @@ from typing import Any, Dict, Generator
 # Third Party Libraries
 import boto3
 import pytest
-from moto.athena import mock_athena  # type: ignore[import-untyped]
+from moto import mock_aws  # type: ignore[import-untyped]
 
 
 @pytest.fixture(name="athena_data_source_lambda_event")
 def fixture_athena_data_source_lambda_event() -> Generator[Dict[str, Any], None, None]:
-    with mock_athena():
+    with mock_aws():
         athena_client = boto3.client("athena")
 
         athena_client.create_work_group(Name=os.environ["ATHENA_WORKGROUP"])

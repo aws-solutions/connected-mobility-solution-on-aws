@@ -9,19 +9,19 @@ import json
 
 # Third Party Libraries
 import pytest
-from moto import mock_stepfunctions  # type: ignore
+from moto import mock_aws  # type: ignore
 
 # Connected Mobility Solution on AWS
 from .....handlers.api.vs_api.chalicelib.stepfunctions import StepFunctionsStateMachine
 
 
-@mock_stepfunctions
+@mock_aws
 def test__init__() -> None:
     step_function = StepFunctionsStateMachine()
     assert step_function.stepfunctions_client
 
 
-@mock_stepfunctions
+@mock_aws
 def test_create() -> None:
     step_function = StepFunctionsStateMachine()
     step_function_name = "test_state_machine_name"

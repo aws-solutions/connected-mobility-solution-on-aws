@@ -11,7 +11,7 @@ from typing import Any, Dict, Generator
 # Third Party Libraries
 import boto3
 import pytest
-from moto import mock_iam, mock_lambda  # type: ignore
+from moto import mock_aws  # type: ignore
 from mypy_boto3_lambda.type_defs import FunctionConfigurationResponseTypeDef
 from mypy_boto3_secretsmanager.type_defs import (
     CreateSecretResponseTypeDef,
@@ -25,10 +25,10 @@ from ...handlers.rotate_secret.lib.rotate_secret_enum import SecretStatus
 
 
 @pytest.fixture(name="rotate_secret_lambda_function")
-def fixture_rotate_secret_lambda_function() -> Generator[
-    FunctionConfigurationResponseTypeDef, None, None
-]:
-    with mock_lambda(), mock_iam():
+def fixture_rotate_secret_lambda_function() -> (
+    Generator[FunctionConfigurationResponseTypeDef, None, None]
+):
+    with mock_aws():
         iam_client = boto3.client("iam")
         iam_role = iam_client.create_role(
             RoleName="test-rotate-secret-lambda-role",

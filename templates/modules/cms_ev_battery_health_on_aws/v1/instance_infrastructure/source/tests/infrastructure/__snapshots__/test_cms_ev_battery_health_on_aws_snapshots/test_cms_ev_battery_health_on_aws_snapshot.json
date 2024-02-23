@@ -887,7 +887,7 @@
           "ApplicationType": "AWS-Solutions",
           "SolutionID": "SO0241",
           "SolutionName": "Connected Mobility Solution on AWS",
-          "Version": "v1.0.2"
+          "Version": "v1.0.3"
         },
         "Description": "Attribute group for solution information",
         "Name": {
@@ -927,7 +927,7 @@
         "Description": "CMS EV battery health custom resource lambda function",
         "Environment": {
           "Variables": {
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.2"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.3 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.3"
           }
         },
         "FunctionName": "cms-ev-battery-health-on-aws-stack-dev-custom-resource-lambda",
@@ -1087,7 +1087,6 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
-        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -1143,7 +1142,6 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
-        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -1319,7 +1317,7 @@
                 "Endpoint"
               ]
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.2"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.3 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.3"
           }
         },
         "FunctionName": "cms-ev-battery-health-on-aws-stack-dev-rotate-secret-lambda",
@@ -1907,7 +1905,6 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
-        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -1951,7 +1948,6 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
-        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -2017,7 +2013,6 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
-        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -2063,7 +2058,6 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
-        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -2143,7 +2137,6 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
-        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -2183,7 +2176,6 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
-        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -2220,7 +2212,7 @@
             "AUTHENTICATION_USER_POOL_REGION": {
               "Ref": "cmsevbatteryhealthcmsevmoduleinputsconstructssmauthenticationuserpoolregionParameterB4D73345"
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.2"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.3 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.3"
           }
         },
         "FunctionName": "cms-ev-battery-health-on-aws-stack-dev-process-alerts-lambda",
@@ -2267,7 +2259,6 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
-        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -2313,7 +2304,6 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
-        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -2351,7 +2341,6 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
-        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -2476,7 +2465,6 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
-        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -2526,7 +2514,7 @@
                 "Id"
               ]
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.2"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.3 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.3"
           }
         },
         "FunctionName": "cms-ev-battery-health-on-aws-stack-dev-workspace-active-lambda",
@@ -3323,54 +3311,14 @@
             ]
           ]
         },
-        "LoggingConfiguration": {
-          "Destinations": [
-            {
-              "CloudWatchLogsLogGroup": {
-                "LogGroupArn": {
-                  "Fn::GetAtt": [
-                    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
-                    "Arn"
-                  ]
-                }
-              }
-            }
-          ],
-          "IncludeExecutionData": false,
-          "Level": "ERROR"
-        },
         "RoleArn": {
           "Fn::GetAtt": [
             "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
             "Arn"
           ]
-        },
-        "Tags": [
-          {
-            "Key": "Solutions:DeploymentUUID",
-            "Value": {
-              "Ref": "deploymentuuidParameter"
-            }
-          }
-        ]
+        }
       },
       "Type": "AWS::StepFunctions::StateMachine"
-    },
-    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277": {
-      "DeletionPolicy": "Retain",
-      "Properties": {
-        "RetentionInDays": 731,
-        "Tags": [
-          {
-            "Key": "Solutions:DeploymentUUID",
-            "Value": {
-              "Ref": "deploymentuuidParameter"
-            }
-          }
-        ]
-      },
-      "Type": "AWS::Logs::LogGroup",
-      "UpdateReplacePolicy": "Retain"
     },
     "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8": {
       "Properties": {
@@ -3460,22 +3408,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "Action": [
-                "logs:CreateLogDelivery",
-                "logs:CreateLogStream",
-                "logs:GetLogDelivery",
-                "logs:UpdateLogDelivery",
-                "logs:DeleteLogDelivery",
-                "logs:ListLogDeliveries",
-                "logs:PutLogEvents",
-                "logs:PutResourcePolicy",
-                "logs:DescribeResourcePolicies",
-                "logs:DescribeLogGroups"
-              ],
-              "Effect": "Allow",
-              "Resource": "*"
             }
           ],
           "Version": "2012-10-17"
@@ -3969,7 +3901,7 @@
                 "Endpoint"
               ]
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.2"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.3 AWSSOLUTION-CAPABILITY/CMS.11/v1.0.3"
           }
         },
         "FunctionName": "cms-ev-battery-health-on-aws-stack-dev-s3-to-grafana-lambda",

@@ -16,7 +16,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 from jose import jwk, jwt
-from moto.secretsmanager import mock_secretsmanager  # type: ignore
+from moto import mock_aws  # type: ignore
 
 # COGNITO/AUTHENTICATION CONFIGURATION CONSTANTS
 TEST_USER_POOL_ID = "test-user-pool-id"
@@ -124,7 +124,7 @@ def fixture_mock_jwk_construct() -> Generator[None, None, None]:
 # VALID FIXTURES
 @pytest.fixture(name="mock_env_for_token_exchange")
 def mock_env_for_token_exchange() -> Generator[None, None, None]:
-    with mock_secretsmanager():
+    with mock_aws():
         secretsmanager_client = boto3.client("secretsmanager")
         secretsmanager_client_secret = secretsmanager_client.create_secret(
             Name="test-secret", SecretString=TEST_CLIENT_SECRET

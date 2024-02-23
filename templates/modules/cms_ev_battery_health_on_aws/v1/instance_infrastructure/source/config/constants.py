@@ -15,7 +15,7 @@ class EVBatteryHealthConstantsClass:
     MODULE_NAME: str = "cms-ev-battery-health-on-aws"
     SOLUTION_NAME: str = "Connected Mobility Solution on AWS"
     SOLUTION_ID: str = "SO0241"
-    SOLUTION_VERSION: str = "v1.0.2"
+    SOLUTION_VERSION: str = "v1.0.3"
     APPLICATION_TYPE: str = "AWS-Solutions"
     CAPABILITY_ID = "CMS.11"
     USER_AGENT_STRING: str = f"AWSSOLUTION/{SOLUTION_ID}/{SOLUTION_VERSION} AWSSOLUTION-CAPABILITY/{CAPABILITY_ID}/{SOLUTION_VERSION}"

@@ -14,7 +14,7 @@ except FileNotFoundError:
 
 setuptools.setup(
     name="connected-mobility-solution-on-aws",
-    version="1.0.2",
+    version="1.0.3",
     description="The administrative module to deploy all CMS modules and assets",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
