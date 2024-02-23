@@ -310,7 +310,7 @@
             "SOLUTION_ID": {
               "Ref": "simulatorconstructssmsolutionidParameter309B25A9"
             },
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.1/v1.0.2",
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.3 AWSSOLUTION-CAPABILITY/CMS.1/v1.0.3",
             "VERSION": {
               "Fn::ImportValue": "cms-vehicle-simulator-on-aws-stack-dev-solution-version"
             }
@@ -642,7 +642,7 @@
               "Ref": "simulatorconstructssmsolutionidParameter309B25A9"
             },
             "TOPIC_PREFIX": "cms/data/simulated",
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.1/v1.0.2",
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.3 AWSSOLUTION-CAPABILITY/CMS.1/v1.0.3",
             "VERSION": {
               "Fn::ImportValue": "cms-vehicle-simulator-on-aws-stack-dev-solution-version"
             }
@@ -992,7 +992,7 @@
               "Ref": "simulatorconstructssmsolutionidParameter309B25A9"
             },
             "TOPIC_PREFIX": "cms/data/simulated",
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.1/v1.0.2",
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.3 AWSSOLUTION-CAPABILITY/CMS.1/v1.0.3",
             "VERSION": {
               "Fn::ImportValue": "cms-vehicle-simulator-on-aws-stack-dev-solution-version"
             }
@@ -1425,7 +1425,7 @@
           "Fn::Join": [
             "",
             [
-              "{\"StartAt\":\"get-device-type-map\",\"States\":{\"get-device-type-map\":{\"Type\":\"Map\",\"End\":true,\"Parameters\":{\"type_id.$\":\"$$.Map.Item.Value.type_id\",\"amount.$\":\"States.StringToJson($$.Map.Item.Value.amount)\",\"simulation.$\":\"$.simulation\"},\"Iterator\":{\"StartAt\":\"get-device-type-info\",\"States\":{\"get-device-type-info\":{\"Next\":\"device-pass\",\"Type\":\"Task\",\"ResultPath\":\"$.info\",\"ResultSelector\":{\"name.$\":\"$.Item.name\",\"topic.$\":\"$.Item.topic\",\"payload.$\":\"$.Item.payload\",\"simulation\":\"$.simulation\",\"amount\":\"$.amount\"},\"Resource\":\"arn:",
+              "{\"StartAt\":\"get-device-type-map\",\"States\":{\"get-device-type-map\":{\"Type\":\"Map\",\"End\":true,\"Parameters\":{\"type_id.$\":\"$$.Map.Item.Value.type_id\",\"amount.$\":\"States.StringToJson($$.Map.Item.Value.amount)\",\"simulation.$\":\"$.simulation\"},\"ItemsPath\":\"$.simulation.devices\",\"MaxConcurrency\":0,\"Iterator\":{\"StartAt\":\"get-device-type-info\",\"States\":{\"get-device-type-info\":{\"Next\":\"device-pass\",\"Type\":\"Task\",\"ResultPath\":\"$.info\",\"ResultSelector\":{\"name.$\":\"$.Item.name\",\"topic.$\":\"$.Item.topic\",\"payload.$\":\"$.Item.payload\",\"simulation\":\"$.simulation\",\"amount\":\"$.amount\"},\"Resource\":\"arn:",
               {
                 "Ref": "AWS::Partition"
               },
@@ -1453,7 +1453,7 @@
                   }
                 ]
               },
-              "\",\"ConsistentRead\":false}},\"device-pass\":{\"Type\":\"Pass\",\"Parameters\":{\"amount_range.$\":\"States.ArrayRange(1,$.amount,1)\",\"info.$\":\"$.info\",\"simulation.$\":\"$.simulation\"},\"Next\":\"device-map\"},\"device-map\":{\"Type\":\"Map\",\"ResultPath\":null,\"Next\":\"cleanup-invoke\",\"Parameters\":{\"simulation.$\":\"$.simulation\",\"info.$\":\"$.info\",\"index.$\":\"$$.Map.Item.Index\"},\"Catch\":[{\"ErrorEquals\":[\"States.ALL\"],\"Next\":\"cleanup-invoke\"}],\"Iterator\":{\"StartAt\":\"provisioning-invoke\",\"States\":{\"provisioning-invoke\":{\"Next\":\"simulator-invoke\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Catch\":[{\"ErrorEquals\":[\"States.ALL\"],\"Next\":\"Done\"}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+              "\",\"ConsistentRead\":false}},\"device-pass\":{\"Type\":\"Pass\",\"Parameters\":{\"amount_range.$\":\"States.ArrayRange(1,$.amount,1)\",\"info.$\":\"$.info\",\"simulation.$\":\"$.simulation\"},\"Next\":\"device-map\"},\"device-map\":{\"Type\":\"Map\",\"ResultPath\":null,\"Next\":\"cleanup-invoke\",\"Parameters\":{\"simulation.$\":\"$.simulation\",\"info.$\":\"$.info\",\"index.$\":\"$$.Map.Item.Index\"},\"Catch\":[{\"ErrorEquals\":[\"States.ALL\"],\"Next\":\"cleanup-invoke\"}],\"ItemsPath\":\"$.amount_range\",\"MaxConcurrency\":0,\"Iterator\":{\"StartAt\":\"provisioning-invoke\",\"States\":{\"provisioning-invoke\":{\"Next\":\"simulator-invoke\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Catch\":[{\"ErrorEquals\":[\"States.ALL\"],\"Next\":\"Done\"}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
               {
                 "Fn::GetAtt": [
                   "simulatorconstructprovisioninglambdaAE2CCD63",
@@ -1495,7 +1495,7 @@
                   }
                 ]
               },
-              "\",\"ConditionExpression\":\"attribute_exists(sim_id)\",\"ExpressionAttributeValues\":{\":stage\":{\"S\":\"sleeping\"},\":time\":{\"S.$\":\"$$.State.EnteredTime\"}},\"UpdateExpression\":\"SET stage = :stage, updatedAt = :time\"}},\"Done\":{\"Type\":\"Succeed\"}}},\"ItemsPath\":\"$.amount_range\",\"MaxConcurrency\":0},\"cleanup-invoke\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"arn:",
+              "\",\"ConditionExpression\":\"attribute_exists(sim_id)\",\"ExpressionAttributeValues\":{\":stage\":{\"S\":\"sleeping\"},\":time\":{\"S.$\":\"$$.State.EnteredTime\"}},\"UpdateExpression\":\"SET stage = :stage, updatedAt = :time\"}},\"Done\":{\"Type\":\"Succeed\"}}}},\"cleanup-invoke\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"arn:",
               {
                 "Ref": "AWS::Partition"
               },
@@ -1506,7 +1506,7 @@
                   "Arn"
                 ]
               },
-              "\",\"Payload.$\":\"$\"}}}},\"ItemsPath\":\"$.simulation.devices\",\"MaxConcurrency\":0}}}"
+              "\",\"Payload.$\":\"$\"}}}}}}}"
             ]
           ]
         },

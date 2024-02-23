@@ -9,7 +9,7 @@ from typing import Generator
 # Third Party Libraries
 import boto3
 import pytest
-from moto import mock_dynamodb, mock_stepfunctions  # type: ignore
+from moto import mock_aws  # type: ignore
 
 # Connected Mobility Solution on AWS
 from ....handlers.api.vs_api.chalicelib.stepfunctions import StepFunctionsStateMachine
@@ -17,7 +17,7 @@ from ....handlers.api.vs_api.chalicelib.stepfunctions import StepFunctionsStateM
 
 @pytest.fixture(name="dynamodb_table")
 def fixture_dynamodb_table() -> Generator[str, None, None]:
-    with mock_dynamodb():
+    with mock_aws():
         table_name = "test_table"
         table = boto3.resource("dynamodb")
         table.create_table(
@@ -50,7 +50,7 @@ def fixture_dynamodb_table() -> Generator[str, None, None]:
 
 @pytest.fixture(name="step_function")
 def fixture_step_function() -> Generator[StepFunctionsStateMachine, None, None]:
-    with mock_stepfunctions():
+    with mock_aws():
         step_function = StepFunctionsStateMachine()
         state_machine_name = "test_state_machine_name"
         response = step_function.stepfunctions_client.create_state_machine(

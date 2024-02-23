@@ -12,12 +12,7 @@ from typing import Any, Dict, Generator
 # Third Party Libraries
 import boto3
 import pytest
-from moto import (  # type: ignore[import-untyped]
-    mock_iot,
-    mock_resourcegroupstaggingapi,
-    mock_s3,
-    mock_secretsmanager,
-)
+from moto import mock_aws  # type: ignore[import-untyped]
 
 # Connected Mobility Solution on AWS
 from ....config.constants import VSConstants
@@ -26,7 +21,7 @@ from ....handlers.stepfunction.provision import DeviceProvisioner
 
 @pytest.fixture(name="device_provisioner")
 def fixture_device_provisioner() -> Generator[DeviceProvisioner, None, None]:
-    with mock_iot(), mock_s3(), mock_secretsmanager(), mock_resourcegroupstaggingapi():
+    with mock_aws():
         os.environ["SIMULATOR_THING_GROUP_NAME"] = "test-thing-group"
         device_provisioner = DeviceProvisioner(
             "test_account_id",
@@ -58,8 +53,7 @@ def fixture_cleanup_event() -> Dict[str, Any]:
     return {"simulation": {"sim_id": "test_simulation_id"}}
 
 
-@mock_iot
-@mock_secretsmanager
+@mock_aws
 @pytest.fixture(name="provisioned_secrets")
 def fixture_provisioned_secrets() -> Dict[str, Any]:
     device_name = "test-device"
@@ -80,7 +74,7 @@ def fixture_provisioned_secrets() -> Dict[str, Any]:
     }
 
 
-@mock_iot
+@mock_aws
 @pytest.fixture(name="provisioned_thing")
 def fixture_provisioned_thing() -> Dict[str, Any]:
     device_name = "test-device"
@@ -98,7 +92,7 @@ def fixture_provisioned_thing() -> Dict[str, Any]:
     return thing  # type: ignore
 
 
-@mock_iot
+@mock_aws
 @pytest.fixture(name="provisioned_policy")
 def fixture_provisioned_policy() -> Dict[str, Any]:
     device_name = "test-device"

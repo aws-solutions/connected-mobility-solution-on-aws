@@ -10,7 +10,7 @@ from typing import Any, Dict, Generator
 # Third Party Libraries
 import boto3
 import pytest
-from moto import mock_iam, mock_lambda  # type: ignore[import-untyped]
+from moto import mock_aws  # type: ignore[import-untyped]
 from mypy_boto3_lambda.type_defs import FunctionConfigurationResponseTypeDef
 
 # Connected Mobility Solution on AWS
@@ -36,7 +36,7 @@ def fixture_custom_resource_event() -> Dict[str, Any]:
 def fixture_rotate_secret_lambda_function() -> Generator[
     FunctionConfigurationResponseTypeDef, None, None
 ]:
-    with mock_lambda(), mock_iam():
+    with mock_aws():
         iam_client = boto3.client("iam")
         iam_role = iam_client.create_role(
             RoleName="test-rotate-secret-lambda-role",

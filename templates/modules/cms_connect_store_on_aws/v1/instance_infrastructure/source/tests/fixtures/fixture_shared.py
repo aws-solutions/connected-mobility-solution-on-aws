@@ -11,7 +11,7 @@ from typing import Dict, Generator, cast
 import boto3
 import pytest
 from aws_lambda_powertools.utilities.typing import LambdaContext
-from moto import mock_secretsmanager  # type: ignore
+from moto import mock_aws  # type: ignore
 from mypy_boto3_secretsmanager.type_defs import CreateSecretResponseTypeDef
 
 
@@ -47,7 +47,7 @@ def fixture_aws_credentials_env_vars() -> Dict[str, str]:
 def fixture_service_client_credentials_secret() -> (
     Generator[CreateSecretResponseTypeDef, None, None]
 ):
-    with mock_secretsmanager():
+    with mock_aws():
         secretsmanager_client = boto3.client("secretsmanager")
 
         client_credentials = {

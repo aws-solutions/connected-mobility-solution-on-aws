@@ -103,7 +103,7 @@
         "Description": "CMS provisioning custom resource lambda function",
         "Environment": {
           "Variables": {
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.5/v1.0.2"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.3 AWSSOLUTION-CAPABILITY/CMS.5/v1.0.3"
           }
         },
         "FunctionName": "cms-provisioning-on-aws-stack-dev-custom-resource-lambda",
@@ -441,7 +441,7 @@
         "Environment": {
           "Variables": {
             "CLAIM_CERT_PROVISIONING_POLICY_NAME": "claim-certificate-provisioning-policy",
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.2 AWSSOLUTION-CAPABILITY/CMS.5/v1.0.2"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.3 AWSSOLUTION-CAPABILITY/CMS.5/v1.0.3"
           }
         },
         "FunctionName": "cms-provisioning-on-aws-stack-dev-rotate-secret-lambda",

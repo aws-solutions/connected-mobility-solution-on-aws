@@ -9,7 +9,7 @@ from typing import Any, Dict, Generator
 # Third Party Libraries
 import boto3
 import pytest
-from moto import mock_iot, mock_secretsmanager  # type: ignore
+from moto import mock_aws  # type: ignore
 from mypy_boto3_iot.type_defs import CreatePolicyResponseTypeDef
 from mypy_boto3_lambda.type_defs import FunctionConfigurationResponseTypeDef
 from mypy_boto3_secretsmanager.type_defs import (
@@ -33,7 +33,7 @@ def fixture_provisioning_secret_metadata() -> Dict[str, Any]:
 
 @pytest.fixture(name="provisioning_policy")
 def fixture_provisioning_policy() -> Generator[CreatePolicyResponseTypeDef, None, None]:
-    with mock_iot():
+    with mock_aws():
         iot_client = boto3.client("iot")
         provisioning_policy = iot_client.create_policy(
             policyName="claim-certificate-provisioning-policy",
@@ -58,7 +58,7 @@ def fixture_provisioning_secret(
     provisioning_secret_metadata: Dict[str, Any],
     provisioning_policy: CreatePolicyResponseTypeDef,
 ) -> Generator[CreateSecretResponseTypeDef, None, None]:
-    with mock_secretsmanager():
+    with mock_aws():
         secretsmanager_client = boto3.client("secretsmanager")
         iot_client = boto3.client("iot")
 

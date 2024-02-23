@@ -11,7 +11,7 @@ from unittest import mock
 # Third Party Libraries
 import boto3
 from chalice.app import Request
-from moto import mock_stepfunctions  # type: ignore[import-untyped]
+from moto import mock_aws  # type: ignore[import-untyped]
 
 # Connected Mobility Solution on AWS
 from ....handlers.api.vs_api import app
@@ -271,7 +271,7 @@ def test_get_simulations_stats(mocker: mock.MagicMock) -> None:
     mocked_app_req.assert_called_once()
 
 
-@mock_stepfunctions
+@mock_aws
 def test_update_simulation(
     vsapi_update_simulations_event: Request, mocker: mock.MagicMock
 ) -> None:
@@ -318,7 +318,7 @@ def test_update_simulation(
     mocked_update_req.assert_called()
 
 
-@mock_stepfunctions
+@mock_aws
 def test_update_simulation_by_id(
     vsapi_update_simulation_by_id_event: Request, mocker: mock.MagicMock
 ) -> None:

@@ -12,7 +12,7 @@ import boto3
 import pytest
 import responses
 from jose import jwk
-from moto.secretsmanager import mock_secretsmanager  # type: ignore[import-untyped]
+from moto import mock_aws  # type: ignore[import-untyped]
 
 # Connected Mobility Solution on AWS
 from .fixture_jwt_shared import (
@@ -31,10 +31,11 @@ from .fixture_jwt_shared import (
 # Store jwk.construct function to avoid patches when necessary
 original_jwk_construct = jwk.construct
 
+
 # VALID FIXTURES
 @pytest.fixture(name="mock_env_for_token_exchange")
 def mock_env_for_token_exchange() -> Generator[None, None, None]:
-    with mock_secretsmanager():
+    with mock_aws():
         secretsmanager_client = boto3.client("secretsmanager")
         secretsmanager_client_secret = secretsmanager_client.create_secret(
             Name="test-secret", SecretString=TEST_USER_CLIENT_SECRET

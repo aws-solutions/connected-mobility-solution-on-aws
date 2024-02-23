@@ -8,7 +8,7 @@ from typing import Any, Dict, Generator
 # Third Party Libraries
 import boto3
 import pytest
-from moto import mock_cognitoidp  # type: ignore
+from moto import mock_aws  # type: ignore
 
 # Connected Mobility Solution on AWS
 from ....handlers.custom_resource.lib.custom_resource_type_enum import (
@@ -33,7 +33,7 @@ def fixture_custom_resource_event() -> Dict[str, Any]:
 def fixture_custom_resource_manage_user_pool_domain_event(
     custom_resource_event: Dict[str, Any],
 ) -> Generator[Dict[str, Any], None, None]:
-    with mock_cognitoidp():
+    with mock_aws():
         cognito_client = boto3.client("cognito-idp")
         user_pool = cognito_client.create_user_pool(
             PoolName="test-user-pool-cms-authentication"
