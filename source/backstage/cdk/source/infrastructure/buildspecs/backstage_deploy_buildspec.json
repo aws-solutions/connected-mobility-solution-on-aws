@@ -10,7 +10,7 @@
             "commands": [
                 "cd cdk",
                 "pipenv install --dev",
-                "STACK_TARGET=\"cms-backstage-$STAGE\" pipenv run cdk deploy --context \"backstage-image-tag\"=\"$CODEBUILD_RESOLVED_SOURCE_VERSION\" --require-approval never"
+                "STACK_TARGET=\"cms-backstage-$STAGE\" pipenv run cdk deploy --context \"backstage-image-tag\"=\"s3_$CODEBUILD_RESOLVED_SOURCE_VERSION\" --require-approval never"
             ]
         }
     }

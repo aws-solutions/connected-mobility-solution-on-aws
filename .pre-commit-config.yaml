@@ -3,18 +3,18 @@ repos:
     rev: v3.2.0
     hooks:
       - id: check-byte-order-marker   # Forbid UTF-8 byte-order markers
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
       - id: check-case-conflict       # Check for files with names that would conflict on a case-insensitive
                                       # filesystem like MacOS HFS+ or Windows FAT.
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
       - id: check-json
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
       - id: check-yaml
         exclude: (^source/backstage/examples|^.*/catalog-info.yaml|^templates)
       - id: check-toml
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
       - id: check-merge-conflict
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
       - id: check-added-large-files
         exclude: |
           (?x)^(
@@ -24,25 +24,25 @@ repos:
             ^.*/Pipfile.lock
           )$
       - id: end-of-file-fixer
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
       - id: fix-encoding-pragma
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
       - id: trailing-whitespace
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
       - id: mixed-line-ending
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
       - id: sort-simple-yaml          # Requires explicit files parameter to enable file matching
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
       - id: detect-aws-credentials
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
         args: ["--credentials-file", "~/.ada/credentials"]
       - id: detect-private-key
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
   - repo: https://github.com/Lucas-C/pre-commit-hooks
     rev: v1.5.1
     hooks:
       - id: insert-license
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
         files: \.py$
         args:
           - --license-filepath
@@ -52,7 +52,7 @@ repos:
     rev: v1.5.1
     hooks:
       - id: insert-license
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
         files: \.tsx|.ts$
         args:
           - --license-filepath
@@ -64,49 +64,49 @@ repos:
     rev: 22.3.0
     hooks:
       - id: black
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
   - repo: https://github.com/hadialqattan/pycln
     rev: v2.2.2
     hooks:
       - id: pycln
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
   - repo: https://github.com/pycqa/isort
     rev: 5.12.0
     hooks:
       - id: isort
         name: isort (python)
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
         args: ["--profile", "black"]
   - repo: https://github.com/PyCQA/bandit
     rev: 1.7.4
     hooks:
       - id: bandit
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
         args: ["-c", "pyproject.toml"]
         additional_dependencies: [ "bandit[toml]" ]
   # - repo: https://github.com/kontrolilo/kontrolilo
   #   rev: v2.2.0
   #   hooks:
   #     - id: license-check-configuration-lint
-  #       exclude: (^templates)
+  #       exclude: ^(templates/|.nightswatch/)
   #       language: python
   #     - id: license-check-pipenv
-  #       exclude: (^templates)
+  #       exclude: ^(templates/|.nightswatch/)
   #       language: python
   #     - id: license-check-npm
-  #       exclude: (^templates)
+  #       exclude: ^(templates/|.nightswatch/)
   #       language: python
   - repo: https://github.com/pypa/pip-audit
     rev: v2.6.1
     hooks:
       - id: pip-audit
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
 
   # Local hooks
   - repo: local
     hooks:
       - id: check-bash-syntax
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
         name: Check Shell scripts syntax correctness
         language: system
         entry: bash -n
@@ -114,7 +114,7 @@ repos:
   - repo: local
     hooks:
       - id: detect-empty-files
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
         name: Detect empty files in the repo
         entry: deployment/detect-empty-files.sh
         language: system
@@ -122,7 +122,7 @@ repos:
   - repo: local
     hooks:
       - id: pylint
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
         name: pylint
         entry: pylint
         args: ["--extension-pkg-allow-list", "math"]
@@ -132,7 +132,7 @@ repos:
   - repo: local
     hooks:
       - id: mypy
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
         name: mypy
         entry: mypy
         types_or: [python, pyi]
@@ -142,7 +142,7 @@ repos:
   - repo: local
     hooks:
       - id: cfn-nag
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
         name: cfn-nag
         entry: deployment/run-cfn-nag.sh
         files: infrastructure
@@ -153,7 +153,7 @@ repos:
   - repo: local
     hooks:
       - id: pytest-jest
-        exclude: (^templates)
+        exclude: ^(templates/|.nightswatch/)
         name: pytest-jest
         entry: deployment/run-unit-tests.sh
         args: ["--no-report", "--no-nested"]

@@ -103,6 +103,8 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
+*-cfnlogs.txt
+.nightswatch/functional/results
 
 # Translations
 *.mo

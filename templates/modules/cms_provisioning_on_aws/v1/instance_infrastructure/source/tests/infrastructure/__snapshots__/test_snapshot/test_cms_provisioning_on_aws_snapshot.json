@@ -101,7 +101,7 @@
           "ApplicationType": "AWS-Solutions",
           "SolutionID": "SO0241",
           "SolutionName": "Connected Mobility Solution on AWS",
-          "Version": "v1.0.3"
+          "Version": "v1.0.4"
         },
         "Description": "Attribute group for solution information",
         "Name": {
