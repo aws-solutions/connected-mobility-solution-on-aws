@@ -15,7 +15,7 @@ class EnvironmentConstantsClass:
     MODULE_NAME: str = "cms-environment-on-aws"
     SOLUTION_NAME: str = "Connected Mobility Solution on AWS"
     SOLUTION_ID: str = "SO0241"
-    SOLUTION_VERSION: str = "v1.0.3"
+    SOLUTION_VERSION: str = "v1.0.4"
     APPLICATION_TYPE: str = "AWS-Solutions"
     CAPABILITY_ID = "CMS.6"
     USER_AGENT_STRING: str = (

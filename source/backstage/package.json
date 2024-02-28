@@ -1,6 +1,6 @@
 {
   "name": "cms-backstage",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "private": true,
   "license": "Apache-2.0",
   "description": "Backstage implementation preconfigured to work with CMS",
@@ -31,29 +31,26 @@
     ]
   },
   "devDependencies": {
-    "@backstage/cli": "^0.23.1",
-    "@spotify/prettier-config": "^15.0.0",
+    "@backstage/cli": "^0.25.2",
     "@types/supertest": "^2.0.14",
     "concurrently": "^8.0.1",
     "lerna": "^7.1.5",
-    "node-gyp": "^9.3.1",
-    "prettier": "3",
-    "typescript": "^5.1.6",
+    "node-gyp": "^10.0.0",
+    "prettier": "^3",
+    "typescript": "^5.3.2",
     "xml2js": "^0.5.0",
     "yaml": "^2.2.2"
   },
   "resolutions": {
-    "@types/react": "^17",
-    "@babel/traverse": "^7.23.2",
-    "browserify-sign": "^4.2.2",
-    "@octokit/webhooks": "^10.9.2",
-    "octokit": "^3.1.2",
-    "follow-redirects": "^1.15.4",
-    "swagger-ui-react": "5.10.5",
-    "ip": "2.0.1",
-    "@backstage/backend-app-api": "^0.5.11"
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@backstage/plugin-home": "^0.6.2",
+    "@backstage/backend-app-api": "^0.5.13",
+    "@backstage/backend-common": "^0.21.2",
+    "@backstage/backend-plugin-api": "^0.6.12",
+    "@backstage/core-components": "^0.14.0",
+    "@backstage/theme": "^0.5.1"
   },
-  "prettier": "@spotify/prettier-config",
   "lint-staged": {
     "*.{js,jsx,ts,tsx,mjs,cjs}": [
       "eslint --fix",

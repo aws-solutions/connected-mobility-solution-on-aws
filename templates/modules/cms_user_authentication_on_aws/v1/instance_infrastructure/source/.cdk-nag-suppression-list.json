@@ -161,5 +161,13 @@
                 "reason": "App client secret should not be rotated. Client secret cannot be updated without destroying the app client."
             }
         ]
+    },
+    "/cms-user-authentication-on-aws-stack-dev/AWS679f53fac002430cb0da5b7982bd2287/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+            }
+        ]
     }
 }

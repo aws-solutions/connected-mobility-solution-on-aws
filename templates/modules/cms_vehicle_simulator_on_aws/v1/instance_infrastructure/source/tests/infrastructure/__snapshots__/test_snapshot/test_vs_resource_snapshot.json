@@ -226,7 +226,7 @@
           "Variables": {
             "SOLUTION_ID": "test",
             "SOLUTION_VERSION": "test",
-            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.3 AWSSOLUTION-CAPABILITY/CMS.1/v1.0.3"
+            "USER_AGENT_STRING": "AWSSOLUTION/SO0241/v1.0.4 AWSSOLUTION-CAPABILITY/CMS.1/v1.0.4"
           }
         },
         "FunctionName": "cms-vehicle-simulator-on-aws-stack-dev-custom-resources-lambda",
