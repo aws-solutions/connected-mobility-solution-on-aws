@@ -1,0 +1,17 @@
+{
+    "app": "python3 -m source.app",
+    "watch": {
+        "include": [
+            "**"
+        ],
+        "exclude": [
+            "README.md",
+            "cdk*.json",
+            "requirements*.txt",
+            "source.bat",
+            "python/__pycache__",
+            "tests"
+        ]
+    },
+    "context": {}
+}

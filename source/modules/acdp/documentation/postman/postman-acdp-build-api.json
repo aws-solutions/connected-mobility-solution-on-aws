@@ -1,0 +1,181 @@
+{
+	"info": {
+		"_postman_id": "ce2e0058-b302-46de-96f6-49302ed1e9b3",
+		"name": "ACDP Build API Requests",
+		"description": "Collection of ACDP Build API requests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11872555"
+	},
+	"item": [
+		{
+			"name": "Get Project Details",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Base_URL}}/api/acdp-backend/project?entityRef={{Entity_Ref}}",
+					"host": [
+						"{{Base_URL}}"
+					],
+					"path": [
+						"api",
+						"acdp-backend",
+						"project"
+					],
+					"query": [
+						{
+							"key": "entityRef",
+							"value": "{{Entity_Ref}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Builds Details",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{Base_URL}}/api/acdp-backend/builds?entityRef={{Entity_Ref}}",
+					"host": [
+						"{{Base_URL}}"
+					],
+					"path": [
+						"api",
+						"acdp-backend",
+						"builds"
+					],
+					"query": [
+						{
+							"key": "entityRef",
+							"value": "{{Entity_Ref}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Start Deploy Build",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "content-type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"entityRef\":\"{{Entity_Ref}}\",\n    \"action\": \"deploy\"\n}"
+				},
+				"url": {
+					"raw": "{{Base_URL}}/api/acdp-backend/startBuild",
+					"host": [
+						"{{Base_URL}}"
+					],
+					"path": [
+						"api",
+						"acdp-backend",
+						"startBuild"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Start Update Build",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "content-type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"entityRef\":\"{{Entity_Ref}}\",\n    \"action\": \"update\"\n}"
+				},
+				"url": {
+					"raw": "{{Base_URL}}/api/acdp-backend/startBuild",
+					"host": [
+						"{{Base_URL}}"
+					],
+					"path": [
+						"api",
+						"acdp-backend",
+						"startBuild"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Start Teardown Build",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "content-type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"entityRef\":\"{{Entity_Ref}}\",\n    \"action\": \"teardown\"\n}"
+				},
+				"url": {
+					"raw": "{{Base_URL}}/api/acdp-backend/startBuild",
+					"host": [
+						"{{Base_URL}}"
+					],
+					"path": [
+						"api",
+						"acdp-backend",
+						"startBuild"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{Access_Token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

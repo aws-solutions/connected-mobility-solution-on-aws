@@ -1,0 +1,53 @@
+{
+    "/auth-setup/module-outputs/client-secret/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-SMG4",
+                "reason": "Rotating this type of secret is currently not supported; it will require a simple rotation lambda."
+            }
+        ]
+    },
+    "/auth-setup/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM4",
+                "appliesTo": [
+                    "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                ],
+                "reason": "L2/L3 constructs creates lambda functions with managed policies."
+            }
+        ]
+    },
+    "/auth-setup/AWS679f53fac002430cb0da5b7982bd2287/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "The lambda resource is defined by the L2/L3 constructs and cannot be modified."
+            }
+        ]
+    },
+    "/auth-setup/configuration-secrets/idp-config/new-secret/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-SMG4",
+                "reason": "The secret can not be automatically rotated as it contains static configurations for the customer identity provider."
+            }
+        ]
+    },
+    "/auth-setup/configuration-secrets/service-client-config/new-secret/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-SMG4",
+                "reason": "The secret can not be automatically rotated as it contains static configurations for the customer identity provider."
+            }
+        ]
+    },
+    "/auth-setup/configuration-secrets/authorization-code-exchange-config/new-secret/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-SMG4",
+                "reason": "The secret can not be automatically rotated as it contains static configurations for the customer identity provider."
+            }
+        ]
+    }
+}

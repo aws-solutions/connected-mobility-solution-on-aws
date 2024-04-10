@@ -1,0 +1,71 @@
+{
+    "/cms-config/cms-config/metrics-construct/lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W11",
+                "reason": "Wildcard permissions required to write to log streams. ec2 Network Interfaces permissions need to be wildcard"
+            }
+        ]
+    },
+    "/cms-config/cms-config/metrics-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-config/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W58",
+                "reason": "Lambda functions require permission to write CloudWatch Logs"
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-config/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W11",
+                "reason": "ec2 Network Interfaces permissions need to be wildcard"
+            }
+        ]
+    },
+    "/cms-config/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Log retention lambda function uses policies that require wildcard permissions."
+            }
+        ]
+    },
+    "/cms-config/cms-config/cdk-lambdas-vpc-construct/security-group/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W40",
+                "reason": "Lambdas need outbound communication to contact other resources in VPC"
+            },
+            {
+                "id": "W5",
+                "reason": "Lambdas are inside Private Subnets and may need to communicate to services over internet. So the CIDR is wide open on egress for now"
+            }
+        ]
+    },
+    "/cms-config/cms-config/metrics-construct/security-group/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W40",
+                "reason": "Lambdas need outbound communication to contact other resources in VPC"
+            },
+            {
+                "id": "W5",
+                "reason": "Lambdas are inside Private Subnets and may need to communicate to services over internet. So the CIDR is wide open on egress for now"
+            }
+        ]
+    }
+
+}

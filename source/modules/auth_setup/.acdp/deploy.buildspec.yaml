@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      # Build and deploy
+      - |
+        aws cloudformation create-stack \
+        --stack-name "${MODULE_STACK_NAME}" \
+        --template-url "${CFN_TEMPLATE_URL}" \
+        --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
+        --role-arn "${CLOUDFORMATION_ROLE_ARN}" \
+        --parameters \
+        "[{\"ParameterKey\":\"IdentityProviderId\",\"ParameterValue\":\"${IDENTITY_PROVIDER_ID}\"}, \
+          {\"ParameterKey\":\"ShouldCreateCognitoResources\",\"ParameterValue\":\"${SHOULD_CREATE_COGNITO_RESOURCES}\"}, \
+          {\"ParameterKey\":\"CallbackUrls\",\"ParameterValue\":\"${CALLBACK_URLS}\"}, \
+          {\"ParameterKey\":\"IdPConfigSecretArn\",\"ParameterValue\":\"${IDP_CONFIG_SECRET_ARN}\"}, \
+          {\"ParameterKey\":\"ServiceClientConfigSecretArn\",\"ParameterValue\":\"${SERVICE_CLIENT_CONFIG_SECRET_ARN}\"}, \
+          {\"ParameterKey\":\"AuthorizationCodeExchangeConfigSecretArn\",\"ParameterValue\":\"${AUTHORIZATION_CODE_EXCHANGE_CONFIG_SECRET_ARN}\"}]"

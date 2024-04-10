@@ -1,238 +1,275 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+exclude: '^.*\.svg$'
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.2.0
+    rev: v4.5.0
     hooks:
-      - id: check-byte-order-marker   # Forbid UTF-8 byte-order markers
-        exclude: ^(templates/|.nightswatch/)
-      - id: check-case-conflict       # Check for files with names that would conflict on a case-insensitive
-                                      # filesystem like MacOS HFS+ or Windows FAT.
-        exclude: ^(templates/|.nightswatch/)
+      - id: check-executables-have-shebangs
+        name: (ROOT) Check executables have shebangs
+        exclude: ^(source/|.nightswatch/)
+      - id: fix-byte-order-marker
+        name: (ROOT) Fix byte order marker
+        exclude: ^(source/|.nightswatch/)
+      - id: check-case-conflict
+        name: (ROOT) Check case conflict
+        exclude: ^(source/|.nightswatch/)
       - id: check-json
-        exclude: ^(templates/|.nightswatch/)
+        name: (ROOT) Check json
+        exclude: ^(source/|.nightswatch/)
       - id: check-yaml
-        exclude: (^source/backstage/examples|^.*/catalog-info.yaml|^templates)
+        name: (ROOT) Check yaml
+        exclude: ^(source/|.nightswatch/)
+        args: [--allow-multiple-documents, --unsafe]
       - id: check-toml
-        exclude: ^(templates/|.nightswatch/)
+        name: (ROOT) Check toml
+        exclude: ^(source/|.nightswatch/)
       - id: check-merge-conflict
-        exclude: ^(templates/|.nightswatch/)
+        name: (ROOT) Check for merge conflicts
+        exclude: ^(source/|.nightswatch/)
       - id: check-added-large-files
+        name: (ROOT) Check for added large files
         exclude: |
           (?x)^(
-            ^templates |
+            ^source/ |
+            ^.nightswatch/ |
             ^.*/package-lock.json |
             ^.*/yarn.lock |
             ^.*/Pipfile.lock
           )$
       - id: end-of-file-fixer
-        exclude: ^(templates/|.nightswatch/)
+        name: (ROOT) Fix end of the files
+        exclude: ^(source/|.nightswatch/)
       - id: fix-encoding-pragma
-        exclude: ^(templates/|.nightswatch/)
+        name: (ROOT) Fix python encoding pragma
+        exclude: ^(source/|.nightswatch/)
       - id: trailing-whitespace
-        exclude: ^(templates/|.nightswatch/)
+        name: (ROOT) Trim trailing whitespace
+        exclude: ^(source/|.nightswatch/)
       - id: mixed-line-ending
-        exclude: ^(templates/|.nightswatch/)
-      - id: sort-simple-yaml          # Requires explicit files parameter to enable file matching
-        exclude: ^(templates/|.nightswatch/)
+        name: (ROOT) Mixed line ending
+        exclude: ^(source/|.nightswatch/)
       - id: detect-aws-credentials
-        exclude: ^(templates/|.nightswatch/)
+        name: (ROOT) Detect AWS credentials
+        exclude: ^(source/|.nightswatch/)
         args: ["--credentials-file", "~/.ada/credentials"]
       - id: detect-private-key
-        exclude: ^(templates/|.nightswatch/)
+        name: (ROOT) Detect private keys
+        exclude: ^(source/|.nightswatch/)
   - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.5.1
+    rev: v1.5.4
     hooks:
       - id: insert-license
-        exclude: ^(templates/|.nightswatch/)
+        name: (ROOT) Insert license header (python)
+        exclude: ^(source/|.nightswatch/)
         files: \.py$
         args:
           - --license-filepath
-          - ./license_header.txt        # defaults to: LICENSE.txt
+          - ./license_header.txt
           - --detect-license-in-X-top-lines=3
-  - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.5.1
-    hooks:
       - id: insert-license
-        exclude: ^(templates/|.nightswatch/)
-        files: \.tsx|.ts$
+        name: (ROOT) Insert license header (typescript and javascript)
+        files: \.tsx$|\.ts$|\.js$|\.jsx$
+        exclude: ^(source/|.nightswatch/)
         args:
           - --license-filepath
-          - ./license_header.txt        # defaults to: LICENSE.txt
+          - ./license_header.txt
           - --comment-style
-          - //                            # defaults to:  #
+          - // # defaults to Python's # syntax, requires changing for typescript syntax.
           - --detect-license-in-X-top-lines=3
   - repo: https://github.com/psf/black
-    rev: 22.3.0
+    rev: 23.10.1
     hooks:
       - id: black
-        exclude: ^(templates/|.nightswatch/)
+        name: (ROOT) Black
+        exclude: ^(source/|.nightswatch/)
   - repo: https://github.com/hadialqattan/pycln
-    rev: v2.2.2
+    rev: v2.3.0
     hooks:
       - id: pycln
-        exclude: ^(templates/|.nightswatch/)
+        name: (ROOT) Pycln
+        exclude: ^(source/|.nightswatch/)
   - repo: https://github.com/pycqa/isort
     rev: 5.12.0
     hooks:
       - id: isort
-        name: isort (python)
-        exclude: ^(templates/|.nightswatch/)
-        args: ["--profile", "black"]
+        name: (ROOT) Isort (python)
+        exclude: ^(source/|.nightswatch/)
+        args: ["--skip-glob", "**/node_modules/* **/.venv/*", "--settings-path", "./pyproject.toml"]
   - repo: https://github.com/PyCQA/bandit
-    rev: 1.7.4
+    rev: 1.7.5
     hooks:
       - id: bandit
-        exclude: ^(templates/|.nightswatch/)
-        args: ["-c", "pyproject.toml"]
+        name: (ROOT) Bandit
+        exclude: ^(source/|.nightswatch/)
+        args: ["-c", "./pyproject.toml"]
         additional_dependencies: [ "bandit[toml]" ]
-  # - repo: https://github.com/kontrolilo/kontrolilo
-  #   rev: v2.2.0
-  #   hooks:
-  #     - id: license-check-configuration-lint
-  #       exclude: ^(templates/|.nightswatch/)
-  #       language: python
-  #     - id: license-check-pipenv
-  #       exclude: ^(templates/|.nightswatch/)
-  #       language: python
-  #     - id: license-check-npm
-  #       exclude: ^(templates/|.nightswatch/)
-  #       language: python
   - repo: https://github.com/pypa/pip-audit
     rev: v2.6.1
     hooks:
       - id: pip-audit
-        exclude: ^(templates/|.nightswatch/)
-
-  # Local hooks
-  - repo: local
+        name: (ROOT) Pip audit
+        exclude: ^(source/|.nightswatch/)
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
     hooks:
-      - id: check-bash-syntax
-        exclude: ^(templates/|.nightswatch/)
-        name: Check Shell scripts syntax correctness
-        language: system
-        entry: bash -n
-        files: \.sh$
+      - id: prettier
+        name: (ROOT) Prettier
+        types_or: [javascript, jsx, ts, tsx]
+        exclude: ^(source/|.nightswatch/)
+  # Local
   - repo: local
     hooks:
       - id: detect-empty-files
-        exclude: ^(templates/|.nightswatch/)
-        name: Detect empty files in the repo
-        entry: deployment/detect-empty-files.sh
+        name: (ROOT) detect-empty-files
+        exclude: ^(source/|.nightswatch/)
+        entry: deployment/run-detect-empty-files.sh
         language: system
         pass_filenames: false
-  - repo: local
-    hooks:
+      - id: shellcheck
+        name: (ROOT) Shellchecker
+        exclude: ^(source/|.nightswatch/)
+        entry: ./deployment/run-shellcheck.sh
+        args: ["-x"]
+        types: [shell]
+        language: system
       - id: pylint
-        exclude: ^(templates/|.nightswatch/)
-        name: pylint
-        entry: pylint
-        args: ["--extension-pkg-allow-list", "math"]
+        name: (ROOT) pylint
+        exclude: ^(source/|.nightswatch/)
+        entry: pipenv run pylint
+        args: ["--extension-pkg-allow-list", "math", "--rcfile", "./pyproject.toml"]
         types: [python]
         language: system
         require_serial: true
-  - repo: local
-    hooks:
       - id: mypy
-        exclude: ^(templates/|.nightswatch/)
-        name: mypy
-        entry: mypy
+        name: (ROOT) mypy
+        exclude: ^(source/|.nightswatch/)
+        entry: pipenv run mypy
         types_or: [python, pyi]
-        args: ["--strict", "--cache-dir", "/dev/null"]
+        args: ["--strict", "--cache-dir", "./.mypy_cache", "--config-file", "./pyproject.toml"]
         language: system
         require_serial: true
+  # Module pre-commits: https://github.com/pre-commit/pre-commit/issues/731#issuecomment-376945745
   - repo: local
     hooks:
-      - id: cfn-nag
-        exclude: ^(templates/|.nightswatch/)
-        name: cfn-nag
-        entry: deployment/run-cfn-nag.sh
-        files: infrastructure
-        args: ["--no-nested"]
-        language: system
-        types_or: [python, json]
-        pass_filenames: false
-  - repo: local
-    hooks:
-      - id: pytest-jest
-        exclude: ^(templates/|.nightswatch/)
-        name: pytest-jest
-        entry: deployment/run-unit-tests.sh
-        args: ["--no-report", "--no-nested"]
-        files: (^source)
-        language: system
-        types_or: [python, javascript, jsx, ts, tsx]
-        pass_filenames: false
-
-
-  # Run module level precommit hooks https://github.com/pre-commit/pre-commit/issues/731#issuecomment-376945745
-  - repo: local
-    hooks:
-      - id: module-alerts-hooks
-        name: CMS Alerts hooks
+      - id: acdp
+        name: (ACDP)
         language: script
-        args: ["--module", "alerts", "--files-list"]
-        entry: ./deployment/run_module_hooks.py
-        files: ^templates/modules/cms_alerts_on_aws
+        args: ["--module-path", "source/modules/acdp", "--files-list"]
+        entry: ./deployment/script_run_module_hooks.py
+        files: ^source/modules/acdp
         verbose: true
         require_serial: true
-
-  - repo: local
-    hooks:
-      - id: module-api-hooks
-        name: CMS API hooks
+      - id: cms-alerts
+        name: (Alerts)
         language: script
-        args: ["--module", "api", "--files-list"]
-        entry: ./deployment/run_module_hooks.py
-        files: ^templates/modules/cms_api_on_aws
+        args: ["--module-path", "source/modules/cms_alerts", "--files-list"]
+        entry: ./deployment/script_run_module_hooks.py
+        files: ^source/modules/cms_alerts
         verbose: true
         require_serial: true
-
-  - repo: local
-    hooks:
-      - id: module-connect-store-hooks
-        name: CMS Connect & Store hooks
+      - id: cms-api
+        name: (API)
         language: script
-        args: ["--module", "connect_store", "--files-list"]
-        entry: ./deployment/run_module_hooks.py
-        files: ^templates/modules/cms_connect_store_on_aws
+        args: ["--module-path", "source/modules/cms_api", "--files-list"]
+        entry: ./deployment/script_run_module_hooks.py
+        files: ^source/modules/cms_api
         verbose: true
         require_serial: true
-  - repo: local
-    hooks:
-      - id: module-ev-battery-health-hooks
-        name: CMS EV Battery Health hooks
+      - id: cms-common
+        name: (Common)
         language: script
-        args: ["--module", "ev_battery_health", "--files-list"]
-        entry: ./deployment/run_module_hooks.py
-        files: ^templates/modules/cms_ev_battery_health_on_aws
+        args: ["--module-path", "source/lib", "--files-list"]
+        entry: ./deployment/script_run_module_hooks.py
+        files: ^source/lib
         verbose: true
         require_serial: true
-  - repo: local
-    hooks:
-      - id: module-provisioning-hooks
-        name: CMS Provisioning hooks
+      - id: cms-config
+        name: (Config)
         language: script
-        args: ["--module", "provisioning", "--files-list"]
-        entry: ./deployment/run_module_hooks.py
-        files: ^templates/modules/cms_provisioning_on_aws
+        args: ["--module-path", "source/modules/cms_config", "--files-list"]
+        entry: ./deployment/script_run_module_hooks.py
+        files: ^source/modules/cms_config
         verbose: true
         require_serial: true
-  - repo: local
-    hooks:
-      - id: module-user-authentication-hooks
-        name: CMS User Authentication hooks
+      - id: cms-connect-store
+        name: (Connect Store)
         language: script
-        args: ["--module", "user_authentication", "--files-list"]
-        entry: ./deployment/run_module_hooks.py
-        files: ^templates/modules/cms_user_authentication_on_aws
+        args: ["--module-path", "source/modules/cms_connect_store", "--files-list"]
+        entry: ./deployment/script_run_module_hooks.py
+        files: ^source/modules/cms_connect_store
         verbose: true
         require_serial: true
-  - repo: local
-    hooks:
-      - id: module-vehicle-simulator-hooks
-        name: CMS Vehicle Simulator hooks
+      - id: cms-ev-battery-health
+        name: (EV Battery Health)
         language: script
-        args: ["--module", "vehicle_simulator", "--files-list"]
-        entry: ./deployment/run_module_hooks.py
-        files: ^templates/modules/cms_vehicle_simulator_on_aws
+        args: ["--module-path", "source/modules/cms_ev_battery_health", "--files-list"]
+        entry: ./deployment/script_run_module_hooks.py
+        files: ^source/modules/cms_ev_battery_health
+        verbose: true
+        require_serial: true
+      - id: cms-provisioning
+        name: (Vehicle Provisioning)
+        language: script
+        args: ["--module-path", "source/modules/cms_provisioning", "--files-list"]
+        entry: ./deployment/script_run_module_hooks.py
+        files: ^source/modules/cms_provisioning
+        verbose: true
+        require_serial: true
+      - id: cms-sample
+        name: (Sample)
+        language: script
+        args: ["--module-path", "source/modules/cms_sample", "--files-list"]
+        entry: ./deployment/script_run_module_hooks.py
+        files: ^source/modules/cms_sample
+        verbose: true
+        require_serial: true
+      - id: cms-auth
+        name: (Auth)
+        language: script
+        args: ["--module-path", "source/modules/cms_auth", "--files-list"]
+        entry: ./deployment/script_run_module_hooks.py
+        files: ^source/modules/cms_auth
+        verbose: true
+        require_serial: true
+      - id: cms-vehicle-simulator
+        name: (Vehicle Simulator)
+        language: script
+        args: ["--module-path", "source/modules/cms_vehicle_simulator", "--files-list"]
+        entry: ./deployment/script_run_module_hooks.py
+        files: ^source/modules/cms_vehicle_simulator
+        verbose: true
+        require_serial: true
+      - id: cms-fleetwise-connector
+        name: (FleetWise Connector)
+        language: script
+        args: ["--module-path", "source/modules/cms_fleetwise_connector", "--files-list"]
+        entry: ./deployment/script_run_module_hooks.py
+        files: ^source/modules/cms_fleetwise_connector
+        verbose: true
+        require_serial: true
+      - id: auth-setup
+        name: (Auth Setup)
+        language: script
+        args: ["--module-path", "source/modules/auth_setup", "--files-list"]
+        entry: ./deployment/script_run_module_hooks.py
+        files: ^source/modules/auth_setup
+        verbose: true
+        require_serial: true
+      - id: vpc
+        name: (VPC)
+        language: script
+        args: ["--module-path", "source/modules/vpc", "--files-list"]
+        entry: ./deployment/script_run_module_hooks.py
+        files: ^source/modules/vpc
+        verbose: true
+        require_serial: true
+      - id: nightswatch
+        name: (NightsWatch)
+        language: script
+        args: ["--module-path", ".nightswatch", "--files-list"]
+        entry: ./deployment/script_run_module_hooks.py
+        files: ^.nightswatch
         verbose: true
         require_serial: true

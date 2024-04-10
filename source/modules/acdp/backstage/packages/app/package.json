@@ -1,0 +1,96 @@
+{
+  "name": "app",
+  "version": "1.1.0",
+  "private": true,
+  "bundled": true,
+  "license": "Apache-2.0",
+  "description": "Backstage frontend package",
+  "backstage": {
+    "role": "frontend"
+  },
+  "scripts": {
+    "start": "backstage-cli package start",
+    "build": "backstage-cli package build",
+    "clean": "backstage-cli package clean",
+    "test": "backstage-cli package test --coverage --silent",
+    "lint": "backstage-cli package lint",
+    "test:e2e": "cross-env PORT=3001 start-server-and-test start http://localhost:3001 cy:dev",
+    "test:e2e:ci": "cross-env PORT=3001 start-server-and-test start http://localhost:3001 cy:run",
+    "cy:dev": "cypress open",
+    "cy:run": "cypress run --browser chrome"
+  },
+  "dependencies": {
+    "@backstage/app-defaults": "^1.5.0",
+    "@backstage/catalog-model": "^1.4.4",
+    "@backstage/cli": "^0.25.2",
+    "@backstage/core-app-api": "^1.12.0",
+    "@backstage/core-components": "^0.14.0",
+    "@backstage/core-plugin-api": "^1.9.0",
+    "@backstage/integration-react": "^1.1.24",
+    "@backstage/plugin-api-docs": "^0.11.0",
+    "@backstage/plugin-catalog": "^1.17.0",
+    "@backstage/plugin-catalog-common": "^1.0.21",
+    "@backstage/plugin-catalog-graph": "^0.4.0",
+    "@backstage/plugin-catalog-import": "^0.10.6",
+    "@backstage/plugin-catalog-react": "^1.10.0",
+    "@backstage/plugin-home": "^0.6.2",
+    "@backstage/plugin-org": "^0.6.20",
+    "@backstage/plugin-permission-react": "^0.4.20",
+    "@backstage/plugin-scaffolder": "^1.18.0",
+    "@backstage/plugin-search": "^1.4.6",
+    "@backstage/plugin-search-react": "^1.7.6",
+    "@backstage/plugin-techdocs": "^1.10.0",
+    "@backstage/plugin-techdocs-module-addons-contrib": "^1.1.5",
+    "@backstage/plugin-techdocs-react": "^1.1.16",
+    "@backstage/plugin-user-settings": "^0.8.1",
+    "@backstage/theme": "^0.5.1",
+    "@react-hookz/web": "^23.1.0",
+    "backstage-plugin-acdp": "*",
+    "react": "^18.0.2",
+    "react-dom": "^18.0.2",
+    "react-router": "^6.3.0",
+    "react-router-dom": "^6.3.0",
+    "sanitize-html": "2.10.0"
+  },
+  "devDependencies": {
+    "@backstage/test-utils": "^1.5.0",
+    "@testing-library/dom": "^9.0.0",
+    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.0.0",
+    "@types/node": "20.1.1",
+    "@types/react": "*",
+    "@types/react-dom": "*",
+    "@types/react-router": "*",
+    "@types/react-router-dom": "*",
+    "@types/sanitize-html": "^2.9.0",
+    "cross-env": "7.0.3",
+    "cypress": "^13.3.0",
+    "eslint": "^8",
+    "eslint-plugin-cypress": "^2",
+    "jsonwebtoken": "9.0.0",
+    "start-server-and-test": "2.0.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "files": [
+    "dist"
+  ],
+  "jest": {
+    "coverageThreshold": {
+      "global": {
+        "lines": 80
+      }
+    }
+  }
+}

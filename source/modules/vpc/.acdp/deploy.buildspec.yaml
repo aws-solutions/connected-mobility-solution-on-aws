@@ -1,0 +1,22 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      # Build and deploy
+      - |
+        aws cloudformation create-stack \
+        --stack-name "${MODULE_STACK_NAME}" \
+        --template-url "${CFN_TEMPLATE_URL}" \
+        --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
+        --role-arn "${CLOUDFORMATION_ROLE_ARN}" \
+        --parameters \
+          ParameterKey=VpcName,ParameterValue="${VPC_NAME}" \
+          ParameterKey=VpcCIDR,ParameterValue="${VPC_CIDR}" \
+          ParameterKey=PublicSubnet1CIDR,ParameterValue="${PUBLIC_SUBNET_1_CIDR}" \
+          ParameterKey=PublicSubnet2CIDR,ParameterValue="${PUBLIC_SUBNET_2_CIDR}" \
+          ParameterKey=PrivateSubnet1CIDR,ParameterValue="${PRIVATE_SUBNET_1_CIDR}" \
+          ParameterKey=PrivateSubnet2CIDR,ParameterValue="${PRIVATE_SUBNET_2_CIDR}" \
+          ParameterKey=IsolatedSubnet1CIDR,ParameterValue="${ISOLATED_SUBNET_1_CIDR}" \
+          ParameterKey=IsolatedSubnet2CIDR,ParameterValue="${ISOLATED_SUBNET_2_CIDR}" \
+          ParameterKey=VpcFlowLogsEnabled,ParameterValue="${VPC_FLOW_LOGS_ENABLED}"

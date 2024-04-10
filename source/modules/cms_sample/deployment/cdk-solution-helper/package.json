@@ -1,0 +1,6 @@
+{
+    "name": "cdk-solution-helper",
+    "version": "0.1.0",
+    "description": "Helper package to synthesize CloudFormation stacks.",
+    "license": "Apache-2.0"
+}

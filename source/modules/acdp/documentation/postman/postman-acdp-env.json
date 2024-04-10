@@ -1,0 +1,27 @@
+{
+	"id": "e596ff4a-48c1-49ed-bf4e-15c1eb292207",
+	"name": "ACDP",
+	"values": [
+		{
+			"key": "Access_Token",
+			"value": "",
+			"type": "secret",
+			"enabled": true
+		},
+		{
+			"key": "Base_URL",
+			"value": "https://acdp.endpoint",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "Entity_Ref",
+			"value": "component:acdp/cms-sample",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2024-03-08T14:43:13.666Z",
+	"_postman_exported_using": "Postman/10.19.7"
+}

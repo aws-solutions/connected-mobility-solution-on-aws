@@ -3,6 +3,12 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta:__legacy__"
 
 [tool.isort]
+sections=["FUTURE", "STDLIB", "THIRDPARTY", "AWS", "FIRSTPARTY", "LOCALFOLDER"]
+known_aws=["aws_cdk","aws_lambda_powertools","aws_solutions_constructs","awscrt","awsiot","cdk_nag","chalice","constructs","boto3","botocore"]
+import_heading_stdlib="Standard Library"
+import_heading_thirdparty="Third Party Libraries"
+import_heading_aws="AWS Libraries"
+import_heading_localfolder="Connected Mobility Solution on AWS"
 profile = "black"
 
 [tool.bandit]

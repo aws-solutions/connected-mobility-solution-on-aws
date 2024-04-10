@@ -1,0 +1,43 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+arrow = ">=1.2.3"
+attrs = ">=22.1.0"
+aws_lambda_powertools = {extras=["tracer", "validation"], version=">=2.4.0"}
+cattrs = ">=22.1.0"
+cms_common = {path = "./../../lib", editable = true}
+pyhumps = "*"
+requests = ">=2.28.1"
+
+[dev-packages]
+aws-cdk-lib = ">=2.63.2"
+boto3 = ">=1.26.0"
+boto3-stubs = {extras = ["essential", "sns", "dynamodb", "dynamodbstreams", "ssm"], version = "*"}
+exceptiongroup = "*"
+cdk-nag = "*"
+mkdocs-techdocs-core = "*"
+mypy = "*"
+pre-commit = "*"
+moto="*"
+pycln = "*"
+pylint = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+syrupy = "*"
+toml = ">=0.10.2"
+types-boto3 = ">=1.0.2"
+types-python-dateutil = "*"
+types-pyyaml = "*"
+types-setuptools = ">=65.6.0.1"
+types-toml = ">=0.10.2"
+wheel = "*"
+zipp = "*"
+"aws-solutions-constructs.aws-sqs-lambda" = "*"
+"aws-solutions-constructs.aws-sns-sqs" = "*"
+
+[requires]
+python_version = "3.10"

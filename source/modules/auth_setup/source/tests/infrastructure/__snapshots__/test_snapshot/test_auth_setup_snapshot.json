@@ -1,0 +1,1106 @@
+{
+  "Conditions": {
+    "configurationsecretsauthorizationcodeexchangeconfigshouldcreatesecretcondition7EC56421": {
+      "Fn::Or": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ShouldCreateCognitoResources"
+            },
+            "true"
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "AuthorizationCodeExchangeConfigSecretArn"
+            },
+            ""
+          ]
+        }
+      ]
+    },
+    "configurationsecretsauthorizationcodeexchangeconfigshoulduseexistingsecretcondition13A19C12": {
+      "Fn::And": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ShouldCreateCognitoResources"
+            },
+            "false"
+          ]
+        },
+        {
+          "Fn::Not": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AuthorizationCodeExchangeConfigSecretArn"
+                },
+                ""
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "configurationsecretsidpconfigshouldcreatesecretcondition762C5806": {
+      "Fn::Or": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ShouldCreateCognitoResources"
+            },
+            "true"
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "IdPConfigSecretArn"
+            },
+            ""
+          ]
+        }
+      ]
+    },
+    "configurationsecretsidpconfigshoulduseexistingsecretcondition4893D434": {
+      "Fn::And": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ShouldCreateCognitoResources"
+            },
+            "false"
+          ]
+        },
+        {
+          "Fn::Not": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "IdPConfigSecretArn"
+                },
+                ""
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "configurationsecretsserviceclientconfigshouldcreatesecretcondition2EE770AA": {
+      "Fn::Or": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ShouldCreateCognitoResources"
+            },
+            "true"
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ServiceClientConfigSecretArn"
+            },
+            ""
+          ]
+        }
+      ]
+    },
+    "configurationsecretsserviceclientconfigshoulduseexistingsecretcondition555D4426": {
+      "Fn::And": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ShouldCreateCognitoResources"
+            },
+            "false"
+          ]
+        },
+        {
+          "Fn::Not": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "ServiceClientConfigSecretArn"
+                },
+                ""
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "shouldcreatecognitoresourcescondition": {
+      "Fn::Equals": [
+        {
+          "Ref": "ShouldCreateCognitoResources"
+        },
+        "true"
+      ]
+    }
+  },
+  "Mappings": {
+    "Solution": {
+      "AssetsConfig": {
+        "S3AssetBucketBaseName": "test-bucket-base-name",
+        "S3AssetKeyPrefix": "test-object-key-prefix"
+      }
+    }
+  },
+  "Parameters": {
+    "AuthorizationCodeExchangeConfigSecretArn": {
+      "AllowedPattern": "(^$)|(arn:aws:secretsmanager:[a-z0-9-]+:\\d{12}:secret:[a-zA-Z0-9/_+=.@-]+)",
+      "ConstraintDescription": "Value must be a valid AWS SecretsManger secret Arn",
+      "Default": "",
+      "Description": "Secret Arn of preexisting authorization code exchange config json",
+      "Type": "String"
+    },
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "CallbackUrls": {
+      "AllowedPattern": "^[a-zA_Z]{1}[a-zA-Z0-9+-.]*:\\/\\/(www\\.)?[a-zA-Z0-9\\/@%._\\+~=-]*\\b\\/?$",
+      "Default": "https://example.com,https://localhost",
+      "Description": "List of callback URLs allowed for the Cognito user pool. These are the allowed redirect uris during authentication",
+      "Type": "CommaDelimitedList"
+    },
+    "IdPConfigSecretArn": {
+      "AllowedPattern": "(^$)|(arn:aws:secretsmanager:[a-z0-9-]+:\\d{12}:secret:[a-zA-Z0-9/_+=.@-]+)",
+      "ConstraintDescription": "Value must be a valid AWS SecretsManger secret Arn",
+      "Default": "",
+      "Description": "Secret Arn of preexisting IdP configuration json",
+      "Type": "String"
+    },
+    "IdentityProviderId": {
+      "ConstraintDescription": "The identity provider ID must be a minimum of 3 characters.",
+      "Default": "cms",
+      "Description": "The ID associated with the identity provider configurations used for validation and exchange.",
+      "MinLength": 3,
+      "Type": "String"
+    },
+    "ServiceClientConfigSecretArn": {
+      "AllowedPattern": "(^$)|(arn:aws:secretsmanager:[a-z0-9-]+:\\d{12}:secret:[a-zA-Z0-9/_+=.@-]+)",
+      "ConstraintDescription": "Value must be a valid AWS SecretsManger secret Arn",
+      "Default": "",
+      "Description": "Secret Arn of preexisting service client configuration json",
+      "Type": "String"
+    },
+    "ShouldCreateCognitoResources": {
+      "AllowedValues": [
+        "true",
+        "false"
+      ],
+      "ConstraintDescription": "Value must be boolean (true, false)",
+      "Default": "true",
+      "Description": "Boolean flag that creates resources for a default identity provider using Amazon Cognito",
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "AWS679f53fac002430cb0da5b7982bd22872D164C4C": {
+      "DependsOn": [
+        "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 120
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cognitoservicesserviceresourceserver625C8BB3": {
+      "Condition": "shouldcreatecognitoresourcescondition",
+      "Properties": {
+        "Identifier": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "IdentityProviderId"
+              },
+              "-service-resource-server"
+            ]
+          ]
+        },
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "IdentityProviderId"
+              },
+              "-service-resource-server"
+            ]
+          ]
+        },
+        "Scopes": [
+          {
+            "ScopeDescription": {
+              "Fn::Join": [
+                "",
+                [
+                  "Default scope for all ",
+                  {
+                    "Ref": "IdentityProviderId"
+                  },
+                  " services."
+                ]
+              ]
+            },
+            "ScopeName": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "IdentityProviderId"
+                  },
+                  "-service"
+                ]
+              ]
+            }
+          }
+        ],
+        "UserPoolId": {
+          "Ref": "cognitousersuserpool51A5F544"
+        }
+      },
+      "Type": "AWS::Cognito::UserPoolResourceServer"
+    },
+    "cognitousersuserpool51A5F544": {
+      "Condition": "shouldcreatecognitoresourcescondition",
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "AccountRecoverySetting": {
+          "RecoveryMechanisms": [
+            {
+              "Name": "verified_email",
+              "Priority": 1
+            }
+          ]
+        },
+        "AdminCreateUserConfig": {
+          "AllowAdminCreateUserOnly": true,
+          "InviteMessageTemplate": {
+            "EmailMessage": {
+              "Fn::Join": [
+                "",
+                [
+                  "Hello {username}, you have been invited to join ",
+                  {
+                    "Ref": "IdentityProviderId"
+                  },
+                  ".\nYour temporary password is: {####}"
+                ]
+              ]
+            },
+            "EmailSubject": {
+              "Fn::Join": [
+                "",
+                [
+                  "Invitation to join ",
+                  {
+                    "Ref": "IdentityProviderId"
+                  },
+                  "!"
+                ]
+              ]
+            }
+          }
+        },
+        "AliasAttributes": [
+          "email"
+        ],
+        "AutoVerifiedAttributes": [
+          "email"
+        ],
+        "DeviceConfiguration": {
+          "ChallengeRequiredOnNewDevice": true,
+          "DeviceOnlyRememberedOnUserPrompt": true
+        },
+        "EmailVerificationMessage": "The verification code to your new account is {####}",
+        "EmailVerificationSubject": "Verify your new account",
+        "EnabledMfas": [
+          "SOFTWARE_TOKEN_MFA"
+        ],
+        "MfaConfiguration": "ON",
+        "Policies": {
+          "PasswordPolicy": {
+            "MinimumLength": 8,
+            "RequireLowercase": true,
+            "RequireNumbers": true,
+            "RequireSymbols": true,
+            "RequireUppercase": true,
+            "TemporaryPasswordValidityDays": 1
+          }
+        },
+        "Schema": [
+          {
+            "Mutable": true,
+            "Name": "email",
+            "Required": true
+          },
+          {
+            "Mutable": false,
+            "Name": "name",
+            "Required": false
+          },
+          {
+            "Mutable": false,
+            "Name": "phone_number",
+            "Required": false
+          },
+          {
+            "Mutable": true,
+            "Name": "preferred_username",
+            "Required": false
+          },
+          {
+            "Mutable": true,
+            "Name": "zoneinfo",
+            "Required": false
+          }
+        ],
+        "SmsVerificationMessage": "The verification code to your new account is {####}",
+        "UserPoolAddOns": {
+          "AdvancedSecurityMode": "ENFORCED"
+        },
+        "UserPoolName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "IdentityProviderId"
+              },
+              "-user-pool"
+            ]
+          ]
+        },
+        "VerificationMessageTemplate": {
+          "DefaultEmailOption": "CONFIRM_WITH_CODE",
+          "EmailMessage": "The verification code to your new account is {####}",
+          "EmailSubject": "Verify your new account",
+          "SmsMessage": "The verification code to your new account is {####}"
+        }
+      },
+      "Type": "AWS::Cognito::UserPool",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cognitousersuserpoolserviceclient76A43875": {
+      "Condition": "shouldcreatecognitoresourcescondition",
+      "Properties": {
+        "AllowedOAuthFlows": [
+          "client_credentials"
+        ],
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthScopes": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Ref": "cognitoservicesserviceresourceserver625C8BB3"
+                },
+                "/",
+                {
+                  "Ref": "IdentityProviderId"
+                },
+                "-service"
+              ]
+            ]
+          }
+        ],
+        "ClientName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "IdentityProviderId"
+              },
+              "-service-client"
+            ]
+          ]
+        },
+        "ExplicitAuthFlows": [
+          "ALLOW_USER_SRP_AUTH",
+          "ALLOW_REFRESH_TOKEN_AUTH"
+        ],
+        "GenerateSecret": true,
+        "RefreshTokenValidity": 1440,
+        "SupportedIdentityProviders": [
+          "COGNITO"
+        ],
+        "TokenValidityUnits": {
+          "RefreshToken": "minutes"
+        },
+        "UserPoolId": {
+          "Ref": "cognitousersuserpool51A5F544"
+        }
+      },
+      "Type": "AWS::Cognito::UserPoolClient"
+    },
+    "cognitousersuserpoolserviceclientDescribeCognitoUserPoolClient0C87FE67": {
+      "Condition": "shouldcreatecognitoresourcescondition",
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "cognitousersuserpoolserviceclientDescribeCognitoUserPoolClientCustomResourcePolicy8D35F5AA"
+      ],
+      "Properties": {
+        "Create": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"service\":\"CognitoIdentityServiceProvider\",\"action\":\"describeUserPoolClient\",\"parameters\":{\"UserPoolId\":\"",
+              {
+                "Ref": "cognitousersuserpool51A5F544"
+              },
+              "\",\"ClientId\":\"",
+              {
+                "Ref": "cognitousersuserpoolserviceclient76A43875"
+              },
+              "\"},\"physicalResourceId\":{\"id\":\"",
+              {
+                "Ref": "cognitousersuserpoolserviceclient76A43875"
+              },
+              "\"}}"
+            ]
+          ]
+        },
+        "InstallLatestAwsSdk": false,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn"
+          ]
+        },
+        "Update": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"service\":\"CognitoIdentityServiceProvider\",\"action\":\"describeUserPoolClient\",\"parameters\":{\"UserPoolId\":\"",
+              {
+                "Ref": "cognitousersuserpool51A5F544"
+              },
+              "\",\"ClientId\":\"",
+              {
+                "Ref": "cognitousersuserpoolserviceclient76A43875"
+              },
+              "\"},\"physicalResourceId\":{\"id\":\"",
+              {
+                "Ref": "cognitousersuserpoolserviceclient76A43875"
+              },
+              "\"}}"
+            ]
+          ]
+        }
+      },
+      "Type": "Custom::DescribeCognitoUserPoolClient",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cognitousersuserpoolserviceclientDescribeCognitoUserPoolClientCustomResourcePolicy8D35F5AA": {
+      "Condition": "shouldcreatecognitoresourcescondition",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "cognito-idp:DescribeUserPoolClient",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "cognitousersuserpool51A5F544",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cognitousersuserpoolserviceclientDescribeCognitoUserPoolClientCustomResourcePolicy8D35F5AA",
+        "Roles": [
+          {
+            "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cognitousersuserpooluserclientDescribeCognitoUserPoolClient58A73904": {
+      "Condition": "shouldcreatecognitoresourcescondition",
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "cognitousersuserpooluserclientDescribeCognitoUserPoolClientCustomResourcePolicy9DCE1D12"
+      ],
+      "Properties": {
+        "Create": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"service\":\"CognitoIdentityServiceProvider\",\"action\":\"describeUserPoolClient\",\"parameters\":{\"UserPoolId\":\"",
+              {
+                "Ref": "cognitousersuserpool51A5F544"
+              },
+              "\",\"ClientId\":\"",
+              {
+                "Ref": "cognitousersuserpooluserclientE8342D23"
+              },
+              "\"},\"physicalResourceId\":{\"id\":\"",
+              {
+                "Ref": "cognitousersuserpooluserclientE8342D23"
+              },
+              "\"}}"
+            ]
+          ]
+        },
+        "InstallLatestAwsSdk": false,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn"
+          ]
+        },
+        "Update": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"region\":\"",
+              {
+                "Ref": "AWS::Region"
+              },
+              "\",\"service\":\"CognitoIdentityServiceProvider\",\"action\":\"describeUserPoolClient\",\"parameters\":{\"UserPoolId\":\"",
+              {
+                "Ref": "cognitousersuserpool51A5F544"
+              },
+              "\",\"ClientId\":\"",
+              {
+                "Ref": "cognitousersuserpooluserclientE8342D23"
+              },
+              "\"},\"physicalResourceId\":{\"id\":\"",
+              {
+                "Ref": "cognitousersuserpooluserclientE8342D23"
+              },
+              "\"}}"
+            ]
+          ]
+        }
+      },
+      "Type": "Custom::DescribeCognitoUserPoolClient",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cognitousersuserpooluserclientDescribeCognitoUserPoolClientCustomResourcePolicy9DCE1D12": {
+      "Condition": "shouldcreatecognitoresourcescondition",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "cognito-idp:DescribeUserPoolClient",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "cognitousersuserpool51A5F544",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cognitousersuserpooluserclientDescribeCognitoUserPoolClientCustomResourcePolicy9DCE1D12",
+        "Roles": [
+          {
+            "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cognitousersuserpooluserclientE8342D23": {
+      "Condition": "shouldcreatecognitoresourcescondition",
+      "Properties": {
+        "AllowedOAuthFlows": [
+          "code"
+        ],
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthScopes": [
+          "email",
+          "openid",
+          {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Ref": "cognitousersuserresourceserver92FD33B9"
+                },
+                "/",
+                {
+                  "Ref": "IdentityProviderId"
+                },
+                "-user"
+              ]
+            ]
+          }
+        ],
+        "CallbackURLs": {
+          "Ref": "CallbackUrls"
+        },
+        "ClientName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "IdentityProviderId"
+              },
+              "-users-client"
+            ]
+          ]
+        },
+        "ExplicitAuthFlows": [
+          "ALLOW_USER_SRP_AUTH",
+          "ALLOW_REFRESH_TOKEN_AUTH"
+        ],
+        "GenerateSecret": true,
+        "RefreshTokenValidity": 1440,
+        "SupportedIdentityProviders": [
+          "COGNITO"
+        ],
+        "TokenValidityUnits": {
+          "RefreshToken": "minutes"
+        },
+        "UserPoolId": {
+          "Ref": "cognitousersuserpool51A5F544"
+        }
+      },
+      "Type": "AWS::Cognito::UserPoolClient"
+    },
+    "cognitousersuserpooluserpoolcognitodomain284E63B2": {
+      "Condition": "shouldcreatecognitoresourcescondition",
+      "Properties": {
+        "Domain": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "IdentityProviderId"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        },
+        "UserPoolId": {
+          "Ref": "cognitousersuserpool51A5F544"
+        }
+      },
+      "Type": "AWS::Cognito::UserPoolDomain"
+    },
+    "cognitousersuserresourceserver92FD33B9": {
+      "Condition": "shouldcreatecognitoresourcescondition",
+      "Properties": {
+        "Identifier": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "IdentityProviderId"
+              },
+              "-user-resource-server"
+            ]
+          ]
+        },
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "IdentityProviderId"
+              },
+              "-user-resource-server"
+            ]
+          ]
+        },
+        "Scopes": [
+          {
+            "ScopeDescription": {
+              "Fn::Join": [
+                "",
+                [
+                  "Default scope for all ",
+                  {
+                    "Ref": "IdentityProviderId"
+                  },
+                  " users."
+                ]
+              ]
+            },
+            "ScopeName": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "IdentityProviderId"
+                  },
+                  "-user"
+                ]
+              ]
+            }
+          }
+        ],
+        "UserPoolId": {
+          "Ref": "cognitousersuserpool51A5F544"
+        }
+      },
+      "Type": "AWS::Cognito::UserPoolResourceServer"
+    },
+    "configurationsecretsauthorizationcodeexchangeconfignewsecret80960EA7": {
+      "Condition": "configurationsecretsauthorizationcodeexchangeconfigshouldcreatesecretcondition7EC56421",
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "Description": "Domain and Client configurations needed to perform the authorization code flow token exchange.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/auth/",
+              {
+                "Ref": "IdentityProviderId"
+              },
+              "/authorization-code-flow/config"
+            ]
+          ]
+        },
+        "SecretString": {
+          "Fn::If": [
+            "shouldcreatecognitoresourcescondition",
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{\"token_endpoint\": \"https://",
+                  {
+                    "Ref": "cognitousersuserpooluserpoolcognitodomain284E63B2"
+                  },
+                  ".auth.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".amazoncognito.com/oauth2/token\", \"client_id\": \"",
+                  {
+                    "Ref": "cognitousersuserpooluserclientE8342D23"
+                  },
+                  "\", \"client_secret\": \"",
+                  {
+                    "Fn::GetAtt": [
+                      "cognitousersuserpooluserclientDescribeCognitoUserPoolClient58A73904",
+                      "UserPoolClient.ClientSecret"
+                    ]
+                  },
+                  "\"}"
+                ]
+              ]
+            },
+            "{\"token_endpoint\": \"\", \"client_id\": \"\", \"client_secret\": \"\"}"
+          ]
+        }
+      },
+      "Type": "AWS::SecretsManager::Secret",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "configurationsecretsidpconfignewsecret663C86DE": {
+      "Condition": "configurationsecretsidpconfigshouldcreatesecretcondition762C5806",
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "Description": "IdP configurations needed to perform JWT validation for OAuth OpenID Connect auth tokens.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/auth/",
+              {
+                "Ref": "IdentityProviderId"
+              },
+              "/idp-config"
+            ]
+          ]
+        },
+        "SecretString": {
+          "Fn::If": [
+            "shouldcreatecognitoresourcescondition",
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{\"iss_domain\": \"cognito-idp.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".amazonaws.com/",
+                  {
+                    "Ref": "cognitousersuserpool51A5F544"
+                  },
+                  "\", \"alternate_aud_key\": \"client_id\", \"auds\": [\"",
+                  {
+                    "Ref": "cognitousersuserpooluserclientE8342D23"
+                  },
+                  "\", \"",
+                  {
+                    "Ref": "cognitousersuserpoolserviceclient76A43875"
+                  },
+                  "\"], \"scopes\": [\"email\", \"openid\", \"",
+                  {
+                    "Ref": "cognitousersuserresourceserver92FD33B9"
+                  },
+                  "/",
+                  {
+                    "Ref": "IdentityProviderId"
+                  },
+                  "-user\", \"",
+                  {
+                    "Ref": "cognitoservicesserviceresourceserver625C8BB3"
+                  },
+                  "/",
+                  {
+                    "Ref": "IdentityProviderId"
+                  },
+                  "-service\"]}"
+                ]
+              ]
+            },
+            "{\"iss_domain\": \"\", \"alternate_aud_key\": \"\", \"auds\": [], \"scopes\": []}"
+          ]
+        }
+      },
+      "Type": "AWS::SecretsManager::Secret",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "configurationsecretsserviceclientconfignewsecretDA9FCD03": {
+      "Condition": "configurationsecretsserviceclientconfigshouldcreatesecretcondition2EE770AA",
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "Description": "Client configurations needed for services to execute the Client Credentials flow, and be granted access tokens.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/auth/",
+              {
+                "Ref": "IdentityProviderId"
+              },
+              "/client-config/default"
+            ]
+          ]
+        },
+        "SecretString": {
+          "Fn::If": [
+            "shouldcreatecognitoresourcescondition",
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{\"token_endpoint\": \"https://",
+                  {
+                    "Ref": "cognitousersuserpooluserpoolcognitodomain284E63B2"
+                  },
+                  ".auth.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".amazoncognito.com/oauth2/token\", \"client_id\": \"",
+                  {
+                    "Ref": "cognitousersuserpoolserviceclient76A43875"
+                  },
+                  "\", \"client_secret\": \"",
+                  {
+                    "Fn::GetAtt": [
+                      "cognitousersuserpoolserviceclientDescribeCognitoUserPoolClient0C87FE67",
+                      "UserPoolClient.ClientSecret"
+                    ]
+                  },
+                  "\", \"audience\": \"\"}"
+                ]
+              ]
+            },
+            "{\"token_endpoint\": \"\", \"client_id\": \"\", \"client_secret\": \"\", \"audience\": \"\"}"
+          ]
+        }
+      },
+      "Type": "AWS::SecretsManager::Secret",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "moduleoutputsssmauthorizationcodeexchangeconfigsecretarn3D816DA8": {
+      "Properties": {
+        "Description": "Secret Arn for Domain and Client configurations needed to perform the authorization code flow token exchange.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/auth/",
+              {
+                "Ref": "IdentityProviderId"
+              },
+              "/authorization-code-flow/config/secret/arn"
+            ]
+          ]
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::If": [
+            "configurationsecretsauthorizationcodeexchangeconfigshouldcreatesecretcondition7EC56421",
+            {
+              "Ref": "configurationsecretsauthorizationcodeexchangeconfignewsecret80960EA7"
+            },
+            {
+              "Ref": "AuthorizationCodeExchangeConfigSecretArn"
+            }
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "moduleoutputsssmidpconfigsecretarnCF8D6D64": {
+      "Properties": {
+        "Description": "Secret Arn for IdP configurations needed to perform JWT validation for OAuth OpenID Connect auth tokens.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/auth/",
+              {
+                "Ref": "IdentityProviderId"
+              },
+              "/idp-config/secret/arn"
+            ]
+          ]
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::If": [
+            "configurationsecretsidpconfigshouldcreatesecretcondition762C5806",
+            {
+              "Ref": "configurationsecretsidpconfignewsecret663C86DE"
+            },
+            {
+              "Ref": "IdPConfigSecretArn"
+            }
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "moduleoutputsssmserviceclientconfigsecretarn57E3B212": {
+      "Properties": {
+        "Description": "Secret Arn for Client configurations needed for services to execute the Client Credentials flow, and be granted access tokens.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/auth/",
+              {
+                "Ref": "IdentityProviderId"
+              },
+              "/client-config/default/secret/arn"
+            ]
+          ]
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::If": [
+            "configurationsecretsserviceclientconfigshouldcreatesecretcondition2EE770AA",
+            {
+              "Ref": "configurationsecretsserviceclientconfignewsecretDA9FCD03"
+            },
+            {
+              "Ref": "ServiceClientConfigSecretArn"
+            }
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                  ],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}

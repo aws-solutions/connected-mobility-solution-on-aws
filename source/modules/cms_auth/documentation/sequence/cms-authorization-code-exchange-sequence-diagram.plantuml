@@ -1,0 +1,57 @@
+@startuml cms-authorization-code-exchange-sequence-diagram
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v14.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/SecurityIdentityCompliance/SecretsManager.puml
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/General/Internet.puml
+
+'Comment out to use default PlantUML sequence formatting
+skinparam participant {
+    BackgroundColor AWS_BG_COLOR
+    BorderColor AWS_BORDER_COLOR
+}
+skinparam sequence {
+    ArrowThickness 2
+    LifeLineBorderColor AWS_COLOR
+    LifeLineBackgroundColor AWS_BORDER_COLOR
+    BoxBorderColor AWS_COLOR
+}
+
+!$LAMBDA_COLOR = "#D76511"
+!$API_COLOR = "#232F3E"
+!$SECRETS_COLOR = "#D22029"
+
+actor User as user
+
+box CMS Auth
+participant "$LambdaIMG()\nAuthorization Code Exchange Lambda" as authorization_code_exchange_lambda << Lambda Function >>
+endbox
+
+box OAuth2.0 IdP
+participant "$InternetIMG()\nOAuth2.0 API" as cognito_api << OAuth2.0 API >>
+endbox
+
+box Auth Setup
+participant "$SecretsManagerIMG()\nAuthorization Code Exchange Config" as authorization_code_config << Secrets Manager >>
+endbox
+
+'Use shortcut syntax for activation with colored lifelines and return keyword
+user -> cognito_api++ $API_COLOR: GET /authorize endpoint with PKCE (optional)
+user <-- cognito_api: redirect to /login endpoint with appropriate URL queries
+user -> cognito_api: Login with valid user credentials
+cognito_api --> cognito_api: validate user credentials
+return authorization code
+|||
+user -> authorization_code_exchange_lambda++ $LAMBDA_COLOR: authorization_code, redirect_uri, code_verifier (optional)
+authorization_code_exchange_lambda -> authorization_code_config++ $SECRETS_COLOR: Get authorization code exchange config
+return
+cognito_api <- authorization_code_exchange_lambda++ $API_COLOR: POST /token endpoint
+cognito_api --> cognito_api: Validate request
+return user tokens
+return user tokens
+|||
+
+@enduml

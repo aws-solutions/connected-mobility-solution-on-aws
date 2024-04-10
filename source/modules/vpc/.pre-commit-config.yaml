@@ -1,0 +1,108 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: name-tests-test
+        name: (VPC) Check test naming
+        args: ["--pytest-test-first"]
+        exclude: (tests/?.*/fixture(s)?_.*\.py$)
+      - id: check-executables-have-shebangs
+        name: (VPC) Check executables have shebangs
+      - id: fix-byte-order-marker
+        name: (VPC) Fix byte order marker
+      - id: check-case-conflict
+        name: (VPC) Check case conflict
+      - id: check-json
+        name: (VPC) Check json
+      - id: check-yaml
+        name: (VPC) Check yaml
+        args: [--allow-multiple-documents, --unsafe]
+      - id: check-toml
+        name: (VPC) Check toml
+      - id: check-merge-conflict
+        name: (VPC) Check for merge conflicts
+      - id: check-added-large-files
+        name: (VPC) Check for added large files
+        exclude: |
+          (?x)^(
+            ^.*/package-lock.json |
+            ^.*/yarn.lock |
+            ^.*/Pipfile.lock
+          )$
+      - id: end-of-file-fixer
+        name: (VPC) Fix end of files
+      - id: fix-encoding-pragma
+        name: (VPC) Fix python encoding pragma
+      - id: trailing-whitespace
+        name: (VPC) Trim trailing whitespace
+      - id: mixed-line-ending
+        name: (VPC) Mixed line ending
+      - id: detect-aws-credentials
+        name: (VPC) Detect AWS credentials
+        args: ["--credentials-file", "~/.ada/credentials"]
+      - id: detect-private-key
+        name: (VPC) Detect private keys
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.5.1
+    hooks:
+      - id: insert-license
+        name: (VPC) Insert license header (python)
+        files: \.py$
+        args:
+          - --license-filepath
+          - ./license_header.txt
+          - --detect-license-in-X-top-lines=3
+  - repo: https://github.com/psf/black
+    rev: 22.3.0
+    hooks:
+      - id: black
+        name: (VPC) Black
+  - repo: https://github.com/hadialqattan/pycln
+    rev: v2.1.3
+    hooks:
+      - id: pycln
+        name: (VPC) Pycln
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        name: (VPC) Isort (python)
+        args: ["--skip-glob", "**/node_modules/* **/.venv/*", "--settings-path", "./source/modules/vpc/pyproject.toml"]
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.4
+    hooks:
+      - id: bandit
+        name: (VPC) Bandit
+        args: ["-c", "./source/modules/vpc/pyproject.toml"]
+        additional_dependencies: [ "bandit[toml]" ]
+  - repo: https://github.com/pypa/pip-audit
+    rev: v2.6.1
+    hooks:
+      - id: pip-audit
+        name: (VPC) Pip audit
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier
+        name: (VPC) Prettier
+        types_or: [javascript, jsx, ts, tsx]
+  # Local
+  - repo: local
+    hooks:
+      - id: run-cfn-nag
+        name: (VPC) run-cfn-nag
+        entry: source/modules/vpc/deployment/run-cfn-nag.sh
+        files: infrastructure
+        language: system
+        types_or: [python, json]
+        pass_filenames: false
+      - id: run-unit-tests
+        name: (VPC) run-unit-tests
+        entry: source/modules/vpc/deployment/run-unit-tests.sh
+        args: ["--no-report"]
+        language: system
+        types: [python]
+        pass_filenames: false
