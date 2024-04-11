@@ -1,0 +1,2513 @@
+{
+  "Mappings": {
+    "Solution": {
+      "AssetsConfig": {
+        "S3AssetBucketBaseName": "test-bucket-base-name",
+        "S3AssetKeyPrefix": "test-object-key-prefix"
+      }
+    }
+  },
+  "Outputs": {
+    "cmsapicmsapimoduleoutputsoutputgraphqlendpointurl043E0322": {
+      "Description": "Endpoint URL for the CMS GraphQL API",
+      "Value": {
+        "Fn::GetAtt": [
+          "cmsapiappsyncapigraphqlapi7FD01C2C",
+          "GraphQLUrl"
+        ]
+      }
+    }
+  },
+  "Parameters": {
+    "AppUniqueId": {
+      "AllowedPattern": "^(?!-)[a-z0-9-]+(?<!-)$",
+      "ConstraintDescription": "AppUniqueId must contain min 3 and max 10 characters, and contain only lowercase alphanumeric characters and dashes.",
+      "Description": "Application unique identifier used to uniquely name resources within the stack.",
+      "MaxLength": 10,
+      "MinLength": 3,
+      "Type": "String"
+    },
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    }
+  },
+  "Resources": {
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+      "DependsOn": [
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 900
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:PutRetentionPolicy",
+                "logs:DeleteRetentionPolicy"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "Roles": [
+          {
+            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "appregistryapplicationstackassociation": {
+      "Properties": {
+        "Application": {
+          "Fn::GetAtt": [
+            "cmsapiappregistryappregistryapplication6ED84CFF",
+            "Id"
+          ]
+        },
+        "Resource": {
+          "Ref": "AWS::StackId"
+        },
+        "ResourceType": "CFN_STACK"
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::ResourceAssociation"
+    },
+    "cmsapiappregistryappregistryapplication6ED84CFF": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::Application"
+    },
+    "cmsapiappregistryappregistryapplicationattributeassociation794265BD": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Application": {
+          "Fn::GetAtt": [
+            "cmsapiappregistryappregistryapplication6ED84CFF",
+            "Id"
+          ]
+        },
+        "AttributeGroup": {
+          "Fn::GetAtt": [
+            "cmsapiappregistrydefaultapplicationattributes32AA6159",
+            "Id"
+          ]
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroupAssociation"
+    },
+    "cmsapiappregistrydefaultapplicationattributes32AA6159": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Attributes": {
+          "ApplicationType": "test-application-type",
+          "SolutionID": "test-solution-id",
+          "SolutionName": "test-solution-name",
+          "Version": "test-solution-version"
+        },
+        "Description": "Attribute group for solution information",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroup"
+    },
+    "cmsapiappsyncapigraphqlapi7FD01C2C": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AuthenticationType": "AWS_LAMBDA",
+        "LambdaAuthorizerConfig": {
+          "AuthorizerResultTtlInSeconds": 300,
+          "AuthorizerUri": {
+            "Fn::GetAtt": [
+              "cmsapiauthorizationlambdalambdafunctionCDD3194F",
+              "Arn"
+            ]
+          },
+          "IdentityValidationExpression": "^Bearer [\\w-]+\\.[\\w-]+\\.[\\w-]+$"
+        },
+        "LogConfig": {
+          "CloudWatchLogsRoleArn": {
+            "Fn::GetAtt": [
+              "cmsapiappsyncapigraphqlapiaccesslogroleE53C1217",
+              "Arn"
+            ]
+          },
+          "FieldLogLevel": "NONE"
+        },
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-test-module-short-name-appsync-api"
+            ]
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "XrayEnabled": true
+      },
+      "Type": "AWS::AppSync::GraphQLApi"
+    },
+    "cmsapiappsyncapigraphqlapiLogRetentionA3CE4499": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/appsync/apis/",
+              {
+                "Fn::GetAtt": [
+                  "cmsapiappsyncapigraphqlapi7FD01C2C",
+                  "ApiId"
+                ]
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsapiappsyncapigraphqlapiSchema42676EE2": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "cmsapiappsyncapigraphqlapi7FD01C2C",
+            "ApiId"
+          ]
+        },
+        "Definition": "str"
+      },
+      "Type": "AWS::AppSync::GraphQLSchema"
+    },
+    "cmsapiappsyncapigraphqlapiaccesslogroleDefaultPolicy822EEEBD": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":log-group:/aws/appsync/apis/",
+                      {
+                        "Fn::GetAtt": [
+                          "cmsapiappsyncapigraphqlapi7FD01C2C",
+                          "ApiId"
+                        ]
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":log-group:/aws/appsync/apis/",
+                      {
+                        "Fn::GetAtt": [
+                          "cmsapiappsyncapigraphqlapi7FD01C2C",
+                          "ApiId"
+                        ]
+                      },
+                      ":log-stream:*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cmsapiappsyncapigraphqlapiaccesslogroleDefaultPolicy822EEEBD",
+        "Roles": [
+          {
+            "Ref": "cmsapiappsyncapigraphqlapiaccesslogroleE53C1217"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cmsapiappsyncapigraphqlapiaccesslogroleE53C1217": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "appsync.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Path": "/",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsapiappsyncapigraphqlapilambdadatasourceD6B6B41C": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "cmsapiappsyncapigraphqlapi7FD01C2C",
+            "ApiId"
+          ]
+        },
+        "Description": "Lambda backed data source for Athena",
+        "LambdaConfig": {
+          "LambdaFunctionArn": {
+            "Fn::GetAtt": [
+              "cmsapiappsyncathenadatasourcelambda6647B8E4",
+              "Arn"
+            ]
+          }
+        },
+        "Name": "lambdadatasource",
+        "ServiceRoleArn": {
+          "Fn::GetAtt": [
+            "cmsapiappsyncapigraphqlapilambdadatasourceServiceRole89E4264D",
+            "Arn"
+          ]
+        },
+        "Type": "AWS_LAMBDA"
+      },
+      "Type": "AWS::AppSync::DataSource"
+    },
+    "cmsapiappsyncapigraphqlapilambdadatasourceServiceRole89E4264D": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "appsync.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsapiappsyncapigraphqlapilambdadatasourceServiceRoleDefaultPolicyBA726623": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "cmsapiappsyncathenadatasourcelambda6647B8E4",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "cmsapiappsyncathenadatasourcelambda6647B8E4",
+                          "Arn"
+                        ]
+                      },
+                      ":*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cmsapiappsyncapigraphqlapilambdadatasourceServiceRoleDefaultPolicyBA726623",
+        "Roles": [
+          {
+            "Ref": "cmsapiappsyncapigraphqlapilambdadatasourceServiceRole89E4264D"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cmsapiappsyncapigraphqlapiresolvergetvehicle510CFDE7": {
+      "DependsOn": [
+        "cmsapiappsyncapigraphqlapilambdadatasourceD6B6B41C",
+        "cmsapiappsyncapigraphqlapiSchema42676EE2",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "cmsapiappsyncapigraphqlapi7FD01C2C",
+            "ApiId"
+          ]
+        },
+        "DataSourceName": "lambdadatasource",
+        "FieldName": "getVehicle",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "{\n    \"version\": \"2017-02-28\",\n    \"operation\": \"Invoke\",\n    \"payload\": {\n        \"arguments\": $utils.toJson($ctx.args),\n        \"info\": $utils.toJson($ctx.info),\n        \"selectionSetList\": $utils.toJson($ctx.info.selectionSetList)\n    }\n}\n",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)",
+        "TypeName": "Query"
+      },
+      "Type": "AWS::AppSync::Resolver"
+    },
+    "cmsapiappsyncapigraphqlapiresolverlistvehicles72F800C4": {
+      "DependsOn": [
+        "cmsapiappsyncapigraphqlapilambdadatasourceD6B6B41C",
+        "cmsapiappsyncapigraphqlapiSchema42676EE2",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "cmsapiappsyncapigraphqlapi7FD01C2C",
+            "ApiId"
+          ]
+        },
+        "DataSourceName": "lambdadatasource",
+        "FieldName": "listVehicles",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "{\n    \"version\": \"2017-02-28\",\n    \"operation\": \"Invoke\",\n    \"payload\": {\n        \"arguments\": $utils.toJson($ctx.args),\n        \"info\": $utils.toJson($ctx.info),\n        \"selectionSetList\": $utils.toJson($ctx.info.selectionSetList)\n    }\n}\n",
+        "ResponseMappingTemplate": "$util.toJson($ctx.result)",
+        "TypeName": "Query"
+      },
+      "Type": "AWS::AppSync::Resolver"
+    },
+    "cmsapiappsyncathenadatasourceathenaresultcmks3cmkencryptedbucketCEA9B8D2": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "KMSMasterKeyID": {
+                  "Fn::GetAtt": [
+                    "cmsapiappsyncathenadatasourceathenaresultcmks3cmkkey82AD7B50",
+                    "Arn"
+                  ]
+                },
+                "SSEAlgorithm": "aws:kms"
+              }
+            }
+          ]
+        },
+        "LoggingConfiguration": {
+          "DestinationBucketName": {
+            "Ref": "cmsapiappsyncathenadatasourceathenaresultcmks3logbucket48A624E2"
+          }
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "cmsapiappsyncathenadatasourceathenaresultcmks3cmkencryptedbucketPolicy4669F49F": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Bucket": {
+          "Ref": "cmsapiappsyncathenadatasourceathenaresultcmks3cmkencryptedbucketCEA9B8D2"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "cmsapiappsyncathenadatasourceathenaresultcmks3cmkencryptedbucketCEA9B8D2",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "cmsapiappsyncathenadatasourceathenaresultcmks3cmkencryptedbucketCEA9B8D2",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Type": "AWS::S3::BucketPolicy"
+    },
+    "cmsapiappsyncathenadatasourceathenaresultcmks3cmkkey82AD7B50": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "cmsapiappsyncathenadatasourceathenaresultcmks3logbucket48A624E2": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AccessControl": "LogDeliveryWrite",
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        },
+        "OwnershipControls": {
+          "Rules": [
+            {
+              "ObjectOwnership": "ObjectWriter"
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "cmsapiappsyncathenadatasourceathenaresultcmks3logbucketPolicyEC6CEB5A": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Bucket": {
+          "Ref": "cmsapiappsyncathenadatasourceathenaresultcmks3logbucket48A624E2"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "cmsapiappsyncathenadatasourceathenaresultcmks3logbucket48A624E2",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "cmsapiappsyncathenadatasourceathenaresultcmks3logbucket48A624E2",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Type": "AWS::S3::BucketPolicy"
+    },
+    "cmsapiappsyncathenadatasourcelambda6647B8E4": {
+      "DependsOn": [
+        "cmsapiappsyncathenadatasourcelambdarole95DB1DA6",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "CMS API Athena data source Lambda",
+        "Environment": {
+          "Variables": {
+            "ATHENA_WORKGROUP": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "-test-module-short-name-athena-workgroup"
+                ]
+              ]
+            },
+            "AWS_ACCOUNT_ID": {
+              "Ref": "AWS::AccountId"
+            },
+            "DEPLOYMENT_UUID": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            },
+            "GLUE_DATABASE_NAME": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/connect-store/glue-database/name}}"
+                ]
+              ]
+            },
+            "GLUE_TABLE_NAME": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/connect-store/glue-table/name}}"
+                ]
+              ]
+            },
+            "METRICS_SOLUTION_URL": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/metrics/url}}"
+                ]
+              ]
+            },
+            "RECORD_LIMIT": "100",
+            "REPORT_METRICS_ENABLED": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/metrics/enabled}}"
+                ]
+              ]
+            },
+            "SOLUTION_ID": "test-solution-id",
+            "SOLUTION_VERSION": "test-solution-version",
+            "USER_AGENT_STRING": "AWSSOLUTION/test-solution-id/test-solution-version AWSSOLUTION-CAPABILITY/test-capability-id/test-solution-version"
+          }
+        },
+        "FunctionName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-test-module-short-name-athena-data-source"
+            ]
+          ]
+        },
+        "Handler": "function.main.handler",
+        "Layers": [
+          {
+            "Ref": "cmsapidependencylayerlambdadependencylayerversionBF498A31"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsapiappsyncathenadatasourcelambdarole95DB1DA6",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "Timeout": 60,
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "cmsapiappsyncathenadatasourcesecuritygroup1B5EAB15",
+                "GroupId"
+              ]
+            }
+          ],
+          "SubnetIds": [
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Fn::GetAtt": [
+                      "moduleinputsconstructvpcnamecustomresource12726E51",
+                      "parameter_value"
+                    ]
+                  },
+                  "/subnets/private/1}}"
+                ]
+              ]
+            },
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Fn::GetAtt": [
+                      "moduleinputsconstructvpcnamecustomresource12726E51",
+                      "parameter_value"
+                    ]
+                  },
+                  "/subnets/private/2}}"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsapiappsyncathenadatasourcelambdarole95DB1DA6": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-test-module-short-name-athena-data-source"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-test-module-short-name-athena-data-source:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch-logs-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "s3:ListBucket",
+                    "s3:GetObject",
+                    "s3:GetBucketLocation",
+                    "s3:ListBucketMultipartUploads",
+                    "s3:AbortMultipartUpload",
+                    "s3:PutObject",
+                    "s3:ListMultipartUploadParts"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "{{resolve:ssm:/solution/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "/connect-store/s3-storage-bucket/arn}}"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "{{resolve:ssm:/solution/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "/connect-store/s3-storage-bucket/arn}}/*"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::GetAtt": [
+                        "cmsapiappsyncathenadatasourceathenaresultcmks3cmkencryptedbucketCEA9B8D2",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          {
+                            "Fn::GetAtt": [
+                              "cmsapiappsyncathenadatasourceathenaresultcmks3cmkencryptedbucketCEA9B8D2",
+                              "Arn"
+                            ]
+                          },
+                          "/*"
+                        ]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Action": [
+                    "kms:Decrypt",
+                    "kms:GenerateDataKey"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "{{resolve:ssm:/solution/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "/connect-store/s3-storage-bucket/key-arn}}"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::GetAtt": [
+                        "cmsapiappsyncathenadatasourceathenaresultcmks3cmkkey82AD7B50",
+                        "Arn"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "s3-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "glue:GetSchemaVersion",
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "{{resolve:ssm:/solution/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "/connect-store/glue-schema/arn}}"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":glue:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":registry/{{resolve:ssm:/solution/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "/connect-store/glue-registry/name}}"
+                        ]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Action": "glue:GetTable",
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":glue:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":catalog"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":glue:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":database/{{resolve:ssm:/solution/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "/connect-store/glue-database/name}}"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":glue:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":table/{{resolve:ssm:/solution/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "/connect-store/glue-database/name}}/{{resolve:ssm:/solution/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "/connect-store/glue-table/name}}"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "glue-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "athena:StartQueryExecution",
+                    "athena:GetQueryExecution",
+                    "athena:GetQueryResults"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":athena:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":workgroup/",
+                        {
+                          "Ref": "AppUniqueId"
+                        },
+                        "-test-module-short-name-athena-workgroup"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "athena-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "ec2:CreateNetworkInterfacePermission",
+                  "Condition": {
+                    "StringEquals": {
+                      "ec2:AuthorizedService": "lambda.amazonaws.com",
+                      "ec2:Subnet": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Fn::GetAtt": [
+                                  "moduleinputsconstructvpcnamecustomresource12726E51",
+                                  "parameter_value"
+                                ]
+                              },
+                              "/subnets/private/1}}"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Fn::GetAtt": [
+                                  "moduleinputsconstructvpcnamecustomresource12726E51",
+                                  "parameter_value"
+                                ]
+                              },
+                              "/subnets/private/2}}"
+                            ]
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":ec2:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":network-interface/*"
+                      ]
+                    ]
+                  }
+                },
+                {
+                  "Action": [
+                    "ec2:DescribeNetworkInterfaces",
+                    "ec2:CreateNetworkInterface",
+                    "ec2:DeleteNetworkInterface"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ec2-vpc-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsapiappsyncathenadatasourcesecuritygroup1B5EAB15": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "GroupDescription": "cms-api/cms-api/appsync-athena-data-source/security-group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Fn::GetAtt": [
+                  "moduleinputsconstructvpcnamecustomresource12726E51",
+                  "parameter_value"
+                ]
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "cmsapiappsyncathenadatasourceworkgroup0D34D2D5": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Athena Workgroup for CMS",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-test-module-short-name-athena-workgroup"
+            ]
+          ]
+        },
+        "RecursiveDeleteOption": true,
+        "Tags": [
+          {
+            "Key": "GrafanaDataSource",
+            "Value": "true"
+          },
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "WorkGroupConfiguration": {
+          "EnforceWorkGroupConfiguration": true,
+          "ResultConfiguration": {
+            "EncryptionConfiguration": {
+              "EncryptionOption": "SSE_KMS",
+              "KmsKey": {
+                "Fn::GetAtt": [
+                  "cmsapiappsyncathenadatasourceathenaresultcmks3cmkkey82AD7B50",
+                  "Arn"
+                ]
+              }
+            },
+            "OutputLocation": {
+              "Fn::Join": [
+                "",
+                [
+                  "s3://",
+                  {
+                    "Ref": "cmsapiappsyncathenadatasourceathenaresultcmks3cmkencryptedbucketCEA9B8D2"
+                  }
+                ]
+              ]
+            }
+          }
+        }
+      },
+      "Type": "AWS::Athena::WorkGroup"
+    },
+    "cmsapiauthorizationlambdalambdafunctionCDD3194F": {
+      "DependsOn": [
+        "cmsapiauthorizationlambdalambdarole51F147E8",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "CMS API authorization lambda function",
+        "Environment": {
+          "Variables": {
+            "TOKEN_VALIDATION_LAMBDA_ARN": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/auth/token-validation-lambda/arn}}"
+                ]
+              ]
+            },
+            "USER_AGENT_STRING": "AWSSOLUTION/test-solution-id/test-solution-version AWSSOLUTION-CAPABILITY/test-capability-id/test-solution-version"
+          }
+        },
+        "FunctionName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-test-module-short-name-authorization"
+            ]
+          ]
+        },
+        "Handler": "main.handler",
+        "Layers": [
+          {
+            "Ref": "cmsapidependencylayerlambdadependencylayerversionBF498A31"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsapiauthorizationlambdalambdarole51F147E8",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "Timeout": 60,
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "cmsapiauthorizationlambdasecuritygroup39C54053",
+                "GroupId"
+              ]
+            }
+          ],
+          "SubnetIds": [
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Fn::GetAtt": [
+                      "moduleinputsconstructvpcnamecustomresource12726E51",
+                      "parameter_value"
+                    ]
+                  },
+                  "/subnets/private/1}}"
+                ]
+              ]
+            },
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Fn::GetAtt": [
+                      "moduleinputsconstructvpcnamecustomresource12726E51",
+                      "parameter_value"
+                    ]
+                  },
+                  "/subnets/private/2}}"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsapiauthorizationlambdalambdafunctionLogRetention0B12AF5C": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsapiauthorizationlambdalambdafunctionCDD3194F"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsapiauthorizationlambdalambdafunctiongraphqlapiappsyncE3A01FE8": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "cmsapiauthorizationlambdalambdafunctionCDD3194F",
+            "Arn"
+          ]
+        },
+        "Principal": "appsync.amazonaws.com"
+      },
+      "Type": "AWS::Lambda::Permission"
+    },
+    "cmsapiauthorizationlambdalambdarole51F147E8": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-test-module-short-name-authorization"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-test-module-short-name-authorization:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "lambda:InvokeFunction",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "{{resolve:ssm:/solution/",
+                        {
+                          "Ref": "AppUniqueId"
+                        },
+                        "/auth/token-validation-lambda/arn}}"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "lambda-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "ec2:CreateNetworkInterfacePermission",
+                  "Condition": {
+                    "StringEquals": {
+                      "ec2:AuthorizedService": "lambda.amazonaws.com",
+                      "ec2:Subnet": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Fn::GetAtt": [
+                                  "moduleinputsconstructvpcnamecustomresource12726E51",
+                                  "parameter_value"
+                                ]
+                              },
+                              "/subnets/private/1}}"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Fn::GetAtt": [
+                                  "moduleinputsconstructvpcnamecustomresource12726E51",
+                                  "parameter_value"
+                                ]
+                              },
+                              "/subnets/private/2}}"
+                            ]
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":ec2:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":network-interface/*"
+                      ]
+                    ]
+                  }
+                },
+                {
+                  "Action": [
+                    "ec2:DescribeNetworkInterfaces",
+                    "ec2:CreateNetworkInterface",
+                    "ec2:DeleteNetworkInterface"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ec2-vpc-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsapiauthorizationlambdasecuritygroup39C54053": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "GroupDescription": "cms-api/cms-api/authorization-lambda/security-group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Fn::GetAtt": [
+                  "moduleinputsconstructvpcnamecustomresource12726E51",
+                  "parameter_value"
+                ]
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "cmsapicdklambdasvpcconstructsecuritygroup97689D73": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Metadata": {
+        "cfn_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "W5",
+              "reason": "Unable to know egress requirement. leaving open for now"
+            },
+            {
+              "id": "W40",
+              "reason": "Unable to know egress requirement. leaving open for now"
+            }
+          ]
+        }
+      },
+      "Properties": {
+        "GroupDescription": "cms-api/cms-api/cdk-lambdas-vpc-construct/security-group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Fn::GetAtt": [
+                  "moduleinputsconstructvpcnamecustomresource12726E51",
+                  "parameter_value"
+                ]
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "cmsapicmsapimoduleoutputsssmathenaresultbucketarn057D5C05": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Arn of S3 bucket where Athena results are stored",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/test-module-short-name/athena-result-bucket/arn"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "cmsapiappsyncathenadatasourceathenaresultcmks3cmkencryptedbucketCEA9B8D2",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsapicmsapimoduleoutputsssmathenaresultbucketkeyarnDE34295D": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Arn of KMS key for S3 bucket where Athena results are stored",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/test-module-short-name/athena-result-bucket/key-arn"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "cmsapiappsyncathenadatasourceathenaresultcmks3cmkkey82AD7B50",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsapicmsapimoduleoutputsssmathenaresultbucketname7D6CB5D1": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Name of S3 bucket where Athena results are stored",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/test-module-short-name/athena-result-bucket/name"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "cmsapiappsyncathenadatasourceathenaresultcmks3cmkencryptedbucketCEA9B8D2"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsapicmsapimoduleoutputsssmathenaresultbucketregionB2D8CED3": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Region of S3 bucket where Athena results are stored",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/test-module-short-name/athena-result-bucket/region"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "AWS::Region"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsapicmsapimoduleoutputsssmathenaworkgroupname7D81F49C": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Name of Athena workgroup",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/test-module-short-name/athena-workgroup/name"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-test-module-short-name-athena-workgroup"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsapicmsapimoduleoutputsssmgraphqlendpointurl88A6D23F": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Endpoint URL for the CMS GraphQL API",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/test-module-short-name/graphql-endpoint/url"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "cmsapiappsyncapigraphqlapi7FD01C2C",
+            "GraphQLUrl"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsapidependencylayerlambdadependencylayerversionBF498A31": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "CompatibleArchitectures": [
+          "x86_64",
+          "arm64"
+        ],
+        "CompatibleRuntimes": [
+          "python3.8",
+          "python3.9",
+          "python3.10"
+        ],
+        "Content": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        }
+      },
+      "Type": "AWS::Lambda::LayerVersion"
+    },
+    "moduleinputsconstructvpcnamecustomresource12726E51": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "ParameterName": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/config/vpc/name"
+            ]
+          ]
+        },
+        "Resource": "SsmParameters",
+        "ServiceToken": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/config/aws-resource-lookup-lambda/arn}}"
+            ]
+          ]
+        }
+      },
+      "Type": "Custom::SsmParameters",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "ssmappuniqueidregistermodule9C5C2C5D": {
+      "Properties": {
+        "Description": "SSM parameter to register a module with an app unique ID.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/test-module-short-name"
+            ]
+          ]
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                  ],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}

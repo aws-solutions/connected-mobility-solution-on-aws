@@ -1,0 +1,765 @@
+
+
+AWSTemplateFormatVersion: "2010-09-09"
+Description: (SO0241-CMS.23) connected-mobility-solution-on-aws - vpc. Version v1.1.0
+  This template deploys a VPC, with a pair of public and private subnets spread
+  across two Availability Zones. It deploys an internet gateway, with a default
+  route on the public subnets. It deploys a pair of NAT gateways (one in each AZ),
+  and default routes for them in the private subnets.
+Parameters:
+  VpcName:
+    Description: Name of the vpc. It is also used to prefix other resource names
+    Type: String
+
+  VpcCIDR:
+    Description: Please enter the IP range (CIDR notation) for this VPC
+    Type: String
+    Default: 10.0.0.0/16
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: Must be a valid CIDR range in the form x.x.x.x/xx
+
+  PublicSubnet1CIDR:
+    Description: Please enter the IP range (CIDR notation) for the public subnet in the first Availability Zone
+    Type: String
+    Default: 10.0.10.0/22
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: Must be a valid CIDR range in the form x.x.x.x/xx
+
+  PublicSubnet2CIDR:
+    Description: Please enter the IP range (CIDR notation) for the public subnet in the second Availability Zone
+    Type: String
+    Default: 10.0.14.0/22
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: Must be a valid CIDR range in the form x.x.x.x/xx
+
+  IsolatedSubnet1CIDR:
+    Description: Please enter the IP range (CIDR notation) for the isolated subnet in the first Availability Zone
+    Type: String
+    Default: 10.0.20.0/22
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: Must be a valid CIDR range in the form x.x.x.x/xx
+
+  IsolatedSubnet2CIDR:
+    Description: Please enter the IP range (CIDR notation) for the isolated subnet in the second Availability Zone
+    Type: String
+    Default: 10.0.24.0/22
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: Must be a valid CIDR range in the form x.x.x.x/xx
+
+  PrivateSubnet1CIDR:
+    Description: Please enter the IP range (CIDR notation) for the private subnet in the first Availability Zone
+    Type: String
+    Default: 10.0.100.0/22
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: Must be a valid CIDR range in the form x.x.x.x/xx
+
+  PrivateSubnet2CIDR:
+    Description: Please enter the IP range (CIDR notation) for the private subnet in the second Availability Zone
+    Type: String
+    Default: 10.0.104.0/22
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: Must be a valid CIDR range in the form x.x.x.x/xx
+
+  VpcFlowLogsEnabled:
+    Type: String
+    Default: "true"
+    AllowedValues:
+      - "true"
+      - "false"
+
+Conditions:
+  IsVpcFlowLogEnabled: !Equals [!Ref VpcFlowLogsEnabled, "true"]
+
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCIDR
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: !Ref VpcName
+
+  VpcFlowLog:
+    Condition: IsVpcFlowLogEnabled
+    Type: AWS::EC2::FlowLog
+    Properties:
+      DeliverLogsPermissionArn: !GetAtt VpcFlowLogRole.Arn
+      LogDestinationType: cloud-watch-logs
+      LogGroupName: VpcFlowLogsGroup
+      ResourceId: !Ref VPC
+      ResourceType: VPC
+      TrafficType: ALL
+
+  VpcFlowLogRole:
+    Condition: IsVpcFlowLogEnabled
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: vpc-flow-logs.amazonaws.com
+            Action: sts:AssumeRole
+      Path: /
+      Policies:
+        - PolicyName: allow-access-to-cw-logs
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:*"
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Ref VpcName
+
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: !Ref PublicSubnet1CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcName} Public Subnet (AZ1)
+
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
+      CidrBlock: !Ref PublicSubnet2CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcName} Public Subnet (AZ2)
+
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs  '' ]
+      CidrBlock: !Ref PrivateSubnet1CIDR
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcName} Private Subnet (AZ1)
+
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
+      CidrBlock: !Ref PrivateSubnet2CIDR
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcName} Private Subnet (AZ2)
+
+  IsolatedSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs  '' ]
+      CidrBlock: !Ref IsolatedSubnet1CIDR
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcName} Isolated Subnet (AZ1)
+
+  IsolatedSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
+      CidrBlock: !Ref IsolatedSubnet2CIDR
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcName} Isolated Subnet (AZ2)
+
+  NatGateway1EIP:
+    Type: AWS::EC2::EIP
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      Domain: vpc
+
+  NatGateway2EIP:
+    Type: AWS::EC2::EIP
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      Domain: vpc
+
+  NatGateway1:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGateway1EIP.AllocationId
+      SubnetId: !Ref PublicSubnet1
+
+  NatGateway2:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGateway2EIP.AllocationId
+      SubnetId: !Ref PublicSubnet2
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcName} Public Routes
+
+  DefaultPublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet1
+
+  PublicSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet2
+
+
+  PrivateRouteTable1:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcName} Private Routes (AZ1)
+
+  DefaultPrivateRoute1:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable1
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway1
+
+  PrivateSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable1
+      SubnetId: !Ref PrivateSubnet1
+
+  PrivateRouteTable2:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcName} Private Routes (AZ2)
+
+  DefaultPrivateRoute2:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable2
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway2
+
+  PrivateSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable2
+      SubnetId: !Ref PrivateSubnet2
+
+
+  IsolatedRouteTable1:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcName} Isolated Routes (AZ1)
+
+  IsolatedSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref IsolatedRouteTable1
+      SubnetId: !Ref IsolatedSubnet1
+
+  IsolatedRouteTable2:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcName} Isolated Routes (AZ2)
+
+  IsolatedSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref IsolatedRouteTable2
+      SubnetId: !Ref IsolatedSubnet2
+
+  VpcIdSSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: VPC Id
+      Name: !Sub /solution/vpc/${VpcName}/vpcid
+      Value: !Ref VPC
+
+  VpcNameSSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: VPC Name
+      Name: !Sub /solution/vpc/${VpcName}/name
+      Value: !Ref VpcName
+
+  AZSSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: Public Subnet Ids
+      Name: !Sub /solution/vpc/${VpcName}/AZs
+      Value: !Join [",", [!Select [0, !GetAZs ""], !Select [1, !GetAZs ""]]]
+
+  PublicSubnetsSSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: Public Subnet Ids
+      Name: !Sub /solution/vpc/${VpcName}/subnets/public
+      Value: !Sub ${PublicSubnet1},${PublicSubnet2}
+
+  PublicSubnetCIDRSSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: Public Subnet CIDRs
+      Name: !Sub /solution/vpc/${VpcName}/subnets/cidr/public
+      Value: !Sub ${PublicSubnet1CIDR},${PublicSubnet2CIDR}
+
+  PrivateSubnetCIDRSSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: Private Subnet CIDRs
+      Name: !Sub /solution/vpc/${VpcName}/subnets/cidr/private
+      Value: !Sub ${PrivateSubnet1CIDR},${PrivateSubnet2CIDR}
+
+  IsolatedSubnetCIDRSSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: Isolated Subnet CIDRs
+      Name: !Sub /solution/vpc/${VpcName}/subnets/cidr/isolated
+      Value: !Sub ${IsolatedSubnet1CIDR},${IsolatedSubnet2CIDR}
+
+  PublicRouteTableSSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: Public Route Table
+      Name: !Sub /solution/vpc/${VpcName}/routetable/public
+      Value: !Ref PublicRouteTable
+
+  PrivateRouteTableSSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: Private Route Table
+      Name: !Sub /solution/vpc/${VpcName}/routetable/private
+      Value: !Sub ${PrivateRouteTable1},${PrivateRouteTable2}
+
+  IsolatedRouteTableSSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: Isolated Route Table
+      Name: !Sub /solution/vpc/${VpcName}/routetable/isolated
+      Value: !Sub ${IsolatedRouteTable1},${IsolatedRouteTable2}
+
+  PrivateSubnetsSSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: Private Subnet Ids
+      Name: !Sub /solution/vpc/${VpcName}/subnets/private
+      Value: !Sub ${PrivateSubnet1},${PrivateSubnet2}
+
+  IsolatedSubnetsSSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: Isolated Subnet Ids
+      Name: !Sub /solution/vpc/${VpcName}/subnets/isolated
+      Value: !Sub ${IsolatedSubnet1},${IsolatedSubnet2}
+
+#### Temporary SSMParameters for individual subnets until we can support more than two AZs ####
+  PublicSubnet1SSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: Public Subnet 1 Id
+      Name: !Sub /solution/vpc/${VpcName}/subnets/public/1
+      Value: !Ref PublicSubnet1
+
+  PublicSubnet2SSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: Public Subnet 2 Id
+      Name: !Sub /solution/vpc/${VpcName}/subnets/public/2
+      Value: !Ref PublicSubnet2
+
+  PrivateSubnet1SSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: Private Subnet 1 Id
+      Name: !Sub /solution/vpc/${VpcName}/subnets/private/1
+      Value: !Ref PrivateSubnet1
+
+  PrivateSubnet2SSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: Private Subnet 2 Id
+      Name: !Sub /solution/vpc/${VpcName}/subnets/private/2
+      Value: !Ref PrivateSubnet2
+
+  IsolatedSubnet1SSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: Isolated Subnet 1
+      Name: !Sub /solution/vpc/${VpcName}/subnets/isolated/1
+      Value: !Ref IsolatedSubnet1
+
+  IsolatedSubnet2SSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: Isolated Subnet 2
+      Name: !Sub /solution/vpc/${VpcName}/subnets/isolated/2
+      Value: !Ref IsolatedSubnet2
+
+  AZ1SSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: AZ1
+      Name: !Sub /solution/vpc/${VpcName}/azs/1
+      Value: !Select [0, !GetAZs ""]
+
+  AZ2SSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: AZ2
+      Name: !Sub /solution/vpc/${VpcName}/azs/2
+      Value: !Select [1, !GetAZs ""]
+
+#### PRIVATE NETWORK VPC ENDPOINTS ################################################################
+# To add additional endpoints, refer to the following documentation on service availability
+# https://docs.aws.amazon.com/vpc/latest/privatelink/aws-services-privatelink-support.html
+
+  DynamoDBEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: "*"
+            Principal: "*"
+            Resource: "*"
+      RouteTableIds:
+        - !Ref PrivateRouteTable1
+        - !Ref PrivateRouteTable2
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.dynamodb"
+      VpcId: !Ref VPC
+
+  S3Endpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: "*"
+            Principal: "*"
+            Resource: "*"
+      RouteTableIds:
+        - !Ref PrivateRouteTable1
+        - !Ref PrivateRouteTable2
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.s3"
+      VpcId: !Ref VPC
+
+  VpcEndpointSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: vpc-endpoints-security-group
+      GroupDescription: Allow inbound traffic from the VPC to VPC Endpoints
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: -1
+          CidrIp: !Ref VpcCIDR
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: !Ref VpcCIDR
+      Tags:
+        - Key: Name
+          Value: !Ref VpcName
+
+  ApiGatewayEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      PrivateDnsEnabled: True
+      VpcEndpointType: Interface
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.execute-api"
+      VpcId: !Ref VPC
+      SecurityGroupIds:
+        - !GetAtt VpcEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+
+  AthenaEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      PrivateDnsEnabled: True
+      VpcEndpointType: Interface
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.athena"
+      VpcId: !Ref VPC
+      SecurityGroupIds:
+        - !GetAtt VpcEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+
+  CloudFormationEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      PrivateDnsEnabled: True
+      VpcEndpointType: Interface
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.cloudformation"
+      VpcId: !Ref VPC
+      SecurityGroupIds:
+        - !GetAtt VpcEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+
+  CloudWatchLogsEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      PrivateDnsEnabled: True
+      VpcEndpointType: Interface
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.logs"
+      VpcId: !Ref VPC
+      SecurityGroupIds:
+        - !GetAtt VpcEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+
+  CloudTrailEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      PrivateDnsEnabled: True
+      VpcEndpointType: Interface
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.cloudtrail"
+      VpcId: !Ref VPC
+      SecurityGroupIds:
+        - !GetAtt VpcEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+
+  CodeBuildEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      PrivateDnsEnabled: True
+      VpcEndpointType: Interface
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.codebuild"
+      VpcId: !Ref VPC
+      SecurityGroupIds:
+        - !GetAtt VpcEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+
+  CodePipelineEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      PrivateDnsEnabled: True
+      VpcEndpointType: Interface
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.codepipeline"
+      VpcId: !Ref VPC
+      SecurityGroupIds:
+        - !GetAtt VpcEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+
+  ECRApiEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      PrivateDnsEnabled: True
+      VpcEndpointType: Interface
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.ecr.api"
+      VpcId: !Ref VPC
+      SecurityGroupIds:
+        - !GetAtt VpcEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+
+  ECRDKREndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      PrivateDnsEnabled: True
+      VpcEndpointType: Interface
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.ecr.dkr"
+      VpcId: !Ref VPC
+      SecurityGroupIds:
+        - !GetAtt VpcEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+
+  ECSEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      PrivateDnsEnabled: True
+      VpcEndpointType: Interface
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.ecs"
+      VpcId: !Ref VPC
+      SecurityGroupIds:
+        - !GetAtt VpcEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+
+  KMSEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      PrivateDnsEnabled: True
+      VpcEndpointType: Interface
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.kms"
+      VpcId: !Ref VPC
+      SecurityGroupIds:
+        - !GetAtt VpcEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+
+  LambdaEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      PrivateDnsEnabled: True
+      VpcEndpointType: Interface
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.lambda"
+      VpcId: !Ref VPC
+      SecurityGroupIds:
+        - !GetAtt VpcEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+
+  RDSEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      PrivateDnsEnabled: True
+      VpcEndpointType: Interface
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.rds"
+      VpcId: !Ref VPC
+      SecurityGroupIds:
+        - !GetAtt VpcEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+
+  RDSDataEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      PrivateDnsEnabled: True
+      VpcEndpointType: Interface
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.rds-data"
+      VpcId: !Ref VPC
+      SecurityGroupIds:
+        - !GetAtt VpcEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+
+  SecretsManagerEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      PrivateDnsEnabled: True
+      VpcEndpointType: Interface
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.secretsmanager"
+      VpcId: !Ref VPC
+      SecurityGroupIds:
+        - !GetAtt VpcEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+
+Outputs:
+  VPC:
+    Description: A reference to the created VPC
+    Value: !Ref VPC
+
+  PublicSubnets:
+    Description: A list of the public subnets
+    Value: !Join [ ",", [ !Ref PublicSubnet1, !Ref PublicSubnet2 ]]
+
+  PrivateSubnets:
+    Description: A list of the private subnets
+    Value: !Join [ ",", [ !Ref PrivateSubnet1, !Ref PrivateSubnet2 ]]
+
+  PublicSubnet1:
+    Description: A reference to the public subnet in the 1st Availability Zone
+    Value: !Ref PublicSubnet1
+
+  PublicSubnet2:
+    Description: A reference to the public subnet in the 2nd Availability Zone
+    Value: !Ref PublicSubnet2
+
+  PrivateSubnet1:
+    Description: A reference to the private subnet in the 1st Availability Zone
+    Value: !Ref PrivateSubnet1
+
+  PrivateSubnet2:
+    Description: A reference to the private subnet in the 2nd Availability Zone
+    Value: !Ref PrivateSubnet2
+
+  IsolatedSubnet1:
+    Description: A reference to the isolated subnet in the 1st Availability Zone
+    Value: !Ref IsolatedSubnet1
+
+  IsolatedSubnet2:
+    Description: A reference to the isolated subnet in the 2nd Availability Zone
+    Value: !Ref IsolatedSubnet2

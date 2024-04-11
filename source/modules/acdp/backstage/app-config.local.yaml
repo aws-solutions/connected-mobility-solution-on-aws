@@ -1,0 +1,200 @@
+app:
+  title: local
+  baseUrl: http://localhost:8081
+  auth:
+    providers: {}
+
+organization:
+  name: local
+
+acdp:
+  s3Catalog:
+    bucketName: ${REGIONAL_ASSET_BUCKET_NAME}
+    prefix: local/backstage/catalog
+    region: ${AWS_REGION}
+  buildConfig:
+    buildConfigStoreSsmPrefix: /local/backstage/acdp-build
+  deploymentDefaults:
+    codeBuildProjectArn: arn:aws:codebuild:${AWS_REGION}:${AWS_ACCOUNT_ID}:project/acdp-deployment-project
+    accountId: ${AWS_ACCOUNT_ID}
+    region: ${AWS_REGION}
+  metrics:
+    userAgentString: local-user-agent
+  allow-unsafe-local-dir-access: true
+
+backend:
+  # Used for enabling authentication, secret is shared by all backend plugins
+  # See https://backstage.io/docs/auth/service-to-service-auth for
+  # information on the format
+  auth:
+    keys:
+      - secret: test
+    providers: {}
+  baseUrl: http://localhost:8080
+  listen:
+    port: 8080
+  csp:
+    connect-src: ["'self'", 'http:', 'https:']
+  cors:
+    origin:
+      - http://localhost:8081
+      - http://localhost
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+  database:
+    client: pg
+    connection:
+      host: localhost
+      port: 5432
+      user: test
+      password: test
+  cache:
+    store: memory
+  # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
+
+# Reference documentation http://backstage.io/docs/features/techdocs/configuration
+# Note: After experimenting with basic setup, use CI/CD to generate docs
+# and an external cloud storage when deploying TechDocs for production use-case.
+# https://backstage.io/docs/features/techdocs/how-to-guides#how-to-migrate-from-techdocs-basic-to-recommended-deployment-approach
+techdocs:
+  generator:
+    runIn: 'local'
+  builder: 'local'
+  publisher:
+    type: 'awsS3'
+    awsS3:
+      bucketName: ${REGIONAL_ASSET_BUCKET_NAME}
+      region: ${AWS_REGION}
+      bucketRootPath: local/backstage/techdocs
+auth:
+  environment: development
+  providers: {}
+  session:
+    secret: test
+  auth:
+    providers: {}
+    keys:
+      - secret: test
+
+scaffolder:
+  # see https://backstage.io/docs/features/software-templates/configuration for software template options
+  concurrentTasksLimit: 10
+
+catalog:
+  rules:
+    - allow: [Component, System, API, Group, User, Resource, Location, Template]
+  orphanStrategy: delete
+  processingInterval: { minutes: 1 }
+  locations:
+    - type: file
+      target: ../../../../../modules/cms_api/deployment/regional-s3-assets/backstage/templates/cms-api.template.yaml
+      rules:
+        - allow: [Template]
+    - type: file
+      target: ../../../../../modules/cms_alerts/deployment/regional-s3-assets/backstage/templates/cms-alerts.template.yaml
+      rules:
+        - allow: [Template]
+    - type: file
+      target: ../../../../../modules/cms_provisioning/deployment/regional-s3-assets/backstage/templates/cms-provisioning.template.yaml
+      rules:
+        - allow: [Template]
+    - type: file
+      target: ../../../../../modules/cms_connect_store/deployment/regional-s3-assets/backstage/templates/cms-connect-store.template.yaml
+      rules:
+        - allow: [Template]
+    - type: file
+      target: ../../../../../modules/cms_ev_battery_health/deployment/regional-s3-assets/backstage/templates/cms-ev-battery-health.template.yaml
+      rules:
+        - allow: [Template]
+    - type: file
+      target: ../../../../../modules/cms_vehicle_simulator/deployment/regional-s3-assets/backstage/templates/cms-vehicle-simulator.template.yaml
+      rules:
+        - allow: [Template]
+    - type: file
+      target: ../../../../../modules/cms_auth/deployment/regional-s3-assets/backstage/templates/cms-auth.template.yaml
+      rules:
+        - allow: [Template]
+    - type: file
+      target: ../../../../../modules/cms_fleetwise_connector/deployment/regional-s3-assets/backstage/templates/cms-fleetwise-connector.template.yaml
+      rules:
+        - allow: [Template]
+    - type: file
+      target: ../../../../../modules/vpc/deployment/regional-s3-assets/backstage/templates/vpc.template.yaml
+      rules:
+        - allow: [Template]
+    - type: file
+      target: ../../../../../modules/auth_setup/deployment/regional-s3-assets/backstage/templates/auth-setup.template.yaml
+      rules:
+        - allow: [Template]
+    - type: file
+      target: ../../../../../modules/cms_sample/deployment/regional-s3-assets/backstage/templates/cms-sample.template.yaml
+      rules:
+        - allow: [Template]
+    - type: file
+      target: ../../../../../modules/cms_config/deployment/regional-s3-assets/backstage/templates/cms-config.template.yaml
+      rules:
+        - allow: [Template]
+
+  # For local testing of AWS integration, uncomment this and fill in <PlACEHOLDER>
+  # providers:
+  #   rules:
+  #   - allow: [Component, System, API, Group, User, Resource, Location, Template]
+  #   awsS3:
+  #     acdpTemplateResourceBucket:
+  #       bucketName: ${REGIONAL_ASSET_BUCKET_NAME}
+  #       prefix: ${BACKSTAGE_ASSETS_PREFIX}
+  #       region: ${AWS_REGION}
+  #       schedule:
+  #         frequency:
+  #           minutes: 1
+  #         timeout: { minutes: 1 }
+  #     acdpDocsResourceBucket:
+  #       bucketName: ${REGIONAL_ASSET_BUCKET_NAME}
+  #       prefix: ${BACKSTAGE_ASSETS_PREFIX}/docs
+  #       region: ${AWS_REGION}
+  #       schedule:
+  #         frequency:
+  #           minutes: 1
+  #         timeout: { minutes: 3 }
+  # locations:
+  ## Uncomment these lines to add more example data
+  # - type: url
+  #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
+
+  ## Uncomment these lines to add an example org
+  # - type: url
+  #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme-corp.yaml
+  #   rules:
+  #     - allow: [User, Group]
+
+
+#Enable this to allow connections to externally hosted repositories. s3 integration works automatically via IAM and isn't needed here
+# integrations:
+# gitlab:
+#   - host: gitlab.aws.dev
+#     baseUrl: https://gitlab.aws.dev/
+#     apiBaseUrl: https://gitlab.aws.dev/api/v4
+#     token: ${GITLAB_TOKEN}
+#     allowedKinds: [Component, System, API, Group, User, Resource, Location, Template]
+# github:
+#   - host: github.com
+#     # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
+#     # about setting up the GitHub integration here: https://backstage.io/docs/getting-started/configuration#setting-up-a-github-integration
+#     token: ${GITHUB_TOKEN}
+#     allowedKinds: [Component, System, API, Group, User, Resource, Location, Template]
+### Example for how to add your GitHub Enterprise instance using the API:
+# - host: ghe.example.net
+#   apiBaseUrl: https://ghe.example.net/api/v3
+#   token: ${GHE_TOKEN}
+
+# proxy:
+#   '/rss/reddit':
+#     target: 'https://www.reddit.com/r/'
+#   '/rss/hacker-news':
+#     target: 'https://hnrss.org/'
+
+### Example for how to add a proxy endpoint for the frontend.
+### A typical reason to do this is to handle HTTPS and CORS for internal services.
+# '/test':
+#   target: 'https://example.com'
+#   changeOrigin: true

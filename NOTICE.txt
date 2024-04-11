@@ -26,8 +26,6 @@ This software includes third party software subject to the following copyrights:
 @aws-sdk/signature-v4 under the Apache License 2.0
 @aws/aws-codeservices-backend-plugin-for-backstage under the Apache License 2.0
 @aws/aws-codeservices-plugin-for-backstage under the Apache License 2.0
-@aws/aws-proton-backend-plugin-for-backstage under the Apache License 2.0
-@aws/aws-proton-plugin-for-backstage under the Apache License 2.0
 @backstage/app-defaults under the Apache License 2.0
 @backstage/backend-common under the Apache License 2.0
 @backstage/backend-tasks under the Apache License 2.0
@@ -115,7 +113,6 @@ rsa under the Apache License 2.0
 s3transfer under the Apache License 2.0
 types-pyasn1 under the Apache License 2.0
 types-python-dateutil under the Apache License 2.0
-types-python-jose under the Apache License 2.0
 types-PyYAML under the Apache License 2.0
 types-setuptools under the Apache License 2.0
 typescript under the Apache License 2.0
@@ -159,7 +156,6 @@ cross-env under the Massachusetts Institute of Technology (MIT) license
 cypress under the Massachusetts Institute of Technology (MIT) license
 dataclass-type-validator under the Massachusetts Institute of Technology (MIT) license
 dparse under the Massachusetts Institute of Technology (MIT) license
-ecdsa under the Massachusetts Institute of Technology (MIT) license
 eslint-plugin-cypress under the Massachusetts Institute of Technology (MIT) license
 exceptiongroup under the Massachusetts Institute of Technology (MIT) license
 express-promise-router under the Massachusetts Institute of Technology (MIT) license
@@ -199,7 +195,6 @@ pyrsistent under the Massachusetts Institute of Technology (MIT) license
 pytest under the Massachusetts Institute of Technology (MIT) license
 pytest-cov under the Massachusetts Institute of Technology (MIT) license
 pytest-mock under the Massachusetts Institute of Technology (MIT) license
-python-jose under the Massachusetts Institute of Technology (MIT) license
 react under the Massachusetts Institute of Technology (MIT) license
 react-bootstrap under the Massachusetts Institute of Technology (MIT) license
 react-dom under the Massachusetts Institute of Technology (MIT) license
@@ -275,7 +270,3 @@ pathspec under the Mozilla Public License 2.0 (MPL 2.0)
 typing_extensions under the PSF license
 
 uuid under Unknown license
-
-aws-encryption-sdk under Apache Software License (Apache License 2.0)
-
-jsonpath-ng under Apache Software License (Apache 2.0)

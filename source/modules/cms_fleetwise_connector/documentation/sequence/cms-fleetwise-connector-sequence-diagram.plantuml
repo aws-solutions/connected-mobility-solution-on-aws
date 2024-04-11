@@ -1,0 +1,86 @@
+@startuml cms-fleetwise-connector-sequence-diagram
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/ApplicationIntegration/EventBridge.puml
+!include AWSPuml/ApplicationIntegration/StepFunctions.puml
+!include AWSPuml/Database/Timestream.puml
+!include AWSPuml/Storage/SimpleStorageService.puml
+!include AWSPuml/Analytics/Glue.puml
+
+skinparam participant {
+    BackgroundColor AWS_BG_COLOR
+    BorderColor AWS_BORDER_COLOR
+}
+skinparam sequence {
+    ArrowThickness 2
+    LifeLineBorderColor AWS_COLOR
+    LifeLineBackgroundColor AWS_BORDER_COLOR
+    BoxBorderColor AWS_COLOR
+}
+
+!$STEP_FUNCTIONS_COLOR = "#E7157B"
+!$LAMBDA_COLOR = "#D76511"
+!$GLUE_COLOR = "#A020F0"
+!$S3_COLOR = "#248823"
+!$TIMESTREAM_COLOR = "#C925D1"
+
+box "AWS Cloud"
+  participant "$EventBridgeIMG()\nScheduled Recurring\nUnload Event" as EBEvent <<EventBridge>>
+  participant "$StepFunctionsIMG()\nUnload Data from\nTimestream to S3" as Start <<StepFunction>>
+  participant "$LambdaIMG()\nTime Range" as TimeRange <<Lambda>>
+  participant "$LambdaIMG()\nQuery VINs" as GetBatches <<Lambda>>
+  participant "$StepFunctionsIMG()\nProcess Each VIN Batch" as ProcessBatch <<StepFunction>>
+  participant "$LambdaIMG()\nUnload Data to S3" as UnloadData <<Lambda>>
+  participant "$TimestreamIMG()\nFleetWise Campaign\nData Store" as Timestream <<Timestream>>
+  participant "$SimpleStorageServiceIMG()\nCMS Connect & Store\nTelemetry Bucket" as S3 <<S3>>
+  participant "$GlueIMG()\nGlue Crawler" as Glue <<Glue>>
+
+  EBEvent -> Start : Trigger unload step function
+
+  activate Start $STEP_FUNCTIONS_COLOR
+
+    Start -> TimeRange : Get time range for unload
+    activate TimeRange $LAMBDA_COLOR
+      TimeRange --> Start
+    deactivate TimeRange
+
+    Start -> GetBatches : Get batches of VINs split by max unload partitions
+
+    activate GetBatches $LAMBDA_COLOR
+      GetBatches -> Timestream : Get VINs with data within Query Time Range
+      activate Timestream $TIMESTREAM_COLOR
+        Timestream --> GetBatches
+      deactivate Timestream
+      GetBatches --> Start
+    deactivate GetBatches
+
+    Start -> Start : Check for existence of data, exit if no new data
+
+    Start -> ProcessBatch : If data exists, pass VINs to map processor
+    activate ProcessBatch $STEP_FUNCTIONS_COLOR
+      ProcessBatch -> UnloadData : Call unload query targeting a batch of VINs within query time range
+      activate UnloadData $LAMBDA_COLOR
+        UnloadData -> Timestream
+        activate Timestream $TIMESTREAM_COLOR
+          Timestream -> S3 : Store parquet files with output of unload query
+          Timestream --> UnloadData : Return unload status
+        deactivate Timestream
+        UnloadData --> ProcessBatch
+      deactivate UnloadData
+      ProcessBatch --> Start
+    deactivate ProcessBatch
+
+    Start -> TimeRange : Store end time of successful unload query
+    activate TimeRange $LAMBDA_COLOR
+      TimeRange --> Start
+    deactivate TimeRange
+
+  deactivate Start
+
+  Glue -> S3 : Crawl for new data on scheduled interval and update indexes
+  activate Glue $GLUE_COLOR
+    S3 --> Glue
+  deactivate Glue
+end box
+@enduml

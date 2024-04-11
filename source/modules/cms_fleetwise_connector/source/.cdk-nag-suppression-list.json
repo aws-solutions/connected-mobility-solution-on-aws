@@ -1,0 +1,193 @@
+{
+    "/cms-fleetwise-connector/cms-fleetwise-connector/fleetwise-config/fleetwise-execution-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*"
+                ],
+                "reason": "Timestream endpoint must be referenced as *"
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": ["Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:*:log-stream:*"],
+                "reason": "Log stream has to be a wildcard"
+            }
+        ]
+    },
+    "/cms-fleetwise-connector/cms-fleetwise-connector/fleetwise-timestream-to-s3/fleetwise-timestream-unload-lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*"
+                ],
+                "reason": "Timestream endpoint must be referenced as *"
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:*:log-stream:*",
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-fleetwise-connector-timestream-unload-to-s3:log-stream:*"
+
+                ],
+                "reason": "Log stream has to be a wildcard"
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::<cmsfleetwiseconnectormoduleinputsssmrootbucketarnParameter8795A630>/*",
+                    "Resource::{{resolve:ssm:/solution/<AppUniqueId>/connect-store/s3-storage-bucket/arn>>/*",
+                    "Resource::{{resolve:ssm:/solution/<AppUniqueId>/connect-store/s3-storage-bucket/arn>>/fleetwise_timestream_to_s3/*"
+                ],
+                "reason": "Intentional sub-tree of ssm parameters is accessible"
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*"
+                ],
+                "reason": "VPC items must be accessed as * resource"
+            }
+        ]
+    },
+    "/cms-fleetwise-connector/cms-fleetwise-connector/fleetwise-timestream-to-s3/fleetwise-timestream-query-vins-lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*"
+                ],
+                "reason": "Timestream endpoint must be referenced as *"
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:*:log-stream:*",
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-fleetwise-connector-timestream-vin-query:log-stream:*"
+                ],
+                "reason": "Log stream has to be a wildcard"
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*"
+                ],
+                "reason": "VPC items must be accessed as * resource"
+            }
+        ]
+    },
+    "/cms-fleetwise-connector/cms-fleetwise-connector/fleetwise-timestream-to-s3/timestream-unload-to-s3-lambda/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Active choice to use specific runtime."
+            }
+        ]
+    },
+    "/cms-fleetwise-connector/cms-fleetwise-connector/fleetwise-timestream-to-s3/timestream-query-vins-lambda/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Active choice to use specific runtime."
+            }
+        ]
+    },
+    "/cms-fleetwise-connector/cms-fleetwise-connector/fleetwise-timestream-to-s3/state-machine-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*",
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:*"
+                ],
+                "reason": "Log group unknown at deploy time"
+            }
+        ]
+    },
+    "/cms-fleetwise-connector/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": ["Resource::*"],
+                "reason": "Log retention lambda uses managed policies"
+            }
+        ]
+    },
+    "/cms-fleetwise-connector/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM4",
+                "appliesTo": ["Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"],
+                "reason": "Log retention lambda uses managed policies"
+            }
+        ]
+    },
+    "/cms-fleetwise-connector/cms-fleetwise-connector/fleetwise-timestream-to-s3/state-machine-role/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*",
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:*:log-stream:*",
+                    "Resource::<cmsfleetwiseconnectorfleetwisetimestreamtos3timestreamqueryvinslambda742EB725.Arn>:*",
+                    "Resource::<cmsfleetwiseconnectorfleetwisetimestreamtos3timestreamunloadtos3lambdaF2A09E9C.Arn>:*",
+                    "Resource::<cmsfleetwiseconnectorfleetwisetimestreamtos3timesrangehandlerlambda5986686C.Arn>:*"
+                ],
+                "reason": "Log stream has to be a wildcard"
+            }
+        ]
+    },
+    "/cms-fleetwise-connector/cms-fleetwise-connector/fleetwise-timestream-to-s3/fleetwise-timestream-time-range-handler-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*",
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-fleetwise-connector-time-handler:log-stream:*",
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-fleetwise-connector-time-handler:log-stream:*",
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*"
+                ],
+                "reason": "Timestream endpoint and cloudwatch log resources must be a wildcard"
+            }
+        ]
+    },
+    "/cms-fleetwise-connector/cms-fleetwise-connector/fleetwise-timestream-to-s3/time-range-handler-lambda/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Lambda runtime would be upgraded in next release in all modules"
+            }
+        ]
+    },
+    "/cms-fleetwise-connector/cms-fleetwise-connector/s3-glue-athena/crawler": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-GL1",
+                "reason": "It does have CloudWatch Log Encryption on. This is a false positive."
+            }
+        ]
+    },
+    "/cms-fleetwise-connector/cms-fleetwise-connector/s3-glue-athena/glue-crawler-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::{{resolve:ssm:/solution/<AppUniqueId>/connect-store/s3-storage-bucket/arn>>/fleetwise_timestream_to_s3/*",
+                    "Resource::arn:<AWS::Partition>:glue:<AWS::Region>:<AWS::AccountId>:table/<AppUniqueId>-fleetwise-connector/fleetwise-data-*",
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws-glue/crawlers:*",
+                    "Resource::*",
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws-glue/crawlers-role/*"
+                ],
+                "reason": "Intentional sub-tree of ssm parameters is accessible. Log writing only works with *"
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*"
+                ],
+                "reason": "VPC items must be accessed as * resource"
+            }
+        ]
+    }
+}

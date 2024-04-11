@@ -1,0 +1,72 @@
+@startuml cms-acdp-deployment-sequence-diagram
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v13.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/DeveloperTools/CodeBuild.puml
+!include AWSPuml/DeveloperTools/CodePipeline.puml
+!include AWSPuml/Storage/SimpleStorageService.puml
+!include AWSPuml/ManagementGovernance/CloudFormation.puml
+!include AWSPuml/Containers/ElasticContainerRegistry.puml
+
+'Comment out to use default PlantUML sequence formatting
+skinparam participant {
+    BackgroundColor AWS_BG_COLOR
+    BorderColor AWS_BORDER_COLOR
+}
+skinparam sequence {
+    ArrowThickness 2
+    LifeLineBorderColor AWS_COLOR
+    LifeLineBackgroundColor AWS_BORDER_COLOR
+    BoxBorderColor AWS_COLOR
+}
+
+actor User as user
+
+box ACDP Deployment (Step 1)
+participant "$CloudFormationIMG()\nCloudFormation" as cfn << CloudFormation >>
+endbox
+
+box Backstage Deployment Pipeline (Step 2 - Synchronous)
+participant "$CodePipelineIMG()\nBackstage" as bcp << CodePipeline >>
+participant "$SimpleStorageServiceIMG()\nBackstage Source Zip" as bs3 << S3 Asset >>
+participant "$CodeBuildIMG()\nBackstage PipelineProjects" as bcb << CodeBuild >>
+participant "$ElasticContainerRegistryIMG()\nECR" as ecr << ECR >>
+endbox
+
+'ACDP Deployment
+user -> cfn++ #CC2264: deploy Automotive Cloud Developer Portal (ACDP)
+cfn -> bs3++ #3F8624: create Backstage source zip object
+return
+cfn -> bcp++ #3355DA: create Backstage pipeline
+return
+|||
+user <-- cfn: finish deploy
+cfn --> bcp: begin pipeline execution
+deactivate cfn
+activate bcp #3355DA
+
+
+'Backstage Deployment Pipeline
+bcp -> bs3++ #3F8624: get Backstage source
+return
+bcp -> bcb++ #3355DA: start CodeBuild PipelineProjects
+|||
+bcb -> bcb: build Backstage docker image
+bcb -> ecr++ #F68D05: store Backstage docker image
+return
+bcb -> bcb: begin Backstage deploy
+bcb -> ecr++ #F68D05: use Backstage docker image
+return
+cfn <- bcb: deploy Backstage infrastructure
+activate cfn
+|||
+bcp <-- cfn: finish Backstage deploy
+deactivate cfn
+bcp <-- bcb:
+deactivate bcb
+deactivate bcp
+
+@enduml

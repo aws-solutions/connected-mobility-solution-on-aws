@@ -1,0 +1,157 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: auth-setup
+  description: A CDK Python app for deploying a customizable but structured OAuth configuration, with optional Cognito infrastructure to populate this configuration.
+  tags:
+  - cms
+  - auth
+  - user
+  - config
+  - client-credentials
+  - authorization-code
+  title: CMS Auth Setup Module
+  annotations:
+    backstage.io/techdocs-ref: dir:../docs/components/auth-setup/
+spec:
+  type: infrastructure
+  output:
+    links:
+    - entityRef: ${{ steps.catalogRegister.output.entityRef }}
+      icon: catalog
+      title: Open in catalog
+  owner: aws solutions
+  parameters:
+  - properties:
+      componentId:
+        default: auth-setup
+        description: Unique name of the component
+        pattern: '[a-zA-Z][-a-zA-Z0-9]*[a-zA-Z]'
+        title: Name
+        type: string
+        ui:field: EntityNamePicker
+      description:
+        default: A CDK Python app for deploying a customizable but structured OAuth configuration, with optional Cognito infrastructure to populate this
+          configuration.
+        description: Help others understand what this component is for.
+        title: Description
+        type: string
+      owner:
+        description: Owner of the component
+        title: Owner
+        type: string
+        ui:field: OwnerPicker
+        ui:options:
+          catalogFilter:
+            kind:
+            - Group
+            - User
+    required:
+    - componentId
+    - owner
+    title: Provide the required information
+  - dependencies:
+      shouldCreateCognitoResources:
+        oneOf:
+        - properties:
+            authorizationCodeExchangeConfigSecretArn:
+              description: Leave blank to deploy new secret with empty JSON values. Otherwise, ARN of an existing Secret. Secret value is a JSON string
+                providing config used for the AWS Cognito Authorization Code flow.
+              pattern: ^arn:aws:secretsmanager:[a-z0-9-]+:\d{12}:secret:[a-zA-Z0-9/_+=.@-]+$
+              title: Authorization Code Exchange Config Secret Arn (Optional)
+              type: string
+            idpConfigSecretArn:
+              description: Leave blank to deploy new secret with empty JSON values. Otherwise, ARN of an existing Secret. Secret value is a JSON string
+                providing config used to validate OAuth 2.0 OpenID Connect auth tokens.
+              pattern: ^arn:aws:secretsmanager:[a-z0-9-]+:\d{12}:secret:[a-zA-Z0-9/_+=.@-]+$
+              title: IdP Config Secret Arn (Optional)
+              type: string
+            serviceClientConfigSecretArn:
+              description: Leave blank to deploy new secret with empty JSON values. Otherwise, ARN of an existing Secret. Secret value is a JSON string
+                providing config used for the Client Credentials flow.
+              pattern: ^arn:aws:secretsmanager:[a-z0-9-]+:\d{12}:secret:[a-zA-Z0-9/_+=.@-]+$
+              title: Service Client Config Secret Arn (Optional)
+              type: string
+            shouldCreateCognitoResources:
+              enum:
+              - 'false'
+        - properties:
+            callbackUrls:
+              description: An optional list of Callback URLs to associate with the Cognito App Client created. These Callback URLs can be used as the redirect
+                uri during the authentication process.
+              items:
+                title: Callback URL
+                default: ''
+                pattern: ^[a-zA_Z]{1}[a-zA-Z0-9+-.]*:\/\/(www\.)?[a-zA-Z0-9\/@%._\+~=-]*\b\/?$
+                type: string
+              title: Callback URLs (Optional)
+              type: array
+            shouldCreateCognitoResources:
+              enum:
+              - 'true'
+    properties:
+      identityProviderId:
+        description: The ID to be used to identify the identity provider configurations exposed by this stack.
+        pattern: ^(?!-)((?!cognito|aws|amazon)[a-z0-9\-])+(?<!-)$
+        title: Identity Provider ID
+        type: string
+      shouldCreateCognitoResources:
+        default: 'true'
+        description: Boolean flag that creates resources for a default identity provider using Amazon Cognito.
+        enum:
+        - 'true'
+        - 'false'
+        title: Should create Cognito resources.
+        type: string
+    required:
+    - identityProviderId
+    - shouldCreateCognitoResources
+    title: Provide the Module Configuration
+  steps:
+  - action: aws:acdp:catalog:create
+    id: acdpCatalogCreate
+    name: ACDP S3 Catalog Create
+    input:
+      componentId: ${{ parameters.componentId }}
+      assetsSourcePath: dir:../acdp/auth-setup/
+      docsSiteSourcePath: dir:../docs/components/auth-setup/site/
+      entity:
+        apiVersion: backstage.io/v1alpha1
+        kind: Component
+        metadata:
+          annotations:
+            aws.amazon.com/acdp-deploy-on-create: "true"
+          description: ${{parameters.description}}
+          name: ${{parameters.componentId}}
+          namespace: acdp
+        spec:
+          lifecycle: experimental
+          owner: ${{parameters.owner}}
+          type: infrastructure
+
+  - action: catalog:register
+    id: catalogRegister
+    name: Backstage Catalog Register
+    input:
+      catalogInfoUrl: ${{ steps.acdpCatalogCreate.output.catalogItemS3Url }}
+
+  - action: aws:acdp:configure
+    id: acdpConfigureDeploy
+    name: ACDP Configure Deploy
+    input:
+      entityRef: ${{ steps.catalogRegister.output.entityRef }}
+      buildParameters:
+      - name: CFN_TEMPLATE_URL
+        value: UNSET
+      - name: IDENTITY_PROVIDER_ID
+        value: ${{ parameters.identityProviderId }}
+      - name: SHOULD_CREATE_COGNITO_RESOURCES
+        value: ${{ parameters.shouldCreateCognitoResources }}
+      - name: CALLBACK_URLS
+        value: ${{ parameters.callbackUrls | join(",") | default("https://example.com,https://localhost", true) }}
+      - name: IDP_CONFIG_SECRET_ARN
+        value: ${{ parameters.idpConfigSecretArn | default("") }}
+      - name: SERVICE_CLIENT_CONFIG_SECRET_ARN
+        value: ${{ parameters.serviceClientConfigSecretArn | default("") }}
+      - name: AUTHORIZATION_CODE_EXCHANGE_CONFIG_SECRET_ARN
+        value: ${{ parameters.authorizationCodeExchangeConfigSecretArn | default("") }}

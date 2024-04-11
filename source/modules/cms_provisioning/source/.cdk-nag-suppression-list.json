@@ -1,0 +1,206 @@
+{
+    "/cms-provisioning/cms-provisioning/pre-provisioning-construct/lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-provisioning-pre-provisioning:log-stream:*"
+                ],
+                "reason": "Wildcard permissions are required to put log events into the log stream."
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:cert/*"
+                ],
+                "reason": "iot:DeleteCertificate requires wildcard resource name since we do not know the certificate information at runtime"
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*",
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*"
+                ],
+                "reason": "ec2 Network Interfaces permissions need to be wildcard"
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/iot-credentials-construct/rotate-secret-lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:secretsmanager:<AWS::Region>:<AWS::AccountId>:secret:solution/<AppUniqueId>/provisioning/provisioning-credentials*",
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:cert/*",
+                    "Resource::*",
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-provisioning-rotate-secret:log-stream:*"
+                ],
+                "reason": "iot:CreateKeysAndCertificate cannot be scoped to a resource. Wildcard permissions required to delete IoT certificates and create SecretsManager secrets."
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-provisioning-rotate-secret:log-stream:*"
+                ],
+                "reason": "Wildcard permissions are required to put log events into the log stream."
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*",
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*"
+                ],
+                "reason": "ec2 Network Interfaces permissions need to be wildcard"
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/iot-credentials-construct/custom-resource-policy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*",
+                    "Resource::arn:<AWS::Partition>:secretsmanager:<AWS::Region>:<AWS::AccountId>:secret:solution/<AppUniqueId>/provisioning/provisioning-credentials*",
+                    "Resource::arn:<AWS::Partition>:secretsmanager:<AWS::Region>:<AWS::AccountId>:secret:*",
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:cert/*"
+                ],
+                "reason": "iot:CreateKeysAndCertificate cannot be scoped to a resource. Wildcard permissions required to delete IoT certificates and create SecretsManager secrets."
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/iot-provisioning-template-construct/iot-core-provisioning-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*",
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:cert/*",
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:thing/*"
+                ],
+                "reason": "iot:RegisterThing and iot:CreatePolicy cannot be scoped to a resource. Wildcard permissions required to create IoT certificates and things."
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/iot-provisioning-certificate-construct/custom-resource-policy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:cert/*"
+                ],
+                "reason": "iot:DeleteCertificate requires wildcard resource name since we do not know the certificate information at runtime"
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/post-provisioning-construct/custom-resource-policy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*"
+                ],
+                "reason": "iot:UpdateEventConfigurations requires wildcard permissions"
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/post-provisioning-construct/lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:cert/*",
+                    "Resource::*"
+                ],
+                "reason": "iot:ListCertificates, iot:ListAttachedPolicies and iot:DetachPolicy require wildcard permissions"
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-provisioning-post-provisioning:log-stream:*"
+                ],
+                "reason": "Wildcard permissions are required to put log events into the log stream."
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*",
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*"
+                ],
+                "reason": "ec2 Network Interfaces permissions need to be wildcard"
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/initial-connection-construct/lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-provisioning-initial-connection:log-stream:*"
+                ],
+                "reason": "Wildcard permissions are required to put log events into the log stream."
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*",
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*"
+                ],
+                "reason": "ec2 Network Interfaces permissions need to be wildcard"
+            }
+        ]
+    },
+    "/cms-provisioning/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM4",
+                "appliesTo": [
+                    "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                ],
+                "reason": "Managed policies are used by log retention lambda created by L2/L3 constructs"
+            }
+        ]
+    },
+    "/cms-provisioning/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*"
+                ],
+                "reason": "Wildcard permissions are required by the log retention lambda."
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/pre-provisioning-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/iot-credentials-construct/rotate-secret-lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/post-provisioning-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/initial-connection-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+            }
+        ]
+    }
+}

@@ -1,0 +1,76 @@
+@startuml cms-api-sequence-diagram
+skinparam BoxPadding 30
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v15.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/ApplicationIntegration/AppSync.puml
+!include AWSPuml/Groups/GenericPink.puml
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/Analytics/Athena.puml
+!include AWSPuml/Storage/SimpleStorageService.puml
+!include AWSPuml/Analytics/Glue.puml
+
+
+'Comment out to use default PlantUML sequence formatting
+skinparam participant {
+    BackgroundColor AWS_BG_COLOR
+    BorderColor AWS_BORDER_COLOR
+}
+skinparam sequence {
+    ArrowThickness 2
+    LifeLineBorderColor AWS_COLOR
+    LifeLineBackgroundColor AWS_BORDER_COLOR
+    BoxBorderColor AWS_COLOR
+}
+
+entity Client as client
+box CMS API
+participant "$AppSyncIMG()\nCMS API" as appsync <<AppSync>>
+participant "$LambdaIMG()\nLambda Authorizer" as lambdaauthorizer <<Lambda>>
+participant "$LambdaIMG()\nLambda Resolver" as lambdaresolver <<Lambda>>
+participant "$AthenaIMG()\nAthena" as athena <<Athena>>
+participant "$SimpleStorageServiceIMG()\nResults Bucket" as resultsbucket <<S3>>
+endbox
+
+box External Resources
+participant "$GlueIMG()\nVehicle Glue Table" as glue <<Glue>>
+participant "$SimpleStorageServiceIMG()\nVehicle Telemetry Bucket" as rootbucket <<S3>>
+endbox
+
+'Use shortcut syntax for activation with colored lifelines and return keyword
+client -> appsync++ #f50581: Makes request to AppSync endpoint
+appsync -> lambdaauthorizer++ #f58027: Authorizes request via the provided JWT
+return
+client <-- appsync: Unauthorized
+|||
+appsync -> lambdaresolver++ #f58027: Authorized: Sends AppSync query information
+lambdaresolver -> athena++ #8b27f5: Builds query and calls start_query_execution
+lambdaresolver <-- athena:
+|||
+athena -> glue++ #8b27f5: Get S3 location and data schema
+return
+|||
+athena -> rootbucket++ #29853a: Query telemetry data
+|||
+lambdaresolver -> athena: Polls query status by calling get_query_execution
+lambdaresolver <-- athena:
+|||
+return
+|||
+athena -> resultsbucket++ #29853a: Stores query result
+return
+|||
+athena -> athena: Sets query status to SUCCESS
+|||
+lambdaresolver -> athena: Once get_query_execution returns SUCCESS status, get_query_results is called
+athena -> resultsbucket++ #29853a: Fetches results
+return
+return
+|||
+lambdaresolver -> lambdaresolver: Results are parsed into correct format for AppSync
+|||
+return
+return Client recieves API response
+@enduml

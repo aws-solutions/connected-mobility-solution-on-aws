@@ -1,0 +1,165 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  description: A CDK Python app for deploying opinionated VPC infrastructure usable by CMS modules
+  name: vpc
+  tags:
+    - cms
+    - vpc
+    - network
+  title: CMS VPC Module
+  annotations:
+    backstage.io/techdocs-ref: dir:../docs/components/vpc/
+spec:
+  type: infrastructure
+  output:
+    links:
+      - entityRef: ${{ steps.catalogRegister.output.entityRef }}
+        icon: catalog
+        title: Open in catalog
+  owner: aws solutions
+  parameters:
+    - properties:
+        componentId:
+          default: vpc
+          description: Unique name of the component
+          pattern: '[a-zA-Z][-a-zA-Z0-9]*[a-zA-Z]'
+          title: Name
+          type: string
+          ui:field: EntityNamePicker
+        description:
+          default: A CDK Python app for deploying opinionated VPC infrastructure usable by CMS modules
+          description: Help others understand what this component is for.
+          title: Description
+          type: string
+        owner:
+          description: Owner of the component
+          title: Owner
+          type: string
+          ui:field: OwnerPicker
+          ui:options:
+            catalogFilter:
+              kind:
+                - Group
+      required:
+        - componentId
+        - owner
+      title: Provide the required information
+    - properties:
+        isolatedSubnet1CIDR:
+          default: 10.0.150.0/22
+          description: CIDR Range for isolated subnet 1
+          pattern: ^([0-9]{1,3}\.){3}[0-9]{1,3}\/([0-9]|[1-2][0-9]|3[0-2])$
+          title: Isolated Subnet 1 CIDR Range
+          type: string
+        isolatedSubnet2CIDR:
+          default: 10.0.154.0/22
+          description: CIDR Range for isolated subnet 2
+          pattern: ^([0-9]{1,3}\.){3}[0-9]{1,3}\/([0-9]|[1-2][0-9]|3[0-2])$
+          title: Isolated Subnet 2 CIDR Range
+          type: string
+        privateSubnet1CIDR:
+          default: 10.0.100.0/22
+          description: CIDR Range for private subnet 1
+          pattern: ^([0-9]{1,3}\.){3}[0-9]{1,3}\/([0-9]|[1-2][0-9]|3[0-2])$
+          title: Private Subnet 1 CIDR Range
+          type: string
+        privateSubnet2CIDR:
+          default: 10.0.104.0/22
+          description: CIDR Range for private subnet 2
+          pattern: ^([0-9]{1,3}\.){3}[0-9]{1,3}\/([0-9]|[1-2][0-9]|3[0-2])$
+          title: Private Subnet 2 CIDR Range
+          type: string
+        publicSubnet1CIDR:
+          default: 10.0.10.0/22
+          description: CIDR Range for public subnet 1
+          pattern: ^([0-9]{1,3}\.){3}[0-9]{1,3}\/([0-9]|[1-2][0-9]|3[0-2])$
+          title: Public Subnet 1 CIDR Range
+          type: string
+        publicSubnet2CIDR:
+          default: 10.0.14.0/22
+          description: CIDR Range for public subnet 2
+          pattern: ^([0-9]{1,3}\.){3}[0-9]{1,3}\/([0-9]|[1-2][0-9]|3[0-2])$
+          title: Public Subnet 2 CIDR Range
+          type: string
+        vpcCIDR:
+          default: 10.0.0.0/16
+          description: CIDR Range for vpc
+          pattern: ^([0-9]{1,3}\.){3}[0-9]{1,3}\/([0-9]|[1-2][0-9]|3[0-2])$
+          title: VPC CIDR Range
+          type: string
+        vpcFlowLogsEnabled:
+          default: 'true'
+          description: Vpc flow logs flag
+          pattern: ^(true|false)$
+          title: VPC Flow Logs Enabled
+          type: string
+        vpcName:
+          description: unique name for vpc
+          title: VPC Name
+          type: string
+      required:
+        - vpcName
+        - vpcCIDR
+        - publicSubnet1CIDR
+        - publicSubnet2CIDR
+        - privateSubnet1CIDR
+        - privateSubnet2CIDR
+        - isolatedSubnet1CIDR
+        - isolatedSubnet2CIDR
+        - vpcFlowLogsEnabled
+      title: Provide the Module Configuration
+  steps:
+  - action: aws:acdp:catalog:create
+    id: acdpCatalogCreate
+    name: ACDP S3 Catalog Create
+    input:
+      componentId: ${{ parameters.componentId }}
+      assetsSourcePath: dir:../acdp/vpc/
+      docsSiteSourcePath: dir:../docs/components/vpc/site/
+      entity:
+        apiVersion: backstage.io/v1alpha1
+        kind: Component
+        metadata:
+          annotations:
+            aws.amazon.com/acdp-deploy-on-create: "true"
+          description: ${{parameters.description}}
+          name: ${{parameters.componentId}}
+          namespace: acdp
+        spec:
+          lifecycle: experimental
+          owner: ${{parameters.owner}}
+          type: infrastructure
+
+  - action: catalog:register
+    id: catalogRegister
+    name: Backstage Catalog Register
+    input:
+      catalogInfoUrl: ${{ steps.acdpCatalogCreate.output.catalogItemS3Url }}
+
+  - action: aws:acdp:configure
+    id: acdpConfigureDeploy
+    name: ACDP Configure Deploy
+    input:
+      entityRef: ${{ steps.catalogRegister.output.entityRef }}
+      buildParameters:
+      - name: CFN_TEMPLATE_URL
+        value: UNSET
+      - name: VPC_NAME
+        value: ${{ parameters.vpcName }}
+      - name: VPC_CIDR
+        value: ${{ parameters.vpcCIDR }}
+      - name: PUBLIC_SUBNET_1_CIDR
+        value: ${{ parameters.publicSubnet1CIDR }}
+      - name: PUBLIC_SUBNET_2_CIDR
+        value: ${{ parameters.publicSubnet2CIDR }}
+      - name: PRIVATE_SUBNET_1_CIDR
+        value: ${{ parameters.privateSubnet1CIDR }}
+      - name: PRIVATE_SUBNET_2_CIDR
+        value: ${{ parameters.privateSubnet2CIDR }}
+      - name: ISOLATED_SUBNET_1_CIDR
+        value: ${{ parameters.isolatedSubnet1CIDR }}
+      - name: ISOLATED_SUBNET_2_CIDR
+        value: ${{ parameters.isolatedSubnet2CIDR }}
+      - name: VPC_FLOW_LOGS_ENABLED
+        value: ${{ parameters.vpcFlowLogsEnabled }}

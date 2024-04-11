@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="901px" preserveAspectRatio="none" style="width:1400px;height:901px;background:#FFFFFF;" version="1.1" viewBox="0 0 1400 901" width="1400px" zoomAndPan="magnify"><defs/><g><rect fill="#FFFFFF" height="889.1621" style="stroke:#232F3E;stroke-width:0.5;" width="1391" x="3" y="6"/><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing" textLength="72" x="662.5" y="18.5684">AWS Cloud</text><rect fill="#E7157B" height="477.2578" style="stroke:#232F3E;stroke-width:1.0;" width="10" x="241.5" y="198.041"/><rect fill="#D76511" height="14" style="stroke:#232F3E;stroke-width:1.0;" width="10" x="419.5" y="226.1738"/><rect fill="#D76511" height="14" style="stroke:#232F3E;stroke-width:1.0;" width="10" x="419.5" y="661.2988"/><rect fill="#D76511" height="70.2656" style="stroke:#232F3E;stroke-width:1.0;" width="10" x="525.5" y="282.4395"/><rect fill="#E7157B" height="168.7969" style="stroke:#232F3E;stroke-width:1.0;" width="10" x="669" y="450.2363"/><rect fill="#D76511" height="98.3984" style="stroke:#232F3E;stroke-width:1.0;" width="10" x="845" y="506.6348"/><rect fill="#C925D1" height="14" style="stroke:#232F3E;stroke-width:1.0;" width="10" x="1003.5" y="324.7051"/><rect fill="#C925D1" height="70.3984" style="stroke:#232F3E;stroke-width:1.0;" width="10" x="1003.5" y="520.6348"/><rect fill="#A020F0" height="14" style="stroke:#232F3E;stroke-width:1.0;" width="10" x="1332" y="731.6973"/><line style="stroke:#232F3E;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="87" x2="87" y1="153.7754" y2="763.6973"/><line style="stroke:#232F3E;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="246" x2="246" y1="153.7754" y2="763.6973"/><line style="stroke:#232F3E;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="424" x2="424" y1="153.7754" y2="763.6973"/><line style="stroke:#232F3E;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="530" x2="530" y1="153.7754" y2="763.6973"/><line style="stroke:#232F3E;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="674" x2="674" y1="153.7754" y2="763.6973"/><line style="stroke:#232F3E;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="849.5" x2="849.5" y1="153.7754" y2="763.6973"/><line style="stroke:#232F3E;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="1008.5" x2="1008.5" y1="153.7754" y2="763.6973"/><line style="stroke:#232F3E;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="1177.5" x2="1177.5" y1="153.7754" y2="763.6973"/><line style="stroke:#232F3E;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="1337" x2="1337" y1="153.7754" y2="763.6973"/><rect fill="#FFFFFF" height="127.4648" style="stroke:#7D8998;stroke-width:1.25;" width="156" x="9" y="25.3105"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="95" x="39.5" y="45.8457">«EventBridge»</text><image height="64" width="64" x="55" xlink:href="data:image/png;base64,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" y="48.7988"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="142" x="16" y="126.334">Scheduled Recurring</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="90" x="42" y="142.8223">Unload Event</text><rect fill="#FFFFFF" height="127.4648" style="stroke:#7D8998;stroke-width:1.25;" width="156" x="9" y="762.6973"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="95" x="39.5" y="783.2324">«EventBridge»</text><image height="64" width="64" x="55" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAGR0lEQVR4Xu2Z+W9UVRTH+SdAtCruxoUoiaIhxiVuuCXqL8YtcQlq3I0hgtBCWaSUWPZNwSD7JlhaRSlVVkFpAZUKrbQgi/Nmn+lsnXmb3/teZ3p7z7yZN68tE8y8fH6Ze857937vds69M8g1eMJFzSBadHFRElBsSgKKTUlAsSkJKDZ9EhB675vkvg41lJBPeuNrmtzDq6jPQONUwJCJiW3H9N4PlPif+EL0HGAcCgiPq2Mt9seCb2xwXzfVO2qOqUf5JyBdVUn9Bw6HAuQ2D5obeHFlT+HQ8tSRcygMvraW+g8cTgRIwyp1VdMSKTSaL4/MaICA6Nzdgn9k5s5eU41/Ukp4bC2twj5OBKDdWjwFDdLVU/jy6OL9aFLnpO2Cfy4Buq4lZe+988QqbONIwOAJyb3tqDu6YE+mxDNilhqMo9A3egn1tyK+6hBekVtcUlkFtdrBoQDfgwt1WUXdXQ2t4fF10dm71ABrfWLzUeqcA6x45ZRf6IuCcCgAYLGqgRg/GfBAGPXMje/xpbqiYkImd59UfVHlXChR3+K9fz71zIpzAcB902ehD7bElh2IVDd27TjBBmRnK3XLC94SOgKLG1GSelL6JIDHffMMLZxA1YGXV1NrDvxPfalrmpZUOiu+R494bq+OztuN72Cf8Iysof4C/SYAhCfU62Ysu3wStVqR2PoH3sIWzBfG1zazwpqfqb9AfwpwXVou/yWxiqsbRZM1yKPwiveeuXwhQiQKuxrbqL9AYQJ8Dy9C7kDLM2D+9MzjbA+a675hGv9Kqvksyv1P9kqiQu9sRiHWFa1CoBABQyaalYU/2Saa0sQ3HRFaTJ/Y8oP8K2b4Y52djuvSlZPNkews/45WIVCAAGwL+KgqdVqla77HlhrLUfbc8Tm1AkRctmMqKh963TdOVz0RfDl19DyieOf0HUqHj/1sPiuV5V9LdgUga1DdrBoMLrUyMD6HWTIXnbNLNHHEvjoIHwRyvtD36GKlnTWaf5Dh0tcpdgUgUupGr6Ch1ApC7xvj47IcHxMsADNmB1/tlbRKV0wOvrkhunBvdNE++ZgLDtH5tmKzLQGeu2qwT2N6oKuoFUjXTDGnQejtTdQqgCUET+WM5W6LWszIgHqpVcCWgK4fWZSNr2umJhP0HBufpjNW49OLoendtmqnaEqDuuCAeqlJIL+AwHMr8C0t0uW+ZQa1Au/ds7vH55FF1JoV/zPL2TcRa2+bSa0AdaFG+KB2auXJL0A+buxolT9Qk4l5mETspKYcJOqMt1Y3UZMJaoQDaqcmnv4QUPunEwH1LRdIwIBMoWcv4BRyZRbx+sPUZFLwIjZGVUjgeFCX3l+L2PU/2EZd6UAm/+1N7mlH3i+3eWIrD+EMkHHoYyDrIZ1x9WcgA+7rp5mHYP7BkRL5abdPJpUg1yo8WVMJHjMPRdoiXHlYYVcAjkvsu54Iek66dirS967tx1GCocjMBN/oJd3J3J0Wydx982kyJ4CFhM+G3rXIuAh2BSj/hvFd7B49hZdVmGsx8ELP/Vx8Y/50Ovnrafr9DOiO8Mff2toMDGwJQMarG3e3QjkST5RHZvZkBO5bq5SzQbHJ5PE/vYzW4gxbApCX6ykFCAl6bMVvaA0yePqKFeYtnXzCjfMntTrAlgBX+uAXmfVTpsQzssaMNVZ7a1YwQ5TT7CbLzmnLDnYFsOsnVUPFWLvhcXXYasxLFAwCdc5N4KVVeFHrtAztBWFXAAi+tRHLIDOP2UxAouJoJnTfgjW0RqobY8sOhD7cwoeUgihAgMtYo6GPtuJUzrZzDIiiYmSoW158DyzgO0JnISUefH0d9cxLYQJ4EClRsXLKnzv0ZsW8vECjo7N3hcfXmQOCQOl7qOCrVecCpLIKuYUdXuOrDlFrDliqY2zKnhGzMoVmdyT3d1D/3DgX4DKuSRB3uYkgPnyIyID9B6bY0l/4Qgxj1n998tInASA8tpaFCIsnqwBMmyymSyayf300rdAJ2VcBDgi+sgYCUr+f5zs78PzXupHtUv/cFEGANKz7Xxkci72j5iA1DI5Zr/rZfyXhT+upf26KIMBlXEKaf6jxD07J9nO4DMURANzDq+JrmjBnENGx+eA8RH3sUDQB/UVJQLEpCSg2JQHFpiSg2Fz0Av4DrVEH0EzLCu0AAAAASUVORK5CYII=" y="786.1855"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="142" x="16" y="863.7207">Scheduled Recurring</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="90" x="42" y="880.209">Unload Event</text><rect fill="#FFFFFF" height="127.4648" style="stroke:#7D8998;stroke-width:1.25;" width="135" x="179" y="25.3105"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="104" x="194.5" y="45.8457">«StepFunction»</text><image height="64" width="64" x="214.5" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAB+UlEQVR4Xu2asU7DMBCG+xI8ALDyCIy8BGLiORiQysLKUBYmGHgAJMTACBJih4GNLWlBRWqL2qpq4YSHpvxpfLbPsdz69A3J5Xzx19gMCY1s4yhqGpiKiyQQmiQQmiQQmiQQGl8CH7tnw9vXad4j6IBOsUYELwLd/cvZePJTCDqlJFa6Iy+Qb59M232a9PfFU3vnlKADOqVkvtXEekfkBboHVzTd8fN7MUmnlKRLWO+IvEDv+I7mOmg9FJOD80dK0iWsd0Re4OvwetkToEtY74i8QL7ZnHbK9kCnT5ew3hF5gexvG8xGi3+FRhMfGyDzJEB87rWGNy9q9nRAp1gjgi8BhRLAvCCWAqP7t/n6kAhqiHfhYCnw//4SgXfh4CSAeTtcuq26gOlat1vKaizmOWgEFqfHCmyixXpgxhTAfClGxVIkAXax6XZSod1ULAGjwCbWrVRgqyIaAdOfreIHUwWYr4AzRCOwDE7reoasukD0S2g+NXZgE+tWKrBVEZYA5kupLjZ9mCoqHqmiPgFPrIeAUWATLdYDM62A6cLVLtlS1FjMc9AILMPllohLt/UWkA28CwdLAdO9oQ27zZNZCzBRk8O8IL4E4n61GPfL3ehfr0f/gSP6T0zRf+SL/jNrFvuHbkXc/2pQJ0kgNEkgNEkgNEkgNNEL/AJU+Ek/EETQ1AAAAABJRU5ErkJggg==" y="48.7988"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="121" x="186" y="126.334">Unload Data from</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="120" x="186.5" y="142.8223">Timestream to S3</text><rect fill="#FFFFFF" height="127.4648" style="stroke:#7D8998;stroke-width:1.25;" width="135" x="179" y="762.6973"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="104" x="194.5" y="783.2324">«StepFunction»</text><image height="64" width="64" x="214.5" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAB+UlEQVR4Xu2asU7DMBCG+xI8ALDyCIy8BGLiORiQysLKUBYmGHgAJMTACBJih4GNLWlBRWqL2qpq4YSHpvxpfLbPsdz69A3J5Xzx19gMCY1s4yhqGpiKiyQQmiQQmiQQmiQQGl8CH7tnw9vXad4j6IBOsUYELwLd/cvZePJTCDqlJFa6Iy+Qb59M232a9PfFU3vnlKADOqVkvtXEekfkBboHVzTd8fN7MUmnlKRLWO+IvEDv+I7mOmg9FJOD80dK0iWsd0Re4OvwetkToEtY74i8QL7ZnHbK9kCnT5ew3hF5gexvG8xGi3+FRhMfGyDzJEB87rWGNy9q9nRAp1gjgi8BhRLAvCCWAqP7t/n6kAhqiHfhYCnw//4SgXfh4CSAeTtcuq26gOlat1vKaizmOWgEFqfHCmyixXpgxhTAfClGxVIkAXax6XZSod1ULAGjwCbWrVRgqyIaAdOfreIHUwWYr4AzRCOwDE7reoasukD0S2g+NXZgE+tWKrBVEZYA5kupLjZ9mCoqHqmiPgFPrIeAUWATLdYDM62A6cLVLtlS1FjMc9AILMPllohLt/UWkA28CwdLAdO9oQ27zZNZCzBRk8O8IL4E4n61GPfL3ehfr0f/gSP6T0zRf+SL/jNrFvuHbkXc/2pQJ0kgNEkgNEkgNEkgNNEL/AJU+Ek/EETQ1AAAAABJRU5ErkJggg==" y="786.1855"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="121" x="186" y="863.7207">Unload Data from</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="120" x="186.5" y="880.209">Timestream to S3</text><rect fill="#FFFFFF" height="110.9766" style="stroke:#7D8998;stroke-width:1.25;" width="95" x="377" y="41.7988"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="68" x="390.5" y="62.334">«Lambda»</text><image height="64" width="64" x="392.5" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAFmUlEQVR4XtWZW2wUVRjHARW8EI23eFc0xniJCcYHY+IlXh68vIgvmHh70BfwwVBa2mqh0qJWrLFAKVEjWGwJpBBIWkEwYEpFkbbBgFbQAi0SKaUze7/Mzu6M37dndph+33b37M48OJPfy//8z5w938yZOf9ppymLpvkaqn0H1b6Dat9Bte+g2ndQ7Tuo9h1U+w6qfQfVkiT2rzINw5Q4DC0abnuGj+AVVEuSPv83nenUhz7yCx/BK6iWRBQQWHEXt5yoSy4zIuPQM7Tmce56AtWSSBYAxHctg56pP7q55QlUS5KZGMYCGu/kFkGtu9bQYvDABD95gLvuoVoS+QIU8cSbZvLQN9xyD9WSlFRAoHGOmdHNdCrwwS3cdQnVkpRUAKANdkL/xI/N3HIJ1ZLkCpjDrbwEm+dCfyMZVmuv4q4bqJYkM3FCvOPJoZ/uVypn8v5A6thu6BDrqeGWG6iWJNG3hs49d0Q3v8X7A7Afg5sJn1WqZnG3bKh2Q2TjKzDF9Lk/lYrp3AX0fwawwi1vc6tsqHbF4osyykmYYmT9S9TKEmmfn63wmFIxg7vlQbVLolsXwhT1Uz9zC4EKsw9PZP08apUL1S7B8BM9D1MMtT7BXcWu0Lt4R7V74ruWmhh+erilOCv0KN5R7R71/WvgG6BA+PE23lFdBmrNbH24N76n0W5J9LbAFJP97bwz9rfjXdP93C0Vqssg1r0E3/+ZdPDDu0VLoOEOK/wsv433VzDercYKD23gVqlQXSpq1aWwN2EBMKGDX9vt2sC30JLo/Zyfonga76gulWjXAphoevw43AGcUMPtoj248kETw09Efe9qfpaC8W4TVrjvU26VBNWlsfji3M41L9m/ESfU12q7qaHvoCW+s46elcWreEd1SUQ6XsPLPzYE2SHYdJ9pZAw9EVh2o3BDrU/ioxE5B8uMn6t4FO+oLoGK6emzv8MMop1viBbtty6yKvTRX7FD1wJ6bhZP4h3V8kDgwZ9XR2AhiZbcqojAVmD12fAy9pkYhhDBR1Aw3g1ihS7iHdXyWFd360JnI2zAuO53N1gtFTPw+YaHpH0+H0GZFO/yB9iiUC1J7u6PkfUdWvUo3oR4QK29UrTA1YUWCNJ8EORCvMsfYItCtSSpv/bCr8a6q6ey4j21VkvVLLFRhNc9yzsDsW3vYIVTBdhiUC1DqOURcpmdhNc+hW5kXK2+XLRAndCSOr6Hd1ac8W71Y9wtCtUyaEd34DX+YQW3BPrIQVwVHa8KCW96IxGClmDzQ7wzEP++HissK95RXRTImJDDII2pdddxF6m8JKOO4pr54jm7MbFvJbRohzfTzlncxDuqi6INdJgYclq4JYhuehM6pP896nyxBOpvNtMaxI2p/pRUdryjujDw81bmWX4rdxHY3caGnOvHBqIeTvGntfSULNl4lx25xHhHdWGSB9bhJBypk2Dtbsope3ezCX58L669VFxdej0/UcnFO+cBaYp3I1BdgED9TaaehMAT/Oge7gry7m422pHtpnObmww8AEZ0gtTAuxGoLkDuQdzCLUG47WmzYHqztrmYolZfwV0CXCkvC4BYD9HXxFfhXO4K4E1vOrewfOgn9kOf2PZ3uUXwuADrS3xoJ7cEoc8exqubCBXO9+GvXsS7pI7yh4TgZQFwx8XqLLBZWll6bxO3JnEhhL9Orcl4WUBsxyIYSz/Zxy0BPNa5r5kbuEuA7wcTN4oj3HLiXQGVMzPBMzBW+MvnqZXDescfaONWHmCrDpzODvgCtRx4VoDIw+kzh7klgK3H2mUl/mkpsG7pcC+3bDwrAL42TIlDG+zk506FWjPbiKt0iHwHP5dANQeuEx2VHZCHYaPl5xYA3qT4p6GCh8c78f8Tqn0H1b6Dat9Bte+g2ndQ7Tuo9h1U+w6qfcd/sTVKGw8/YPUAAAAASUVORK5CYII=" y="65.2871"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="81" x="384" y="142.8223">Time Range</text><rect fill="#FFFFFF" height="110.9766" style="stroke:#7D8998;stroke-width:1.25;" width="95" x="377" y="762.6973"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="68" x="390.5" y="783.2324">«Lambda»</text><image height="64" width="64" x="392.5" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAFmUlEQVR4XtWZW2wUVRjHARW8EI23eFc0xniJCcYHY+IlXh68vIgvmHh70BfwwVBa2mqh0qJWrLFAKVEjWGwJpBBIWkEwYEpFkbbBgFbQAi0SKaUze7/Mzu6M37dndph+33b37M48OJPfy//8z5w938yZOf9ppymLpvkaqn0H1b6Dat9Bte+g2ndQ7Tuo9h1U+w6qfQfVkiT2rzINw5Q4DC0abnuGj+AVVEuSPv83nenUhz7yCx/BK6iWRBQQWHEXt5yoSy4zIuPQM7Tmce56AtWSSBYAxHctg56pP7q55QlUS5KZGMYCGu/kFkGtu9bQYvDABD95gLvuoVoS+QIU8cSbZvLQN9xyD9WSlFRAoHGOmdHNdCrwwS3cdQnVkpRUAKANdkL/xI/N3HIJ1ZLkCpjDrbwEm+dCfyMZVmuv4q4bqJYkM3FCvOPJoZ/uVypn8v5A6thu6BDrqeGWG6iWJNG3hs49d0Q3v8X7A7Afg5sJn1WqZnG3bKh2Q2TjKzDF9Lk/lYrp3AX0fwawwi1vc6tsqHbF4osyykmYYmT9S9TKEmmfn63wmFIxg7vlQbVLolsXwhT1Uz9zC4EKsw9PZP08apUL1S7B8BM9D1MMtT7BXcWu0Lt4R7V74ruWmhh+erilOCv0KN5R7R71/WvgG6BA+PE23lFdBmrNbH24N76n0W5J9LbAFJP97bwz9rfjXdP93C0Vqssg1r0E3/+ZdPDDu0VLoOEOK/wsv433VzDercYKD23gVqlQXSpq1aWwN2EBMKGDX9vt2sC30JLo/Zyfonga76gulWjXAphoevw43AGcUMPtoj248kETw09Efe9qfpaC8W4TVrjvU26VBNWlsfji3M41L9m/ESfU12q7qaHvoCW+s46elcWreEd1SUQ6XsPLPzYE2SHYdJ9pZAw9EVh2o3BDrU/ioxE5B8uMn6t4FO+oLoGK6emzv8MMop1viBbtty6yKvTRX7FD1wJ6bhZP4h3V8kDgwZ9XR2AhiZbcqojAVmD12fAy9pkYhhDBR1Aw3g1ihS7iHdXyWFd360JnI2zAuO53N1gtFTPw+YaHpH0+H0GZFO/yB9iiUC1J7u6PkfUdWvUo3oR4QK29UrTA1YUWCNJ8EORCvMsfYItCtSSpv/bCr8a6q6ey4j21VkvVLLFRhNc9yzsDsW3vYIVTBdhiUC1DqOURcpmdhNc+hW5kXK2+XLRAndCSOr6Hd1ac8W71Y9wtCtUyaEd34DX+YQW3BPrIQVwVHa8KCW96IxGClmDzQ7wzEP++HissK95RXRTImJDDII2pdddxF6m8JKOO4pr54jm7MbFvJbRohzfTzlncxDuqi6INdJgYclq4JYhuehM6pP896nyxBOpvNtMaxI2p/pRUdryjujDw81bmWX4rdxHY3caGnOvHBqIeTvGntfSULNl4lx25xHhHdWGSB9bhJBypk2Dtbsope3ezCX58L669VFxdej0/UcnFO+cBaYp3I1BdgED9TaaehMAT/Oge7gry7m422pHtpnObmww8AEZ0gtTAuxGoLkDuQdzCLUG47WmzYHqztrmYolZfwV0CXCkvC4BYD9HXxFfhXO4K4E1vOrewfOgn9kOf2PZ3uUXwuADrS3xoJ7cEoc8exqubCBXO9+GvXsS7pI7yh4TgZQFwx8XqLLBZWll6bxO3JnEhhL9Orcl4WUBsxyIYSz/Zxy0BPNa5r5kbuEuA7wcTN4oj3HLiXQGVMzPBMzBW+MvnqZXDescfaONWHmCrDpzODvgCtRx4VoDIw+kzh7klgK3H2mUl/mkpsG7pcC+3bDwrAL42TIlDG+zk506FWjPbiKt0iHwHP5dANQeuEx2VHZCHYaPl5xYA3qT4p6GCh8c78f8Tqn0H1b6Dat9Bte+g2ndQ7Tuo9h1U+w6qfcd/sTVKGw8/YPUAAAAASUVORK5CYII=" y="786.1855"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="81" x="384" y="863.7207">Time Range</text><rect fill="#FFFFFF" height="110.9766" style="stroke:#7D8998;stroke-width:1.25;" width="89" x="486" y="41.7988"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="68" x="496.5" y="62.334">«Lambda»</text><image height="64" width="64" x="498.5" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAFmUlEQVR4XtWZW2wUVRjHARW8EI23eFc0xniJCcYHY+IlXh68vIgvmHh70BfwwVBa2mqh0qJWrLFAKVEjWGwJpBBIWkEwYEpFkbbBgFbQAi0SKaUze7/Mzu6M37dndph+33b37M48OJPfy//8z5w938yZOf9ppymLpvkaqn0H1b6Dat9Bte+g2ndQ7Tuo9h1U+w6qfQfVkiT2rzINw5Q4DC0abnuGj+AVVEuSPv83nenUhz7yCx/BK6iWRBQQWHEXt5yoSy4zIuPQM7Tmce56AtWSSBYAxHctg56pP7q55QlUS5KZGMYCGu/kFkGtu9bQYvDABD95gLvuoVoS+QIU8cSbZvLQN9xyD9WSlFRAoHGOmdHNdCrwwS3cdQnVkpRUAKANdkL/xI/N3HIJ1ZLkCpjDrbwEm+dCfyMZVmuv4q4bqJYkM3FCvOPJoZ/uVypn8v5A6thu6BDrqeGWG6iWJNG3hs49d0Q3v8X7A7Afg5sJn1WqZnG3bKh2Q2TjKzDF9Lk/lYrp3AX0fwawwi1vc6tsqHbF4osyykmYYmT9S9TKEmmfn63wmFIxg7vlQbVLolsXwhT1Uz9zC4EKsw9PZP08apUL1S7B8BM9D1MMtT7BXcWu0Lt4R7V74ruWmhh+erilOCv0KN5R7R71/WvgG6BA+PE23lFdBmrNbH24N76n0W5J9LbAFJP97bwz9rfjXdP93C0Vqssg1r0E3/+ZdPDDu0VLoOEOK/wsv433VzDercYKD23gVqlQXSpq1aWwN2EBMKGDX9vt2sC30JLo/Zyfonga76gulWjXAphoevw43AGcUMPtoj248kETw09Efe9qfpaC8W4TVrjvU26VBNWlsfji3M41L9m/ESfU12q7qaHvoCW+s46elcWreEd1SUQ6XsPLPzYE2SHYdJ9pZAw9EVh2o3BDrU/ioxE5B8uMn6t4FO+oLoGK6emzv8MMop1viBbtty6yKvTRX7FD1wJ6bhZP4h3V8kDgwZ9XR2AhiZbcqojAVmD12fAy9pkYhhDBR1Aw3g1ihS7iHdXyWFd360JnI2zAuO53N1gtFTPw+YaHpH0+H0GZFO/yB9iiUC1J7u6PkfUdWvUo3oR4QK29UrTA1YUWCNJ8EORCvMsfYItCtSSpv/bCr8a6q6ey4j21VkvVLLFRhNc9yzsDsW3vYIVTBdhiUC1DqOURcpmdhNc+hW5kXK2+XLRAndCSOr6Hd1ac8W71Y9wtCtUyaEd34DX+YQW3BPrIQVwVHa8KCW96IxGClmDzQ7wzEP++HissK95RXRTImJDDII2pdddxF6m8JKOO4pr54jm7MbFvJbRohzfTzlncxDuqi6INdJgYclq4JYhuehM6pP896nyxBOpvNtMaxI2p/pRUdryjujDw81bmWX4rdxHY3caGnOvHBqIeTvGntfSULNl4lx25xHhHdWGSB9bhJBypk2Dtbsope3ezCX58L669VFxdej0/UcnFO+cBaYp3I1BdgED9TaaehMAT/Oge7gry7m422pHtpnObmww8AEZ0gtTAuxGoLkDuQdzCLUG47WmzYHqztrmYolZfwV0CXCkvC4BYD9HXxFfhXO4K4E1vOrewfOgn9kOf2PZ3uUXwuADrS3xoJ7cEoc8exqubCBXO9+GvXsS7pI7yh4TgZQFwx8XqLLBZWll6bxO3JnEhhL9Orcl4WUBsxyIYSz/Zxy0BPNa5r5kbuEuA7wcTN4oj3HLiXQGVMzPBMzBW+MvnqZXDescfaONWHmCrDpzODvgCtRx4VoDIw+kzh7klgK3H2mUl/mkpsG7pcC+3bDwrAL42TIlDG+zk506FWjPbiKt0iHwHP5dANQeuEx2VHZCHYaPl5xYA3qT4p6GCh8c78f8Tqn0H1b6Dat9Bte+g2ndQ7Tuo9h1U+w6qfcd/sTVKGw8/YPUAAAAASUVORK5CYII=" y="65.2871"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="75" x="493" y="142.8223">Query VINs</text><rect fill="#FFFFFF" height="110.9766" style="stroke:#7D8998;stroke-width:1.25;" width="89" x="486" y="762.6973"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="68" x="496.5" y="783.2324">«Lambda»</text><image height="64" width="64" x="498.5" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAFmUlEQVR4XtWZW2wUVRjHARW8EI23eFc0xniJCcYHY+IlXh68vIgvmHh70BfwwVBa2mqh0qJWrLFAKVEjWGwJpBBIWkEwYEpFkbbBgFbQAi0SKaUze7/Mzu6M37dndph+33b37M48OJPfy//8z5w938yZOf9ppymLpvkaqn0H1b6Dat9Bte+g2ndQ7Tuo9h1U+w6qfQfVkiT2rzINw5Q4DC0abnuGj+AVVEuSPv83nenUhz7yCx/BK6iWRBQQWHEXt5yoSy4zIuPQM7Tmce56AtWSSBYAxHctg56pP7q55QlUS5KZGMYCGu/kFkGtu9bQYvDABD95gLvuoVoS+QIU8cSbZvLQN9xyD9WSlFRAoHGOmdHNdCrwwS3cdQnVkpRUAKANdkL/xI/N3HIJ1ZLkCpjDrbwEm+dCfyMZVmuv4q4bqJYkM3FCvOPJoZ/uVypn8v5A6thu6BDrqeGWG6iWJNG3hs49d0Q3v8X7A7Afg5sJn1WqZnG3bKh2Q2TjKzDF9Lk/lYrp3AX0fwawwi1vc6tsqHbF4osyykmYYmT9S9TKEmmfn63wmFIxg7vlQbVLolsXwhT1Uz9zC4EKsw9PZP08apUL1S7B8BM9D1MMtT7BXcWu0Lt4R7V74ruWmhh+erilOCv0KN5R7R71/WvgG6BA+PE23lFdBmrNbH24N76n0W5J9LbAFJP97bwz9rfjXdP93C0Vqssg1r0E3/+ZdPDDu0VLoOEOK/wsv433VzDercYKD23gVqlQXSpq1aWwN2EBMKGDX9vt2sC30JLo/Zyfonga76gulWjXAphoevw43AGcUMPtoj248kETw09Efe9qfpaC8W4TVrjvU26VBNWlsfji3M41L9m/ESfU12q7qaHvoCW+s46elcWreEd1SUQ6XsPLPzYE2SHYdJ9pZAw9EVh2o3BDrU/ioxE5B8uMn6t4FO+oLoGK6emzv8MMop1viBbtty6yKvTRX7FD1wJ6bhZP4h3V8kDgwZ9XR2AhiZbcqojAVmD12fAy9pkYhhDBR1Aw3g1ihS7iHdXyWFd360JnI2zAuO53N1gtFTPw+YaHpH0+H0GZFO/yB9iiUC1J7u6PkfUdWvUo3oR4QK29UrTA1YUWCNJ8EORCvMsfYItCtSSpv/bCr8a6q6ey4j21VkvVLLFRhNc9yzsDsW3vYIVTBdhiUC1DqOURcpmdhNc+hW5kXK2+XLRAndCSOr6Hd1ac8W71Y9wtCtUyaEd34DX+YQW3BPrIQVwVHa8KCW96IxGClmDzQ7wzEP++HissK95RXRTImJDDII2pdddxF6m8JKOO4pr54jm7MbFvJbRohzfTzlncxDuqi6INdJgYclq4JYhuehM6pP896nyxBOpvNtMaxI2p/pRUdryjujDw81bmWX4rdxHY3caGnOvHBqIeTvGntfSULNl4lx25xHhHdWGSB9bhJBypk2Dtbsope3ezCX58L669VFxdej0/UcnFO+cBaYp3I1BdgED9TaaehMAT/Oge7gry7m422pHtpnObmww8AEZ0gtTAuxGoLkDuQdzCLUG47WmzYHqztrmYolZfwV0CXCkvC4BYD9HXxFfhXO4K4E1vOrewfOgn9kOf2PZ3uUXwuADrS3xoJ7cEoc8exqubCBXO9+GvXsS7pI7yh4TgZQFwx8XqLLBZWll6bxO3JnEhhL9Orcl4WUBsxyIYSz/Zxy0BPNa5r5kbuEuA7wcTN4oj3HLiXQGVMzPBMzBW+MvnqZXDescfaONWHmCrDpzODvgCtRx4VoDIw+kzh7klgK3H2mUl/mkpsG7pcC+3bDwrAL42TIlDG+zk506FWjPbiKt0iHwHP5dANQeuEx2VHZCHYaPl5xYA3qT4p6GCh8c78f8Tqn0H1b6Dat9Bte+g2ndQ7Tuo9h1U+w6qfcd/sTVKGw8/YPUAAAAASUVORK5CYII=" y="786.1855"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="75" x="493" y="863.7207">Query VINs</text><rect fill="#FFFFFF" height="110.9766" style="stroke:#7D8998;stroke-width:1.25;" width="170" x="589" y="41.7988"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="104" x="622" y="62.334">«StepFunction»</text><image height="64" width="64" x="642" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAB+UlEQVR4Xu2asU7DMBCG+xI8ALDyCIy8BGLiORiQysLKUBYmGHgAJMTACBJih4GNLWlBRWqL2qpq4YSHpvxpfLbPsdz69A3J5Xzx19gMCY1s4yhqGpiKiyQQmiQQmiQQmiQQGl8CH7tnw9vXad4j6IBOsUYELwLd/cvZePJTCDqlJFa6Iy+Qb59M232a9PfFU3vnlKADOqVkvtXEekfkBboHVzTd8fN7MUmnlKRLWO+IvEDv+I7mOmg9FJOD80dK0iWsd0Re4OvwetkToEtY74i8QL7ZnHbK9kCnT5ew3hF5gexvG8xGi3+FRhMfGyDzJEB87rWGNy9q9nRAp1gjgi8BhRLAvCCWAqP7t/n6kAhqiHfhYCnw//4SgXfh4CSAeTtcuq26gOlat1vKaizmOWgEFqfHCmyixXpgxhTAfClGxVIkAXax6XZSod1ULAGjwCbWrVRgqyIaAdOfreIHUwWYr4AzRCOwDE7reoasukD0S2g+NXZgE+tWKrBVEZYA5kupLjZ9mCoqHqmiPgFPrIeAUWATLdYDM62A6cLVLtlS1FjMc9AILMPllohLt/UWkA28CwdLAdO9oQ27zZNZCzBRk8O8IL4E4n61GPfL3ehfr0f/gSP6T0zRf+SL/jNrFvuHbkXc/2pQJ0kgNEkgNEkgNEkgNNEL/AJU+Ek/EETQ1AAAAABJRU5ErkJggg==" y="65.2871"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="156" x="596" y="142.8223">Process Each VIN Batch</text><rect fill="#FFFFFF" height="110.9766" style="stroke:#7D8998;stroke-width:1.25;" width="170" x="589" y="762.6973"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="104" x="622" y="783.2324">«StepFunction»</text><image height="64" width="64" x="642" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAB+UlEQVR4Xu2asU7DMBCG+xI8ALDyCIy8BGLiORiQysLKUBYmGHgAJMTACBJih4GNLWlBRWqL2qpq4YSHpvxpfLbPsdz69A3J5Xzx19gMCY1s4yhqGpiKiyQQmiQQmiQQmiQQGl8CH7tnw9vXad4j6IBOsUYELwLd/cvZePJTCDqlJFa6Iy+Qb59M232a9PfFU3vnlKADOqVkvtXEekfkBboHVzTd8fN7MUmnlKRLWO+IvEDv+I7mOmg9FJOD80dK0iWsd0Re4OvwetkToEtY74i8QL7ZnHbK9kCnT5ew3hF5gexvG8xGi3+FRhMfGyDzJEB87rWGNy9q9nRAp1gjgi8BhRLAvCCWAqP7t/n6kAhqiHfhYCnw//4SgXfh4CSAeTtcuq26gOlat1vKaizmOWgEFqfHCmyixXpgxhTAfClGxVIkAXax6XZSod1ULAGjwCbWrVRgqyIaAdOfreIHUwWYr4AzRCOwDE7reoasukD0S2g+NXZgE+tWKrBVEZYA5kupLjZ9mCoqHqmiPgFPrIeAUWATLdYDM62A6cLVLtlS1FjMc9AILMPllohLt/UWkA28CwdLAdO9oQ27zZNZCzBRk8O8IL4E4n61GPfL3ehfr0f/gSP6T0zRf+SL/jNrFvuHbkXc/2pQJ0kgNEkgNEkgNEkgNNEL/AJU+Ek/EETQ1AAAAABJRU5ErkJggg==" y="786.1855"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="156" x="596" y="863.7207">Process Each VIN Batch</text><rect fill="#FFFFFF" height="110.9766" style="stroke:#7D8998;stroke-width:1.25;" width="137" x="781.5" y="41.7988"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="68" x="816" y="62.334">«Lambda»</text><image height="64" width="64" x="818" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAFmUlEQVR4XtWZW2wUVRjHARW8EI23eFc0xniJCcYHY+IlXh68vIgvmHh70BfwwVBa2mqh0qJWrLFAKVEjWGwJpBBIWkEwYEpFkbbBgFbQAi0SKaUze7/Mzu6M37dndph+33b37M48OJPfy//8z5w938yZOf9ppymLpvkaqn0H1b6Dat9Bte+g2ndQ7Tuo9h1U+w6qfQfVkiT2rzINw5Q4DC0abnuGj+AVVEuSPv83nenUhz7yCx/BK6iWRBQQWHEXt5yoSy4zIuPQM7Tmce56AtWSSBYAxHctg56pP7q55QlUS5KZGMYCGu/kFkGtu9bQYvDABD95gLvuoVoS+QIU8cSbZvLQN9xyD9WSlFRAoHGOmdHNdCrwwS3cdQnVkpRUAKANdkL/xI/N3HIJ1ZLkCpjDrbwEm+dCfyMZVmuv4q4bqJYkM3FCvOPJoZ/uVypn8v5A6thu6BDrqeGWG6iWJNG3hs49d0Q3v8X7A7Afg5sJn1WqZnG3bKh2Q2TjKzDF9Lk/lYrp3AX0fwawwi1vc6tsqHbF4osyykmYYmT9S9TKEmmfn63wmFIxg7vlQbVLolsXwhT1Uz9zC4EKsw9PZP08apUL1S7B8BM9D1MMtT7BXcWu0Lt4R7V74ruWmhh+erilOCv0KN5R7R71/WvgG6BA+PE23lFdBmrNbH24N76n0W5J9LbAFJP97bwz9rfjXdP93C0Vqssg1r0E3/+ZdPDDu0VLoOEOK/wsv433VzDercYKD23gVqlQXSpq1aWwN2EBMKGDX9vt2sC30JLo/Zyfonga76gulWjXAphoevw43AGcUMPtoj248kETw09Efe9qfpaC8W4TVrjvU26VBNWlsfji3M41L9m/ESfU12q7qaHvoCW+s46elcWreEd1SUQ6XsPLPzYE2SHYdJ9pZAw9EVh2o3BDrU/ioxE5B8uMn6t4FO+oLoGK6emzv8MMop1viBbtty6yKvTRX7FD1wJ6bhZP4h3V8kDgwZ9XR2AhiZbcqojAVmD12fAy9pkYhhDBR1Aw3g1ihS7iHdXyWFd360JnI2zAuO53N1gtFTPw+YaHpH0+H0GZFO/yB9iiUC1J7u6PkfUdWvUo3oR4QK29UrTA1YUWCNJ8EORCvMsfYItCtSSpv/bCr8a6q6ey4j21VkvVLLFRhNc9yzsDsW3vYIVTBdhiUC1DqOURcpmdhNc+hW5kXK2+XLRAndCSOr6Hd1ac8W71Y9wtCtUyaEd34DX+YQW3BPrIQVwVHa8KCW96IxGClmDzQ7wzEP++HissK95RXRTImJDDII2pdddxF6m8JKOO4pr54jm7MbFvJbRohzfTzlncxDuqi6INdJgYclq4JYhuehM6pP896nyxBOpvNtMaxI2p/pRUdryjujDw81bmWX4rdxHY3caGnOvHBqIeTvGntfSULNl4lx25xHhHdWGSB9bhJBypk2Dtbsope3ezCX58L669VFxdej0/UcnFO+cBaYp3I1BdgED9TaaehMAT/Oge7gry7m422pHtpnObmww8AEZ0gtTAuxGoLkDuQdzCLUG47WmzYHqztrmYolZfwV0CXCkvC4BYD9HXxFfhXO4K4E1vOrewfOgn9kOf2PZ3uUXwuADrS3xoJ7cEoc8exqubCBXO9+GvXsS7pI7yh4TgZQFwx8XqLLBZWll6bxO3JnEhhL9Orcl4WUBsxyIYSz/Zxy0BPNa5r5kbuEuA7wcTN4oj3HLiXQGVMzPBMzBW+MvnqZXDescfaONWHmCrDpzODvgCtRx4VoDIw+kzh7klgK3H2mUl/mkpsG7pcC+3bDwrAL42TIlDG+zk506FWjPbiKt0iHwHP5dANQeuEx2VHZCHYaPl5xYA3qT4p6GCh8c78f8Tqn0H1b6Dat9Bte+g2ndQ7Tuo9h1U+w6qfcd/sTVKGw8/YPUAAAAASUVORK5CYII=" y="65.2871"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="123" x="788.5" y="142.8223">Unload Data to S3</text><rect fill="#FFFFFF" height="110.9766" style="stroke:#7D8998;stroke-width:1.25;" width="137" x="781.5" y="762.6973"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="68" x="816" y="783.2324">«Lambda»</text><image height="64" width="64" x="818" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAFmUlEQVR4XtWZW2wUVRjHARW8EI23eFc0xniJCcYHY+IlXh68vIgvmHh70BfwwVBa2mqh0qJWrLFAKVEjWGwJpBBIWkEwYEpFkbbBgFbQAi0SKaUze7/Mzu6M37dndph+33b37M48OJPfy//8z5w938yZOf9ppymLpvkaqn0H1b6Dat9Bte+g2ndQ7Tuo9h1U+w6qfQfVkiT2rzINw5Q4DC0abnuGj+AVVEuSPv83nenUhz7yCx/BK6iWRBQQWHEXt5yoSy4zIuPQM7Tmce56AtWSSBYAxHctg56pP7q55QlUS5KZGMYCGu/kFkGtu9bQYvDABD95gLvuoVoS+QIU8cSbZvLQN9xyD9WSlFRAoHGOmdHNdCrwwS3cdQnVkpRUAKANdkL/xI/N3HIJ1ZLkCpjDrbwEm+dCfyMZVmuv4q4bqJYkM3FCvOPJoZ/uVypn8v5A6thu6BDrqeGWG6iWJNG3hs49d0Q3v8X7A7Afg5sJn1WqZnG3bKh2Q2TjKzDF9Lk/lYrp3AX0fwawwi1vc6tsqHbF4osyykmYYmT9S9TKEmmfn63wmFIxg7vlQbVLolsXwhT1Uz9zC4EKsw9PZP08apUL1S7B8BM9D1MMtT7BXcWu0Lt4R7V74ruWmhh+erilOCv0KN5R7R71/WvgG6BA+PE23lFdBmrNbH24N76n0W5J9LbAFJP97bwz9rfjXdP93C0Vqssg1r0E3/+ZdPDDu0VLoOEOK/wsv433VzDercYKD23gVqlQXSpq1aWwN2EBMKGDX9vt2sC30JLo/Zyfonga76gulWjXAphoevw43AGcUMPtoj248kETw09Efe9qfpaC8W4TVrjvU26VBNWlsfji3M41L9m/ESfU12q7qaHvoCW+s46elcWreEd1SUQ6XsPLPzYE2SHYdJ9pZAw9EVh2o3BDrU/ioxE5B8uMn6t4FO+oLoGK6emzv8MMop1viBbtty6yKvTRX7FD1wJ6bhZP4h3V8kDgwZ9XR2AhiZbcqojAVmD12fAy9pkYhhDBR1Aw3g1ihS7iHdXyWFd360JnI2zAuO53N1gtFTPw+YaHpH0+H0GZFO/yB9iiUC1J7u6PkfUdWvUo3oR4QK29UrTA1YUWCNJ8EORCvMsfYItCtSSpv/bCr8a6q6ey4j21VkvVLLFRhNc9yzsDsW3vYIVTBdhiUC1DqOURcpmdhNc+hW5kXK2+XLRAndCSOr6Hd1ac8W71Y9wtCtUyaEd34DX+YQW3BPrIQVwVHa8KCW96IxGClmDzQ7wzEP++HissK95RXRTImJDDII2pdddxF6m8JKOO4pr54jm7MbFvJbRohzfTzlncxDuqi6INdJgYclq4JYhuehM6pP896nyxBOpvNtMaxI2p/pRUdryjujDw81bmWX4rdxHY3caGnOvHBqIeTvGntfSULNl4lx25xHhHdWGSB9bhJBypk2Dtbsope3ezCX58L669VFxdej0/UcnFO+cBaYp3I1BdgED9TaaehMAT/Oge7gry7m422pHtpnObmww8AEZ0gtTAuxGoLkDuQdzCLUG47WmzYHqztrmYolZfwV0CXCkvC4BYD9HXxFfhXO4K4E1vOrewfOgn9kOf2PZ3uUXwuADrS3xoJ7cEoc8exqubCBXO9+GvXsS7pI7yh4TgZQFwx8XqLLBZWll6bxO3JnEhhL9Orcl4WUBsxyIYSz/Zxy0BPNa5r5kbuEuA7wcTN4oj3HLiXQGVMzPBMzBW+MvnqZXDescfaONWHmCrDpzODvgCtRx4VoDIw+kzh7klgK3H2mUl/mkpsG7pcC+3bDwrAL42TIlDG+zk506FWjPbiKt0iHwHP5dANQeuEx2VHZCHYaPl5xYA3qT4p6GCh8c78f8Tqn0H1b6Dat9Bte+g2ndQ7Tuo9h1U+w6qfcd/sTVKGw8/YPUAAAAASUVORK5CYII=" y="786.1855"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="123" x="788.5" y="863.7207">Unload Data to S3</text><rect fill="#FFFFFF" height="127.4648" style="stroke:#7D8998;stroke-width:1.25;" width="152" x="932.5" y="25.3105"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="95" x="961" y="45.8457">«Timestream»</text><image height="64" width="64" x="976.5" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAFd0lEQVR4Xu2Y54scZRzH8894sTdiuyjYUEQhRpBgw4oNUawoUYgRgzWIGg1G4gvPkliR2BBfiPhiL7e7t733PtvLbJ3d8TvzrJPLPLt782y5ucN9+HLM7fPMM8/nmefXZpvhDMuW1jb6p62lOYDemgPorTmA3poD6K3/McDy2VbHHl/0rST3baFiqDVjrU6h0210e0JP4LvtbKcRaJb+qqSXcsG9McsNbnqGqYgdYMHifjCYO1HEWkWW1sq0k0c4600e9YSTiQ3AeYe/Zqsra6p7G9zxfOiVuOvegOV6l/ES+8nzbIbtlpULbKbLHbZbPN5HQ9E3k/nfSm2u07+nJ2Z/KJh3OunJxxMDQHh/QpQ3HXsZeye1eq2LHjNUCxbHHj93LN9r9TADeOy7veoxY0krgOehoLR9Qi/+fhqnnx6gUeYrnTAMiSHbMe6w0wNYpRWgZuHx1PC+ON3FrO0WwhA7mFJ3sUsrQK8tvfqVi6awZ5D/2Qhmy/9aortYpRWAWOB030Dxz7K6i11sAFO0AX0ATvNC17B6IZ/ihbAROgD0Oj3bLm9lpdaHGRgHzrWOjgNYeuaLHLEBHQDItfu+APdNXigLComW1gg1E4cyJKdALBd1BCCScyF/aF8883W+aqzV/U0cLWRBUi5UFprxFu9plP6uJD/l/M9FVRnEpgCYRHOAU9pEAMSylZb5MkffSGvmAPbbfLgXRkJ3qTRzADTX3QG6a7QIgLr1xOCL0ejbSfIfrN/zcAiDTYuOVqJNfpwJAJxM4PkoohI9YJgGA4gSw9omJaeXOkjKSEqlmQCQxrsaoZdjCFv0MFoDj1DkgLz3XREeFtsRfi3hfTyc/6WE3xrhFnkz0weADXgeCaHS7XN0xaqZT32WDbwQdd8ftN/qXb3ahRisunEgABR9I4kblX8TH2cwrFMSWKtnNgBcLJ9p9T0VQXawbk3MO+uG4QBrhWNJbsn9VKR7R4sZQNHJ821IgXAYst8Xqqs8MgWc47VUIwByJ4rKMKWRDC/5CUc/fYTGB9AoAtAINpUkPLg3plo6WvIIB0dEyqbE4Qw9zzBtEAAa8iK8NJgsyWd9T4bpwche8RSJ4ZBWho0DEOWDtHKxffkcyYrokUTexySGTqFjusJB99LaIIBmpIX8FBe8o268bOjKjDvs4f0JMKCWoHsHigEAoQeOku4aLcWIzVc5iQvGX1yTXriB1NFsf/CCpWqUAtmsbACt7mtYbmTz02u9EPYeb0B6IfHW6nUu1z0B4rXSn/dj1ikb+EgrAxuAKDu77HcFlDIoHelhtFRuFDaAa1HOHbp12eeenlMoLf5Bmp6NFgMAlp48nOk/FVGzKCCcxQ6mcGTtu73mnc6VC23LZ6k/WNBxAL4IHolMkvkq534g2G0OgJgBgGzEqNYTH6YRpNQPpNqIQIaYUPi9xB3Lq/LC2R4hlRcyLTr9z0QAk/+5iJONY413Qr6arAtgkFMSdVY7ayOexI2O0WaSjdK/rysYRjMqRQDWtlkABmpgTTyetAK0UlKlB+dNd42hyIGEtMdLmvZ4tLQCpJdyomSL/ORf2G27vEJV+qqHMojuZZVWAKwb+Ywol3yI//QALYL3jLyeINGXO56nB4whrQAGOQKgcCEWVjHU/E9HpE+51LCBgs9FpUvyOTQUohoD+bpiADDIzjv8ahyVK1kH9rL8TzX2Xtr3RNh6s8e06ECUxRjkC0jXHLf7UPWmjnJS1PsvPPCuhvMuPz3z2GIDIMIqgy/FEJtIEailCXwX8Q7ZGz3bhBoHQBHSd+w9EqTCH2Ukqm1Oys+kr9MVAV6rZqvnfizE3k057/TTOdK0NBHAZtAcQG/NAfTWHEBvzQH01pYH+BfWSnr/PdM9/wAAAABJRU5ErkJggg==" y="48.7988"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="138" x="939.5" y="126.334">FleetWise Campaign</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="71" x="973" y="142.8223">Data Store</text><rect fill="#FFFFFF" height="127.4648" style="stroke:#7D8998;stroke-width:1.25;" width="152" x="932.5" y="762.6973"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="95" x="961" y="783.2324">«Timestream»</text><image height="64" width="64" x="976.5" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAFd0lEQVR4Xu2Y54scZRzH8894sTdiuyjYUEQhRpBgw4oNUawoUYgRgzWIGg1G4gvPkliR2BBfiPhiL7e7t733PtvLbJ3d8TvzrJPLPLt782y5ucN9+HLM7fPMM8/nmefXZpvhDMuW1jb6p62lOYDemgPorTmA3poD6K3/McDy2VbHHl/0rST3baFiqDVjrU6h0210e0JP4LvtbKcRaJb+qqSXcsG9McsNbnqGqYgdYMHifjCYO1HEWkWW1sq0k0c4600e9YSTiQ3AeYe/Zqsra6p7G9zxfOiVuOvegOV6l/ES+8nzbIbtlpULbKbLHbZbPN5HQ9E3k/nfSm2u07+nJ2Z/KJh3OunJxxMDQHh/QpQ3HXsZeye1eq2LHjNUCxbHHj93LN9r9TADeOy7veoxY0krgOehoLR9Qi/+fhqnnx6gUeYrnTAMiSHbMe6w0wNYpRWgZuHx1PC+ON3FrO0WwhA7mFJ3sUsrQK8tvfqVi6awZ5D/2Qhmy/9aortYpRWAWOB030Dxz7K6i11sAFO0AX0ATvNC17B6IZ/ihbAROgD0Oj3bLm9lpdaHGRgHzrWOjgNYeuaLHLEBHQDItfu+APdNXigLComW1gg1E4cyJKdALBd1BCCScyF/aF8883W+aqzV/U0cLWRBUi5UFprxFu9plP6uJD/l/M9FVRnEpgCYRHOAU9pEAMSylZb5MkffSGvmAPbbfLgXRkJ3qTRzADTX3QG6a7QIgLr1xOCL0ejbSfIfrN/zcAiDTYuOVqJNfpwJAJxM4PkoohI9YJgGA4gSw9omJaeXOkjKSEqlmQCQxrsaoZdjCFv0MFoDj1DkgLz3XREeFtsRfi3hfTyc/6WE3xrhFnkz0weADXgeCaHS7XN0xaqZT32WDbwQdd8ftN/qXb3ahRisunEgABR9I4kblX8TH2cwrFMSWKtnNgBcLJ9p9T0VQXawbk3MO+uG4QBrhWNJbsn9VKR7R4sZQNHJ821IgXAYst8Xqqs8MgWc47VUIwByJ4rKMKWRDC/5CUc/fYTGB9AoAtAINpUkPLg3plo6WvIIB0dEyqbE4Qw9zzBtEAAa8iK8NJgsyWd9T4bpwche8RSJ4ZBWho0DEOWDtHKxffkcyYrokUTexySGTqFjusJB99LaIIBmpIX8FBe8o268bOjKjDvs4f0JMKCWoHsHigEAoQeOku4aLcWIzVc5iQvGX1yTXriB1NFsf/CCpWqUAtmsbACt7mtYbmTz02u9EPYeb0B6IfHW6nUu1z0B4rXSn/dj1ikb+EgrAxuAKDu77HcFlDIoHelhtFRuFDaAa1HOHbp12eeenlMoLf5Bmp6NFgMAlp48nOk/FVGzKCCcxQ6mcGTtu73mnc6VC23LZ6k/WNBxAL4IHolMkvkq534g2G0OgJgBgGzEqNYTH6YRpNQPpNqIQIaYUPi9xB3Lq/LC2R4hlRcyLTr9z0QAk/+5iJONY413Qr6arAtgkFMSdVY7ayOexI2O0WaSjdK/rysYRjMqRQDWtlkABmpgTTyetAK0UlKlB+dNd42hyIGEtMdLmvZ4tLQCpJdyomSL/ORf2G27vEJV+qqHMojuZZVWAKwb+Ywol3yI//QALYL3jLyeINGXO56nB4whrQAGOQKgcCEWVjHU/E9HpE+51LCBgs9FpUvyOTQUohoD+bpiADDIzjv8ahyVK1kH9rL8TzX2Xtr3RNh6s8e06ECUxRjkC0jXHLf7UPWmjnJS1PsvPPCuhvMuPz3z2GIDIMIqgy/FEJtIEailCXwX8Q7ZGz3bhBoHQBHSd+w9EqTCH2Ukqm1Oys+kr9MVAV6rZqvnfizE3k057/TTOdK0NBHAZtAcQG/NAfTWHEBvzQH01pYH+BfWSnr/PdM9/wAAAABJRU5ErkJggg==" y="786.1855"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="138" x="939.5" y="863.7207">FleetWise Campaign</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="71" x="973" y="880.209">Data Store</text><rect fill="#FFFFFF" height="127.4648" style="stroke:#7D8998;stroke-width:1.25;" width="159" x="1098.5" y="25.3105"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="31" x="1162.5" y="45.8457">«S3»</text><image height="64" width="64" x="1146" xlink:href="data:image/png;base64,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" y="48.7988"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="145" x="1105.5" y="126.334">CMS Connect &amp; Store</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="117" x="1119.5" y="142.8223">Telemetry Bucket</text><rect fill="#FFFFFF" height="127.4648" style="stroke:#7D8998;stroke-width:1.25;" width="159" x="1098.5" y="762.6973"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="31" x="1162.5" y="783.2324">«S3»</text><image height="64" width="64" x="1146" xlink:href="data:image/png;base64,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" y="786.1855"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="145" x="1105.5" y="863.7207">CMS Connect &amp; Store</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="117" x="1119.5" y="880.209">Telemetry Bucket</text><rect fill="#FFFFFF" height="110.9766" style="stroke:#7D8998;stroke-width:1.25;" width="102" x="1286" y="41.7988"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="45" x="1314.5" y="62.334">«Glue»</text><image height="64" width="64" x="1305" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAD+0lEQVR4Xu2Y+0tUQRTH/Q+1B/Si3yJ6EEEQ1A9lEgXFqqj5S74yEcO0ZCk0K9+IUVo+81GJz9Tcyle66u7pe+5c764zauu9M24Le/hwGeecez3fu2fmzkyKL5USmhS1K7FICog3SQHxJikg3iQFxBuzAka7yLGRDtmrBYMCMg9FsoeFNuUALRgXgLyzjyayAFg4lJgCwHiPrQH2rVP2akGnAAzTzQ2boTa7M/uIjRqvBX0C0iIvm6yykQPMoFlAOEw5xxJZAGx9TRYw3M6dgoEm5UZv6BOQSpMDtgYYhq/ozDoc6SQDc5FOASD3uI3TIwQg7wen/lcBD89QzV1qfkRdL2iwlca6aXqI5kYpMEnFFyK/QHAlIsB/j57dpqLzlJkmP22/uBeAwdpeQQuzdn47WulljoQex8Z7uce5a32VBTcU8tPUfxEL7gVMDdpJrC1zEt111FJKtTn8aiuuUdkVKrnEiwgOTuP6EfisV47fCrcsBbZkEc2MyM+PEfcCnLc484U+1VJjET2/w3mjonZ7neiHFzEoucZC1uw8BA01PhbcC6i8gcly6wWqFqbNdQr+odUlvqK9dzCepv6LWHAvAOAVwpAiigft0Y88dpd/cmWLBdy2JEPcDy9isE/Aj4a7UH4wtNWHx4gnAZguF+Y4g5bHsstnTaC5Jyj/NF/RVgNay/hePGG3kosFTwJAVTongQopvii79gZDnOuK6OlN2bUvvAoAPfWcB+ZKbABU744g8vsw34XCU737QoMAVMjiPGeDb5nq3RGUnCie6G+2OzQIANUZnNBGkD+9qlcCxWYXT7rscoEeAaDvLec09fkfq4NI8bySXe7QJiDvpP1lxRdN9TqgzGCLP7jwVK8LtAkAWESIQio8J7sEKB54YVW3ZJdrdAoA/Y2c30S/veaJBqU1bS2fel7LLi9oFoDlGr61sIYC2dVUYhXPPOVpKh6BZgEACzWy1skFZyOdmJ3s4smQ4z2iXwAYaOZcsTRyeib6uKf3jRzpHSMCsP6hqN2jOKILhzUXj8CIgExxxLJ1MOFsi9VI75gRIE5Fw9RWTnW5fE0wAeD3jKUhygITcowWTAnAfPoyizr9fJKFHTDaJgaAz5yAA8OUAIxjbB2x38d4EA01RgvGBIipM2R2CvKZEPDBz+979us2AWSdvoB31XK8R/QLELszYYFJ7ok+vfs1Lcd7RL+A8qu8ECLrgFocN2D+EQfXwRU+1VJv8YJ+AT7rzEtsGjsq+c/3NdzGYu7JdTnSO0YE+Kw1KQYubKybr2hrX4cKTAkA+HiJ40Qs4/z3Za8uDAoA9fm0NM9H1qpLF2YFHABJAfEmKSDeJAXEm6SAeJPwAv4CzdTpiVLvBysAAAAASUVORK5CYII=" y="65.2871"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="88" x="1293" y="142.8223">Glue Crawler</text><rect fill="#FFFFFF" height="110.9766" style="stroke:#7D8998;stroke-width:1.25;" width="102" x="1286" y="762.6973"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="45" x="1314.5" y="783.2324">«Glue»</text><image height="64" width="64" x="1305" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAD+0lEQVR4Xu2Y+0tUQRTH/Q+1B/Si3yJ6EEEQ1A9lEgXFqqj5S74yEcO0ZCk0K9+IUVo+81GJz9Tcyle66u7pe+5c764zauu9M24Le/hwGeecez3fu2fmzkyKL5USmhS1K7FICog3SQHxJikg3iQFxBuzAka7yLGRDtmrBYMCMg9FsoeFNuUALRgXgLyzjyayAFg4lJgCwHiPrQH2rVP2akGnAAzTzQ2boTa7M/uIjRqvBX0C0iIvm6yykQPMoFlAOEw5xxJZAGx9TRYw3M6dgoEm5UZv6BOQSpMDtgYYhq/ozDoc6SQDc5FOASD3uI3TIwQg7wen/lcBD89QzV1qfkRdL2iwlca6aXqI5kYpMEnFFyK/QHAlIsB/j57dpqLzlJkmP22/uBeAwdpeQQuzdn47WulljoQex8Z7uce5a32VBTcU8tPUfxEL7gVMDdpJrC1zEt111FJKtTn8aiuuUdkVKrnEiwgOTuP6EfisV47fCrcsBbZkEc2MyM+PEfcCnLc484U+1VJjET2/w3mjonZ7neiHFzEoucZC1uw8BA01PhbcC6i8gcly6wWqFqbNdQr+odUlvqK9dzCepv6LWHAvAOAVwpAiigft0Y88dpd/cmWLBdy2JEPcDy9isE/Aj4a7UH4wtNWHx4gnAZguF+Y4g5bHsstnTaC5Jyj/NF/RVgNay/hePGG3kosFTwJAVTongQopvii79gZDnOuK6OlN2bUvvAoAPfWcB+ZKbABU744g8vsw34XCU737QoMAVMjiPGeDb5nq3RGUnCie6G+2OzQIANUZnNBGkD+9qlcCxWYXT7rscoEeAaDvLec09fkfq4NI8bySXe7QJiDvpP1lxRdN9TqgzGCLP7jwVK8LtAkAWESIQio8J7sEKB54YVW3ZJdrdAoA/Y2c30S/veaJBqU1bS2fel7LLi9oFoDlGr61sIYC2dVUYhXPPOVpKh6BZgEACzWy1skFZyOdmJ3s4smQ4z2iXwAYaOZcsTRyeib6uKf3jRzpHSMCsP6hqN2jOKILhzUXj8CIgExxxLJ1MOFsi9VI75gRIE5Fw9RWTnW5fE0wAeD3jKUhygITcowWTAnAfPoyizr9fJKFHTDaJgaAz5yAA8OUAIxjbB2x38d4EA01RgvGBIipM2R2CvKZEPDBz+979us2AWSdvoB31XK8R/QLELszYYFJ7ok+vfs1Lcd7RL+A8qu8ECLrgFocN2D+EQfXwRU+1VJv8YJ+AT7rzEtsGjsq+c/3NdzGYu7JdTnSO0YE+Kw1KQYubKybr2hrX4cKTAkA+HiJ40Qs4/z3Za8uDAoA9fm0NM9H1qpLF2YFHABJAfEmKSDeJAXEm6SAeJPwAv4CzdTpiVLvBysAAAAASUVORK5CYII=" y="786.1855"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="88" x="1293" y="863.7207">Glue Crawler</text><rect fill="#E7157B" height="477.2578" style="stroke:#232F3E;stroke-width:1.0;" width="10" x="241.5" y="198.041"/><rect fill="#D76511" height="14" style="stroke:#232F3E;stroke-width:1.0;" width="10" x="419.5" y="226.1738"/><rect fill="#D76511" height="14" style="stroke:#232F3E;stroke-width:1.0;" width="10" x="419.5" y="661.2988"/><rect fill="#D76511" height="70.2656" style="stroke:#232F3E;stroke-width:1.0;" width="10" x="525.5" y="282.4395"/><rect fill="#E7157B" height="168.7969" style="stroke:#232F3E;stroke-width:1.0;" width="10" x="669" y="450.2363"/><rect fill="#D76511" height="98.3984" style="stroke:#232F3E;stroke-width:1.0;" width="10" x="845" y="506.6348"/><rect fill="#C925D1" height="14" style="stroke:#232F3E;stroke-width:1.0;" width="10" x="1003.5" y="324.7051"/><rect fill="#C925D1" height="70.3984" style="stroke:#232F3E;stroke-width:1.0;" width="10" x="1003.5" y="520.6348"/><rect fill="#A020F0" height="14" style="stroke:#232F3E;stroke-width:1.0;" width="10" x="1332" y="731.6973"/><polygon fill="#000000" points="229.5,194.041,239.5,198.041,229.5,202.041,233.5,198.041" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:2.0;" x1="87" x2="235.5" y1="198.041" y2="198.041"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="114" x="105.25" y="179.377">Trigger unload step</text><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="45" x="141.75" y="193.5098">function</text><polygon fill="#000000" points="407.5,222.1738,417.5,226.1738,407.5,230.1738,411.5,226.1738" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:2.0;" x1="251.5" x2="413.5" y1="226.1738" y2="226.1738"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="149" x="261" y="221.6426">Get time range for unload</text><polygon fill="#000000" points="262.5,236.1738,252.5,240.1738,262.5,244.1738,258.5,240.1738" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:2.0;stroke-dasharray:2.0,2.0;" x1="256.5" x2="423.5" y1="240.1738" y2="240.1738"/><polygon fill="#000000" points="513.5,278.4395,523.5,282.4395,513.5,286.4395,517.5,282.4395" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:2.0;" x1="251.5" x2="519.5" y1="282.4395" y2="282.4395"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="142" x="315.5" y="263.7754">Get batches of VINs split</text><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="144" x="316.5" y="277.9082">by max unload partitions</text><polygon fill="#000000" points="991.5,320.7051,1001.5,324.7051,991.5,328.7051,995.5,324.7051" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:2.0;" x1="535.5" x2="997.5" y1="324.7051" y2="324.7051"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="144" x="695.5" y="306.041">Get VINs with data within</text><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="107" x="716" y="320.1738">Query Time Range</text><polygon fill="#000000" points="546.5,334.7051,536.5,338.7051,546.5,342.7051,542.5,338.7051" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:2.0;stroke-dasharray:2.0,2.0;" x1="540.5" x2="1007.5" y1="338.7051" y2="338.7051"/><polygon fill="#000000" points="262.5,348.7051,252.5,352.7051,262.5,356.7051,258.5,352.7051" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:2.0;stroke-dasharray:2.0,2.0;" x1="256.5" x2="529.5" y1="352.7051" y2="352.7051"/><line style="stroke:#000000;stroke-width:2.0;" x1="251.5" x2="293.5" y1="394.9707" y2="394.9707"/><line style="stroke:#000000;stroke-width:2.0;" x1="293.5" x2="293.5" y1="394.9707" y2="407.9707"/><line style="stroke:#000000;stroke-width:2.0;" x1="252.5" x2="293.5" y1="407.9707" y2="407.9707"/><polygon fill="#000000" points="262.5,403.9707,252.5,407.9707,262.5,411.9707,258.5,407.9707" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="128" x="263" y="376.3066">Check for existence of</text><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="141" x="258.5" y="390.4395">data, exit if no new data</text><polygon fill="#000000" points="657,446.2363,667,450.2363,657,454.2363,661,450.2363" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:2.0;" x1="251.5" x2="663" y1="450.2363" y2="450.2363"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="139" x="388.75" y="431.5723">If data exists, pass VINs</text><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="102" x="409.25" y="445.7051">to map processor</text><polygon fill="#000000" points="833,502.6348,843,506.6348,833,510.6348,837,506.6348" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:2.0;" x1="679" x2="839" y1="506.6348" y2="506.6348"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="101" x="709.5" y="473.8379">Call unload query</text><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="143" x="688.5" y="487.9707">targeting a batch of VINs</text><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="136" x="694" y="502.1035">within query time range</text><polygon fill="#000000" points="991.5,516.6348,1001.5,520.6348,991.5,524.6348,995.5,520.6348" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:2.0;" x1="855" x2="997.5" y1="520.6348" y2="520.6348"/><polygon fill="#000000" points="1166,558.9004,1176,562.9004,1166,566.9004,1170,562.9004" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:2.0;" x1="1013.5" x2="1172" y1="562.9004" y2="562.9004"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="133" x="1027.25" y="544.2363">Store parquet files with</text><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="132" x="1029.75" y="558.3691">output of unload query</text><polygon fill="#000000" points="866,587.0332,856,591.0332,866,595.0332,862,591.0332" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:2.0;stroke-dasharray:2.0,2.0;" x1="860" x2="1007.5" y1="591.0332" y2="591.0332"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="119" x="872.25" y="586.502">Return unload status</text><polygon fill="#000000" points="690,601.0332,680,605.0332,690,609.0332,686,605.0332" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:2.0;stroke-dasharray:2.0,2.0;" x1="684" x2="849" y1="605.0332" y2="605.0332"/><polygon fill="#000000" points="262.5,615.0332,252.5,619.0332,262.5,623.0332,258.5,619.0332" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:2.0;stroke-dasharray:2.0,2.0;" x1="256.5" x2="673" y1="619.0332" y2="619.0332"/><polygon fill="#000000" points="407.5,657.2988,417.5,661.2988,407.5,665.2988,411.5,661.2988" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:2.0;" x1="251.5" x2="413.5" y1="661.2988" y2="661.2988"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="99" x="284" y="642.6348">Store end time of</text><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="138" x="266.5" y="656.7676">successful unload query</text><polygon fill="#000000" points="257.5,671.2988,247.5,675.2988,257.5,679.2988,253.5,675.2988" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:2.0;stroke-dasharray:2.0,2.0;" x1="251.5" x2="423.5" y1="675.2988" y2="675.2988"/><polygon fill="#000000" points="1189,727.6973,1179,731.6973,1189,735.6973,1185,731.6973" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:2.0;" x1="1183" x2="1331" y1="731.6973" y2="731.6973"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="127" x="1189.5" y="698.9004">Crawl for new data on</text><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="131" x="1187.5" y="713.0332">scheduled interval and</text><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="90" x="1210" y="727.166">update indexes</text><polygon fill="#000000" points="1325,741.6973,1335,745.6973,1325,749.6973,1329,745.6973" style="stroke:#000000;stroke-width:1.0;"/><line style="stroke:#000000;stroke-width:2.0;stroke-dasharray:2.0,2.0;" x1="1178" x2="1331" y1="745.6973" y2="745.6973"/><!--MD5=[a0387c27881c2861a4a0807d5b34e7f7]
+@startuml cms-fleetwise-connector-sequence-diagram
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/ApplicationIntegration/EventBridge.puml
+!include AWSPuml/ApplicationIntegration/StepFunctions.puml
+!include AWSPuml/Database/Timestream.puml
+!include AWSPuml/Storage/SimpleStorageService.puml
+!include AWSPuml/Analytics/Glue.puml
+
+skinparam participant {
+    BackgroundColor AWS_BG_COLOR
+    BorderColor AWS_BORDER_COLOR
+}
+skinparam sequence {
+    ArrowThickness 2
+    LifeLineBorderColor AWS_COLOR
+    LifeLineBackgroundColor AWS_BORDER_COLOR
+    BoxBorderColor AWS_COLOR
+}
+
+!$STEP_FUNCTIONS_COLOR = "#E7157B"
+!$LAMBDA_COLOR = "#D76511"
+!$GLUE_COLOR = "#A020F0"
+!$S3_COLOR = "#248823"
+!$TIMESTREAM_COLOR = "#C925D1"
+
+box "AWS Cloud"
+  participant "$EventBridgeIMG()\nScheduled Recurring\nUnload Event" as EBEvent <<EventBridge>>
+  participant "$StepFunctionsIMG()\nUnload Data from\nTimestream to S3" as Start <<StepFunction>>
+  participant "$LambdaIMG()\nTime Range" as TimeRange <<Lambda>>
+  participant "$LambdaIMG()\nQuery VINs" as GetBatches <<Lambda>>
+  participant "$StepFunctionsIMG()\nProcess Each VIN Batch" as ProcessBatch <<StepFunction>>
+  participant "$LambdaIMG()\nUnload Data to S3" as UnloadData <<Lambda>>
+  participant "$TimestreamIMG()\nFleetWise Campaign\nData Store" as Timestream <<Timestream>>
+  participant "$SimpleStorageServiceIMG()\nCMS Connect & Store\nTelemetry Bucket" as S3 <<S3>>
+  participant "$GlueIMG()\nGlue Crawler" as Glue <<Glue>>
+
+  EBEvent -> Start : Trigger unload step function
+
+  activate Start $STEP_FUNCTIONS_COLOR
+
+    Start -> TimeRange : Get time range for unload
+    activate TimeRange $LAMBDA_COLOR
+      TimeRange - -> Start
+    deactivate TimeRange
+
+    Start -> GetBatches : Get batches of VINs split by max unload partitions
+
+    activate GetBatches $LAMBDA_COLOR
+      GetBatches -> Timestream : Get VINs with data within Query Time Range
+      activate Timestream $TIMESTREAM_COLOR
+        Timestream - -> GetBatches
+      deactivate Timestream
+      GetBatches - -> Start
+    deactivate GetBatches
+
+    Start -> Start : Check for existence of data, exit if no new data
+
+    Start -> ProcessBatch : If data exists, pass VINs to map processor
+    activate ProcessBatch $STEP_FUNCTIONS_COLOR
+      ProcessBatch -> UnloadData : Call unload query targeting a batch of VINs within query time range
+      activate UnloadData $LAMBDA_COLOR
+        UnloadData -> Timestream
+        activate Timestream $TIMESTREAM_COLOR
+          Timestream -> S3 : Store parquet files with output of unload query
+          Timestream - -> UnloadData : Return unload status
+        deactivate Timestream
+        UnloadData - -> ProcessBatch
+      deactivate UnloadData
+      ProcessBatch - -> Start
+    deactivate ProcessBatch
+
+    Start -> TimeRange : Store end time of successful unload query
+    activate TimeRange $LAMBDA_COLOR
+      TimeRange - -> Start
+    deactivate TimeRange
+
+  deactivate Start
+
+  Glue -> S3 : Crawl for new data on scheduled interval and update indexes
+  activate Glue $GLUE_COLOR
+    S3 - -> Glue
+  deactivate Glue
+end box
+@enduml
+
+@startuml cms-fleetwise-connector-sequence-diagram
+
+
+
+
+
+
+
+<style>
+  root {
+    BackgroundColor #FFFFFF
+    FontColor #000000
+    LineColor #000000
+  }
+  caption {
+    LineThickness 0
+  }
+  footer {
+    LineThickness 0
+  }
+  header {
+    LineThickness 0
+  }
+</style>
+
+
+skinparam defaultTextAlignment Center
+skinparam PackageTitleAlignment Left
+
+skinparam wrapWidth 200
+skinparam maxMessageSize 150
+skinparam Shadowing false
+skinparam RoundCorner 0
+skinparam BackgroundColor #FFFFFF
+
+
+
+skinparam arrow {
+    Color #000000
+    FontColor #000000
+    FontSize 12
+}
+
+skinparam TitleFontColor #000000
+skinparam TitleBorderColor transparent
+skinparam BackgroundColor #FFFFFF
+
+skinparam participant {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+    Padding 2
+}
+
+skinparam sequence {
+    ArrowThickness 2
+    LifeLineBorderColor #000000
+    LifeLineBackgroundColor #FFFFFF
+    BoxFontColor #000000
+    BoxBorderColor #7D8998
+    BoxBorderThickness 1.25
+    BoxBackgroundColor #FFFFFF
+    GroupBorderColor #000000
+    GroupFontColor #000000
+    GroupBodyBackgroundColor transparent
+}
+skinparam BoxPadding 2
+
+skinparam note {
+  BorderColor #7D8998
+  BorderThickness 1.25
+}
+
+skinparam activity {
+      FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+  BorderThickness 2
+  StartColor #FFFFFF
+  EndColor #000000
+  BarColor #000000
+}
+skinparam swimlane {
+      FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+  TitleFontColor #000000
+}
+
+skinparam actor {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam agent {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+    Padding 2
+}
+skinparam artifact {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam boundary {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam card {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam circle {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam cloud {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam collections {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam component {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam control {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam database {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam entity {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam file {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam folder {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam frame {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam hexagon {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam interface {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam label {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam node {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam package {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam person {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam queue {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam rectangle {
+    StereotypeFontSize 12
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 2
+}
+skinparam stack {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam storage {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+skinparam usecase {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 1.25
+}
+
+skinparam legend {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+}
+skinparam object {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+}
+skinparam class {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+}
+skinparam partition {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+sprite $Lambda [64x64/16z] {
+xPC5TiLG509vclslk7PhKv-wyLq8Sn8ulfN-zQyHQ5b_2zIyVz_wH03l7-blyk_We_8JmFi9uFsbdk7z193-KYE0xzyyIgi0f6RQ3T6KPZPlfhqLO7qs09iN
+3S3c-H8Fk6o9PxBV0f2aetaEOAO1m9OuMVL_09ZuYgxgMu3gU_s_cHNXdvS0M9681u0fSSNNgrqHELk6M17Y0U1Mr3D8OahCeYRBhOZnCqtEc165hrPK2JoH
+ND6vkeedm8L4FDwMacVY6LeeyBjuVg2VIXRY0V2CdmNdbMBr4nlFwYSsdW2F-LjA3tOaj_GI_xuBXsD_3_thNwS
+}
+
+
+skinparam rectangle<<Lambda>> {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 2
+}
+sprite $EventBridge [64x64/16z] {
+xPQ7pkD028I7kalU_tslB3eX6UUyVs_vqWjcWB7mxPFnu84pIEAvqI5OZ6V66-0n1VHC1RGo1yEV9n-8bA4f1_-m9yKhx12FUTk1L-BP6hZRaGcmAI17OGJT
+6_yTjGDWa5nN4Qucu5uP5hxPHk_vBQPkzj5QkmIMBxebW8u3fqmyghBEy4CR5wc4Sw8EkP-KOIMtq7GKH-awnQleKNsQ-JO0DYDmR3Gz6DKcpP87NTXuAImb
+xRZXgdTTM9xlupVqkZe2QKfgcFrVtL_HbFIiaRzrUevpRGPwvVZdwtz-_ru-luw26AJH_DDyUKuW6MV-JHo8dTNJpv-4uPUh9ry41PT4Z__9JxcmF4mndh5w
+MlilOLYDiOt_cW68AQ1drjnUFMTY1MpgiRDwzAnR4_khHz452A0cmDpR7DBhd-N3AoQErnm6hG5VOyTuXLNyCt1mh39eDwAtP8QddkSmi7Z9LIc1_VQfUF3W
+Dm
+}
+
+
+skinparam rectangle<<EventBridge>> {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 2
+}
+sprite $StepFunctions [64x64/16z] {
+xPPL0i8m44GdBlU_B-w-UJWyQFiraVN-hlpvKuDpeGxBYnQKGNcJOcjHQgFR-_d7ZnuWASu_KMbCdzVxPtf_Q7_WVsdcVu1abdYTnT-svNdOaRdUSczlrEiG
+invuxf5whqEywVuwncH_YTZnyNf-Vcu_xh_NnzyXZylVrzSVNZzv_GQN0VthnVCBdn_u_CBdfzVFBtn-VJr__am1
+}
+
+
+skinparam rectangle<<StepFunctions>> {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 2
+}
+sprite $Timestream [64x64/16z] {
+xPLNiYmn2CL4DEn_mJUdoVZbCFhjactW5Dt_67Vkh30LdX6rM7jo6aU8puzO0eX5LdLNhGm3i9hf0U9rVAO1Qw8dU9-X56hWAt7nYm_yoxSaDl8ltwyJ_tBz
+G_zI_wV-qlFppw5_ANzp_pt_0eYevtDovluP_Y0_0Mp7NnyNZ_nrwhyI0P9TSjqdplhlb7B3HwBEl3yWEzAGkEgd0EgHg-gW_eZkTbXR-PE3_WNOP7uPfdBe
+Vnpgc_DVoElDptY2x_fejv9dDkJGHwlpIu9gpnT1FfIAN5lxSw7rUa3wpJqCiaxzVZaWmM_N3xPE_2xb2tx5Tm3pN5K7-LMm7FXTBcVpPpQUNwMRoA7_Zkxd
+vmJRyKl6_lVlJxcOpS06lg7d3rYG0xy4oREtOpsX5FJeX0e1xo41e9xhzVyRBe2idXFA8PQzHwMh08YOh_vZkNFd4G
+}
+
+
+skinparam rectangle<<Timestream>> {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 2
+}
+sprite $SimpleStorageService [64x64/16z] {
+xPL5ckKm38H_OUv_uY5Dax-adBTghAqi6GfyV3Jyu0UTuMuCp3so7-Wrpc2tPaopUMJrhE-k3BSPiUi6Y3gjLG382GPUebuETbrsh0wDCloo2Br_NH3zlkrt
+KDUttB9ZQZRW5pntEg3E6CJGZqTMzLDZLSRqMWOXsFVPvXHpC1SAgAUxZUACWOqQfsIKvaP3StohVpDSemLz9vUpTNb9YQsFcx3GbOJe3zRLB8uCQU1SJsSO
+l7Qb8_rzzZflOiEmUjYSQS_N40PGx9Op0Ge9rjS4NfKw00mxsh1h0akd7-0YGZGzan28297ocFbTkPnHoLFVJzj3lwycK9UrWxM-D6ohRmr_p5zQ0DhVMW3w
+T5e0-dNs0j3iQC2Tejv2qw_XkAZ5jh-1xBD20bEGQ0FCb__RZIMtPCwSmUkuZVd06JnztnyFF_Z1Rm
+}
+
+
+skinparam rectangle<<SimpleStorageService>> {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 2
+}
+sprite $Glue [64x64/16z] {
+xPM5TiKm34CbG-B__-6HEwPC6Rzt2uUgOzsKwlTovem1iDB1DLlv0dvkVlkVyCgrXwl-F-KnCzoCv3pcvvYrJ12tp280wtFK2dsjHuvnFzGDLt0rJuyEDtDa
+E5Vp0wynQWa7mesuX-RnWSU0Y3guauXklshGkNjcjr_4dmrZjnSC7hON38JsRM1g-mO8iVszWTR-ta1lVs_GxHKIc7BxUmFJslVa_e2fxESZOoDFNCEIINVF
+-Zd88d_g9-haJPuCUVLvd1K6-lcLd_y1H7d79HBewIe986k3xFZlvCoPIm
+}
+
+
+skinparam rectangle<<Glue>> {
+        FontColor #000000
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+    BorderThickness 2
+}
+
+skinparam participant {
+    BackgroundColor #FFFFFF
+    BorderColor #7D8998
+}
+skinparam sequence {
+    ArrowThickness 2
+    LifeLineBorderColor #232F3E
+    LifeLineBackgroundColor #7D8998
+    BoxBorderColor #232F3E
+}
+
+
+box "AWS Cloud"
+  participant "<img data:image/png;base64,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{scale=1}>\nScheduled Recurring\nUnload Event" as EBEvent <<EventBridge>>
+  participant "<img data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAQKADAAQAAAABAAAAQAAAAABGUUKwAAADSUlEQVRoBe1Zv2sUURB2N3e7AfcuSXFnEDUWwVRiERFtxCJYpdHOFCKI/4GNP0pRrLQWBbGIWKuNpBAbg5pSIRLFJIK6QRP1FHfvcnGOB5vn7bs3u/NmYy7sscW8eW/mfTPfzNtjn/WpcmlbN//sbgbfwp4H8L8ZzBnIGTDMQF5Chgk0Nu96BgrGKVA7KIxUvQtjzuhumA5nFmvXphqzvnqpmdbK4q+EO7av/+6E5axnZy1srJyZDKbemqFVWPOXkFXu7bt5EtD/vj3t778ODwgwbClLrgKCmYo/AOfwkF31whfzPy4+an75CQ8IMASlc2SvGVqFNX8AheEK7FN/tSjvVp/5CEMxJevNZf4AVheWAVbxYKt9o19xdBfIYipSsgj8AQRP55pLNefQUPnquL2jBA8IMAQlTLGAlp1kcwodH+m/c8pypVMoaKycvR88mZX3ZpH5GQBYAPTb+K0/D18LiCDAMAv04D8TBqLUDvpXQP5cvRxp2AViAAOTp+FtxYgG3nHLE/cIDoklxIsecJMdrvcZIXqu2hCVRgAAJkQGaJtlYYUwoK/1eObIpUyODWEgbWmmXU/GHRkiDIh1CWs9Tki0jV5I6F/pBGFAabOplIkYYEGsb6dOW6BNlSgAcm3IsGjtgVohAUACUBcySlgvD+NyqnJPkjgkgE6vd+E6FZp4MCyard7E+s6LU4z2HEvWZSdICaVqAPCLro/HLKMhyEgAwmPCWteDS3seiK3RUyFRAITExE06nQfxlak0W72JRTL0tZEqYcrFwn/CQm3zgDCAlmCbu7Tr28wJQ6QHOhWuSc4IKDUmCAMay00yhTCgR5l1b+h3F7NEBthrneyQ+F0oSW5gzQa0CpEBNIDigZ3weVQsAwGGqAltQSYMuF39cdfy3L4bJ+DT9D9XTG6hpfS64YrJPTZsV1RXTBUPpmh1orHi74GePQOwn/KKSUxp0BCm+ANozC0BDuUVk5gioNSY8AcQTs83fdUVk18Ln3/QQKFNZXMKbeBFd8/57UdpoWusVt9/DR6/sQdLdrl37VcYPHv3/dyD+ssFjQl5KhMGyGgIhvw9QABhYpIHYJI9DtucAY4smvjIGTDJHodtzgBHFk18/AUt1CAdTQV1NwAAAABJRU5ErkJggg=={scale=1}>\nUnload Data from\nTimestream to S3" as Start <<StepFunction>>
+  participant "<img data:image/png;base64,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{scale=1}>\nTime Range" as TimeRange <<Lambda>>
+  participant "<img data:image/png;base64,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{scale=1}>\nQuery VINs" as GetBatches <<Lambda>>
+  participant "<img data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAQKADAAQAAAABAAAAQAAAAABGUUKwAAADSUlEQVRoBe1Zv2sUURB2N3e7AfcuSXFnEDUWwVRiERFtxCJYpdHOFCKI/4GNP0pRrLQWBbGIWKuNpBAbg5pSIRLFJIK6QRP1FHfvcnGOB5vn7bs3u/NmYy7sscW8eW/mfTPfzNtjn/WpcmlbN//sbgbfwp4H8L8ZzBnIGTDMQF5Chgk0Nu96BgrGKVA7KIxUvQtjzuhumA5nFmvXphqzvnqpmdbK4q+EO7av/+6E5axnZy1srJyZDKbemqFVWPOXkFXu7bt5EtD/vj3t778ODwgwbClLrgKCmYo/AOfwkF31whfzPy4+an75CQ8IMASlc2SvGVqFNX8AheEK7FN/tSjvVp/5CEMxJevNZf4AVheWAVbxYKt9o19xdBfIYipSsgj8AQRP55pLNefQUPnquL2jBA8IMAQlTLGAlp1kcwodH+m/c8pypVMoaKycvR88mZX3ZpH5GQBYAPTb+K0/D18LiCDAMAv04D8TBqLUDvpXQP5cvRxp2AViAAOTp+FtxYgG3nHLE/cIDoklxIsecJMdrvcZIXqu2hCVRgAAJkQGaJtlYYUwoK/1eObIpUyODWEgbWmmXU/GHRkiDIh1CWs9Tki0jV5I6F/pBGFAabOplIkYYEGsb6dOW6BNlSgAcm3IsGjtgVohAUACUBcySlgvD+NyqnJPkjgkgE6vd+E6FZp4MCyard7E+s6LU4z2HEvWZSdICaVqAPCLro/HLKMhyEgAwmPCWteDS3seiK3RUyFRAITExE06nQfxlak0W72JRTL0tZEqYcrFwn/CQm3zgDCAlmCbu7Tr28wJQ6QHOhWuSc4IKDUmCAMay00yhTCgR5l1b+h3F7NEBthrneyQ+F0oSW5gzQa0CpEBNIDigZ3weVQsAwGGqAltQSYMuF39cdfy3L4bJ+DT9D9XTG6hpfS64YrJPTZsV1RXTBUPpmh1orHi74GePQOwn/KKSUxp0BCm+ANozC0BDuUVk5gioNSY8AcQTs83fdUVk18Ln3/QQKFNZXMKbeBFd8/57UdpoWusVt9/DR6/sQdLdrl37VcYPHv3/dyD+ssFjQl5KhMGyGgIhvw9QABhYpIHYJI9DtucAY4smvjIGTDJHodtzgBHFk18/AUt1CAdTQV1NwAAAABJRU5ErkJggg=={scale=1}>\nProcess Each VIN Batch" as ProcessBatch <<StepFunction>>
+  participant "<img data:image/png;base64,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{scale=1}>\nUnload Data to S3" as UnloadData <<Lambda>>
+  participant "<img data:image/png;base64,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{scale=1}>\nFleetWise Campaign\nData Store" as Timestream <<Timestream>>
+  participant "<img data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAQKADAAQAAAABAAAAQAAAAABGUUKwAAAIB0lEQVRoBe1Za0zTVxSnTwp9QEt5U95CFUEQFdGJUyc+l206DRqzaObUJWYmLn6YidmHZduHfdnih0XnpmTLdMmmy+J0vrZJJqAOH6jjIUiBlndLSx+UPmC/cllDaOn//gu4mND809z/vef+zj33nHvuOefPOVoeE/Ii/7gv8uI9a58V4P/W4KwGZjUwxR2YNaEpbuCUp7/wGuBPZQs4HG60LDMxaoFCmhohTowUJ8nC44R8sYAfhofPFbqGHU7XIB6Hyzpg6zJatSarzmDW6PQPeweaRkaGp8KdzA1GgFj5XHVSaVbi6gRFnpAfHmARAp4IT0ioHDTREXPGUzpctg5DbaPu93rt1e7+uvFDrNoc+lhIJIwozNyxNHsP9pvwGAkZ0Q8869DX9pqeGq06k02HbXY4rU63Z9ex/VCCRxu8MKFADOVEhENLiZAkISovSpbOCeEQHL255XbDmZqms3aHidXqQUwlAJfDWzZ335r8IzAPzDFZO+q1Vxp0NzTdVUNOC1uWhD5UIEmNLc5OXKNOWhchTkAnzOzGg88q604Oj7jpMZkFgJHsfuVcSkwRQOu116rrTzV1VkyL+ZJV4iBlxpcsVe9VJ61Fj6anuvz6DhgYpQy8FW94NjXAb8uyz2Hx0PJ3f7xV8fg4jmBIyEgAevZDI8CsbTnf3FkBnSQocuEP/mm7RInD7EZzkjcB6/S1ba09dyhBgyMD/pnrZZg7P3kzPQKzAO5hJ+BezjvM4wrocYOg5POEaxYcwUT3sIN+OrMbNVhaodZFmTtTY5bcfHS8VnPB5R6iZ0BDCVebl7ZlZe57UdI00IMjzSxCwyxAv6UNArjcDqUsc+vyLzYv+Rieu1F3o7Xndr+lnZ6TL6VckpwauzQrYbVaVUr8G7hADwbzdAsA3pX1J7sMT4rVe1XRhQvStuBBp3mwu9tYj0ugz9SMtnmwx2LvhWOFDbjcdrfbyeMJ+DwRjyuE05SIoqVhMdLwOKUsPSYiKyYyWxoW65Wqvbemqv5UnCKnJOfgNGuA7AfChCs1Hz1sOQ8tZ8SXpMUWY/Nk4fFYRGb8Su86WDUGbJ2a7uqW7ir4H3g5zFWr1uG/fyY0AHWTxYETnjuN5XhFJ/YS/5ESlUKSDPeHnRbww4Wjty+fF4rTglvZ4QmHbNCMJxCytBkt7TDLHlMj/gmm959wmWYTInBYn5eNt4EV+C7COxpEg3AxWDT0c5ndqNHajphHLFIiqqHHDYIS+OCCOMJo0dFPZxYAZmC2dQPRa0WU6IEDVV8Qgg8zGx5x+Y5O1sMsAGb2jzpmv1bkFxdx6/4Nv364s+Xdjb+FhUb6pfHtHLMfNicYIFQC4OSBNNLfMfBdB3qKsncnRy9CI0lZgDDWL41vp1ySgk5WPhT0VAIQv0avgfGLW5V3eNeq8uToxeM7/bb/c0Eav6OTddIJMKoB+jOA7KSt928cfaSOOEJzVev3b7h4YOPl3NTXuJxJ73651OPoWPlQ0E8KN15iYkL0AiCxOnF5EyIcp9sOx1Ksfrsoe49KubCs5CSSoeqGb2qavrfa9eNZoE3wSws+cLgsSDUnjE72ypwPYCbSl+XzDmBByAcmA/LtJ84EV9izrlvVDV/j3o2SpSmkKUhfitXvxETMQdwBn+OduL7wGO6+8FB5fvqbqBU0df5JE5ZSCYBkb2XuIbjFqrpTCHK8LOkbw8Munf7B7frT7X01IqFMGZERr8gpzNyZl/q6SChFPs3hclfnvT/kNF+9/0lKzBIkzTkpm560XgTrwFyoBIAOCtK3YW8eaX5B0BYYMfAowpDalgv3ms8ivkBUB7PJiF+xbN4+JMeSsGiUCH68dfCR5mfEWrGR6kRl/r3mHwIDUgoQkp20FmFcU+fNXlNjYESaUez0s66/Kuu+gkI4HM5oWcmT10MGFD4QX6HAEa+YL5eoQBM4/aA6xIAmMY9crKJZHyUNDgnyCjwwzleLPl2YUQbHhbAXD0Fo6a5kLLTQCkC8G/F0lOujJ0MNwunyHK1Ld481ddyMk8+D7zLZOhq01xhBaAUY0wD1ZczIeAIB8aEoTyDMxjNhNMAr1UWG+UQAxehtHwAu6CEFucV8MgRGQFoBiAkhcWFEDIIANcbI0dOFXIftdFoBBh1Gu2MAdxnyWrY8GOml4bG4wqz2PvqCnBeTVgBMIHEifUDh5cHYGDsA7O0HyCwEmLlzTAQg+IzSTiAIQoDpPwZjArBMZYgkLAQYuwpmwBE9Zw34KU9MUCvbV+KdSdDOdi4LDczgGRi9BJ7HGfDEKpJEfLBhu08B6JGjocKHlGN8bhCAfsIQCw2Q+gr4RUrGgq0JWMG9IsXBjuDjGqnjswVhIQCgn3Z4Mr21BUen61sB7q/SgqPAbNBdZ7t0Qk+bDxDqXlNTftrWJGV+QcZ2fNsasHUgsg+OMWLmxVm7tr/0JcrdtiHDT5WHcNkHAcX8kW8CKD6PlpWcwBdi0o8MS9t7D/EjGsh6rXYDVgNjQzqLNJLL5aO2PprpKsSiKHxpRVaEwrpKWQjLIQjavvvnKvYFd4KBwFoAwhUV9sVzdqGwTl94IxO9/5ATof/dp98i5fd2BtEIUgDCCVaE5EMpy4AjR1qITUWFXSSQCgUSHBIcTVRqcTQdTovdaTZatIimUCPTmzX6geYuY920fKulTWj87g1W0Gl4jMfv6PPpZOeFns+aWHGZFYDVds0A8awGZmBTWUHOaoDVds0A8awGZmBTWUH+C+olW2DmJArIAAAAAElFTkSuQmCC{scale=1}>\nCMS Connect & Store\nTelemetry Bucket" as S3 <<S3>>
+  participant "<img data:image/png;base64,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{scale=1}>\nGlue Crawler" as Glue <<Glue>>
+
+  EBEvent -> Start : Trigger unload step function
+
+  activate Start #E7157B
+
+    Start -> TimeRange : Get time range for unload
+    activate TimeRange #D76511
+      TimeRange - -> Start
+    deactivate TimeRange
+
+    Start -> GetBatches : Get batches of VINs split by max unload partitions
+
+    activate GetBatches #D76511
+      GetBatches -> Timestream : Get VINs with data within Query Time Range
+      activate Timestream #C925D1
+        Timestream - -> GetBatches
+      deactivate Timestream
+      GetBatches - -> Start
+    deactivate GetBatches
+
+    Start -> Start : Check for existence of data, exit if no new data
+
+    Start -> ProcessBatch : If data exists, pass VINs to map processor
+    activate ProcessBatch #E7157B
+      ProcessBatch -> UnloadData : Call unload query targeting a batch of VINs within query time range
+      activate UnloadData #D76511
+        UnloadData -> Timestream
+        activate Timestream #C925D1
+          Timestream -> S3 : Store parquet files with output of unload query
+          Timestream - -> UnloadData : Return unload status
+        deactivate Timestream
+        UnloadData - -> ProcessBatch
+      deactivate UnloadData
+      ProcessBatch - -> Start
+    deactivate ProcessBatch
+
+    Start -> TimeRange : Store end time of successful unload query
+    activate TimeRange #D76511
+      TimeRange - -> Start
+    deactivate TimeRange
+
+  deactivate Start
+
+  Glue -> S3 : Crawl for new data on scheduled interval and update indexes
+  activate Glue #A020F0
+    S3 - -> Glue
+  deactivate Glue
+end box
+@enduml
+
+PlantUML version 1.2022.7(Mon Aug 22 12:01:30 CDT 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

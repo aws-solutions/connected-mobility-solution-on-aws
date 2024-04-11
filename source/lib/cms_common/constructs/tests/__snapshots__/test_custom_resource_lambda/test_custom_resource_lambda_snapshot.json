@@ -1,0 +1,454 @@
+{
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    }
+  },
+  "Resources": {
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+      "DependsOn": [
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "test"
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 900
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:PutRetentionPolicy",
+                "logs:DeleteRetentionPolicy"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "Roles": [
+          {
+            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "testcustomresourcelambdalambdafunctionC2803C89": {
+      "DependsOn": [
+        "testcustomresourcelambdalambdarole3EB2AE8D"
+      ],
+      "Metadata": {
+        "cdk_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "AwsSolutions-L1",
+              "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+            }
+          ]
+        },
+        "cfn_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "W92",
+              "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+          ]
+        }
+      },
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "test"
+        },
+        "Environment": {
+          "Variables": {
+            "USER_AGENT_STRING": "test-user-agent-string"
+          }
+        },
+        "FunctionName": "test-id-test-module-name-custom-resource",
+        "Handler": "function.main.handler",
+        "Layers": [
+          {
+            "Ref": "testlambdadependencieslambdadependencylayerversionAA06C21D"
+          }
+        ],
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "testcustomresourcelambdalambdarole3EB2AE8D",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Timeout": 300,
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "testcustomresourcelambdasecuritygroup8EE64646",
+                "GroupId"
+              ]
+            }
+          ],
+          "SubnetIds": [
+            "test-vpc-private-subnet-1",
+            "test-vpc-private-subnet-2"
+          ]
+        }
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "testcustomresourcelambdalambdafunctionLogRetentionD9120E69": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "testcustomresourcelambdalambdafunctionC2803C89"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "testcustomresourcelambdalambdarole3EB2AE8D": {
+      "Metadata": {
+        "cdk_nag": {
+          "rules_to_suppress": [
+            {
+              "appliesTo": [
+                "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-test-module-name-custom-resource:log-stream:*",
+                "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AcdpUniqueId>-test-module-name-custom-resource:log-stream:*"
+              ],
+              "id": "AwsSolutions-IAM5",
+              "reason": "Log retention lambda uses policies that require wildcard permissions"
+            },
+            {
+              "appliesTo": [
+                "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*",
+                "Resource::*"
+              ],
+              "id": "AwsSolutions-IAM5",
+              "reason": "ec2 Network Interfaces permissions need to be wildcard"
+            }
+          ]
+        },
+        "cfn_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Wildcard permissions required to write to log streams."
+            },
+            {
+              "id": "W11",
+              "reason": "ec2 Network Interfaces permissions need to be wildcard"
+            }
+          ]
+        }
+      },
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/test-id-test-module-name-custom-resource"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/test-id-test-module-name-custom-resource:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "lambda-logs-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "ec2:CreateNetworkInterfacePermission",
+                  "Condition": {
+                    "StringEquals": {
+                      "ec2:AuthorizedService": "lambda.amazonaws.com",
+                      "ec2:Subnet": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/test-vpc-private-subnet-1"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/test-vpc-private-subnet-2"
+                            ]
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":ec2:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":network-interface/*"
+                      ]
+                    ]
+                  }
+                },
+                {
+                  "Action": [
+                    "ec2:DescribeNetworkInterfaces",
+                    "ec2:CreateNetworkInterface",
+                    "ec2:DeleteNetworkInterface"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ec2-policy"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "testcustomresourcelambdasecuritygroup8EE64646": {
+      "Metadata": {
+        "cfn_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "W40",
+              "reason": "Lambdas need outbound communication to contact other resources in VPC"
+            },
+            {
+              "id": "W5",
+              "reason": "Lambdas are inside Private Subnets and may need to communicate to services over internet. So the CIDR is wide open on egress for now"
+            }
+          ]
+        }
+      },
+      "Properties": {
+        "GroupDescription": "Default/test-custom-resource-lambda/security-group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "VpcId": "test-vpc-id"
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "testlambdadependencieslambdadependencylayerversionAA06C21D": {
+      "Properties": {
+        "CompatibleArchitectures": [
+          "x86_64",
+          "arm64"
+        ],
+        "CompatibleRuntimes": [
+          "python3.8",
+          "python3.9",
+          "python3.10"
+        ],
+        "Content": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "test"
+        }
+      },
+      "Type": "AWS::Lambda::LayerVersion"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                  ],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}

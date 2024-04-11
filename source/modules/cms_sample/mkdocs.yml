@@ -1,0 +1,18 @@
+docs_dir: ./docs
+site_dir: ./site
+edit_uri: blob/main/source/modules/cms_sample
+nav:
+- Home: README.md
+- "Issue Tracker \u2197": https://github.com/aws-solutions/connected-mobility-solution-on-aws/issues
+- "Solution Homepage \u2197": https://aws.amazon.com/solutions/implementations/connected-mobility-solution-on-aws/
+- "Implementation Guide \u2197": https://docs.aws.amazon.com/solutions/latest/connected-mobility-solution-on-aws/solution-overview.html
+plugins:
+- techdocs-core
+repo_name: GitHub
+repo_url: https://github.com/aws-solutions/connected-mobility-solution-on-aws
+site_author: !ENV MODULE_AUTHOR
+site_description: !ENV MODULE_DESCRIPTION
+site_name: !ENV MODULE_NAME
+site_url: https://aws.amazon.com/solutions/implementations/connected-mobility-solution-on-aws/
+theme:
+  name: readthedocs

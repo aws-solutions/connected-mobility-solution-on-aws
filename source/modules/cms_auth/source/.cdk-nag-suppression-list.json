@@ -1,0 +1,111 @@
+{
+    "/cms-auth/cms-auth/authorization-code-exchange-lambda/lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Wildcard permissions are required to put log events into the log stream.",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-auth-authorization-code-exchange:log-stream:*"
+                ]
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Wildcard permissions are required to access the secret at runtime.",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:secretsmanager:<AWS::Region>:<AWS::AccountId>:secret:/solution/auth/<IdentityProviderId>/authorization-code-flow/config-*"
+                ]
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "ec2 Network Interfaces permissions need to be wildcard",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*",
+                    "Resource::*"
+                ]
+            }
+        ]
+    },
+    "/cms-auth/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM4",
+                "reason": "Log retention lambdas use AWS managed policies",
+                "appliesTo": [
+                    "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                ]
+            }
+        ]
+    },
+    "/cms-auth/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM4",
+                "reason": "Log retention lambdas use AWS managed policies",
+                "appliesTo": [
+                    "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                ]
+            }
+        ]
+    },
+    "/cms-auth/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*"
+                ],
+                "reason": "Wildcard permissions required by log retention lambda which is created by L2 constructs."
+            }
+        ]
+    },
+    "/cms-auth/cms-auth/authorization-code-exchange-lambda/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+            }
+        ]
+    },
+    "/cms-auth/cms-auth/token-validation-lambda/lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-auth-token-validation:log-stream:*"
+                ],
+                "reason": "Wildcard permissions required to write to log streams."
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Wildcard permissions are required to access the secret at runtime.",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:secretsmanager:<AWS::Region>:<AWS::AccountId>:secret:/solution/auth/<IdentityProviderId>/idp-config-*"
+                ]
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "ec2 Network Interfaces permissions need to be wildcard",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*",
+                    "Resource::*"
+                ]
+            }
+        ]
+    },
+    "/cms-auth/cms-auth/token-validation-lambda/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+            }
+        ]
+    },
+    "/cms-auth/AWS679f53fac002430cb0da5b7982bd2287/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+            }
+        ]
+    }
+}

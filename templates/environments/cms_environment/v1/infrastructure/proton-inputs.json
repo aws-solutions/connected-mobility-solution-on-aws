@@ -1,8 +1,0 @@
-{
-    "environment": {
-      "name": "cms_environment",
-      "inputs": {
-        "a_number": 5
-      }
-    }
-  }

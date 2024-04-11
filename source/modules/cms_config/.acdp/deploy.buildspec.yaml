@@ -1,0 +1,17 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      # Build and deploy
+      - echo "${APP_UNIQUE_ID}"
+      - |
+        aws cloudformation create-stack \
+        --stack-name "${MODULE_STACK_NAME}" \
+        --template-url "${CFN_TEMPLATE_URL}" \
+        --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
+        --role-arn "${CLOUDFORMATION_ROLE_ARN}" \
+        --parameters \
+        ParameterKey="AppUniqueId",ParameterValue="${APP_UNIQUE_ID}" \
+        ParameterKey="VpcName",ParameterValue="${VPC_NAME}" \
+        ParameterKey="IdentityProviderId",ParameterValue="${IDENTITY_PROVIDER_ID}"

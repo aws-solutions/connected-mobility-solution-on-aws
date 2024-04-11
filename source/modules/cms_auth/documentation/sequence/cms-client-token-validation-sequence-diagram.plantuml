@@ -1,0 +1,68 @@
+@startuml cms-client-token-validation-sequence-diagram
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v14.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/SecurityIdentityCompliance/SecretsManager.puml
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/General/Internet.puml
+
+'Comment out to use default PlantUML sequence formatting
+skinparam participant {
+    BackgroundColor AWS_BG_COLOR
+    BorderColor AWS_BORDER_COLOR
+}
+skinparam sequence {
+    ArrowThickness 2
+    LifeLineBorderColor AWS_COLOR
+    LifeLineBackgroundColor AWS_BORDER_COLOR
+    BoxBorderColor AWS_COLOR
+}
+
+!$LAMBDA_COLOR = "#D76511"
+!$SECRETS_COLOR = "#D22029"
+!$API_COLOR = "#232F3E"
+
+entity ServiceClient as service_client
+
+box API
+participant "$InternetIMG()\nExternal Service API" as service_api << Service API >>
+participant "$LambdaIMG()\nAuthorization Lambda" as authorization_lambda << Lambda Function >>
+endbox
+
+box Auth Setup
+participant "$SecretsManagerIMG()\nClient Config" as client_config << Secrets Manager >>
+participant "$SecretsManagerIMG()\nIdP Config" as idp_config << Secrets Manager >>
+endbox
+
+box CMS Auth
+participant "$LambdaIMG()\nToken Validation Lambda" as token_validation_lambda << Lambda Function >>
+endbox
+
+box OAuth2.0 IdP
+participant "$InternetIMG()\nOAuth2.0 API" as oauth_idp << OAuth2.0 API >>
+endbox
+
+'Use shortcut syntax for activation with colored lifelines and return keyword
+service_client -> client_config++ $SECRETS_COLOR: Get client credentials and token endpoint
+return
+|||
+service_client -> oauth_idp++ $API_COLOR: POST to /token endpoint
+oauth_idp --> oauth_idp: Validate request
+return access_token
+|||
+service_client -> service_api++ $API_COLOR: API call w/ Bearer token
+service_api -> authorization_lambda++ $LAMBDA_COLOR: Authorize service
+authorization_lambda -> token_validation_lambda++ $LAMBDA_COLOR: Validate access token
+idp_config <- token_validation_lambda++ $SECRETS_COLOR: Get IdP config
+return
+token_validation_lambda --> oauth_idp++ $API_COLOR: Validate JWT. Verify claims.
+return
+return Token valid
+return Authorized
+service_api --> service_api: Perform API operations
+return API response
+|||
+
+@enduml

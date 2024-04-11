@@ -1,0 +1,107 @@
+@startuml cms-connect-store-sequence-diagram
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v15.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/InternetOfThings/IoTMQTTProtocol.puml
+!include AWSPuml/InternetOfThings/IoTRule.puml
+!include AWSPuml/Storage/SimpleStorageService.puml
+!include AWSPuml/Analytics/KinesisDataStreams.puml
+!include AWSPuml/Analytics/Glue.puml
+!include AWSPuml/SecurityIdentityCompliance/SecretsManager.puml
+!include AWSPuml/General/Internet.puml
+
+'Comment out to use default PlantUML sequence formatting
+skinparam participant {
+    BackgroundColor AWS_BG_COLOR
+    BorderColor AWS_BORDER_COLOR
+}
+skinparam sequence {
+    ArrowThickness 2
+    LifeLineBorderColor AWS_COLOR
+    LifeLineBackgroundColor AWS_BORDER_COLOR
+    BoxBorderColor AWS_COLOR
+}
+
+!$LAMBDA_COLOR = "#D76511"
+!$SECRETS_COLOR = "#D22029"
+!$KINESIS_COLOR = "#A020F0"
+!$GLUE_COLOR = "#A020F0"
+!$S3_COLOR = "#248823"
+!$IOT_COLOR = "#248823"
+!$API_COLOR = "#232F3E"
+
+entity Vehicle as veh
+box AWS Cloud
+participant "$IoTMQTTProtocolIMG()\nCMS MQTT Topics" as iot << IoT Core >>
+participant "$IoTRuleIMG()\nIoT S3 Rule" as s3rule << IoT Rule >>
+participant "$IoTRuleIMG()\nIoT Kinesis Rule" as kinesisrule << IoT Rule >>
+participant "$KinesisDataStreamsIMG()\nKinesis Delivery Stream" as kinesisds << Kinesis >>
+participant "$GlueIMG()\nGlue" as glue << Glue >>
+participant "$SimpleStorageServiceIMG()\nS3" as s3 << S3 >>
+participant "$IoTRuleIMG()\nIoT Vehicle Alarm Rule" as vehiclealarmrule << IoT Rule >>
+participant "$LambdaIMG()\nLambda Vehicle Alarm" as lambdavehiclealarm <<Lambda>>
+participant "$SecretsManagerIMG()\nSecrets Manager" as secretsmanager << SecretsManager >>
+endbox
+
+box OAuth2.0 IdP
+participant "$InternetIMG()\nOAuth2.0 API" as oauth_idp << OAuth2.0 API >>
+endbox
+
+box CMS Alerts
+participant "$InternetIMG()\nAlerts API" as alerts_api << CMS Alerts API >>
+endbox
+
+'Use shortcut syntax for activation with colored lifelines and return keyword
+veh -> iot: emit payload async
+activate iot $IOT_COLOR
+iot --> veh
+iot -> s3: record to audit bucket
+activate s3 $S3_COLOR
+return
+|||
+iot -> s3rule: invoke s3 rule
+activate s3rule $S3_COLOR
+iot -> kinesisrule: invoke \t\t\nkinesis\t\t\nrule    \t\t
+activate kinesisrule $IOT_COLOR
+iot -> vehiclealarmrule: invoke vehicle \ntrigger alarm \nrule
+deactivate iot
+activate vehiclealarmrule $IOT_COLOR
+|||
+s3 <- s3rule: store payload in JSON format in CMS root \nbucket
+activate s3 $S3_COLOR
+return
+deactivate s3rule
+kinesisrule -> kinesisds: send payload to delivery stream
+activate kinesisds $KINESIS_COLOR
+kinesisds -> glue: validate against VSS schema
+activate glue $GLUE_COLOR
+kinesisds <-- glue
+kinesisds -> glue: transform to Parquet format
+return
+s3 <- kinesisds: store payload in Parquet format in CMS root bucket
+activate s3 $S3_COLOR
+return
+|||
+return
+deactivate kinesisrule
+|||
+vehiclealarmrule -> lambdavehiclealarm: trigger vehicle alarm lambda
+deactivate vehiclealarmrule
+activate lambdavehiclealarm $LAMBDA_COLOR
+lambdavehiclealarm -> secretsmanager: fetch client credentials
+activate secretsmanager $SECRETS_COLOR
+lambdavehiclealarm <-- secretsmanager
+deactivate secretsmanager
+lambdavehiclealarm -> oauth_idp: POST /token
+activate oauth_idp $API_COLOR
+lambdavehiclealarm <-- oauth_idp
+deactivate oauth_idp
+lambdavehiclealarm -> alerts_api: POST to alerts api with alarm
+activate alerts_api $API_COLOR
+lambdavehiclealarm <-- alerts_api
+deactivate alerts_api
+deactivate lambdavehiclealarm
+@enduml

@@ -1,0 +1,371 @@
+{
+    "/acdp/acdp/pipelines-construct/backend-secret/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-SMG4",
+                "reason": "Rotating this type of secret is currently not supported; it will require a simple rotation lambda."
+            }
+        ]
+    },
+    "/acdp/custom-resource-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Log groups have wildcards."
+            }
+        ]
+    },
+    "/acdp/acdp/pipelines-construct/backstage-code-pipeline/ArtifactsBucket/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-S1",
+                "reason": "An artifact bucket does not need S3 bucket for access logs"
+            }
+        ]
+    },
+    "/acdp/acdp/pipelines-construct/cms-vpc-cloudwatch-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::<cmspipelinesconstructcmsvpcloggroup296FCDDB.Arn>:log-stream:*"
+                ],
+                "reason": "Log stream has to be a wildcard"
+            }
+        ]
+    },
+    "/acdp/acdp/pipelines-construct/backstage-build-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Action::secretsmanager:*",
+                    "Action::ssm:*",
+                    "Resource::arn:<AWS::Partition>:ssm:<AWS::Region>:<AWS::AccountId>:*",
+                    "Resource::arn:<AWS::Partition>:ssm:<AWS::Region>:<AWS::AccountId>:parameter/acdp/config/*",
+                    "Resource::arn:<AWS::Partition>:secretsmanager:<AWS::Region>:<AWS::AccountId>:secret:/acdp/config/*",
+                    "Resource::arn:<AWS::Partition>:secretsmanager:<AWS::Region>:<AWS::AccountId>:secret:solution/<AcdpUniqueId>/*",
+                    "Resource::arn:<AWS::Partition>:ssm:<AWS::Region>:<AWS::AccountId>:parameter:solution/<AcdpUniqueId>/*"
+                ],
+                "reason": "Pipeline creates and reads multiple secrets and SSM parameters."
+            }
+        ]
+    },
+    "/acdp/acdp/pipelines-construct/backstage-deploy-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:ssm:<AWS::Region>:<AWS::AccountId>:parameter/acdp/config/*",
+                    "Resource::arn:<AWS::Partition>:s3:::{\"Fn::FindInMap\":[\"Solution\",\"AssetsConfig\",\"S3AssetBucketBaseName\"]}-<AWS::Region>/*",
+                    "Resource::arn:<AWS::Partition>:cloudformation:<AWS::Region>:<AWS::AccountId>:stack/cms-*",
+                    "Resource::arn:<AWS::Partition>:cloudformation:<AWS::Region>:<AWS::AccountId>:stack/acdp-backstage-*",
+                    "Resource::arn:<AWS::Partition>:ssm:<AWS::Region>:<AWS::AccountId>:parameter/dev/acdp-dev/*",
+                    "Resource::*",
+                    "Resource::arn:<AWS::Partition>:cloudformation:<AWS::Region>:<AWS::AccountId>:stack/<AcdpUniqueId>--acdp-backstage-*",
+                    "Resource::arn:<AWS::Partition>:cloudformation:<AWS::Region>:<AWS::AccountId>:stack/<AcdpUniqueId>--acdp-backstage/*",
+                    "Resource::arn:<AWS::Partition>:ssm:<AWS::Region>:<AWS::AccountId>:parameter/solution/<AcdpUniqueId>/*",
+                    "Resource::arn:<AWS::Partition>:s3:::<backstageassetbucketconstructcmkencryptedbucketE8CD3782>/*"
+                ],
+                "reason": "Need wildcard to read SSM parameters when deploying modules"
+            }
+        ]
+    },
+    "/acdp/acdp/pipelines-construct/backstage-deploy-role/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Action::kms:GenerateDataKey*",
+                    "Action::kms:ReEncrypt*",
+                    "Resource::arn:<AWS::Partition>:codebuild:<AWS::Region>:<AWS::AccountId>:report-group/<cmspipelinesconstructbackstagedeploypipelineproject34C58448>-*",
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/codebuild/<cmspipelinesconstructbackstagedeploypipelineproject34C58448>:*",
+                    "Resource::<cmspipelinesconstructbackstagecodepipelineArtifactsBucketF50DAED8.Arn>/*",
+                    "Action::s3:Abort*",
+                    "Action::s3:DeleteObject*",
+                    "Action::s3:List*",
+                    "Action::s3:GetBucket*",
+                    "Action::s3:GetObject*",
+                    "Action::ecr:*",
+                    "Resource::*",
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*",
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/codebuild/<acdppipelinesconstructbackstagedeploypipelineproject3068AE0E>:*",
+                    "Resource::arn:<AWS::Partition>:codebuild:<AWS::Region>:<AWS::AccountId>:report-group/<acdppipelinesconstructbackstagedeploypipelineproject3068AE0E>-*",
+                    "Resource::<acdppipelinesconstructbackstagecodepipelineArtifactsBucket9777AC61.Arn>/*"
+                ],
+                "reason": "Pipelines default role policy is least privilege."
+            }
+        ]
+    },
+    "/acdp/acdp/pipelines-construct/backstage-build-role/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Action::kms:GenerateDataKey*",
+                    "Action::kms:ReEncrypt*",
+                    "Resource::arn:<AWS::Partition>:codebuild:<AWS::Region>:<AWS::AccountId>:report-group/<cmspipelinesconstructbackstagebuildpipelineproject8067D702>-*",
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/codebuild/<cmspipelinesconstructbackstagebuildpipelineproject8067D702>:*",
+                    "Resource::<cmspipelinesconstructbackstagecodepipelineArtifactsBucketF50DAED8.Arn>/*",
+                    "Action::s3:Abort*",
+                    "Action::s3:DeleteObject*",
+                    "Action::s3:List*",
+                    "Action::s3:GetBucket*",
+                    "Action::s3:GetObject*",
+                    "Action::ecr:*",
+                    "Resource::*",
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*",
+                    "Resource::arn:<AWS::Partition>:secretsmanager:<AWS::Region>:<AWS::AccountId>:secret:solution/<AcdpUniqueId>/*",
+                    "Resource::arn:<AWS::Partition>:ssm:<AWS::Region>:<AWS::AccountId>:parameter:solution/<AcdpUniqueId>/*",
+                    "Resource::<acdppipelinesconstructbackstagecodepipelineArtifactsBucket9777AC61.Arn>/*",
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/codebuild/<acdppipelinesconstructbackstagebuildpipelineproject8C07A386>:*",
+                    "Resource::arn:<AWS::Partition>:codebuild:<AWS::Region>:<AWS::AccountId>:report-group/<acdppipelinesconstructbackstagebuildpipelineproject8C07A386>-*"
+                ],
+                "reason": "Pipelines default role policy is least privilege."
+            }
+        ]
+    },
+    "/acdp/acdp/pipelines-construct/backstage-pipeline-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Action::secretsmanager:*",
+                    "Resource::arn:<AWS::Partition>:secretsmanager:<AWS::Region>:<AWS::AccountId>:secret:/dev/cms-backstage/*",
+                    "Resource::arn:<AWS::Partition>:secretsmanager:<AWS::Region>:<AWS::AccountId>:secret:cms/*",
+                    "Resource::arn:<AWS::Partition>:ssm:<AWS::Region>:<AWS::AccountId>:parameter:/dev/acdp-stack-dev/*",
+                    "Resource::arn:<AWS::Partition>:secretsmanager:<AWS::Region>:<AWS::AccountId>:secret:solution/<AcdpUniqueId>/*",
+                    "Resource::arn:<AWS::Partition>:ssm:<AWS::Region>:<AWS::AccountId>:parameter:solution/<AcdpUniqueId>/*"
+                ],
+                "reason": "Pipeline creates and reads multiple secrets and SSM parameters."
+            }
+        ]
+    },
+    "/acdp/acdp/pipelines-construct/backstage-code-pipeline/Source-Stage-Backstage/S3-Source-Backstage-Asset/CodePipelineActionRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::<cmspipelinesconstructbackstagecodepipelineArtifactsBucketF50DAED8.Arn>/*",
+                    "Action::kms:GenerateDataKey*",
+                    "Action::kms:ReEncrypt*",
+                    "Action::s3:Abort*",
+                    "Action::s3:DeleteObject*",
+                    "Action::s3:List*",
+                    "Action::s3:GetBucket*",
+                    "Action::s3:GetObject*",
+                    "Resource::<acdppipelinesconstructbackstagecodepipelineArtifactsBucket9777AC61.Arn>/*"
+                ],
+                "reason": "Pipelines default role policy is least privilege."
+            }
+        ]
+    },
+    "/acdp/acdp/pipelines-construct/backstage-pipeline-role/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::<cmspipelinesconstructbackstagecodepipelineArtifactsBucketF50DAED8.Arn>/*",
+                    "Action::kms:GenerateDataKey*",
+                    "Action::kms:ReEncrypt*",
+                    "Action::s3:Abort*",
+                    "Action::s3:DeleteObject*",
+                    "Action::s3:List*",
+                    "Action::s3:GetBucket*",
+                    "Action::s3:GetObject*",
+                    "Resource::<acdppipelinesconstructbackstagecodepipelineArtifactsBucket9777AC61.Arn>/*"
+                ],
+                "reason": "Pipelines default role policy is least privilege."
+            }
+        ]
+    },
+    "/acdp/acdp/pipelines-construct/backstage-code-pipeline/Source-Stage-Backstage/Source/CodePipelineActionRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Action::kms:GenerateDataKey*",
+                    "Action::kms:ReEncrypt*",
+                    "Resource::<cmspipelinesbackstagecodepipelineArtifactsBucket9E305FB4.Arn>/*",
+                    "Action::s3:Abort*",
+                    "Action::s3:DeleteObject*",
+                    "Action::s3:List*",
+                    "Action::s3:GetBucket*",
+                    "Action::s3:GetObject*"
+                ],
+                "reason": "Pipelines default role policy is least privilege."
+            }
+        ]
+    },
+    "/acdp/acdp/cloudformation-role/role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Action::*",
+                    "Resource::*"
+                ],
+                "reason": "The CodeBuild job should be able to pass an admin role to the CloudFormation service principal to be able to deploy module stacks from CodeBuild"
+            }
+        ]
+    },
+    "/acdp/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM4",
+                "appliesTo": [
+                    "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                ],
+                "reason": "Custom bucket deployment can have a default role"
+            }
+        ]
+    },
+    "/acdp/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Cannot update runtime of the lambda function because it belongs to an AWS managed construct."
+            }
+        ]
+    },
+    "/acdp/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM4",
+                "appliesTo": [
+                    "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                ],
+                "reason": "Log retention lambda uses managed policies."
+            }
+        ]
+    },
+    "/acdp/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*"
+                ],
+                "reason": "Log retention lambda uses managed policies which have wildcard permissions."
+            }
+        ]
+    },
+    "/acdp/acdp/metrics-construct/lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/acdp-stack-dev-anonymous-metrics-reporting:log-stream:*"
+                ],
+                "reason": "Log retention lambda uses managed policies which have wildcard permissions."
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*"
+                ],
+                "reason": "CloudWatch Metrics do not support any kind of policy limitation via resource id or condition"
+            }
+        ]
+    },
+    "/acdp/acdp/metrics-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+            }
+        ]
+    },
+    "/acdp/acdp/pipelines-construct/backstage-build-pipeline-project/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-CB3",
+                "reason": "The CodeBuild project has privileged mode enabled."
+            }
+        ]
+    },
+    "/acdp/acdp/module-deploy-project/module-deploy-code-build-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:s3:::{\"Fn::FindInMap\":[\"Solution\",\"AssetsConfig\",\"S3AssetBucketBaseName\"]}-<AWS::Region>/*",
+                    "Resource::arn:<AWS::Partition>:cloudformation:<AWS::Region>:<AWS::AccountId>:stack/*",
+                    "Resource::arn:<AWS::Partition>:ssm:<AWS::Region>:<AWS::AccountId>:parameter/dev/acdp-dev/*",
+                    "Resource::arn:<AWS::Partition>:ssm:<AWS::Region>:<AWS::AccountId>:parameter/dev/cms/*",
+                    "Resource::arn:<AWS::Partition>:ssm:<AWS::Region>:<AWS::AccountId>:parameter/dev/common/*",
+                    "Resource::arn:<AWS::Partition>:ssm:<AWS::Region>:<AWS::AccountId>:parameter/solution/*",
+                    "Resource::arn:<AWS::Partition>:s3:::<backstageassetbucketconstructcmkencryptedbucketE8CD3782>/*"
+                ],
+                "reason": "Need wildcard to read and write objects to the specified resources"
+            }
+        ]
+    },
+    "/acdp/acdp/module-deploy-project/module-deploy-code-build-role/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/codebuild/<cmsmoduledeployprojectmoduledeploycodebuildprojectC6441EDE>:*",
+                    "Resource::arn:<AWS::Partition>:codebuild:<AWS::Region>:<AWS::AccountId>:report-group/<cmsmoduledeployprojectmoduledeploycodebuildprojectC6441EDE>-*",
+                    "Action::kms:ReEncrypt*",
+                    "Action::kms:GenerateDataKey*",
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*",
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/codebuild/<acdpmoduledeployprojectmoduledeploycodebuildprojectADB9C6C3>:*",
+                    "Resource::arn:<AWS::Partition>:codebuild:<AWS::Region>:<AWS::AccountId>:report-group/<acdpmoduledeployprojectmoduledeploycodebuildprojectADB9C6C3>-*"
+                ],
+                "reason": "Need wildcard to read and write objects to the specified resources"
+            }
+        ]
+    },
+    "/acdp/acdp/pipelines-construct/backstage-build-pipeline-project/PolicyDocument/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*"
+                ],
+                "reason": "Pipelines project default role policy is least privilege."
+            }
+        ]
+    },
+    "/acdp/acdp/pipelines-construct/backstage-deploy-pipeline-project/PolicyDocument/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*"
+                ],
+                "reason": "Pipelines project default role policy is least privilege."
+            }
+        ]
+    },
+    "/acdp/acdp/module-deploy-project/module-deploy-codebuild-project/PolicyDocument/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*"
+                ],
+                "reason": "Pipelines project default role policy is least privilege."
+            }
+        ]
+    },
+    "/acdp/acdp/vpc-construct/public-subnet-1": {},
+    "/acdp/acdp/backstage-assets-construct/s3-policy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:s3:::{\"Fn::FindInMap\":[\"Solution\",\"AssetsConfig\",\"S3AssetBucketBaseName\"]}-<AWS::Region>/*",
+                    "Resource::arn:<AWS::Partition>:s3:::<backstageassetbucketconstructcmkencryptedbucketE8CD3782>/*"
+                ],
+                "reason": "unknown asset locations upfront, so need wildcard access to regional buckets"
+            }
+        ]
+    }
+}

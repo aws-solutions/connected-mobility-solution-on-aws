@@ -1,0 +1,79 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta:__legacy__"
+
+[tool.coverage.report]
+fail_under = 80.0
+omit = [
+    "**/deployment/*",
+    "setup.py",
+    "**/tests/*",
+    "source/app.py",
+    "**/*_dependency_layer/**/*"
+]
+
+[tool.isort]
+sections=["FUTURE", "STDLIB", "THIRDPARTY", "AWS", "FIRSTPARTY", "COMMON", "LOCALFOLDER"]
+known_aws=["aws_cdk","aws_lambda_powertools","aws_solutions_constructs","awscrt","awsiot","cdk_nag","chalice","constructs","boto3","botocore"]
+known_common=["cms_common"]
+import_heading_stdlib="Standard Library"
+import_heading_thirdparty="Third Party Libraries"
+import_heading_aws="AWS Libraries"
+import_heading_common="CMS Common Library"
+import_heading_localfolder="Connected Mobility Solution on AWS"
+profile = "black"
+
+[tool.bandit]
+exclude_dirs = ["cdk.out", "build", ".mypy_cache", ".venv", "*/test_*.py", "*/test_*.py"]
+
+[tool.pylint.'SIMILARITIES']
+  # Ignore comments when computing similarities.
+ignore-comments=true
+  # Ignore docstrings when computing similarities.
+ignore-docstrings=true
+  # Ignore imports when computing similarities.
+ignore-imports=true
+  # Minimum lines number of a similarity.
+min-similarity-lines=15
+
+[tool.pylint.'DESIGN']
+  # Maximum number of arguments for function / method.
+max-args=10
+  # Maximum number of attributes for a class (see R0902).
+max-attributes=8
+  # Maximum number of boolean expressions in an if statement (see R0916).
+max-bool-expr=5
+  # Maximum number of branch for function / method body.
+max-branches=12
+  # Maximum number of locals for function / method body.
+max-locals=15
+  # Maximum number of parents for a class (see R0901).
+max-parents=7
+  # Maximum number of public methods for a class (see R0904).
+max-public-methods=20
+  # Maximum number of return / yield for function / method body.
+max-returns=2
+  # Maximum number of statements in function / method body.
+#max-statements=50
+  # Minimum number of public methods for a class (see R0903).
+min-public-methods=0
+
+[tool.pylint.'MESSAGES CONTROL']
+# C0114, C0115, C0116 are for docstrings which we don't use
+# W0511 alarms on leaving TODO, FIXME, etc
+# W0613 alarms on unused arguments
+disable = "C0114, C0115, C0116, W0613, W0511"
+
+[tool.pylint.'FORMAT']
+max-line-length=200
+
+[tool.pylint.'TYPECHECK']
+generated-members=["aws_lambda.Runtime"]
+
+[[tool.mypy.overrides]]
+module=["cms_common.*"]
+ignore_missing_imports=true
+
+[[tool.mypy.overrides]]
+module = "moto"
+implicit_reexport = true

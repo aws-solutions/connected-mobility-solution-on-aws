@@ -1,0 +1,121 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: name-tests-test
+        name: (Auth Setup) Check test naming
+        args: ["--pytest-test-first"]
+        exclude: (tests/?.*/fixture(s)?_.*\.py$)
+      - id: check-executables-have-shebangs
+        name: (Auth Setup) Check executables have shebangs
+      - id: fix-byte-order-marker
+        name: (Auth Setup) Fix byte order marker
+      - id: check-case-conflict
+        name: (Auth Setup) Check case conflict
+      - id: check-json
+        name: (Auth Setup) Check json
+      - id: check-yaml
+        name: (Auth Setup) Check yaml
+        args: [--allow-multiple-documents, --unsafe]
+      - id: check-toml
+        name: (Auth Setup) Check toml
+      - id: check-merge-conflict
+        name: (Auth Setup) Check for merge conflicts
+      - id: check-added-large-files
+        name: (Auth Setup) Check for added large files
+        exclude: |
+          (?x)^(
+            ^.*/package-lock.json |
+            ^.*/yarn.lock |
+            ^.*/Pipfile.lock
+          )$
+      - id: end-of-file-fixer
+        name: (Auth Setup) Fix end of files
+      - id: fix-encoding-pragma
+        name: (Auth Setup) Fix python encoding pragma
+      - id: trailing-whitespace
+        name: (Auth Setup) Trim trailing whitespace
+      - id: mixed-line-ending
+        name: (Auth Setup) Mixed line ending
+      - id: detect-aws-credentials
+        name: (Auth Setup) Detect AWS credentials
+        args: ["--credentials-file", "~/.ada/credentials"]
+      - id: detect-private-key
+        name: (Auth Setup) Detect private keys
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.5.1
+    hooks:
+      - id: insert-license
+        name: (Auth Setup) Insert license header (python)
+        files: \.py$
+        args:
+          - --license-filepath
+          - ./source/modules/auth_setup/license_header.txt
+          - --detect-license-in-X-top-lines=3
+      - id: insert-license
+        name: (Auth Setup) Insert license header (typescript and javascript)
+        files: \.tsx$|\.ts$|\.js$|\.jsx$
+        args:
+          - --license-filepath
+          - ./source/modules/auth_setup/license_header.txt
+          - --comment-style
+          - // # defaults to Python's # syntax, requires changing for typescript syntax.
+          - --detect-license-in-X-top-lines=3
+  - repo: https://github.com/psf/black
+    rev: 22.3.0
+    hooks:
+      - id: black
+        name: (Auth Setup) Black
+  - repo: https://github.com/hadialqattan/pycln
+    rev: v2.1.3
+    hooks:
+      - id: pycln
+        name: (Auth Setup) Pycln
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        name: (Auth Setup) Isort (python)
+        args: ["--skip-glob", "**/node_modules/* **/.venv/*", "--settings-path", "./source/modules/auth_setup/pyproject.toml"]
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.4
+    hooks:
+      - id: bandit
+        name: (Auth Setup) Bandit
+        args: ["-c", "./source/modules/auth_setup/pyproject.toml"]
+        additional_dependencies: [ "bandit[toml]" ]
+  - repo: https://github.com/pypa/pip-audit
+    rev: v2.6.1
+    hooks:
+      - id: pip-audit
+        name: (Auth Setup) Pip audit
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier
+        name: (Auth Setup) Prettier
+        types_or: [javascript, jsx, ts, tsx]
+  # Local
+  - repo: local
+    hooks:
+      - id: shellcheck
+        name: (Auth Setup) Shellchecker
+        entry: shellcheck
+        args: ["-x"]
+        types: [shell]
+        language: system
+      - id: pylint
+        name: (Auth Setup) pylint
+        entry: pylint
+        args: ["--extension-pkg-allow-list", "math", "--rcfile", "./source/modules/auth_setup/pyproject.toml"]
+        types: [python]
+        language: system
+      - id: mypy
+        name: (Auth Setup) mypy
+        entry: mypy
+        types_or: [python, pyi]
+        args: ["--strict", "--cache-dir", "./source/modules/auth_setup/.mypy_cache", "--config-file", "./source/modules/auth_setup/pyproject.toml"]
+        language: system

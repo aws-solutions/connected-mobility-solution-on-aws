@@ -1,0 +1,210 @@
+{
+    "/cms-provisioning/cms-provisioning/post-provisioning-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W89",
+                "reason": "Ignore VPC requirements for Lambda functions for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/pre-provisioning-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W89",
+                "reason": "Ignore VPC requirements for Lambda functions for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/initial-connection-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W89",
+                "reason": "Ignore VPC requirements for Lambda functions for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/iot-credentials-construct/rotate-secret-lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W89",
+                "reason": "Ignore VPC requirements for Lambda functions for now."
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            },
+            {
+                "id": "W11",
+                "reason": "Need wildcard resource permissions for iot:CreateKeysAndCertificate."
+            }
+        ]
+    },
+    "/cms-provisioning/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W58",
+                "reason": "Automatically created lambda by Lambda Function construct, does not need log permissions"
+            },
+            {
+                "id": "W89",
+                "reason": "Log retention lambda can be outside vpc for now"
+            },
+            {
+                "id": "W92",
+                "reason": "No need to define ReservedConcurrentExecutions for log retention lambda"
+            }
+        ]
+    },
+    "/cms-provisioning/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Log retention lambda uses managed policies that use wildcard permissions."
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/iot-provisioning-certificate-construct/claim-certificate-provisioning-policy": {
+        "rules_to_suppress": [
+            {
+                "id": "W39",
+                "reason": "Policy actions iot:RegisterThing and iot:CreatePolicy require wildcard permissions."
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/iot-credentials-construct/custom-resource-policy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Certain IoT Core policy actions such as iot:CreateKeysAndCertificate require wildcard permissions."
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/post-provisioning-construct/custom-resource-policy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "iot:UpdateEventConfigurations requires wildcard permissions."
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/iot-credentials-construct/rotate-secret-lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W11",
+                "reason": "Certain policy actions such as iot:CreateKeysAndCertificate requires wildcard permissions, ec2 Network Interfaces permissions need to be wildcard"
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/iot-provisioning-template-construct/iot-core-provisioning-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W11",
+                "reason": "Certain IoT Core policy actions such as iot:iot:RegisterThing and iot:CreatePolicy require wildcard permissions."
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/post-provisioning-construct/lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W11",
+                "reason": "Certain IoT Core policy actions such as iot:ListAttachedPolicies, iot:ListCertificates and iot:DetachThingPrincipal require wildcard permissions, ec2 Network Interfaces permissions need to be wildcard"
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/pre-provisioning-construct/lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W11",
+                "reason": "ec2 Network Interfaces permissions need to be wildcard"
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/initial-connection-construct/lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W11",
+                "reason": "ec2 Network Interfaces permissions need to be wildcard"
+            }
+        ]
+    },
+    "/cms-provisioning/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W11",
+                "reason": "ec2 Network Interfaces permissions need to be wildcard"
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/pre-provisioning-construct/security-group/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W40",
+                "reason": "Lambdas need outbound communication to contact other resources in VPC"
+            },
+            {
+                "id": "W5",
+                "reason": "Lambdas are inside Private Subnets and may need to communicate to services over internet. So the CIDR is wide open on egress for now"
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/post-provisioning-construct/security-group/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W40",
+                "reason": "Lambdas need outbound communication to contact other resources in VPC"
+            },
+            {
+                "id": "W5",
+                "reason": "Lambdas are inside Private Subnets and may need to communicate to services over internet. So the CIDR is wide open on egress for now"
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/initial-connection-construct/security-group/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W40",
+                "reason": "Lambdas need outbound communication to contact other resources in VPC"
+            },
+            {
+                "id": "W5",
+                "reason": "Lambdas are inside Private Subnets and may need to communicate to services over internet. So the CIDR is wide open on egress for now"
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/iot-credentials-construct/security-group/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W40",
+                "reason": "Lambdas need outbound communication to contact other resources in VPC"
+            },
+            {
+                "id": "W5",
+                "reason": "Lambdas are inside Private Subnets and may need to communicate to services over internet. So the CIDR is wide open on egress for now"
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/cdk-lambdas-vpc-construct/security-group/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W40",
+                "reason": "Lambdas need outbound communication to contact other resources in VPC"
+            },
+            {
+                "id": "W5",
+                "reason": "Lambdas are inside Private Subnets and may need to communicate to services over internet. So the CIDR is wide open on egress for now"
+            }
+        ]
+    }
+}

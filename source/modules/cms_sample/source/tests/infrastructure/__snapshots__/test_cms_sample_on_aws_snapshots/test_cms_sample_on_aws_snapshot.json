@@ -1,0 +1,179 @@
+{
+  "Mappings": {
+    "Solution": {
+      "AssetsConfig": {
+        "S3AssetBucketBaseName": "test-bucket-base-name",
+        "S3AssetKeyPrefix": "test-object-key-prefix"
+      }
+    }
+  },
+  "Parameters": {
+    "AppUniqueId": {
+      "AllowedPattern": "^(?!-)[a-z0-9-]+(?<!-)$",
+      "ConstraintDescription": "AppUniqueId must contain min 3 and max 10 characters, and contain only lowercase alphanumeric characters and dashes.",
+      "Description": "Application unique identifier used to uniquely name resources within the stack.",
+      "MaxLength": 10,
+      "MinLength": 3,
+      "Type": "String"
+    },
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    }
+  },
+  "Resources": {
+    "appregistryapplicationstackassociation": {
+      "Properties": {
+        "Application": {
+          "Fn::GetAtt": [
+            "cmssampleappregistryconstructappregistryapplication0D08805C",
+            "Id"
+          ]
+        },
+        "Resource": {
+          "Ref": "AWS::StackId"
+        },
+        "ResourceType": "CFN_STACK"
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::ResourceAssociation"
+    },
+    "cmssampleappregistryconstructappregistryapplication0D08805C": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::Application"
+    },
+    "cmssampleappregistryconstructappregistryapplicationattributeassociationE8475F23": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Application": {
+          "Fn::GetAtt": [
+            "cmssampleappregistryconstructappregistryapplication0D08805C",
+            "Id"
+          ]
+        },
+        "AttributeGroup": {
+          "Fn::GetAtt": [
+            "cmssampleappregistryconstructdefaultapplicationattributes71271973",
+            "Id"
+          ]
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroupAssociation"
+    },
+    "cmssampleappregistryconstructdefaultapplicationattributes71271973": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Attributes": {
+          "ApplicationType": "test-application-type",
+          "SolutionID": "test-solution-id",
+          "SolutionName": "test-solution-name",
+          "Version": "test-solution-version"
+        },
+        "Description": "Attribute group for solution information",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroup"
+    },
+    "ssmappuniqueidregistermodule9C5C2C5D": {
+      "Properties": {
+        "Description": "SSM parameter to register a module with an app unique ID.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/test-module-short-name"
+            ]
+          ]
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                  ],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}

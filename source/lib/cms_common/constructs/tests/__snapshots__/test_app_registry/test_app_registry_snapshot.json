@@ -1,0 +1,117 @@
+{
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    }
+  },
+  "Resources": {
+    "appregistryapplicationstackassociation": {
+      "Properties": {
+        "Application": {
+          "Fn::GetAtt": [
+            "testappregistryappregistryapplication2A74C8E2",
+            "Id"
+          ]
+        },
+        "Resource": {
+          "Ref": "AWS::StackId"
+        },
+        "ResourceType": "CFN_STACK"
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::ResourceAssociation"
+    },
+    "testappregistryappregistryapplication2A74C8E2": {
+      "Properties": {
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "test-application-name-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::Application"
+    },
+    "testappregistryappregistryapplicationattributeassociation47DF0144": {
+      "Properties": {
+        "Application": {
+          "Fn::GetAtt": [
+            "testappregistryappregistryapplication2A74C8E2",
+            "Id"
+          ]
+        },
+        "AttributeGroup": {
+          "Fn::GetAtt": [
+            "testappregistrydefaultapplicationattributesF88569DD",
+            "Id"
+          ]
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroupAssociation"
+    },
+    "testappregistrydefaultapplicationattributesF88569DD": {
+      "Properties": {
+        "Attributes": {
+          "ApplicationType": "test-application-type",
+          "SolutionID": "test-solution-id",
+          "SolutionName": "test-solution-name",
+          "Version": "test-solution-version"
+        },
+        "Description": "Attribute group for solution information",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "test-application-name-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroup"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                  ],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}

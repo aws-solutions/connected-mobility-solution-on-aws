@@ -1,0 +1,37 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+aws_lambda_powertools = {extras=["tracer", "validation"], version=">=2.4.0"}
+pyjwt = {extras=["crypto"], version="*"}
+requests = ">=2.28.1"
+cms_common = {path = "./../../lib", editable = true}
+
+[dev-packages]
+aws-cdk-lib = ">=2.63.2"
+boto3 = ">=1.26.0"
+boto3-stubs = {extras = ["secretsmanager", "essential", "s3", "ssm", "cognito-idp"], version = "*"}
+cdk-nag = "*"
+moto = "*"
+mkdocs-techdocs-core = "*"
+mypy = "*"
+pre-commit = "*"
+pycln = "*"
+pylint = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+syrupy = "*"
+toml = ">=0.10.2"
+types-boto3 = ">=1.0.2"
+types-python-dateutil = "*"
+types-pyyaml = "*"
+types-requests = ">=2.28.1"
+types-setuptools = "*"
+types-toml = ">=0.10.2"
+wheel = "*"
+
+[requires]
+python_version = "3.10"

@@ -1,0 +1,62 @@
+{
+    "/cms-config/cms-config/ssm/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:ssm:<AWS::Region>:<AWS::AccountId>:parameter/solution/<AppUniqueId>/config/*"
+                ],
+                "reason": "Wildcard permissions allow for generalizing the lambda to lookup any SSM parameters with the known cms_config prefix in their name."
+            }
+        ]
+    },
+    "/cms-config/cms-config/metrics-construct/lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-config-anonymous-metrics:log-stream:*",
+                    "Resource::*"
+                ],
+                "reason": "Wildcard permissions required to write to log streams and get cloudwatch metrics."
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "ec2 Network Interfaces permissions need to be wildcard",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*"
+                ]
+            }
+        ]
+    },
+    "/cms-config/cms-config/metrics-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+            }
+        ]
+    },
+    "/cms-config/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM4",
+                "appliesTo": [
+                    "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                ],
+                "reason": "Log retention lambda uses AWS managed policies."
+            }
+        ]
+    },
+    "/cms-config/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::*"
+                ],
+                "reason": "Log retention lambda uses policies that require wildcard permissions."
+            }
+        ]
+    }
+}

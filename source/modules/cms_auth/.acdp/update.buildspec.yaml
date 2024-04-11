@@ -1,0 +1,9 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      # Build and deploy
+      - echo "${MODULE_STACK_NAME}"
+      - echo "${CFN_TEMPLATE_URL}"
+      - echo "${CLOUDFORMATION_ROLE_ARN}"

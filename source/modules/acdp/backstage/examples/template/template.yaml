@@ -1,0 +1,90 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  description: A CDK Python app for showing a basic skeleton for a CMS module
+  name: cms-example-on-aws
+  tags:
+  - cms
+  - guide
+  - example
+  title: CMS Sample Module
+spec:
+  output:
+    links:
+    - entityRef: ${{ steps.catalogRegister.output.entityRef }}
+      icon: catalog
+      title: Open in catalog
+  owner: aws solutions
+  parameters:
+  - properties:
+      componentId:
+        default: cms-example-on-aws
+        description: Unique name of the component
+        pattern: '[a-zA-Z][-a-zA-Z0-9]*[a-zA-Z]'
+        title: Name
+        type: string
+        ui:field: EntityNamePicker
+      description:
+        default: A CDK Python app for showing a basic skeleton for a CMS module
+        description: Help others understand what this component is for.
+        title: Description
+        type: string
+      owner:
+        description: Owner of the component
+        title: Owner
+        type: string
+        ui:field: OwnerPicker
+        ui:options:
+          catalogFilter:
+            kind:
+            - Group
+            - User
+    required:
+    - componentId
+    - owner
+    title: Provide the required information
+  - properties:
+      appUniqueId:
+        default: cms
+        description: Application unique identifier used to uniquely name resources within the stack
+        title: App Unique ID
+        type: string
+        ui:disabled: true
+    required:
+    - appUniqueId
+    title: Provide the Module Configuration
+  steps:
+  - action: aws:acdp:deploy
+    id: acdpDeploy
+    input:
+      componentId: ${{ parameters.componentId }}
+      moduleParameters:
+      - name: APP_UNIQUE_ID
+        value: ${{ parameters.appUniqueId }}
+    name: ACDP Deploy
+  - action: aws:s3:catalog:write
+    id: s3CatalogWrite
+    input:
+      componentId: ${{ parameters.componentId }}
+      entity:
+        apiVersion: backstage.io/v1alpha1
+        kind: Component
+        metadata:
+          annotations:
+            aws.amazon.com/acdp-codebuild-project: ${{ steps.acdpDeploy.output.codeBuildProjectArn }}
+            backstage.io/techdocs-entity: component:default/cms-example-on-aws-docs
+          description: ${{parameters.description}}
+          labels:
+            templateName: cms-example-on-aws
+          name: ${{parameters.componentId}}
+        spec:
+          lifecycle: experimental
+          owner: ${{parameters.owner}}
+          type: service
+    name: S3 Catalog Write
+  - action: catalog:register
+    id: register
+    input:
+      catalogInfoUrl: ${{ steps.s3CatalogWrite.output.s3Url }}
+    name: Register
+  type: service

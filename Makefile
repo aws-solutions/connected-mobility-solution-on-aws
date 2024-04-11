@@ -1,253 +1,243 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
--include .env
-
 .DEFAULT_GOAL := help
+SHELL := /bin/bash
 
-# ========================================================
-# VARIABLES
-# ========================================================
-PYTHON_VERSION ?= 3.10.9
-AWS_ACCOUNT_ID=$(shell aws sts get-caller-identity --query "Account" --output text)
-PIPENV_VENV_IN_PROJECT = 1
-STAGE ?= dev
-AWS_REGION ?= $(shell aws configure get region --output text)
-CDK_DEPLOY_REGION = ${AWS_REGION}
-ROUTE53_BASE_DOMAIN ?= ${ROUTE53_ZONE_NAME}
-BACKSTAGE_WEB_PORT ?= 443
-BACKSTAGE_WEB_SCHEME ?= https
-VPC_CIDR_RANGE ?= 10.0.0.0/16
-BACKSTAGE_LOG_LEVEL ?= info
-CMS_SOLUTION_VERSION ?= v0.0.0
-CMS_RESOURCE_BUCKET ?= ${AWS_ACCOUNT_ID}-cms-resources-${AWS_REGION}
-CMS_RESOURCE_BUCKET_REGION ?= ${AWS_REGION}
-BACKSTAGE_TEMPLATE_S3_KEY_PREFIX ?= ${CMS_SOLUTION_VERSION}/backstage/templates
-BACKSTAGE_TEMPLATE_S3_UPDATE_REFRESH_MINS ?= 30
-BACKSTAGE_NAME ?= DEFAULT_NAME
-BACKSTAGE_ORG ?= DEFAULT_ORG
+include makefiles/common_config.mk
+include makefiles/global_targets.mk
 
-# Call export after all variables are set.
-# This alllows Make variables to be used and environment variables in sub-shells created by Make target commands
-export
+## ========================================================
+## INCLUDE MODULE'S MAKEFILE TARGETS
+## ========================================================
+module_name-target: ## Call a module make target. Run "make module_name-help" for target lists. Run "ls source/modules" for module list.
 
-# ==================================================================================
-# PRINT COLORS
-# 	To use, simply add ${<color>}<text> to get the colored text.
-#   To disable color, add ${NC} at the point you'd like it to stop.
-#   printf is recommended over echo if wanting color because of more multi-platform support.
-# ==================================================================================
-LIGHT_GREEN = \033[1;32m
-GREEN = \033[0;32m
-LIGHT_PURPLE = \033[1;35m
-NC = \033[00m
+MODULES := source/lib $(shell find ${SOLUTION_PATH}/source/modules -type d -maxdepth 1 -mindepth 1 -not -name __pycache__)
+GLOBAL_TARGETS := $(shell grep -E '^[a-zA-Z0-9-]+:' ${SOLUTION_PATH}/makefiles/global_targets.mk | awk -F: '/^[^.]/ {print $$1;}')
+COMMON_TARGETS := $(shell grep -E '^[a-zA-Z0-9-]+:' ${SOLUTION_PATH}/makefiles/module_targets.mk | awk -F: '/^[^.]/ {print $$1;}')
+define make-module-target
+$(lastword $(subst /, ,$2))-$1:
+	@$(MAKE) -C $2 -f Makefile $1
+endef
+$(foreach module,$(MODULES),$(foreach element,$(shell grep -E '^[a-zA-Z0-9-]+:' $(module)/Makefile | awk -F: '/^[^.]/ {print $$1;}'),$(eval $(call make-module-target,$(element),$(module)))))
+$(foreach module,$(MODULES),$(foreach target,$(GLOBAL_TARGETS),$(eval $(call make-module-target,$(target),$(module)))))
+$(foreach module,$(MODULES),$(foreach target,$(COMMON_TARGETS),$(eval $(call make-module-target,$(target),$(module)))))
+
+## ========================================================
+## INVOKE MAKE TARGET FROM EACH MODULES' MAKEFILE
+## ========================================================
+SubMakefiles    = source/lib/ $(shell find source \( -name lib -o -name deployment -o -name cdk.out -o -name .venv -o -name node_modules -o -name backstage \) -prune -false -o -name Makefile)
+SubMakeDirs     = $(filter-out ${SOLUTION_PATH},$(dir $(SubMakefiles)))
+Prereqs         = source/modules/vpc/ source/modules/auth_setup/ source/modules/cms_config/ source/modules/cms_auth/ source/modules/cms_connect_store/ source/modules/cms_alerts/ source/modules/cms_api/
+DeployableDirs  = $(filter-out source/lib/ source/modules/cms_sample_on_aws ${Prereqs},${SubMakeDirs})
+
+define run-module-target
+	run_make_with_logging() { \
+		output=$$(make -C "$$1" $1 2>&1); \
+		module_target_exit_code=$$?; \
+		if [[ $$module_target_exit_code -ne 0 ]]; then \
+			printf "%bFinished %sMakefile %s failed.\n%s\n%b\n" "${RED}" "$$1" "$1" "$$output" "${NC}"; \
+		else \
+			printf "%bFinished %sMakefile %s passed.%b\n" "${GREEN}" "$$1" "$1" "${NC}"; \
+		fi; \
+		return $$module_target_exit_code; \
+	}; \
+	did_make_target_fail=0; \
+	process_pids=(); \
+	for dir in $2; do \
+		printf "%bStarting %sMakefile %s.%b\n" "${MAGENTA}" "$$dir" "$1" "${NC}"; \
+		(run_make_with_logging "$$dir") & process_pids+=($$!); \
+	done; \
+	for pid in $${process_pids[@]}; do wait "$${pid}" || did_make_target_fail=1; done; \
+	exit $$did_make_target_fail;
+endef
 
 .PHONY: install
-install: pipenv-install pipenv-clean node-package-install ## Installs the resources and dependencies required to build the solution.
-	@printf "${LIGHT_PURPLE}Install finished.${NC}\n"
+install: root-install ## Call root and all modules' "make install".
+	@$(call run-module-target,install,${SubMakeDirs})
+	@printf "%bFinished install.%b\n" "${GREEN}" "${NC}"
 
-.PHONY: node-package-install
-node-package-install: ## Using npm, installs yarn, the aws-cdk-lib, and node dependencies for all modules.
-	@printf "${LIGHT_PURPLE}Checking for yarn installation and installing if not found.${NC}\n"
-	npm install -g yarn
-	@printf "${LIGHT_PURPLE}Checking for cdk installation and installing if not found.${NC}\n"
-	npm install -g aws-cdk
-	@printf "${LIGHT_PURPLE}Installing node dependencies using yarn.${NC}\n"
-	find . -name "package.json" -not -path "*node_modules*" -not -path "*cdk-solution-helper*" -not -path "*cdk.out*" -path "*backstage*" -not -path "*examples*" -execdir bash -c "echo 'Installing from yarn '; pwd; yarn install " {} \;
-	@printf "${LIGHT_PURPLE}Installing node dependencies using npm.${NC}\n"
-	find . -name "package.json" -not -path "*node_modules*" -not -path "*cdk-solution-helper*" -not -path "*cdk.out*" -not -path "*backstage*" -execdir bash -c "echo 'Installing from npm '; pwd; npm install;" {} \;
-
-.PHONY: pipenv-install
-pipenv-install: ## Using pipenv, installs pip dependencies for all modules.
-	@printf "${LIGHT_PURPLE}Installing pip dependencies.${NC}\n"
-	find . -name "Pipfile" -not -path "*cdk.out*" -exec bash -c "echo; echo 'Installing from ' {}; PIPENV_IGNORE_VIRTUALENVS=1 PIPENV_PIPFILE={} PIPENV_VENV_IN_PROJECT=1 pipenv install --dev --python ${PYTHON_VERSION}" {} \;
-
-.PHONY: gen-python-requirements
-gen-python-requirements: ## Generates requirements.txt files from the pipfiles throughout the solution.
-	@printf "${LIGHT_PURPLE}Generating requirements.txt from pipfiles.${NC}\n"
-	find . -name "Pipfile" -not -path "*cdk.out*" -execdir bash -c "echo; PIPENV_IGNORE_VIRTUALENVS=1 PIPENV_PIPFILE={} PIPENV_VENV_IN_PROJECT=1 pipenv requirements 1> requirements.txt; echo" {} \;
-
-## ========================================================
-## PIPENV VIRTUAL ENVIRONMENT MANAGEMENT
-## ========================================================
-.PHONY: pipenv-lock
-pipenv-lock: ## Generates Pipfile.lock for all modules (pipenv lock).
-	@printf "${LIGHT_PURPLE}Generating Pipfile.lock from Pipfiles.${NC}\n"
-	find . -name "Pipfile" -not -path "*cdk.out*" -exec bash -c "echo; echo 'Installing from ' {}; PIPENV_IGNORE_VIRTUALENVS=1 PIPENV_PIPFILE={} PIPENV_VENV_IN_PROJECT=1 pipenv lock --dev --python ${PYTHON_VERSION}" {} \;
-
-.PHONY: pipenv-sync
-pipenv-sync: ## Installs all packages specified in Pipfile.lock for all modules (pipenv sync).
-	@printf "${LIGHT_PURPLE}Syncing virtual environments with Pipfile.lock.${NC}\n"
-	find . -name "Pipfile" -not -path "*cdk.out*" -exec bash -c "echo; echo 'Installing from ' {}; PIPENV_IGNORE_VIRTUALENVS=1 PIPENV_PIPFILE={} PIPENV_VENV_IN_PROJECT=1 pipenv sync --dev --python ${PYTHON_VERSION}" {} \;
-
-.PHONY: pipenv-update
-pipenv-update: ## Runs lock then sync. (pipenv update).
-	@printf "${LIGHT_PURPLE}Beginning pipenv update (lock and sync).${NC}\n"
-	find . -name "Pipfile" -not -path "*cdk.out*" -exec bash -c "echo; echo 'Updating from ' {}; PIPENV_IGNORE_VIRTUALENVS=1 PIPENV_PIPFILE={} PIPENV_VENV_IN_PROJECT=1 pipenv update --dev --python ${PYTHON_VERSION}" {} \;
-
-.PHONY: pipenv-clean
-pipenv-clean: ## Uninstalls all packages not specified in Pipfile.lock (pipenv clean).
-	@printf "${LIGHT_PURPLE}Cleaning virtual environment of packages not in Pipfile.lock.${NC}\n"
-	find . -name "Pipfile" -not -path "*cdk.out*" -exec bash -c "echo; echo 'Cleaning from ' {}; PIPENV_IGNORE_VIRTUALENVS=1 PIPENV_PIPFILE={} PIPENV_VENV_IN_PROJECT=1 pipenv clean --dry-run --python ${PYTHON_VERSION}" {} \;
-
-## ========================================================
-## SYNTH AND DEPLOY
-## ========================================================
-
-.PHONY: synth
-synth: ## Runs cdk synth for Backstage and CMS core.
-	@printf "${LIGHT_PURPLE}Synthesizing Backstage and CMS core.${NC}\n"
-	cdk synth \
-	--context "user-email"="${USER_EMAIL}" \
-	--context "route53-zone-name"="${ROUTE53_ZONE_NAME}" \
-	--context "route53-base-domain"="${ROUTE53_BASE_DOMAIN}" \
-	--context "web-port"="${BACKSTAGE_WEB_PORT}" \
-	--context "web-scheme"="${BACKSTAGE_WEB_SCHEME}" \
-	--context "vpc-cidr-range"="${VPC_CIDR_RANGE}" \
-	--context "backstage-name"="${BACKSTAGE_NAME}" \
-	--context "backstage-org"="${BACKSTAGE_ORG}" \
-	--context "backstage-log-level"="${BACKSTAGE_LOG_LEVEL}" \
-	--context "cms-resource-bucket"="${CMS_RESOURCE_BUCKET}" \
-	--context "cms-resource-bucket-region"="${CMS_RESOURCE_BUCKET_REGION}" \
-	--context "cms-resource-bucket-backstage-template-key-prefix"="${BACKSTAGE_TEMPLATE_S3_KEY_PREFIX}" \
-	--context "cms-resource-bucket-backstage-refresh-frequency-mins"="${BACKSTAGE_TEMPLATE_S3_UPDATE_REFRESH_MINS}" \
-	--context "nag-enforce"=True \
-	--quiet
-
-
-.PHONY: synth-staging
-synth-staging: ## Runs cdk synth for Backstage and CMS core, and ouputs to ./deployment/staging.
-	@printf "${LIGHT_PURPLE}Synthesizing Backstage and CMS core for staging (./deployment/staging).${NC}\n"
-	cdk synth \
-	--context "user-email"="${USER_EMAIL}" \
-	--context "route53-zone-name"="${ROUTE53_ZONE_NAME}" \
-	--context "route53-base-domain"="${ROUTE53_BASE_DOMAIN}" \
-	--context "web-port"="${BACKSTAGE_WEB_PORT}" \
-	--context "web-scheme"="${BACKSTAGE_WEB_SCHEME}" \
-	--context "vpc-cidr-range"="${VPC_CIDR_RANGE}" \
-	--context "backstage-name"="${BACKSTAGE_NAME}" \
-	--context "backstage-org"="${BACKSTAGE_ORG}" \
-	--context "backstage-log-level"="${BACKSTAGE_LOG_LEVEL}" \
-	--context "cms-resource-bucket"="${CMS_RESOURCE_BUCKET}" \
-	--context "cms-resource-bucket-region"="${CMS_RESOURCE_BUCKET_REGION}" \
-	--context "cms-resource-bucket-backstage-template-key-prefix"="${BACKSTAGE_TEMPLATE_S3_KEY_PREFIX}" \
-	--context "cms-resource-bucket-backstage-refresh-frequency-mins"="${BACKSTAGE_TEMPLATE_S3_UPDATE_REFRESH_MINS}" \
-	--context "nag-enforce"=True \
-	--output="./deployment/staging" \
-	--quiet
-
-.PHONY: cdk-context
-cdk-context: check-cdk-env ## Displays current cdk context.
-	@printf "${LIGHT_PURPLE}Verifying CDK Context.${NC}\n"
-	cdk context \
-	--context "user-email"="${USER_EMAIL}" \
-	--context "route53-zone-name"="${ROUTE53_ZONE_NAME}" \
-	--context "route53-base-domain"="${ROUTE53_BASE_DOMAIN}" \
-	--context "web-port"="${BACKSTAGE_WEB_PORT}" \
-	--context "web-scheme"="${BACKSTAGE_WEB_SCHEME}" \
-	--context "vpc-cidr-range"="${VPC_CIDR_RANGE}" \
-	--context "backstage-name"="${BACKSTAGE_NAME}" \
-	--context "backstage-org"="${BACKSTAGE_ORG}" \
-	--context "backstage-log-level"="${BACKSTAGE_LOG_LEVEL}" \
-	--context "cms-resource-bucket"="${CMS_RESOURCE_BUCKET}" \
-	--context "cms-resource-bucket-region"="${CMS_RESOURCE_BUCKET_REGION}" \
-	--context "cms-resource-bucket-backstage-template-key-prefix"="${BACKSTAGE_TEMPLATE_S3_KEY_PREFIX}" \
-	--context "cms-resource-bucket-backstage-refresh-frequency-mins"="${BACKSTAGE_TEMPLATE_S3_UPDATE_REFRESH_MINS}"
-
+.PHONY: build
+build: ## Call all modules' "make build".
+	@printf "%bStarting build.%b\n" "${MAGENTA}" "${NC}"
+	@$(call run-module-target,build,${SubMakeDirs})
+	@printf "%bFinished build.%b\n" "${GREEN}" "${NC}"
 
 .PHONY: deploy
-deploy: check-cdk-env clean ## Runs make clean, then builds and deploys Backstage and CMS core.
-	@printf "${LIGHT_PURPLE}Deploying Backstage and CMS core.${NC}\n"
-	cdk deploy \
-	--context "user-email"="${USER_EMAIL}" \
-	--context "route53-zone-name"="${ROUTE53_ZONE_NAME}" \
-	--context "route53-base-domain"="${ROUTE53_BASE_DOMAIN}" \
-	--context "web-port"="${BACKSTAGE_WEB_PORT}" \
-	--context "web-scheme"="${BACKSTAGE_WEB_SCHEME}" \
-	--context "vpc-cidr-range"="${VPC_CIDR_RANGE}" \
-	--context "backstage-name"="${BACKSTAGE_NAME}" \
-	--context "backstage-org"="${BACKSTAGE_ORG}" \
-	--context "backstage-log-level"="${BACKSTAGE_LOG_LEVEL}" \
-	--context "cms-resource-bucket"="${CMS_RESOURCE_BUCKET}" \
-	--context "cms-resource-bucket-region"="${CMS_RESOURCE_BUCKET_REGION}" \
-	--context "cms-resource-bucket-backstage-template-key-prefix"="${BACKSTAGE_TEMPLATE_S3_KEY_PREFIX}" \
-	--context "cms-resource-bucket-backstage-refresh-frequency-mins"="${BACKSTAGE_TEMPLATE_S3_UPDATE_REFRESH_MINS}"
+deploy: deploy-variables ## Call all modules' "make deploy". Order enforced.
+	@printf "%bStarting deploy.%b\n" "${MAGENTA}" "${NC}"
+	@for dir in $(Prereqs); do \
+		printf "%bDeploying %s.%b\n" "${MAGENTA}" "$$dir" "${NC}"; \
+		$(MAKE) -C $$dir deploy || exit $$?; \
+	done
+	@$(call run-module-target,deploy,${DeployableDirs})
+	@printf "%bFinished deploy.%b\n" "${GREEN}" "${NC}"
+	@printf "%bView status:%b %bhttps://%s.console.aws.amazon.com/cloudformation/home?region=%s%b\n" "${YELLOW}" "${NC}" "${CYAN}" "${AWS_REGION}" "${AWS_REGION}" "${NC}"
 
-.PHONY: bootstrap
-bootstrap: check-cdk-env ## Bootstraps Backstage and CMS core.
-	@printf "${LIGHT_PURPLE}Bootstrapping Backstage and CMS core.${NC}\n"
-	cdk bootstrap \
-	--context "user-email"="${USER_EMAIL}" \
-	--context "route53-zone-name"=${ROUTE53_ZONE_NAME} \
-	--context "route53-base-domain"=${ROUTE53_BASE_DOMAIN} \
-	--context "web-port"=${BACKSTAGE_WEB_PORT} \
-	--context "web-scheme"=${BACKSTAGE_WEB_SCHEME} \
-	--context "vpc-cidr-range"=${VPC_CIDR_RANGE} \
-	--context "backstage-name"="${BACKSTAGE_NAME}" \
-	--context "backstage-org"="${BACKSTAGE_ORG}" \
-	--context "backstage-log-level"="${BACKSTAGE_LOG_LEVEL}" \
-	--context "cms-resource-bucket"="${CMS_RESOURCE_BUCKET}" \
-	--context "cms-resource-bucket-region"="${CMS_RESOURCE_BUCKET_REGION}" \
-	--context "cms-resource-bucket-backstage-template-key-prefix"="${BACKSTAGE_TEMPLATE_S3_KEY_PREFIX}" \
-	--context "cms-resource-bucket-backstage-refresh-frequency-mins"="${BACKSTAGE_TEMPLATE_S3_UPDATE_REFRESH_MINS}"
+.PHONY: destroy
+destroy: ## Call all modules' "make destroy". Order enforced.
+	@printf "%bStarting destroy.%b\n" "${MAGENTA}" "${NC}"
+	@$(call run-module-target,destroy,${DeployableDirs})
+	@reversed=$$(printf "%s\n" ${Prereqs} | tail -r | xargs echo); \
+	for dir in $${reversed}; do \
+		printf "%bDestroying %s.%b\n" "${MAGENTA}" "$$dir" "${NC}"; \
+		$(MAKE) -C $$dir destroy || exit $$?; \
+	done
+	@printf "%bFinished destroy.%b\n" "${GREEN}" "${NC}"
+	@printf "%bView status:%b %bhttps://%s.console.aws.amazon.com/cloudformation/home?region=%s%b\n" "${YELLOW}" "${NC}" "${CYAN}" "${AWS_REGION}" "${AWS_REGION}" "${NC}"
 
-.PHONY: upload-s3-deployment-assets
-upload-s3-deployment-assets: clean  ## Runs make clean, then uploads required deployment assets to S3 for deploying CMS modules via Backstage and Proton.
-	@printf "${LIGHT_PURPLE}Beginning S3 setup.${NC}\n"
-	@printf "${LIGHT_PURPLE}Creating and uploading proton service templates (./deployment/create-proton-service-templates.sh).${NC}\n"
-	./deployment/create-proton-service-templates.sh
-	@printf "${LIGHT_PURPLE}Copying module source code and template.yaml files to S3. (./deployment/copy-backstage-templates-to-s3.sh).${NC}\n"
-	./deployment/copy-backstage-templates-to-s3.sh
-	@printf "${LIGHT_PURPLE}Finished setting up S3.${NC}\n"
+.PHONY: upload
+upload: create-upload-bucket upload-backstage-assets-zip ## Call root and all modules' "make upload" and upload backstage assets zip.
+	@$(call run-module-target,upload,${SubMakeDirs})
+	@printf "%bFinished upload.%b\n" "${MAGENTA}" "${NC}"
+	@printf "%bView resources:%b %bhttps://s3.console.aws.amazon.com/s3/buckets/%s-%s?region=%s%b\n" "${YELLOW}" "${NC}" "${CYAN}" "${S3_ASSET_BUCKET_BASE_NAME}" "${AWS_REGION}" "${AWS_REGION}" "${NC}"
 
-.PHONY: get-deployment-uuid
-get-deployment-uuid: ## Retrieves the deployment-uuid value from the ssm parameter in your AWS account
-	@printf "${LIGHT_PURPLE}Retrieving Deplyoment UUID.${NC}\n"
-	aws ssm get-parameter --name=/${STAGE}/cms/common/config/deployment-uuid --query Parameter.Value --output text
+.PHONY: upload-backstage-assets-zip
+upload-backstage-assets-zip:
+	@aws s3api put-object \
+        --bucket "${REGIONAL_ASSET_BUCKET_NAME}" \
+        --key "${SOLUTION_NAME}/${SOLUTION_VERSION}/backstage.zip" \
+        --body "${SOLUTION_PATH}/deployment/regional-s3-assets/backstage.zip" \
+        --expected-bucket-owner "${AWS_ACCOUNT_ID}" > /dev/null
+	@printf "%bFinished uploading zipped backstage assets \n%b" "${GREEN}" "${NC}"
 
-## ========================================================
-## UTILITY COMMANDS
-## ========================================================
-.PHONY: clean
-clean: ## Cleans up existing build files, not including venvs or dependencies.
-	@printf "${LIGHT_PURPLE}Running clean scripts.${NC}\n"
-	./deployment/clean-for-deploy.sh
+.PHONY: verify-module
+verify-module: ## Run all verifications for CMS. CAUTION: Takes a long time.
+	@$(call run-module-target,verify-module,${SubMakeDirs})
+	@printf "%bFinished verify-module.%b\n" "${GREEN}" "${NC}"
 
-.PHONY: check-cdk-env
-check-cdk-env: ## Checks the cdk environment for the required environment variables and dependencies.
-ifneq (v18.17.1, $(shell node --version))
-	$(error Node version 18.17.1 is required, as specified in .nvmrc. Please install by running `nvm install`)
-endif
-ifneq (9.6.7, $(shell npm --version))
-	$(error Npm version 3.10.9 is required, as specified by the node version in .nvmrc. Please check your node installation.`)
-endif
-ifneq (Python 3.10.9, $(shell python --version))
-	$(error Python version 3.10.9 is required, as specified in .python-version. Please install by running `pyenv install -s`)
-endif
-ifneq (, $(wildcard ./cdk.context.json))
-	$(error 'cdk.context.json' cannot exist, please delete and try again)
-endif
-ifndef USER_EMAIL
-	$(error USER_EMAIL is undefined. Set the variable using `export USER_EMAIL=...`, or use a .env file)
-endif
-ifndef ROUTE53_ZONE_NAME
-	$(error ROUTE53_ZONE_NAME is undefined. Set the variable using `export USER_EMAIL=...`, or use a .env file)
-endif
-ifndef ROUTE53_BASE_DOMAIN
-	$(error ROUTE53_BASE_DOMAIN is undefined. Set the variable using `export USER_EMAIL=...`, or use a .env file)
-endif
-	@printf "${GREEN}All required environment variables found.${NC}\n"
+.PHONY: cfn-nag
+cfn-nag: ## Run cfn-nag for the entire solution.
+	@$(call run-module-target,cfn-nag,${SubMakeDirs})
+	@printf "%bFinished cfn-nag.%b\n" "${GREEN}" "${NC}"
+
+.PHONY: unit-tests
+unit-tests:  ## Run unit-tests for the entire solution.
+	@$(call run-module-target,unit-tests,${SubMakeDirs})
+	@printf "%bFinished unit tests.%b\n" "${GREEN}" "${NC}"
+
+.PHONY: test
+test:  ## Run cfn-nag and unit-tests for the entire solution.
+	@$(call run-module-target,test,${SubMakeDirs})
+	@printf "%bFinished test.%b\n" "${GREEN}" "${NC}"
+
+.PHONY: update-snapshots
+update-snapshots:  ## Run update-snapshots for the entire solution.
+	@$(call run-module-target,update-snapshots,${SubMakeDirs})
+	@printf "%bFinished update-snapshots.%b\n" "${GREEN}" "${NC}"
+
+.PHONY: version
+version: root-version ## Display solution name and current version and each module's version
+	@process_pids=(); \
+	for dir in $(SubMakeDirs); do $(MAKE) -C $$dir version & process_pids+=($$!); done; \
+	for pid in $${process_pids[@]}; do wait "$${pid}"; done;
 
 ## ========================================================
-## HELP COMMANDS
+## INSTALL
+## ========================================================
+.PHONY: root-install
+root-install: ## Using pipenv, installs pip dependencies for root.
+	@printf "%bInstalling pip dependencies.%b\n" "${MAGENTA}" "${NC}"
+	pipenv install --dev --python ${PYTHON_VERSION}
+	pipenv clean --python ${PYTHON_VERSION}
+
+## ========================================================
+## BUILD
+## ========================================================
+.PHONY: asset-copy
+asset-copy: ## Copy modules' build artifacts to root level folders
+	@printf "%bCopying global assets to ${SOLUTION_PATH}/deployment%b\n" "${MAGENTA}" "${NC}"
+	@rm -rf ${SOLUTION_PATH}/deployment/global-s3-assets && mkdir ${SOLUTION_PATH}/deployment/global-s3-assets
+	@find source \( -name cdk.out -o -name .venv -o -name node_modules -o -name backstage -o -name build \) -prune -false -o -name "global-s3-assets" -exec bash -c "cp -r {}/* ${SOLUTION_PATH}/deployment/global-s3-assets" \;
+	@printf "%bCopying regional assets to ${SOLUTION_PATH}/deployment%b\n" "${MAGENTA}" "${NC}"
+	@rm -rf ${SOLUTION_PATH}/deployment/regional-s3-assets && mkdir ${SOLUTION_PATH}/deployment/regional-s3-assets
+	@find source \( -name cdk.out -o -name .venv -o -name node_modules -o -name backstage -o -name build \) -prune -false -o -name "regional-s3-assets" -exec bash -c "cp -r {}/* ${SOLUTION_PATH}/deployment/regional-s3-assets" \;
+	@printf "%bFinished asset collation.%b\n" "${GREEN}" "${NC}"
+
+.PHONY: zip-backstage-assets
+zip-backstage-assets: ## Zip backstage assets in the regional assets directory
+	@cd ${SOLUTION_PATH}/deployment/regional-s3-assets/backstage && zip -r ${SOLUTION_PATH}/deployment/regional-s3-assets/backstage.zip . > /dev/null
+	@printf "%bFinished zipping backstage assets \n%b" "${GREEN}" "${NC}"
+
+.PHONY: build-open-source
+build-open-source: ## Build open source distribution
+	${SOLUTION_PATH}/deployment/build-open-source-dist.sh --solution-name ${SOLUTION_NAME}
+
+.PHONY: build-all
+build-all: build asset-copy zip-backstage-assets ## Builds all modules and copies assets to top level deployment folder.
+
+## ========================================================
+## TESTING
+## ========================================================
+.PHONY: pre-commit-all
+pre-commit-all: ## Run pre-commit for the entire solution for all files.
+	@printf "%bRunning all pre-commits.%b\n" "${MAGENTA}" "${NC}"
+	-pipenv run pre-commit run --all-files
+
+## ========================================================
+## UTILITY
+## ========================================================
+.PHONY: clean-build-artifacts
+clean-build-artifacts: ## Cleans up build files, not including venvs, dependencies, or release build artifacts.
+	@printf "%bRunning clean script.%b\n" "${MAGENTA}" "${NC}"
+	${SOLUTION_PATH}/deployment/run-clean-build-artifacts.sh
+	@printf "%bFinished clean script.%b\n" "${GREEN}" "${NC}"
+
+.PHONY: clean-build-artifacts-release
+clean-build-artifacts-release: ## Cleans up build files, including release build artifacts.
+	@printf "%bRunning clean script.%b\n" "${MAGENTA}" "${NC}"
+	${SOLUTION_PATH}/deployment/run-clean-build-artifacts.sh --release-build
+	@printf "%bFinished clean script.%b\n" "${GREEN}" "${NC}"
+
+.PHONY: clean-build-artifacts-dependencies
+clean-build-artifacts-dependencies: ## Cleans up build files, including venvs and dependencies.
+	@LOCK_FILES_OPTION="--lock-files"; \
+	if [ "$${PIPELINE_TYPE}" = "dtas" ]; then \
+		LOCK_FILES_OPTION=""; \
+	fi; \
+	printf "%bRunning clean scripts.%b\n" "${MAGENTA}" "${NC}"; \
+	${SOLUTION_PATH}/deployment/run-clean-build-artifacts.sh --dependencies $$LOCK_FILES_OPTION
+	@printf "%bFinished clean script.%b\n" "${GREEN}" "${NC}"
+
+.PHONY: clean-build-artifacts-all
+clean-build-artifacts-all: ## Cleans up existing build files, including venvs, dependencies, and release build artifacts.
+	@printf "%bRunning clean script.%b\n" "${MAGENTA}" "${NC}"
+	${SOLUTION_PATH}/deployment/run-clean-build-artifacts.sh --all
+	@printf "%bFinished clean script.%b\n" "${GREEN}" "${NC}"
+
+.PHONY: deploy-variables
+deploy-variables: ## Get variable values to deploy with.
+	@[[ -f .cmsrc ]] || printf "%bInstead of using this target, you can run the following command.\n%b" "${MAGENTA}" "${NC}"
+	@[[ -f .cmsrc ]] || printf "%bcat > .cmsrc <<EOL\nexport USER_EMAIL=\"jie_liu@example.com\"\nexport VPC_NAME=\"cms-vpc\"\nexport IDENTITY_PROVIDER_ID=\"cms\"\nexport ROUTE53_ZONE_NAME=\"domain.com\"\nexport ROUTE53_BASE_DOMAIN=\"subdomain.domain.com\"\nexport BACKSTAGE_NAME=\"Default Name\"\nexport BACKSTAGE_ORG=\"Default Name\"\nEOL\n%b" "${YELLOW}" "${NC}"
+	@source .cmsrc \
+	[[ -n $${USER_EMAIL} ]] || read -p "Enter User Email: " USER_EMAIL; \
+	[[ -n $${ROUTE53_ZONE_NAME} ]] || read -p "Enter Route53 Zone Name: " ROUTE53_ZONE_NAME; \
+	[[ -n $${ROUTE53_BASE_DOMAIN} ]] || read -p "Enter Route53 Base Domain: " ROUTE53_BASE_DOMAIN; \
+	[[ -n $${VPC_NAME} ]] || read -p "Enter VPC Name: " VPC_NAME; \
+	[[ -n $${IDENTITY_PROVIDER_ID} ]] || read -p "Enter Identity Provider ID: " IDENTITY_PROVIDER_ID; \
+	[[ -n $${BACKSTAGE_NAME} ]] || read -p "Enter Backstage Name: " BACKSTAGE_NAME; \
+	[[ -n $${BACKSTAGE_ORG} ]] || read -p "Enter Backstage Organization: " BACKSTAGE_ORG; \
+	printf "#!/bin/bash\nexport USER_EMAIL=\"%s\"\nexport ROUTE53_ZONE_NAME=\"%s\"\nexport ROUTE53_BASE_DOMAIN=\"%s\"\nexport VPC_NAME=\"%s\"\nexport IDENTITY_PROVIDER_ID=\"%s\"\nexport BACKSTAGE_NAME=\"%s\"\nexport BACKSTAGE_ORG=\"%s\"\n" "$$USER_EMAIL" "$$ROUTE53_ZONE_NAME" "$$ROUTE53_BASE_DOMAIN" "$$VPC_NAME" "$$IDENTITY_PROVIDER_ID" "$$BACKSTAGE_NAME" "$$BACKSTAGE_ORG" > .cmsrc
+
+.PHONY: generate-python-requirements-files
+generate-python-requirements-files: ## Generates requirements.txt files from the pipfiles throughout the solution.
+	@printf "%bGenerating requirements.txt from pipfiles.%b\n" "${MAGENTA}" "${NC}"\
+	find ${SOLUTION_PATH} \( -name .venv -o -name node_modules -o -name "cdk.out" \) -prune -false -o -name "Pipfile" -execdir bash -c "echo; PIPENV_PIPFILE={} pipenv requirements 1> requirements.txt;" \;
+
+## ========================================================
+## HELPERS
 ## ========================================================
 .PHONY: help
-help: ## Displays usage information about the Makefile in a readable format.
-	@grep -E '^[a-zA-Z0-9 -]+:.*##|^##.*'  Makefile | while read -r l; \
-	do ( [[ "$$l" =~ ^"##" ]] && printf "${LIGHT_PURPLE}%s${NC}\n" "$$(echo $$l | cut -f 2- -d' ')") \
-	|| ( printf "${LIGHT_GREEN}%-30s${NC}%s\n" "$$(echo $$l | cut -f 1 -d':')" "$$(echo $$l | cut -f 3- -d'#')"); \
+help: ## Displays this help message. For a module's help, run "make <module_name>-help".
+	@grep -E '^[a-zA-Z0-9 -_]+:.*##|^##.*'  ${SOLUTION_PATH}/Makefile | while read -r l; \
+	do ( [[ "$$l" =~ ^"##" ]] && printf "%b%s%b\n" "${MAGENTA}" "$$(echo $$l | cut -f 2- -d' ')" "${NC}") \
+	|| ( printf "%b%-35s%s%b\n" "${GREEN}" "$$(echo $$l | cut -f 1 -d':')" "$$(echo $$l | cut -f 3- -d'#')" "${NC}"); \
 	done;
 
-.PHONY: list-rules
-list-rules: ## Displays an alphabetical list of the makefile rules with their descriptions.
-	@grep -E '^[a-zA-Z0-9 -]+:.*##'  Makefile | sort | while read -r l; do printf "${LIGHT_GREEN}%-30s${NC}%s\n" "$$(echo $$l | cut -f 1 -d':')" "$$(echo $$l | cut -f 3- -d'#')"; done
+.PHONY: encourage
+encourage: ## Sometimes we all need a little encouragement!
+	@printf "%bYou can do this. Believe in yourself. :)%b\n" "${GREEN}" "${NC}"
+
+.PHONY: root-version
+root-version: ## Display solution name and current version
+	@printf "%b%35.35s%b version:%b%s%b\n" "${MAGENTA}" "${SOLUTION_NAME}" "${NC}" "${GREEN}" "${SOLUTION_VERSION}" "${NC}"

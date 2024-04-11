@@ -1,0 +1,1437 @@
+{
+  "Mappings": {
+    "Solution": {
+      "AssetsConfig": {
+        "S3AssetBucketBaseName": "test-bucket-base-name",
+        "S3AssetKeyPrefix": "test-object-key-prefix"
+      }
+    }
+  },
+  "Parameters": {
+    "AppUniqueId": {
+      "AllowedPattern": "^(?!-)[a-z0-9-]+(?<!-)$",
+      "ConstraintDescription": "AppUniqueId must contain min 3 and max 10 characters, and contain only lowercase alphanumeric characters and dashes.",
+      "Description": "Application unique identifier used to uniquely name resources within the stack.",
+      "MaxLength": 10,
+      "MinLength": 3,
+      "Type": "String"
+    },
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    }
+  },
+  "Resources": {
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+      "DependsOn": [
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 900
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:PutRetentionPolicy",
+                "logs:DeleteRetentionPolicy"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "Roles": [
+          {
+            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "appregistryapplicationstackassociation": {
+      "Properties": {
+        "Application": {
+          "Fn::GetAtt": [
+            "cmsauthappregistryappregistryapplicationE72552CE",
+            "Id"
+          ]
+        },
+        "Resource": {
+          "Ref": "AWS::StackId"
+        },
+        "ResourceType": "CFN_STACK"
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::ResourceAssociation"
+    },
+    "cmsauthappregistryappregistryapplicationE72552CE": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::Application"
+    },
+    "cmsauthappregistryappregistryapplicationattributeassociation586F295F": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Application": {
+          "Fn::GetAtt": [
+            "cmsauthappregistryappregistryapplicationE72552CE",
+            "Id"
+          ]
+        },
+        "AttributeGroup": {
+          "Fn::GetAtt": [
+            "cmsauthappregistrydefaultapplicationattributesEB120854",
+            "Id"
+          ]
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroupAssociation"
+    },
+    "cmsauthappregistrydefaultapplicationattributesEB120854": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Attributes": {
+          "ApplicationType": "test-application-type",
+          "SolutionID": "test-solution-id",
+          "SolutionName": "test-solution-name",
+          "Version": "test-solution-version"
+        },
+        "Description": "Attribute group for solution information",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroup"
+    },
+    "cmsauthauthorizationcodeexchangelambdalambdafunctionFE51EE13": {
+      "DependsOn": [
+        "cmsauthauthorizationcodeexchangelambdalambdarole91155D42",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "Authorization Code Flow - Authorization Code Exchange Lambda Function",
+        "Environment": {
+          "Variables": {
+            "IDENTITY_PROVIDER_ID": {
+              "Fn::GetAtt": [
+                "moduleinputsconstructidentityprovideridcustomresourceFE878685",
+                "parameter_value"
+              ]
+            },
+            "USER_AGENT_STRING": "AWSSOLUTION/test-solution-id/test-solution-version AWSSOLUTION-CAPABILITY/test-capability-id/test-solution-version"
+          }
+        },
+        "FunctionName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-test-module-short-name-authorization-code-exchange"
+            ]
+          ]
+        },
+        "Handler": "function.main.handler",
+        "Layers": [
+          {
+            "Ref": "cmsauthdependencylayerlambdadependencylayerversionD54620DB"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsauthauthorizationcodeexchangelambdalambdarole91155D42",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "Timeout": 60,
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "cmsauthauthorizationcodeexchangelambdasecuritygroup83C31967",
+                "GroupId"
+              ]
+            }
+          ],
+          "SubnetIds": [
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Fn::GetAtt": [
+                      "moduleinputsconstructvpcnamecustomresource12726E51",
+                      "parameter_value"
+                    ]
+                  },
+                  "/subnets/private/1}}"
+                ]
+              ]
+            },
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Fn::GetAtt": [
+                      "moduleinputsconstructvpcnamecustomresource12726E51",
+                      "parameter_value"
+                    ]
+                  },
+                  "/subnets/private/2}}"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsauthauthorizationcodeexchangelambdalambdafunctionLogRetentionC8B1BC09": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsauthauthorizationcodeexchangelambdalambdafunctionFE51EE13"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsauthauthorizationcodeexchangelambdalambdarole91155D42": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-test-module-short-name-authorization-code-exchange"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-test-module-short-name-authorization-code-exchange:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "secretsmanager:GetSecretValue",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "{{resolve:ssm:/solution/auth/",
+                        {
+                          "Fn::GetAtt": [
+                            "moduleinputsconstructidentityprovideridcustomresourceFE878685",
+                            "parameter_value"
+                          ]
+                        },
+                        "/authorization-code-flow/config/secret/arn}}"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "secretsmanager"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "ssm:GetParameter",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":ssm:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":parameter/solution/auth/",
+                        {
+                          "Fn::GetAtt": [
+                            "moduleinputsconstructidentityprovideridcustomresourceFE878685",
+                            "parameter_value"
+                          ]
+                        },
+                        "/authorization-code-flow/config/secret/arn"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ssm"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "ec2:CreateNetworkInterfacePermission",
+                  "Condition": {
+                    "StringEquals": {
+                      "ec2:AuthorizedService": "lambda.amazonaws.com",
+                      "ec2:Subnet": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Fn::GetAtt": [
+                                  "moduleinputsconstructvpcnamecustomresource12726E51",
+                                  "parameter_value"
+                                ]
+                              },
+                              "/subnets/private/1}}"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Fn::GetAtt": [
+                                  "moduleinputsconstructvpcnamecustomresource12726E51",
+                                  "parameter_value"
+                                ]
+                              },
+                              "/subnets/private/2}}"
+                            ]
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":ec2:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":network-interface/*"
+                      ]
+                    ]
+                  }
+                },
+                {
+                  "Action": [
+                    "ec2:DescribeNetworkInterfaces",
+                    "ec2:CreateNetworkInterface",
+                    "ec2:DeleteNetworkInterface"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ec2-vpc-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsauthauthorizationcodeexchangelambdasecuritygroup83C31967": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "GroupDescription": "Default/cms-auth/cms-auth/authorization-code-exchange-lambda/security-group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Fn::GetAtt": [
+                  "moduleinputsconstructvpcnamecustomresource12726E51",
+                  "parameter_value"
+                ]
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "cmsauthcdklambdasvpcconstructsecuritygroupE6BFB442": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Metadata": {
+        "cfn_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "W5",
+              "reason": "Unable to know egress requirement. leaving open for now"
+            },
+            {
+              "id": "W40",
+              "reason": "Unable to know egress requirement. leaving open for now"
+            }
+          ]
+        }
+      },
+      "Properties": {
+        "GroupDescription": "Default/cms-auth/cms-auth/cdk-lambdas-vpc-construct/security-group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Fn::GetAtt": [
+                  "moduleinputsconstructvpcnamecustomresource12726E51",
+                  "parameter_value"
+                ]
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "cmsauthdependencylayerlambdadependencylayerversionD54620DB": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "CompatibleArchitectures": [
+          "x86_64",
+          "arm64"
+        ],
+        "CompatibleRuntimes": [
+          "python3.8",
+          "python3.9",
+          "python3.10"
+        ],
+        "Content": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        }
+      },
+      "Type": "AWS::Lambda::LayerVersion"
+    },
+    "cmsauthmoduleoutputsssmauthorizationcodeexchangelambdaarnC4048092": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Arn for lambda function that facilitates the exchange an authorization code for user tokens via the authorization code flow.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/test-module-short-name/authorization-code-flow/authorization-code-exchange-lambda/arn"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "cmsauthauthorizationcodeexchangelambdalambdafunctionFE51EE13",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsauthmoduleoutputsssmtokenvalidationlambdaarnD41E1D34": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Arn for lambda function that verifies the validity and claims of auth tokens.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/test-module-short-name/token-validation-lambda/arn"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "cmsauthtokenvalidationlambdalambdafunction743DB1E1",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsauthtokenvalidationlambdalambdafunction743DB1E1": {
+      "DependsOn": [
+        "cmsauthtokenvalidationlambdalambdaroleF47786E8",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "CMS Token Validation Lambda Function",
+        "Environment": {
+          "Variables": {
+            "IDENTITY_PROVIDER_ID": {
+              "Fn::GetAtt": [
+                "moduleinputsconstructidentityprovideridcustomresourceFE878685",
+                "parameter_value"
+              ]
+            },
+            "USER_AGENT_STRING": "AWSSOLUTION/test-solution-id/test-solution-version AWSSOLUTION-CAPABILITY/test-capability-id/test-solution-version"
+          }
+        },
+        "FunctionName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-test-module-short-name-token-validation"
+            ]
+          ]
+        },
+        "Handler": "function.main.handler",
+        "Layers": [
+          {
+            "Ref": "cmsauthdependencylayerlambdadependencylayerversionD54620DB"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsauthtokenvalidationlambdalambdaroleF47786E8",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "Timeout": 60,
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "cmsauthtokenvalidationlambdasecuritygroup79D0B698",
+                "GroupId"
+              ]
+            }
+          ],
+          "SubnetIds": [
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Fn::GetAtt": [
+                      "moduleinputsconstructvpcnamecustomresource12726E51",
+                      "parameter_value"
+                    ]
+                  },
+                  "/subnets/private/1}}"
+                ]
+              ]
+            },
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Fn::GetAtt": [
+                      "moduleinputsconstructvpcnamecustomresource12726E51",
+                      "parameter_value"
+                    ]
+                  },
+                  "/subnets/private/2}}"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsauthtokenvalidationlambdalambdafunctionLogRetention2AFEF79B": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsauthtokenvalidationlambdalambdafunction743DB1E1"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsauthtokenvalidationlambdalambdaroleF47786E8": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-test-module-short-name-token-validation"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-test-module-short-name-token-validation:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "secretsmanager:GetSecretValue",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "{{resolve:ssm:/solution/auth/",
+                        {
+                          "Fn::GetAtt": [
+                            "moduleinputsconstructidentityprovideridcustomresourceFE878685",
+                            "parameter_value"
+                          ]
+                        },
+                        "/idp-config/secret/arn}}"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "secretsmanager"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "ssm:GetParameter",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":ssm:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":parameter/solution/auth/",
+                        {
+                          "Fn::GetAtt": [
+                            "moduleinputsconstructidentityprovideridcustomresourceFE878685",
+                            "parameter_value"
+                          ]
+                        },
+                        "/idp-config/secret/arn"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ssm"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "ec2:CreateNetworkInterfacePermission",
+                  "Condition": {
+                    "StringEquals": {
+                      "ec2:AuthorizedService": "lambda.amazonaws.com",
+                      "ec2:Subnet": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Fn::GetAtt": [
+                                  "moduleinputsconstructvpcnamecustomresource12726E51",
+                                  "parameter_value"
+                                ]
+                              },
+                              "/subnets/private/1}}"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Fn::GetAtt": [
+                                  "moduleinputsconstructvpcnamecustomresource12726E51",
+                                  "parameter_value"
+                                ]
+                              },
+                              "/subnets/private/2}}"
+                            ]
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":ec2:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":network-interface/*"
+                      ]
+                    ]
+                  }
+                },
+                {
+                  "Action": [
+                    "ec2:DescribeNetworkInterfaces",
+                    "ec2:CreateNetworkInterface",
+                    "ec2:DeleteNetworkInterface"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ec2-vpc-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsauthtokenvalidationlambdasecuritygroup79D0B698": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "GroupDescription": "Default/cms-auth/cms-auth/token-validation-lambda/security-group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Fn::GetAtt": [
+                  "moduleinputsconstructvpcnamecustomresource12726E51",
+                  "parameter_value"
+                ]
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "moduleinputsconstructidentityprovideridcustomresourceFE878685": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "ParameterName": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/config/auth/identity-provider-id"
+            ]
+          ]
+        },
+        "Resource": "SsmParameters",
+        "ServiceToken": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/config/aws-resource-lookup-lambda/arn}}"
+            ]
+          ]
+        }
+      },
+      "Type": "Custom::SsmParameters",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "moduleinputsconstructvpcnamecustomresource12726E51": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "ParameterName": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/config/vpc/name"
+            ]
+          ]
+        },
+        "Resource": "SsmParameters",
+        "ServiceToken": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/config/aws-resource-lookup-lambda/arn}}"
+            ]
+          ]
+        }
+      },
+      "Type": "Custom::SsmParameters",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "ssmappuniqueidregistermodule9C5C2C5D": {
+      "Properties": {
+        "Description": "SSM parameter to register a module with an app unique ID.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/test-module-short-name"
+            ]
+          ]
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                  ],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}

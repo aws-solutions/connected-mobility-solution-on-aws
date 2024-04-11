@@ -1,0 +1,407 @@
+{
+    "/cms-vehicle-simulator/cms-vehicle-simulator/cloudfront-construct/distribution/CloudFrontDistribution/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-CFR1",
+                "reason": "Not providing geo restriction functionality for vehicle simulator"
+            },
+            {
+                "id": "AwsSolutions-CFR4",
+                "reason": "Since the distribution uses the CloudFront domain name, CloudFront automatically sets the security policy to TLSv1 regardless of the value of MinimumProtocolVersion"
+            },
+            {
+                "id": "AwsSolutions-CFR2",
+                "reason": "Ignore Web Application Firewall for now"
+            }
+        ]
+    },
+    "/cms-vehicle-simulator/cms-vehicle-simulator/cognito-construct/user-pool/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-COG2",
+                "reason": "Vehicle Simulator does not require MFA because it does not handle customer data or communicate with the rest of the solution."
+            }
+        ]
+    },
+    "/cms-vehicle-simulator/cms-vehicle-simulator/simulator-construct/custom-resource-policy/Resource": {
+        "rules_to_suppress": [
+            {
+                "appliesTo": [
+                    "Resource::*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "iot:CreateThingGroup permissions are given to the custom resource lambda before creation of subsequent resources."
+            }
+        ]
+    },
+    "/cms-vehicle-simulator/cms-vehicle-simulator/simulator-construct/cleanup-lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "Actions ec2:CreateNetworkInterface, ec2:DescribeNetworkInterfaces and ec2:DeleteNetworkInterface are allowed to create new network interfaces. The lambda itself is protected by policies which only allowed users authenticated via cognito userpool to use it."
+            },
+            {
+                "appliesTo": [
+                    "Resource::<simulatorconstructprovisioningbucketEBD82590.Arn>/*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "The four actions s3:DeleteObject, s3:GetObject, s3:PutObject, s3:PutObjectAcl are allowed on all items within the provisioning bucket"
+            },
+            {
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:thing/*",
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:policy/*",
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:cert/*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "Delete actions are allowed to delete thing, policy and cert. The lambda itself is protected by policies which only allowed users authenticated via cognito userpool to use it and hence lambda will always only perform resources created by itself."
+            },
+            {
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:secretsmanager:<AWS::Region>:<AWS::AccountId>:secret:vs-device/*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "Delete secret is allowed for any resource with resource name starting with vs-device. The lambda itself is protected by policies which only allowed users authenticated via cognito userpool to use it and hence lambda will always only perform resources created by itself."
+            },
+            {
+                "appliesTo": [
+                    "Resource::*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "tag:GetResources action does not allow resource specific permissions"
+            },
+            {
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-vehicle-simulator-cleanup:log-stream:*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "Log stream has to be a wildcard"
+            }
+        ]
+    },
+    "/cms-vehicle-simulator/cms-vehicle-simulator/console-construct/custom-resource-policy/Resource": {
+        "rules_to_suppress": [
+            {
+                "appliesTo": [
+                    "Resource::<cmsvehiclesimulatorcloudfrontconstructdistributionS3Bucket4A436FFA.Arn>/*",
+                    "Resource::<cmsvehiclesimulatorcloudfrontconstructroutesbucket8622DA8D.Arn>/*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "s3:PutObject and s3:AbortMultipartUpload actions are allowed on any item within the mentioned buckets"
+            },
+            {
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:policy/*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "s3:PutObject and s3:AbortMultipartUpload actions are allowed on any item within the mentioned buckets"
+            },
+            {
+                "appliesTo": [
+                    "Resource::*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "iot:DescribeEndpoint action does not allow resource specific permissions. iot:TagResource and iot:DetachPrincipalPolicy permissions are given to this custom resource lambda before creation of subsequent resources like the vs-iot policy."
+            }
+        ]
+    },
+    "/cms-vehicle-simulator/cms-vehicle-simulator/console-construct/identity-pool-authenticated-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:execute-api:<AWS::Region>:<AWS::AccountId>:<RestAPI>/*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "An authenticated user is allowed to execute any of the api gateway resources for given rest api id"
+            },
+            {
+                "appliesTo": [
+                    "Resource::*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "Only a user authenticated using cognito would be able to perform the iot:AttachPrincipalPolicy action. "
+            },
+            {
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:topic/cms/data/simulated/*",
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:topicfilter/cms/data/simulated/*",
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:client/*",
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:cert/*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "Authenticated user is allowed to perform iot:Connect, iot:Subscribe, iot:Receive actions"
+            }
+        ]
+    },
+    "/cms-vehicle-simulator/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756Cc8ed8da5462554f60496fdb0e397446d122355506a/ServiceRole/Resource": {
+        "rules_to_suppress": [
+            {
+                "appliesTo": [
+                    "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+                    "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+                ],
+                "id": "AwsSolutions-IAM4",
+                "reason": "Lambda created by BucketDeployment construct cannot be given custom policy"
+            }
+        ]
+    },
+    "/cms-vehicle-simulator/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756Cc8ed8da5462554f60496fdb0e397446d122355506a/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "appliesTo": [
+                    "Action::s3:GetBucket*",
+                    "Action::s3:GetObject*",
+                    "Action::s3:List*",
+                    "Resource::arn:<AWS::Partition>:s3:::cdk-hnb659fds-assets-<AWS::AccountId>-<AWS::Region>/*",
+                    "Action::s3:Abort*",
+                    "Action::s3:DeleteObject*",
+                    "Resource::<cmsvehiclesimulatorcloudfrontconstructdistributionS3Bucket4A436FFA.Arn>/*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "Lambda created by BucketDeployment construct cannot be given custom policy"
+            }
+        ]
+    },
+    "/cms-vehicle-simulator/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756Cc8ed8da5462554f60496fdb0e397446d122355506a/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "The lambda resource is defined by the CDKBucketDeployment construct."
+            }
+        ]
+    },
+    "/cms-vehicle-simulator/cms-vehicle-simulator/simulator-construct/cleanup-lambda/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+            }
+        ]
+    },
+    "/cms-vehicle-simulator/cms-vehicle-simulator/simulator-construct/iot-endpoint-custom-resource/CustomResourcePolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "appliesTo": [
+                    "Resource::*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "iot:DescribeEndpoint action does not allow resource specific permissions"
+            }
+        ]
+    },
+    "/cms-vehicle-simulator/cms-vehicle-simulator/simulator-construct/provisioning-lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "Actions ec2:CreateNetworkInterface, ec2:DescribeNetworkInterfaces and ec2:DeleteNetworkInterface are allowed to create new network interfaces. The lambda itself is protected by policies which only allowed users authenticated via cognito userpool to use it."
+            },
+            {
+                "appliesTo": [
+                    "Resource::<simulatorconstructprovisioningbucketEBD82590.Arn>/*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "The four actions s3:DeleteObject, s3:GetObject, s3:PutObject, s3:PutObjectAcl are allowed on all items inside the provisioning bucket"
+            },
+            {
+                "appliesTo": [
+                    "Resource::*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "Actions iot:CreateKeysAndCertificate and iot:AttachThingPrincipal does not support resource specific permission"
+            },
+            {
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:thing/*",
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:thinggroup/*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "Actions iot:CreateThing, iot:DescrieThing and iot:AddThingToThingGroup are allowed to create any new thing and add it to any thing group. The lambda itself is protected by policies which only allowed users authenticated via cognito userpool to use it and hence lambda will always only perform resources created by itself."
+            },
+            {
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:policy/*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "Actions iot:CreatePolicy is allowed to create new policies. The lambda itself is protected by policies which only allowed users authenticated via cognito userpool to use it and hence lambda will always only perform resources created by itself."
+            },
+            {
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:cert/*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "Actions iot:AttachPolicy is allowed to certify any resource in iot core. The lambda itself is protected by policies which only allowed users authenticated via cognito userpool to use it and hence lambda will always only perform resources created by itself."
+            },
+            {
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:secretsmanager:<AWS::Region>:<AWS::AccountId>:secret:*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "Actions secretsmanager:CreateSecret and secretsmanager:TagResource are allowed to create new secrets and tag them. The lambda itself is protected by policies which only allowed users authenticated via cognito userpool to use it and hence lambda will always only perform resources created by itself."
+            },
+            {
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-vehicle-simulator-provisioning:log-stream:*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "Log stream has to be a wildcard"
+            }
+        ]
+    },
+    "/cms-vehicle-simulator/cms-vehicle-simulator/simulator-construct/provisioning-lambda/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+            }
+        ]
+    },
+    "/cms-vehicle-simulator/cms-vehicle-simulator/simulator-construct/simulator-engine-lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "Actions ec2:CreateNetworkInterface, ec2:DescribeNetworkInterfaces and ec2:DeleteNetworkInterface are allowed to create new network interfaces. The lambda itself is protected by policies which only allowed users authenticated via cognito userpool to use it."
+            },
+            {
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:topic/cms/data/simulated/*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "Simulator lambda is allowed to publish to all iot topics with cms/data/simulated prefix on this account"
+            },
+            {
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-vehicle-simulator-simulator:log-stream:*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "Log stream has to be a wildcard"
+            },
+            {
+                "appliesTo": [
+                    "Resource::<cmsvehiclesimulatorcloudfrontconstructroutesbucket8622DA8D.Arn>/*",
+                    "Resource::*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "GetObject action requires resource wildcard to access all objects in bucket"
+            }
+        ]
+    },
+    "/cms-vehicle-simulator/cms-vehicle-simulator/simulator-construct/simulator-engine-lambda/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+            }
+        ]
+    },
+    "/cms-vehicle-simulator/cms-vehicle-simulator/simulator-construct/simulator-statemachine-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "appliesTo": [
+                    "Resource::*",
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "LogDelivery and Xray actions do not support resource-level authorizations"
+            }
+        ]
+    },
+    "/cms-vehicle-simulator/cms-vehicle-simulator/vs-api-construct/vs-api-lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "Actions ec2:CreateNetworkInterface, ec2:DescribeNetworkInterfaces and ec2:DeleteNetworkInterface are allowed to create new network interfaces. The lambda itself is protected by policies which only allowed users authenticated via cognito userpool to use it."
+            },
+            {
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:thing/*",
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:policy/*",
+                    "Resource::arn:<AWS::Partition>:iot:<AWS::Region>:<AWS::AccountId>:cert/*",
+                    "Resource::arn:<AWS::Partition>:secretsmanager:<AWS::Region>:<AWS::AccountId>:secret:*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "This lamdba needs permission to access all the 'things','certs', 'policy' and 'secrets' to identify and delete resources provioned by vehicle simulator. tags:GetResources action does not have option of resource level permissions"
+            },
+            {
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:<cmsvehiclesimulatorsimulatorconstructstepfunctionsCE10CFB1.Name>:*",
+                    "Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:stateMachine:*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "ListStateMachine action does not allow resource level permission. Execution permissions are only provided to the statemachine created by vehicle simulator"
+            },
+            {
+                "appliesTo": [
+                    "Resource::*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "Actions tag:GetResources, iot:DetachThingPrincipal, iot:ListThings, iot:ListThingPrincipals, iot:ListPrincipalPolicies does not allow to choose a specific resource"
+            },
+            {
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/*"
+                ],
+                "id": "AwsSolutions-IAM5",
+                "reason": "We do not have arn or name of the lambda which will be created by Chalice, thus we cannot give resource specific permission for logs"
+            }
+        ]
+    },
+    "/cms-vehicle-simulator/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM4",
+                "appliesTo": ["Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"],
+                "reason": "Log retention lambda uses managed policies"
+            }
+        ]
+    },
+    "/cms-vehicle-simulator/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": ["Resource::*"],
+                "reason": "Log retention lambda uses managed policies"
+            }
+        ]
+    },
+    "/cms-vehicle-simulator/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM4",
+                "appliesTo": [
+                    "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+                    "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+                ],
+                "reason": "Lambda created by CDK constructs uses managed policies"
+            }
+        ]
+    },
+    "/cms-vehicle-simulator/AWS679f53fac002430cb0da5b7982bd2287/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+            }
+        ]
+    },
+    "/cms-vehicle-simulator/cms-vehicle-simulator/custom-resource-lambda-construct/lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": ["Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-vehicle-simulator-custom-resource:log-stream:*"],
+                "reason": "Wildcard permissions required to write to a log stream"
+            }
+        ]
+    }
+}

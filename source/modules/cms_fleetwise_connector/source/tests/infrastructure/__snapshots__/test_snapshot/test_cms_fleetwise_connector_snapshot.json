@@ -1,0 +1,4548 @@
+{
+  "Mappings": {
+    "ServiceprincipalMap": {
+      "af-south-1": {
+        "states": "states.af-south-1.amazonaws.com"
+      },
+      "ap-east-1": {
+        "states": "states.ap-east-1.amazonaws.com"
+      },
+      "ap-northeast-1": {
+        "states": "states.ap-northeast-1.amazonaws.com"
+      },
+      "ap-northeast-2": {
+        "states": "states.ap-northeast-2.amazonaws.com"
+      },
+      "ap-northeast-3": {
+        "states": "states.ap-northeast-3.amazonaws.com"
+      },
+      "ap-south-1": {
+        "states": "states.ap-south-1.amazonaws.com"
+      },
+      "ap-south-2": {
+        "states": "states.ap-south-2.amazonaws.com"
+      },
+      "ap-southeast-1": {
+        "states": "states.ap-southeast-1.amazonaws.com"
+      },
+      "ap-southeast-2": {
+        "states": "states.ap-southeast-2.amazonaws.com"
+      },
+      "ap-southeast-3": {
+        "states": "states.ap-southeast-3.amazonaws.com"
+      },
+      "ap-southeast-4": {
+        "states": "states.ap-southeast-4.amazonaws.com"
+      },
+      "ca-central-1": {
+        "states": "states.ca-central-1.amazonaws.com"
+      },
+      "cn-north-1": {
+        "states": "states.cn-north-1.amazonaws.com"
+      },
+      "cn-northwest-1": {
+        "states": "states.cn-northwest-1.amazonaws.com"
+      },
+      "eu-central-1": {
+        "states": "states.eu-central-1.amazonaws.com"
+      },
+      "eu-central-2": {
+        "states": "states.eu-central-2.amazonaws.com"
+      },
+      "eu-north-1": {
+        "states": "states.eu-north-1.amazonaws.com"
+      },
+      "eu-south-1": {
+        "states": "states.eu-south-1.amazonaws.com"
+      },
+      "eu-south-2": {
+        "states": "states.eu-south-2.amazonaws.com"
+      },
+      "eu-west-1": {
+        "states": "states.eu-west-1.amazonaws.com"
+      },
+      "eu-west-2": {
+        "states": "states.eu-west-2.amazonaws.com"
+      },
+      "eu-west-3": {
+        "states": "states.eu-west-3.amazonaws.com"
+      },
+      "il-central-1": {
+        "states": "states.il-central-1.amazonaws.com"
+      },
+      "me-central-1": {
+        "states": "states.me-central-1.amazonaws.com"
+      },
+      "me-south-1": {
+        "states": "states.me-south-1.amazonaws.com"
+      },
+      "sa-east-1": {
+        "states": "states.sa-east-1.amazonaws.com"
+      },
+      "us-east-1": {
+        "states": "states.us-east-1.amazonaws.com"
+      },
+      "us-east-2": {
+        "states": "states.us-east-2.amazonaws.com"
+      },
+      "us-gov-east-1": {
+        "states": "states.us-gov-east-1.amazonaws.com"
+      },
+      "us-gov-west-1": {
+        "states": "states.us-gov-west-1.amazonaws.com"
+      },
+      "us-iso-east-1": {
+        "states": "states.amazonaws.com"
+      },
+      "us-iso-west-1": {
+        "states": "states.amazonaws.com"
+      },
+      "us-isob-east-1": {
+        "states": "states.amazonaws.com"
+      },
+      "us-west-1": {
+        "states": "states.us-west-1.amazonaws.com"
+      },
+      "us-west-2": {
+        "states": "states.us-west-2.amazonaws.com"
+      }
+    },
+    "Solution": {
+      "AssetsConfig": {
+        "S3AssetBucketBaseName": "bucketName",
+        "S3AssetKeyPrefix": "keyPrefix/"
+      }
+    }
+  },
+  "Outputs": {
+    "cmsfleetwiseconnectorcmsfleetwiseconnectormoduleoutputsoutputtimestreamdatabasenameDB85A646": {
+      "Description": "Timestream Database Name for the FleetWise Connector",
+      "Value": {
+        "Ref": "cmsfleetwiseconnectortimestreamtimestreamdatabase51C3291C"
+      }
+    },
+    "cmsfleetwiseconnectorcmsfleetwiseconnectormoduleoutputsoutputtimestreamtablearn125D5619": {
+      "Description": "Timestream Table ARN for the FleetWise Connector",
+      "Value": {
+        "Fn::GetAtt": [
+          "cmsfleetwiseconnectortimestreamtimestreamtableFD6FC863",
+          "Arn"
+        ]
+      }
+    },
+    "cmsfleetwiseconnectorcmsfleetwiseconnectormoduleoutputsoutputtimestreamtablename06A1CD8A": {
+      "Description": "Timestream Table Name for the FleetWise Connector",
+      "Value": {
+        "Fn::GetAtt": [
+          "cmsfleetwiseconnectortimestreamtimestreamtableFD6FC863",
+          "Name"
+        ]
+      }
+    }
+  },
+  "Parameters": {
+    "AppUniqueId": {
+      "AllowedPattern": "^(?!-)[a-z0-9-]+(?<!-)$",
+      "ConstraintDescription": "AppUniqueId must contain min 3 and max 10 characters, and contain only lowercase alphanumeric characters and dashes.",
+      "Description": "Application unique identifier used to uniquely name resources within the stack.",
+      "MaxLength": 10,
+      "MinLength": 3,
+      "Type": "String"
+    },
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "FleetwiseVehicleVinAttributeName": {
+      "AllowedPattern": "^[a-zA-Z0-9:_]+$",
+      "ConstraintDescription": "FleetWise attribute names and path can have up to 150 characters. Valid characters: a-z, A-Z, 0-9, : (colon), and _ (underscore)",
+      "Default": "VehicleVIN",
+      "Description": "Vehicle Attribute Name for the VIN configured for each vehicle used in FleetWise",
+      "MaxLength": 150,
+      "MinLength": 1,
+      "Type": "String"
+    },
+    "TimestreamToS3UnloadIntervalMinutes": {
+      "ConstraintDescription": "Must be between 1 minute and 10080 minutes (1 week)",
+      "Default": "15",
+      "Description": "The rate in minutes that the unload step function is run",
+      "MaxValue": 10080,
+      "MinValue": 1,
+      "Type": "Number"
+    }
+  },
+  "Resources": {
+    "AWS679f53fac002430cb0da5b7982bd22872D164C4C": {
+      "DependsOn": [
+        "cmsfleetwiseconnectors3glueathenaprefixlistlookupvpcprefixlistcustomresourceroleA1B2E782"
+      ],
+      "Metadata": {
+        "cdk_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "AwsSolutions-L1",
+              "reason": "Log retention lambda uses policies that require wildcard permissions"
+            }
+          ]
+        },
+        "cfn_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "W92",
+              "reason": "No reserved concurrency required for custom resources"
+            }
+          ]
+        }
+      },
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "FunctionName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-module-vpc-prefix-list-lookup"
+            ]
+          ]
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsfleetwiseconnectors3glueathenaprefixlistlookupvpcprefixlistcustomresourceroleA1B2E782",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 120,
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "AWS679f53fac002430cb0da5b7982bd2287SecurityGroupBE06FF8C",
+                "GroupId"
+              ]
+            }
+          ],
+          "SubnetIds": [
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Fn::GetAtt": [
+                      "moduleinputsvpcnamecustomresource1E63A8E7",
+                      "parameter_value"
+                    ]
+                  },
+                  "/subnets/private/1}}"
+                ]
+              ]
+            },
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Fn::GetAtt": [
+                      "moduleinputsvpcnamecustomresource1E63A8E7",
+                      "parameter_value"
+                    ]
+                  },
+                  "/subnets/private/2}}"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "AWS679f53fac002430cb0da5b7982bd2287LogRetentionCE72797A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "AWS679f53fac002430cb0da5b7982bd22872D164C4C"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "AWS679f53fac002430cb0da5b7982bd2287SecurityGroupBE06FF8C": {
+      "Metadata": {
+        "cfn_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "W5",
+              "reason": "Unable to know egress requirement. leaving open for now"
+            },
+            {
+              "id": "W40",
+              "reason": "Unable to know egress requirement. leaving open for now"
+            }
+          ]
+        }
+      },
+      "Properties": {
+        "GroupDescription": "Automatic security group for Lambda Function cmsfleetwiseconnectorAWS679f53fac002430cb0da5b7982bd22878A3A31B9",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Fn::GetAtt": [
+                  "moduleinputsvpcnamecustomresource1E63A8E7",
+                  "parameter_value"
+                ]
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+      "DependsOn": [
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 900
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:PutRetentionPolicy",
+                "logs:DeleteRetentionPolicy"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "Roles": [
+          {
+            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "appregistryapplicationstackassociation": {
+      "Properties": {
+        "Application": {
+          "Fn::GetAtt": [
+            "cmsfleetwiseconnectorappregistryappregistryapplication7057F5A3",
+            "Id"
+          ]
+        },
+        "Resource": {
+          "Ref": "AWS::StackId"
+        },
+        "ResourceType": "CFN_STACK"
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::ResourceAssociation"
+    },
+    "cdklambdasvpcconstructsecuritygroupF9971F98": {
+      "Metadata": {
+        "cfn_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "W5",
+              "reason": "Unable to know egress requirement. leaving open for now"
+            },
+            {
+              "id": "W40",
+              "reason": "Unable to know egress requirement. leaving open for now"
+            }
+          ]
+        }
+      },
+      "Properties": {
+        "GroupDescription": "cms-fleetwise-connector/cdk-lambdas-vpc-construct/security-group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Fn::GetAtt": [
+                  "moduleinputsvpcnamecustomresource1E63A8E7",
+                  "parameter_value"
+                ]
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "cmsfleetwiseconnectorappregistryappregistryapplication7057F5A3": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::Application"
+    },
+    "cmsfleetwiseconnectorappregistryappregistryapplicationattributeassociationBA623554": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Application": {
+          "Fn::GetAtt": [
+            "cmsfleetwiseconnectorappregistryappregistryapplication7057F5A3",
+            "Id"
+          ]
+        },
+        "AttributeGroup": {
+          "Fn::GetAtt": [
+            "cmsfleetwiseconnectorappregistrydefaultapplicationattributes21EA5908",
+            "Id"
+          ]
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroupAssociation"
+    },
+    "cmsfleetwiseconnectorappregistrydefaultapplicationattributes21EA5908": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Attributes": {
+          "ApplicationType": "solution",
+          "SolutionID": "id",
+          "SolutionName": "solution",
+          "Version": "v0.0.0"
+        },
+        "Description": "Attribute group for solution information",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroup"
+    },
+    "cmsfleetwiseconnectorcmsfleetwiseconnectormoduleoutputsssmfleetwiseexecutionrolearnF8A3D081": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Arn of IAM Role to use for executing FleetWise Campaigns that store data in FleetWise",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/module/fleetwise/execution-role/arn"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "cmsfleetwiseconnectorfleetwiseconfigfleetwiseexecutionrole37A6A869",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsfleetwiseconnectorcmsfleetwiseconnectormoduleoutputsssmfleetwisevehiclevinattributename195D07EA": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "FleetWise Vehicle VIN Attribute Name",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/module/fleetwise/vehicle/vin-attribute-name"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "FleetwiseVehicleVinAttributeName"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsfleetwiseconnectorcmsfleetwiseconnectormoduleoutputsssmtimestreamdatabasearn64CD1D2F": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Arn of the Timestream Database where FleeWise data is stored",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/module/timestream/database/arn"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "cmsfleetwiseconnectortimestreamtimestreamdatabase51C3291C",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsfleetwiseconnectorcmsfleetwiseconnectormoduleoutputsssmtimestreamdatabasekeyarn36FB51EA": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Arn of KMS key for the Timestream Database where FleetWise data is stored",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/module/timestream/database/key-arn"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "cmsfleetwiseconnectortimestreamtimestreamcmkkey147DF4C0",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsfleetwiseconnectorcmsfleetwiseconnectormoduleoutputsssmtimestreamdatabasename26AEBB20": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Name of the Timestream Database where FleeWise data is stored",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/module/timestream/database/name"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "cmsfleetwiseconnectortimestreamtimestreamdatabase51C3291C"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsfleetwiseconnectorcmsfleetwiseconnectormoduleoutputsssmtimestreamdatabaseregionC65864FE": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Region of the Timestream Service where FleetWise data is stored",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/module/timestream/region"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "AWS::Region"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsfleetwiseconnectorcmsfleetwiseconnectormoduleoutputsssmtimestreamtablearn967E0D2F": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Arn of the Timestream Table where FleetWise data is stored",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/module/timestream/table/arn"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "cmsfleetwiseconnectortimestreamtimestreamtableFD6FC863",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsfleetwiseconnectorcmsfleetwiseconnectormoduleoutputsssmtimestreamtablename714EAC9B": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Name of the Timestream Table where FleetWise data is stored",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/module/timestream/table/name"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "cmsfleetwiseconnectortimestreamtimestreamtableFD6FC863",
+            "Name"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsfleetwiseconnectordependencylayerlambdadependencylayerversion1F9BFED9": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "CompatibleArchitectures": [
+          "x86_64",
+          "arm64"
+        ],
+        "CompatibleRuntimes": [
+          "python3.8",
+          "python3.9",
+          "python3.10"
+        ],
+        "Content": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        }
+      },
+      "Type": "AWS::Lambda::LayerVersion"
+    },
+    "cmsfleetwiseconnectorfleetwiseconfigfleetwiseexecutionrole37A6A869": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "iotfleetwise.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "timestream:WriteRecords",
+                    "timestream:Select"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "cmsfleetwiseconnectortimestreamtimestreamtableFD6FC863",
+                      "Arn"
+                    ]
+                  }
+                },
+                {
+                  "Action": "timestream:DescribeEndpoints",
+                  "Effect": "Allow",
+                  "Resource": "*"
+                },
+                {
+                  "Action": [
+                    "kms:GenerateDataKey",
+                    "kms:Decrypt",
+                    "kms:Encrypt"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "cmsfleetwiseconnectortimestreamtimestreamcmkkey147DF4C0",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "timestream-policy"
+          }
+        ],
+        "RoleName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-module-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-fw-execution-role"
+            ]
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsfleetwiseconnectorfleetwisetimestreamtos3cmsfleetwisestepfunctioncronrule23CCA4A4": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "ScheduleExpression": {
+          "Fn::Join": [
+            "",
+            [
+              "rate(",
+              {
+                "Ref": "TimestreamToS3UnloadIntervalMinutes"
+              },
+              " minutes)"
+            ]
+          ]
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Ref": "cmsfleetwiseconnectorfleetwisetimestreamtos3stepfunctionstatemachine35718297"
+            },
+            "Id": "Target0",
+            "RoleArn": {
+              "Fn::GetAtt": [
+                "cmsfleetwiseconnectorfleetwisetimestreamtos3stepfunctionstatemachineEventsRoleD90095E1",
+                "Arn"
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::Events::Rule"
+    },
+    "cmsfleetwiseconnectorfleetwisetimestreamtos3fleetwisetimestreamqueryvinslambdarole06BCD0F6": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "timestream:ListMeasures",
+                    "timestream:Select"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "cmsfleetwiseconnectortimestreamtimestreamtableFD6FC863",
+                      "Arn"
+                    ]
+                  }
+                },
+                {
+                  "Action": "timestream:DescribeEndpoints",
+                  "Effect": "Allow",
+                  "Resource": "*"
+                },
+                {
+                  "Action": [
+                    "kms:Decrypt",
+                    "kms:DescribeKey",
+                    "kms:Encrypt",
+                    "kms:GenerateDataKey"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "cmsfleetwiseconnectortimestreamtimestreamcmkkey147DF4C0",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "timestream-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-module-timestream-vin-query"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-module-timestream-vin-query:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "lambda-logs-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "ec2:CreateNetworkInterfacePermission",
+                  "Condition": {
+                    "StringEquals": {
+                      "ec2:AuthorizedService": "lambda.amazonaws.com",
+                      "ec2:Subnet": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Fn::GetAtt": [
+                                  "moduleinputsvpcnamecustomresource1E63A8E7",
+                                  "parameter_value"
+                                ]
+                              },
+                              "/subnets/private/1}}"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Fn::GetAtt": [
+                                  "moduleinputsvpcnamecustomresource1E63A8E7",
+                                  "parameter_value"
+                                ]
+                              },
+                              "/subnets/private/2}}"
+                            ]
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":ec2:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":network-interface/*"
+                      ]
+                    ]
+                  }
+                },
+                {
+                  "Action": [
+                    "ec2:DescribeNetworkInterfaces",
+                    "ec2:CreateNetworkInterface",
+                    "ec2:DeleteNetworkInterface"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ec2-vpc-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsfleetwiseconnectorfleetwisetimestreamtos3fleetwisetimestreamtimerangehandlerrole2C70D851": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "ssm:GetParameter",
+                    "ssm:PutParameter"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":ssm:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":parameter/solution/",
+                        {
+                          "Ref": "AppUniqueId"
+                        },
+                        "/module/step-function/last-successful-execution/unload-end-timestamp"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ssm-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "timestream:DescribeEndpoints",
+                    "timestream:SelectValues"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "timestream-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-module-time-handler"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-module-time-handler:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "lambda-logs-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "ec2:CreateNetworkInterfacePermission",
+                  "Condition": {
+                    "StringEquals": {
+                      "ec2:AuthorizedService": "lambda.amazonaws.com",
+                      "ec2:Subnet": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Fn::GetAtt": [
+                                  "moduleinputsvpcnamecustomresource1E63A8E7",
+                                  "parameter_value"
+                                ]
+                              },
+                              "/subnets/private/1}}"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Fn::GetAtt": [
+                                  "moduleinputsvpcnamecustomresource1E63A8E7",
+                                  "parameter_value"
+                                ]
+                              },
+                              "/subnets/private/2}}"
+                            ]
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":ec2:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":network-interface/*"
+                      ]
+                    ]
+                  }
+                },
+                {
+                  "Action": [
+                    "ec2:DescribeNetworkInterfaces",
+                    "ec2:CreateNetworkInterface",
+                    "ec2:DeleteNetworkInterface"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ec2-vpc-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsfleetwiseconnectorfleetwisetimestreamtos3fleetwisetimestreamunloadlambdaroleF172142A": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "timestream:Unload",
+                    "timestream:ListMeasures",
+                    "timestream:Select",
+                    "timestream:DescribeTable"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "cmsfleetwiseconnectortimestreamtimestreamtableFD6FC863",
+                      "Arn"
+                    ]
+                  }
+                },
+                {
+                  "Action": "timestream:DescribeEndpoints",
+                  "Effect": "Allow",
+                  "Resource": "*"
+                },
+                {
+                  "Action": [
+                    "kms:Decrypt",
+                    "kms:DescribeKey",
+                    "kms:Encrypt",
+                    "kms:GenerateDataKey"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "cmsfleetwiseconnectortimestreamtimestreamcmkkey147DF4C0",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "timestream-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "s3:AbortMultipartUpload",
+                    "s3:GetBucketLocation",
+                    "s3:GetObject",
+                    "s3:ListBucket",
+                    "s3:ListBucketMultipartUploads",
+                    "s3:PutObject",
+                    "s3:GetBucketAcl"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "{{resolve:ssm:/solution/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "/connect-store/s3-storage-bucket/arn}}"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "{{resolve:ssm:/solution/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "/connect-store/s3-storage-bucket/arn}}/fleetwise_timestream_to_s3/*"
+                        ]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Action": [
+                    "kms:Decrypt",
+                    "kms:DescribeKey",
+                    "kms:Encrypt",
+                    "kms:GenerateDataKey"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "{{resolve:ssm:/solution/",
+                        {
+                          "Ref": "AppUniqueId"
+                        },
+                        "/connect-store/s3-storage-bucket/key-arn}}"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "s3-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-module-timestream-unload-to-s3"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-module-timestream-unload-to-s3:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "lambda-logs-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "ec2:CreateNetworkInterfacePermission",
+                  "Condition": {
+                    "StringEquals": {
+                      "ec2:AuthorizedService": "lambda.amazonaws.com",
+                      "ec2:Subnet": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Fn::GetAtt": [
+                                  "moduleinputsvpcnamecustomresource1E63A8E7",
+                                  "parameter_value"
+                                ]
+                              },
+                              "/subnets/private/1}}"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Fn::GetAtt": [
+                                  "moduleinputsvpcnamecustomresource1E63A8E7",
+                                  "parameter_value"
+                                ]
+                              },
+                              "/subnets/private/2}}"
+                            ]
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":ec2:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":network-interface/*"
+                      ]
+                    ]
+                  }
+                },
+                {
+                  "Action": [
+                    "ec2:DescribeNetworkInterfaces",
+                    "ec2:CreateNetworkInterface",
+                    "ec2:DeleteNetworkInterface"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ec2-vpc-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsfleetwiseconnectorfleetwisetimestreamtos3loggroupkmskey4B211BE3": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "kms:Encrypt",
+                "kms:Decrypt",
+                "kms:GenerateDataKey"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "Service": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "logs.",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ".amazonaws.com"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "cmsfleetwiseconnectorfleetwisetimestreamtos3ssmlastunloadendtimeparametername9B99E2EE": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "ISO Timestamp representing the last successful Timestream Unload Query end time",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/module/step-function/last-successful-execution/unload-end-timestamp"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": "UNSET"
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "cmsfleetwiseconnectorfleetwisetimestreamtos3statemachineroleA1CA66ED": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": {
+                  "Fn::FindInMap": [
+                    "ServiceprincipalMap",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    "states"
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogDelivery",
+                    "logs:GetLogDelivery",
+                    "logs:UpdateLogDelivery",
+                    "logs:DeleteLogDelivery",
+                    "logs:ListLogDeliveries"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch-logs-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:PutResourcePolicy",
+                    "logs:DescribeResourcePolicies",
+                    "logs:DescribeLogGroups"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":logs:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":*"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch-logs-policy2"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "xray:GetSamplingRules",
+                    "xray:GetSamplingTargets",
+                    "xray:PutTelemetryRecords",
+                    "xray:PutTraceSegments"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "xray-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "Lambda:InvokeFunction",
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "cmsfleetwiseconnectorfleetwisetimestreamtos3timestreamqueryvinslambda742EB725",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::GetAtt": [
+                        "cmsfleetwiseconnectorfleetwisetimestreamtos3timestreamunloadtos3lambdaF2A09E9C",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::GetAtt": [
+                        "cmsfleetwiseconnectorfleetwisetimestreamtos3timerangehandlerlambdaBB27E6F8",
+                        "Arn"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "lambda-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "states:StartExecution",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":states:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":stateMachine:",
+                        {
+                          "Ref": "AppUniqueId"
+                        },
+                        "-module-timestream-to-s3"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "step-function-execution-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsfleetwiseconnectorfleetwisetimestreamtos3stepfunctionsloggroupEE4C8DFB": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "KmsKeyId": {
+          "Fn::GetAtt": [
+            "cmsfleetwiseconnectorfleetwisetimestreamtos3loggroupkmskey4B211BE3",
+            "Arn"
+          ]
+        },
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/vendedlogs/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/module/step-function-",
+              {
+                "Fn::Select": [
+                  2,
+                  {
+                    "Fn::Split": [
+                      "/",
+                      {
+                        "Ref": "AWS::StackId"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "cmsfleetwiseconnectorfleetwisetimestreamtos3stepfunctionstatemachine35718297": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "cmsfleetwiseconnectorfleetwisetimestreamtos3statemachineroleA1CA66ED",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "DefinitionString": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"StartAt\":\"Generate Unload Query Time Range\",\"States\":{\"Generate Unload Query Time Range\":{\"Next\":\"Get Batches of Available VINs in Time Range\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"ResultSelector\":{\"timeInfo.$\":\"$.Payload\"},\"Resource\":\"arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
+              {
+                "Fn::GetAtt": [
+                  "cmsfleetwiseconnectorfleetwisetimestreamtos3timerangehandlerlambdaBB27E6F8",
+                  "Arn"
+                ]
+              },
+              "\",\"Payload\":{\"requestType\":\"Get\"}}},\"Get Batches of Available VINs in Time Range\":{\"Next\":\"Check for Existence of Data in Query Range\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"ResultPath\":\"$.getVinsResult\",\"ResultSelector\":{\"vinBatches.$\":\"$.Payload.vin_batches\"},\"Resource\":\"arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
+              {
+                "Fn::GetAtt": [
+                  "cmsfleetwiseconnectorfleetwisetimestreamtos3timestreamqueryvinslambda742EB725",
+                  "Arn"
+                ]
+              },
+              "\",\"Payload\":{\"timestream\":{\"databaseName\":\"",
+              {
+                "Ref": "cmsfleetwiseconnectortimestreamtimestreamdatabase51C3291C"
+              },
+              "\",\"tableName\":\"",
+              {
+                "Fn::GetAtt": [
+                  "cmsfleetwiseconnectortimestreamtimestreamtableFD6FC863",
+                  "Name"
+                ]
+              },
+              "\"},\"cmsConnectStore\":{\"telemetryBucketName\":\"{{resolve:ssm:/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/connect-store/s3-storage-bucket/name}}\",\"telemetryPrefixPath\":\"fleetwise_timestream_to_s3/\",\"telemetryBucketKmsKeyArn\":\"{{resolve:ssm:/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/connect-store/s3-storage-bucket/key-arn}}\"},\"timeInfo.$\":\"$.timeInfo\"}}},\"Check for Existence of Data in Query Range\":{\"Type\":\"Choice\",\"Choices\":[{\"Variable\":\"$.getVinsResult.vinBatches[0][0]\",\"IsPresent\":false,\"Next\":\"Skipping Unload: No New Data\"}],\"Default\":\"Process Each VIN Batch\"},\"Process Each VIN Batch\":{\"Type\":\"Map\",\"ResultPath\":\"$.vin_batch\",\"Next\":\"Update Last Unload Query End Time\",\"Parameters\":{\"vinBatch.$\":\"$$.Map.Item.Value\",\"timestream\":{\"databaseName\":\"",
+              {
+                "Ref": "cmsfleetwiseconnectortimestreamtimestreamdatabase51C3291C"
+              },
+              "\",\"tableName\":\"",
+              {
+                "Fn::GetAtt": [
+                  "cmsfleetwiseconnectortimestreamtimestreamtableFD6FC863",
+                  "Name"
+                ]
+              },
+              "\"},\"cmsConnectStore\":{\"telemetryBucketName\":\"{{resolve:ssm:/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/connect-store/s3-storage-bucket/name}}\",\"telemetryPrefixPath\":\"fleetwise_timestream_to_s3/\",\"telemetryBucketKmsKeyArn\":\"{{resolve:ssm:/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/connect-store/s3-storage-bucket/key-arn}}\"},\"fleetwise\":{\"vehicleVinAttributeName\":\"",
+              {
+                "Ref": "FleetwiseVehicleVinAttributeName"
+              },
+              "\"},\"timeInfo.$\":\"$.timeInfo\"},\"ItemsPath\":\"$.getVinsResult.vinBatches\",\"ItemProcessor\":{\"ProcessorConfig\":{\"Mode\":\"DISTRIBUTED\",\"ExecutionType\":\"STANDARD\"},\"StartAt\":\"Unload Data to S3 Per Batch of VINs\",\"States\":{\"Unload Data to S3 Per Batch of VINs\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"OutputPath\":\"$.Payload\",\"Resource\":\"arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
+              {
+                "Fn::GetAtt": [
+                  "cmsfleetwiseconnectorfleetwisetimestreamtos3timestreamunloadtos3lambdaF2A09E9C",
+                  "Arn"
+                ]
+              },
+              "\",\"Payload.$\":\"$\"}}}},\"MaxConcurrency\":1},\"Update Last Unload Query End Time\":{\"End\":true,\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"ResultPath\":\"$.timeInfo\",\"Resource\":\"arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
+              {
+                "Fn::GetAtt": [
+                  "cmsfleetwiseconnectorfleetwisetimestreamtos3timerangehandlerlambdaBB27E6F8",
+                  "Arn"
+                ]
+              },
+              "\",\"Payload\":{\"requestType\":\"Set\",\"timeInfo.$\":\"$.timeInfo\"}}},\"Skipping Unload: No New Data\":{\"Type\":\"Succeed\"}}}"
+            ]
+          ]
+        },
+        "LoggingConfiguration": {
+          "Destinations": [
+            {
+              "CloudWatchLogsLogGroup": {
+                "LogGroupArn": {
+                  "Fn::GetAtt": [
+                    "cmsfleetwiseconnectorfleetwisetimestreamtos3stepfunctionsloggroupEE4C8DFB",
+                    "Arn"
+                  ]
+                }
+              }
+            }
+          ],
+          "IncludeExecutionData": false,
+          "Level": "ALL"
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "cmsfleetwiseconnectorfleetwisetimestreamtos3statemachineroleA1CA66ED",
+            "Arn"
+          ]
+        },
+        "StateMachineName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-module-timestream-to-s3"
+            ]
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "TracingConfiguration": {
+          "Enabled": true
+        }
+      },
+      "Type": "AWS::StepFunctions::StateMachine",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsfleetwiseconnectorfleetwisetimestreamtos3stepfunctionstatemachineEventsRoleD90095E1": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "events.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsfleetwiseconnectorfleetwisetimestreamtos3stepfunctionstatemachineEventsRoleDefaultPolicy43BB7137": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "states:StartExecution",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "cmsfleetwiseconnectorfleetwisetimestreamtos3stepfunctionstatemachine35718297"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "cmsfleetwiseconnectorfleetwisetimestreamtos3stepfunctionstatemachineEventsRoleDefaultPolicy43BB7137",
+        "Roles": [
+          {
+            "Ref": "cmsfleetwiseconnectorfleetwisetimestreamtos3stepfunctionstatemachineEventsRoleD90095E1"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "cmsfleetwiseconnectorfleetwisetimestreamtos3timerangehandlerlambdaBB27E6F8": {
+      "DependsOn": [
+        "cmsfleetwiseconnectorfleetwisetimestreamtos3fleetwisetimestreamtimerangehandlerrole2C70D851",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "CMS FleetWise Connector - Time Range Handler",
+        "Environment": {
+          "Variables": {
+            "AWS_ACCOUNT_ID": {
+              "Ref": "AWS::AccountId"
+            },
+            "DEPLOYMENT_UUID": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            },
+            "METRICS_SOLUTION_URL": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/metrics/url}}"
+                ]
+              ]
+            },
+            "REPORT_METRICS_ENABLED": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/metrics/enabled}}"
+                ]
+              ]
+            },
+            "SOLUTION_ID": "id",
+            "SOLUTION_VERSION": "v0.0.0",
+            "UNLOAD_END_TIME_PARAMETER_NAME": {
+              "Ref": "cmsfleetwiseconnectorfleetwisetimestreamtos3ssmlastunloadendtimeparametername9B99E2EE"
+            },
+            "USER_AGENT_STRING": "AWSSOLUTION/id/v0.0.0 AWSSOLUTION-CAPABILITY/CMS.XX/v0.0.0"
+          }
+        },
+        "FunctionName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-module-time-handler"
+            ]
+          ]
+        },
+        "Handler": "function.main.handler",
+        "Layers": [
+          {
+            "Ref": "cmsfleetwiseconnectordependencylayerlambdadependencylayerversion1F9BFED9"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsfleetwiseconnectorfleetwisetimestreamtos3fleetwisetimestreamtimerangehandlerrole2C70D851",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "Timeout": 900,
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "cmsfleetwiseconnectorfleetwisetimestreamtos3timerangehandlersecuritygroup85F3FDFA",
+                "GroupId"
+              ]
+            }
+          ],
+          "SubnetIds": [
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Fn::GetAtt": [
+                      "moduleinputsvpcnamecustomresource1E63A8E7",
+                      "parameter_value"
+                    ]
+                  },
+                  "/subnets/private/1}}"
+                ]
+              ]
+            },
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Fn::GetAtt": [
+                      "moduleinputsvpcnamecustomresource1E63A8E7",
+                      "parameter_value"
+                    ]
+                  },
+                  "/subnets/private/2}}"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsfleetwiseconnectorfleetwisetimestreamtos3timerangehandlerlambdaLogRetention6E433977": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsfleetwiseconnectorfleetwisetimestreamtos3timerangehandlerlambdaBB27E6F8"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsfleetwiseconnectorfleetwisetimestreamtos3timerangehandlersecuritygroup85F3FDFA": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "GroupDescription": "cms-fleetwise-connector/cms-fleetwise-connector/fleetwise-timestream-to-s3/time-range-handler-security-group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Fn::GetAtt": [
+                  "moduleinputsvpcnamecustomresource1E63A8E7",
+                  "parameter_value"
+                ]
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "cmsfleetwiseconnectorfleetwisetimestreamtos3timestreamqueryvinslambda742EB725": {
+      "DependsOn": [
+        "cmsfleetwiseconnectorfleetwisetimestreamtos3fleetwisetimestreamqueryvinslambdarole06BCD0F6",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "CMS FleetWise Connector - Query Timestream VINs",
+        "Environment": {
+          "Variables": {
+            "AWS_ACCOUNT_ID": {
+              "Ref": "AWS::AccountId"
+            },
+            "DEPLOYMENT_UUID": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            },
+            "METRICS_SOLUTION_URL": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/metrics/url}}"
+                ]
+              ]
+            },
+            "REPORT_METRICS_ENABLED": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/metrics/enabled}}"
+                ]
+              ]
+            },
+            "SOLUTION_ID": "id",
+            "SOLUTION_VERSION": "v0.0.0",
+            "USER_AGENT_STRING": "AWSSOLUTION/id/v0.0.0 AWSSOLUTION-CAPABILITY/CMS.XX/v0.0.0"
+          }
+        },
+        "FunctionName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-module-timestream-vin-query"
+            ]
+          ]
+        },
+        "Handler": "function.main.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsfleetwiseconnectorfleetwisetimestreamtos3fleetwisetimestreamqueryvinslambdarole06BCD0F6",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "Timeout": 900,
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "cmsfleetwiseconnectorfleetwisetimestreamtos3timestreamqueryvinssecuritygroup88FCAE8F",
+                "GroupId"
+              ]
+            }
+          ],
+          "SubnetIds": [
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Fn::GetAtt": [
+                      "moduleinputsvpcnamecustomresource1E63A8E7",
+                      "parameter_value"
+                    ]
+                  },
+                  "/subnets/private/1}}"
+                ]
+              ]
+            },
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Fn::GetAtt": [
+                      "moduleinputsvpcnamecustomresource1E63A8E7",
+                      "parameter_value"
+                    ]
+                  },
+                  "/subnets/private/2}}"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsfleetwiseconnectorfleetwisetimestreamtos3timestreamqueryvinslambdaLogRetentionF0DD0CBE": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsfleetwiseconnectorfleetwisetimestreamtos3timestreamqueryvinslambda742EB725"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsfleetwiseconnectorfleetwisetimestreamtos3timestreamqueryvinssecuritygroup88FCAE8F": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "GroupDescription": "cms-fleetwise-connector/cms-fleetwise-connector/fleetwise-timestream-to-s3/timestream-query-vins-security-group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Fn::GetAtt": [
+                  "moduleinputsvpcnamecustomresource1E63A8E7",
+                  "parameter_value"
+                ]
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "cmsfleetwiseconnectorfleetwisetimestreamtos3timestreamunloadsecuritygroup04BE0CA9": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "GroupDescription": "cms-fleetwise-connector/cms-fleetwise-connector/fleetwise-timestream-to-s3/timestream-unload-security-group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Fn::GetAtt": [
+                  "moduleinputsvpcnamecustomresource1E63A8E7",
+                  "parameter_value"
+                ]
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "cmsfleetwiseconnectorfleetwisetimestreamtos3timestreamunloadtos3lambdaF2A09E9C": {
+      "DependsOn": [
+        "cmsfleetwiseconnectorfleetwisetimestreamtos3fleetwisetimestreamunloadlambdaroleF172142A",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "CMS FleetWise Connector - Unload Timestream Data to S3",
+        "Environment": {
+          "Variables": {
+            "AWS_ACCOUNT_ID": {
+              "Ref": "AWS::AccountId"
+            },
+            "DEPLOYMENT_UUID": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            },
+            "METRICS_SOLUTION_URL": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/metrics/url}}"
+                ]
+              ]
+            },
+            "REPORT_METRICS_ENABLED": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/metrics/enabled}}"
+                ]
+              ]
+            },
+            "SOLUTION_ID": "id",
+            "SOLUTION_VERSION": "v0.0.0",
+            "USER_AGENT_STRING": "AWSSOLUTION/id/v0.0.0 AWSSOLUTION-CAPABILITY/CMS.XX/v0.0.0"
+          }
+        },
+        "FunctionName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-module-timestream-unload-to-s3"
+            ]
+          ]
+        },
+        "Handler": "function.main.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsfleetwiseconnectorfleetwisetimestreamtos3fleetwisetimestreamunloadlambdaroleF172142A",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "Timeout": 900,
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "cmsfleetwiseconnectorfleetwisetimestreamtos3timestreamunloadsecuritygroup04BE0CA9",
+                "GroupId"
+              ]
+            }
+          ],
+          "SubnetIds": [
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Fn::GetAtt": [
+                      "moduleinputsvpcnamecustomresource1E63A8E7",
+                      "parameter_value"
+                    ]
+                  },
+                  "/subnets/private/1}}"
+                ]
+              ]
+            },
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Fn::GetAtt": [
+                      "moduleinputsvpcnamecustomresource1E63A8E7",
+                      "parameter_value"
+                    ]
+                  },
+                  "/subnets/private/2}}"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "cmsfleetwiseconnectorfleetwisetimestreamtos3timestreamunloadtos3lambdaLogRetentionE62BE046": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "cmsfleetwiseconnectorfleetwisetimestreamtos3timestreamunloadtos3lambdaF2A09E9C"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "cmsfleetwiseconnectors3glueathenacrawler1CFF2B44": {
+      "DependsOn": [
+        "cmsfleetwiseconnectors3glueathenacrawlerconnectionA0CE801E",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "CrawlerSecurityConfiguration": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-module-data-security"
+            ]
+          ]
+        },
+        "DatabaseName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-module"
+            ]
+          ]
+        },
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-module-data"
+            ]
+          ]
+        },
+        "RecrawlPolicy": {
+          "RecrawlBehavior": "CRAWL_EVERYTHING"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "cmsfleetwiseconnectors3glueathenagluecrawlerroleF5FBC778",
+            "Arn"
+          ]
+        },
+        "Schedule": {
+          "ScheduleExpression": "cron(0 0/1 * * ? *)"
+        },
+        "TablePrefix": "fleetwise-data-",
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Targets": {
+          "S3Targets": [
+            {
+              "ConnectionName": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Ref": "AppUniqueId"
+                    },
+                    "-module-data-connection"
+                  ]
+                ]
+              },
+              "Path": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "s3://{{resolve:ssm:/solution/",
+                    {
+                      "Ref": "AppUniqueId"
+                    },
+                    "/connect-store/s3-storage-bucket/name}}/fleetwise_timestream_to_s3/results/"
+                  ]
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "Type": "AWS::Glue::Crawler"
+    },
+    "cmsfleetwiseconnectors3glueathenacrawlerconnectionA0CE801E": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "CatalogId": {
+          "Ref": "AWS::AccountId"
+        },
+        "ConnectionInput": {
+          "ConnectionType": "NETWORK",
+          "Name": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "-module-data-connection"
+              ]
+            ]
+          },
+          "PhysicalConnectionRequirements": {
+            "AvailabilityZone": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Fn::GetAtt": [
+                      "moduleinputsvpcnamecustomresource1E63A8E7",
+                      "parameter_value"
+                    ]
+                  },
+                  "/azs/1}}"
+                ]
+              ]
+            },
+            "SecurityGroupIdList": [
+              {
+                "Fn::GetAtt": [
+                  "cmsfleetwiseconnectors3glueathenagluecrawlersecuritygroup3A1D9EBA",
+                  "GroupId"
+                ]
+              }
+            ],
+            "SubnetId": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Fn::GetAtt": [
+                      "moduleinputsvpcnamecustomresource1E63A8E7",
+                      "parameter_value"
+                    ]
+                  },
+                  "/subnets/private/1}}"
+                ]
+              ]
+            }
+          }
+        }
+      },
+      "Type": "AWS::Glue::Connection"
+    },
+    "cmsfleetwiseconnectors3glueathenagluecrawlerroleF5FBC778": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "glue.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "s3:GetObject",
+                    "s3:PutObject",
+                    "s3:ListBucket",
+                    "s3:GetBucketAcl"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "{{resolve:ssm:/solution/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "/connect-store/s3-storage-bucket/arn}}"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "{{resolve:ssm:/solution/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "/connect-store/s3-storage-bucket/arn}}/fleetwise_timestream_to_s3/*"
+                        ]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Action": [
+                    "kms:Decrypt",
+                    "kms:DescribeKey",
+                    "kms:Encrypt",
+                    "kms:GenerateDataKey"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "{{resolve:ssm:/solution/",
+                        {
+                          "Ref": "AppUniqueId"
+                        },
+                        "/connect-store/s3-storage-bucket/key-arn}}"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "s3-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "glue:GetSecurityConfiguration",
+                    "glue:GetSecurityConfigurations",
+                    "glue:GetConnection",
+                    "glue:GetConnections"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "glue-security-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "glue:CreateDatabase",
+                    "glue:CreateTable",
+                    "glue:CreatePartition",
+                    "glue:CreatePartitionIndex",
+                    "glue:GetDatabase",
+                    "glue:GetDatabases",
+                    "glue:GetTable",
+                    "glue:GetTables",
+                    "glue:GetSecurityConfiguration",
+                    "glue:GetSecurityConfigurations",
+                    "glue:BatchGetPartition",
+                    "glue:BatchCreatePartition",
+                    "glue:UpdateDatabase",
+                    "glue:UpdateTable",
+                    "glue:UpdatePartition",
+                    "glue:DeleteTable",
+                    "glue:DeletePartition",
+                    "glue:BatchDeletePartition",
+                    "glue:BatchDeleteTable",
+                    "glue:BatchDeleteTableVersion"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":glue:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":security-configuration/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-module-data-security"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":glue:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":catalog"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":glue:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":database/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-module"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":glue:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":table/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-module/fleetwise-data-*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "glue-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "ec2:CreateNetworkInterfacePermission",
+                  "Condition": {
+                    "StringEquals": {
+                      "ec2:AuthorizedService": "glue.amazonaws.com",
+                      "ec2:Subnet": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Fn::GetAtt": [
+                                  "moduleinputsvpcnamecustomresource1E63A8E7",
+                                  "parameter_value"
+                                ]
+                              },
+                              "/subnets/private/1}}"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Fn::GetAtt": [
+                                  "moduleinputsvpcnamecustomresource1E63A8E7",
+                                  "parameter_value"
+                                ]
+                              },
+                              "/subnets/private/2}}"
+                            ]
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":ec2:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":network-interface/*"
+                      ]
+                    ]
+                  }
+                },
+                {
+                  "Action": [
+                    "ec2:DescribeNetworkInterfaces",
+                    "ec2:CreateNetworkInterface",
+                    "ec2:DeleteNetworkInterface"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ec2-vpc-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "ec2:DescribeSubnets",
+                    "ec2:DescribeAvailabilityZones",
+                    "ec2:DescribeNetworkAcls",
+                    "ec2:DescribeRouteTables",
+                    "ec2:DescribeVpcEndpoints",
+                    "ec2:DescribeSecurityGroups",
+                    "ec2:CreateTags"
+                  ],
+                  "Condition": {
+                    "StringEquals": {
+                      "ec2:Region": [
+                        {
+                          "Ref": "AWS::Region"
+                        }
+                      ]
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ec2-vpc-policy-glue"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents",
+                    "logs:AssociateKmsKey"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws-glue/crawlers"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws-glue/crawlers:*"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws-glue/crawlers-role/*"
+                        ]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Action": [
+                    "kms:Decrypt",
+                    "kms:DescribeKey",
+                    "kms:Encrypt",
+                    "kms:GenerateDataKey"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "cmsfleetwiseconnectors3glueathenaloggroupkmskeyCCB38341",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "logs-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsfleetwiseconnectors3glueathenagluecrawlersecuritygroup3A1D9EBA": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Metadata": {
+        "cfn_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "W5",
+              "reason": "Glue requires a fully open ingress that is self referencing"
+            },
+            {
+              "id": "W29",
+              "reason": "Glue requires a fully open egress that is self referencing"
+            },
+            {
+              "id": "W40",
+              "reason": "Glue requires a fully open egress that is self referencing"
+            },
+            {
+              "id": "W42",
+              "reason": "Glue requires a fully open ingress that is self referencing"
+            }
+          ]
+        }
+      },
+      "Properties": {
+        "GroupDescription": "Allow all inbound and outbound traffic as required by Glue.",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Fn::GetAtt": [
+                  "moduleinputsvpcnamecustomresource1E63A8E7",
+                  "parameter_value"
+                ]
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "cmsfleetwiseconnectors3glueathenagluecrawlersecuritygroupfromcmsfleetwiseconnectors3glueathenagluecrawlersecuritygroup739EB5CDALLTRAFFIC0AA853D7": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Allow all inbound traffic from the Security Group to itself",
+        "GroupId": {
+          "Fn::GetAtt": [
+            "cmsfleetwiseconnectors3glueathenagluecrawlersecuritygroup3A1D9EBA",
+            "GroupId"
+          ]
+        },
+        "IpProtocol": "-1",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "cmsfleetwiseconnectors3glueathenagluecrawlersecuritygroup3A1D9EBA",
+            "GroupId"
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress"
+    },
+    "cmsfleetwiseconnectors3glueathenagluecrawlersecuritygrouptoIndirectPeerALLPORTS54B4BE93": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Allow outbound traffic to the s3 endpoint",
+        "DestinationPrefixListId": {
+          "Fn::GetAtt": [
+            "cmsfleetwiseconnectors3glueathenaprefixlistlookupvpcendpointprefixlistcustomresource4D5D4761",
+            "PrefixLists.0.PrefixListId"
+          ]
+        },
+        "FromPort": 0,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "cmsfleetwiseconnectors3glueathenagluecrawlersecuritygroup3A1D9EBA",
+            "GroupId"
+          ]
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 65535
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress"
+    },
+    "cmsfleetwiseconnectors3glueathenagluecrawlersecuritygrouptocmsfleetwiseconnectors3glueathenagluecrawlersecuritygroup739EB5CDALLTRAFFICD3CC7A83": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Allow all outbound traffic from the Security Group to itself",
+        "DestinationSecurityGroupId": {
+          "Fn::GetAtt": [
+            "cmsfleetwiseconnectors3glueathenagluecrawlersecuritygroup3A1D9EBA",
+            "GroupId"
+          ]
+        },
+        "GroupId": {
+          "Fn::GetAtt": [
+            "cmsfleetwiseconnectors3glueathenagluecrawlersecuritygroup3A1D9EBA",
+            "GroupId"
+          ]
+        },
+        "IpProtocol": "-1"
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress"
+    },
+    "cmsfleetwiseconnectors3glueathenaloggroupkmskeyCCB38341": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "kms:Encrypt*",
+                "kms:Decrypt*",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*",
+                "kms:Describe*"
+              ],
+              "Condition": {
+                "ArnLike": {
+                  "kms:EncryptionContext:aws:logs:arn": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":logs:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":log-group:/aws-glue/*"
+                      ]
+                    ]
+                  }
+                }
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "logs.",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ".",
+                      {
+                        "Ref": "AWS::URLSuffix"
+                      }
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "cmsfleetwiseconnectors3glueathenaprefixlistlookupvpcendpointprefixlistcustomresource4D5D4761": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Create": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"action\":\"describeManagedPrefixLists\",\"service\":\"EC2\",\"parameters\":{\"Filters\":[{\"Name\":\"prefix-list-name\",\"Values\":[\"com.amazonaws.",
+              {
+                "Ref": "AWS::Region"
+              },
+              ".s3\"]}]},\"physicalResourceId\":{\"responsePath\":\"PrefixLists.0.PrefixListId\"}}"
+            ]
+          ]
+        },
+        "InstallLatestAwsSdk": false,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::AWS",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsfleetwiseconnectors3glueathenaprefixlistlookupvpcprefixlistcustomresourceroleA1B2E782": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Metadata": {
+        "cdk_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Wildcard permissions required to write to log streams."
+            }
+          ]
+        },
+        "cfn_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "W11",
+              "reason": "Wildcard needed for log policy"
+            }
+          ]
+        }
+      },
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-module-vpc-prefix-list-lookup"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-module-vpc-prefix-list-lookup:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "lambda-logs-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "ec2:CreateNetworkInterfacePermission",
+                  "Condition": {
+                    "StringEquals": {
+                      "ec2:AuthorizedService": "lambda.amazonaws.com",
+                      "ec2:Subnet": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Fn::GetAtt": [
+                                  "moduleinputsvpcnamecustomresource1E63A8E7",
+                                  "parameter_value"
+                                ]
+                              },
+                              "/subnets/private/1}}"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Fn::GetAtt": [
+                                  "moduleinputsvpcnamecustomresource1E63A8E7",
+                                  "parameter_value"
+                                ]
+                              },
+                              "/subnets/private/2}}"
+                            ]
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":ec2:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":network-interface/*"
+                      ]
+                    ]
+                  }
+                },
+                {
+                  "Action": [
+                    "ec2:DescribeNetworkInterfaces",
+                    "ec2:CreateNetworkInterface",
+                    "ec2:DeleteNetworkInterface"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ec2-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "ec2:DescribeManagedPrefixLists",
+                  "Condition": {
+                    "StringEquals": {
+                      "aws:PrincipalAccount": [
+                        {
+                          "Ref": "AWS::AccountId"
+                        }
+                      ],
+                      "aws:RequestedRegion": [
+                        {
+                          "Ref": "AWS::Region"
+                        }
+                      ]
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ec2-prefix-list-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cmsfleetwiseconnectors3glueathenasecurityconfiguration153F4C06": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "EncryptionConfiguration": {
+          "CloudWatchEncryption": {
+            "CloudWatchEncryptionMode": "SSE-KMS",
+            "KmsKeyArn": {
+              "Fn::GetAtt": [
+                "cmsfleetwiseconnectors3glueathenaloggroupkmskeyCCB38341",
+                "Arn"
+              ]
+            }
+          },
+          "S3Encryptions": [
+            {
+              "KmsKeyArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "{{resolve:ssm:/solution/",
+                    {
+                      "Ref": "AppUniqueId"
+                    },
+                    "/connect-store/s3-storage-bucket/key-arn}}"
+                  ]
+                ]
+              },
+              "S3EncryptionMode": "SSE-KMS"
+            }
+          ]
+        },
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-module-data-security"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::Glue::SecurityConfiguration"
+    },
+    "cmsfleetwiseconnectortimestreamtimestreamcmkkey147DF4C0": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "cmsfleetwiseconnectortimestreamtimestreamdatabase51C3291C": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "DatabaseName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-fleetwise-connector"
+            ]
+          ]
+        },
+        "KmsKeyId": {
+          "Ref": "cmsfleetwiseconnectortimestreamtimestreamcmkkey147DF4C0"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::Timestream::Database"
+    },
+    "cmsfleetwiseconnectortimestreamtimestreamtableFD6FC863": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "DatabaseName": {
+          "Ref": "cmsfleetwiseconnectortimestreamtimestreamdatabase51C3291C"
+        },
+        "RetentionProperties": {
+          "MagneticStoreRetentionPeriodInDays": "14",
+          "MemoryStoreRetentionPeriodInHours": "24"
+        },
+        "TableName": "fleetwise-cms-store",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::Timestream::Table"
+    },
+    "moduleinputsvpcnamecustomresource1E63A8E7": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "ParameterName": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/config/vpc/name"
+            ]
+          ]
+        },
+        "Resource": "SsmParameters",
+        "ServiceToken": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/config/aws-resource-lookup-lambda/arn}}"
+            ]
+          ]
+        }
+      },
+      "Type": "Custom::SsmParameters",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "ssmappuniqueidregistermodule9C5C2C5D": {
+      "Properties": {
+        "Description": "SSM parameter to register a module with an app unique ID.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/module"
+            ]
+          ]
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                  ],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}

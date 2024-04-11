@@ -1,0 +1,174 @@
+{
+    "/cms-alerts/cms-alerts/auth-construct/authorization-lambda/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Lambda runtime would be upgraded in next release in all modules"
+            }
+        ]
+    },
+    "/cms-alerts/cms-alerts/auth-construct/authorization-lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-alerts-authorization:log-stream:*"
+                ],
+                "reason": "Log stream has to be a wildcard"
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "ec2 Network Interfaces permissions need to be wildcard",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*",
+                    "Resource::*"
+                ]
+            }
+        ]
+    },
+    "/cms-alerts/cms-alerts/user-subscriptions-construct/user-subscriptions-lambda/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Lambda runtime would be upgraded in next release in all modules"
+            }
+        ]
+    },
+    "/cms-alerts/cms-alerts/user-subscriptions-construct/user-subscriptions-lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": ["Resource::arn:<AWS::Partition>:sns:<AWS::Region>:<AWS::AccountId>:<SnsTopicPrefix>-*"],
+                "reason": "Cannot tighten the policy any more than this in order for the feature to work"
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": ["Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-alerts-user-subscriptions:log-stream:*"],
+                "reason": "Log stream has to be a wildcard"
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "ec2 Network Interfaces permissions need to be wildcard",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*",
+                    "Resource::*"
+                ]
+            }
+        ]
+    },
+    "/cms-alerts/cms-alerts/notification-construct/send-notifications-lambda/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Lambda runtime would be upgraded in next release in all modules"
+            }
+        ]
+    },
+    "/cms-alerts/cms-alerts/notification-construct/notifications-lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": ["Resource::arn:<AWS::Partition>:sns:<AWS::Region>:<AWS::AccountId>:<SnsTopicPrefix>-*"],
+                "reason": "Cannot tighten the policy any more than this in order for the feature to work"
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": ["Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-alerts-send-notifications:log-stream:*"],
+                "reason": "Log stream has to be a wildcard"
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "ec2 Network Interfaces permissions need to be wildcard",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*",
+                    "Resource::*"
+                ]
+            }
+        ]
+    },
+    "/cms-alerts/cms-alerts/incoming-alerts-construct/alerts-lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": ["Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-alerts-create-alerts:log-stream:*"],
+                "reason": "Log stream has to be a wildcard"
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "ec2 Network Interfaces permissions need to be wildcard",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*",
+                    "Resource::*"
+                ]
+            }
+        ]
+    },
+    "/cms-alerts/cms-alerts/publish-api-construct/publish-lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": ["Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-alerts-publish:log-stream:*"],
+                "reason": "Log stream has to be a wildcard"
+            },
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "ec2 Network Interfaces permissions need to be wildcard",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*",
+                    "Resource::*"
+                ]
+            }
+        ]
+    },
+    "/cms-alerts/cms-alerts/publish-api-construct/publish-lambda/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Lambda runtime would be upgraded in next release in all modules"
+            }
+        ]
+    },
+    "/cms-alerts/cms-alerts/incoming-alerts-construct/create-alerts-lambda/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Lambda runtime would be upgraded in next release in all modules"
+            }
+        ]
+    },
+    "/cms-alerts/cms-alerts/frontend-api-construct/graphql-api-access-log-role/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": ["Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/appsync/apis/<cmsalertsfrontendapiconstructappsyncapiAB97D3AC.ApiId>:log-stream:*"],
+                "reason": "Log stream has to be a wildcard"
+            }
+        ]
+    },
+    "/cms-alerts/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM4",
+                "appliesTo": ["Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"],
+                "reason": "Log retention lambda uses managed policies"
+            }
+        ]
+    },
+    "/cms-alerts/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "appliesTo": ["Resource::*"],
+                "reason": "Log retention lambda uses managed policies"
+            }
+        ]
+    },
+    "/cms-alerts/cms-alerts/notification-construct/dead-letter-queue/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-SQS3",
+                "reason": "This SQS queue is used as a dead letter queue for ddb stream."
+            }
+        ]
+    }
+}

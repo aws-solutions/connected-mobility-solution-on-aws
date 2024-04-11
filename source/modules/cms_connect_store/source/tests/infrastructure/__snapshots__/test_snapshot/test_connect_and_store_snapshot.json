@@ -1,0 +1,2752 @@
+{
+  "Mappings": {
+    "Solution": {
+      "AssetsConfig": {
+        "S3AssetBucketBaseName": "test-bucket-base-name",
+        "S3AssetKeyPrefix": "test-object-key-prefix"
+      }
+    }
+  },
+  "Parameters": {
+    "AppUniqueId": {
+      "AllowedPattern": "^(?!-)[a-z0-9-]+(?<!-)$",
+      "ConstraintDescription": "AppUniqueId must contain min 3 and max 10 characters, and contain only lowercase alphanumeric characters and dashes.",
+      "Description": "Application unique identifier used to uniquely name resources within the stack.",
+      "MaxLength": 10,
+      "MinLength": 3,
+      "Type": "String"
+    },
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    }
+  },
+  "Resources": {
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+      "DependsOn": [
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 900
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:PutRetentionPolicy",
+                "logs:DeleteRetentionPolicy"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "Roles": [
+          {
+            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "appregistryapplicationstackassociation": {
+      "Properties": {
+        "Application": {
+          "Fn::GetAtt": [
+            "connectstoreappregistryconstructappregistryapplication971EBEC7",
+            "Id"
+          ]
+        },
+        "Resource": {
+          "Ref": "AWS::StackId"
+        },
+        "ResourceType": "CFN_STACK"
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::ResourceAssociation"
+    },
+    "connectstorealertsconstructiotsendtoalarmlambda5A273D3A": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "RuleName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Fn::Join": [
+                  "_",
+                  {
+                    "Fn::Split": [
+                      "-",
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            {
+                              "Ref": "AppUniqueId"
+                            },
+                            "_test-module-short-name"
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "_iot_send_to_alarm_lambda"
+            ]
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "TopicRulePayload": {
+          "Actions": [
+            {
+              "Lambda": {
+                "FunctionArn": {
+                  "Fn::GetAtt": [
+                    "connectstorealertsconstructlambdafunction0927E3C6",
+                    "Arn"
+                  ]
+                }
+              }
+            }
+          ],
+          "Description": "Send payload to vehicle_trigger_alarm lambda",
+          "Sql": "SELECT * from 'cms/notification/#'"
+        }
+      },
+      "Type": "AWS::IoT::TopicRule"
+    },
+    "connectstorealertsconstructlambdafunction0927E3C6": {
+      "DependsOn": [
+        "connectstorealertsconstructlambdaroleB7D4C8F8",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        },
+        "Description": "Vehicle Trigger Alarm Function",
+        "Environment": {
+          "Variables": {
+            "ALERTS_PUBLISH_ENDPOINT_URL_PARAMETER": {
+              "Fn::Join": [
+                "",
+                [
+                  "/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/alerts/publish-api/endpoint"
+                ]
+              ]
+            },
+            "IDENTITY_PROVIDER_ID": {
+              "Fn::GetAtt": [
+                "moduleinputsconstructidentityprovideridcustomresourceFE878685",
+                "parameter_value"
+              ]
+            },
+            "USER_AGENT_STRING": "AWSSOLUTION/test-solution-id/test-solution-version AWSSOLUTION-CAPABILITY/test-capability-id/test-solution-version"
+          }
+        },
+        "FunctionName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-test-module-short-name-vehicle-alarm"
+            ]
+          ]
+        },
+        "Handler": "function.main.handler",
+        "Layers": [
+          {
+            "Ref": "connectstoredependencylayerconstructlambdadependencylayerversionC961CA5A"
+          }
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "connectstorealertsconstructlambdaroleB7D4C8F8",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "Timeout": 60,
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "connectstorealertsconstructsecuritygroupE12F31EB",
+                "GroupId"
+              ]
+            }
+          ],
+          "SubnetIds": [
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Fn::GetAtt": [
+                      "moduleinputsconstructvpcnamecustomresource12726E51",
+                      "parameter_value"
+                    ]
+                  },
+                  "/subnets/private/1}}"
+                ]
+              ]
+            },
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Fn::GetAtt": [
+                      "moduleinputsconstructvpcnamecustomresource12726E51",
+                      "parameter_value"
+                    ]
+                  },
+                  "/subnets/private/2}}"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "connectstorealertsconstructlambdafunctionLogRetention0C7A64B2": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "connectstorealertsconstructlambdafunction0927E3C6"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "connectstorealertsconstructlambdafunctioniotinvokevehicletriggeralarmpermission3F459DE6": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "connectstorealertsconstructlambdafunction0927E3C6",
+            "Arn"
+          ]
+        },
+        "Principal": "iot.amazonaws.com",
+        "SourceAccount": {
+          "Ref": "AWS::AccountId"
+        }
+      },
+      "Type": "AWS::Lambda::Permission"
+    },
+    "connectstorealertsconstructlambdaroleB7D4C8F8": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-test-module-short-name-vehicle-alarm"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-test-module-short-name-vehicle-alarm:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudwatch-logs-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "secretsmanager:GetSecretValue",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "{{resolve:ssm:/solution/auth/",
+                        {
+                          "Fn::GetAtt": [
+                            "moduleinputsconstructidentityprovideridcustomresourceFE878685",
+                            "parameter_value"
+                          ]
+                        },
+                        "/client-config/default/secret/arn}}"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "secretsmanager-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "ssm:GetParameters",
+                    "ssm:GetParameter"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":ssm:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":parameter/solution/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "/alerts/publish-api/endpoint"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":ssm:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":parameter/solution/auth/",
+                          {
+                            "Fn::GetAtt": [
+                              "moduleinputsconstructidentityprovideridcustomresourceFE878685",
+                              "parameter_value"
+                            ]
+                          },
+                          "/client-config/default/secret/arn"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ssm-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "ec2:CreateNetworkInterfacePermission",
+                  "Condition": {
+                    "StringEquals": {
+                      "ec2:AuthorizedService": "lambda.amazonaws.com",
+                      "ec2:Subnet": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Fn::GetAtt": [
+                                  "moduleinputsconstructvpcnamecustomresource12726E51",
+                                  "parameter_value"
+                                ]
+                              },
+                              "/subnets/private/1}}"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Fn::GetAtt": [
+                                  "moduleinputsconstructvpcnamecustomresource12726E51",
+                                  "parameter_value"
+                                ]
+                              },
+                              "/subnets/private/2}}"
+                            ]
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":ec2:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":network-interface/*"
+                      ]
+                    ]
+                  }
+                },
+                {
+                  "Action": [
+                    "ec2:DescribeNetworkInterfaces",
+                    "ec2:CreateNetworkInterface",
+                    "ec2:DeleteNetworkInterface"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ec2-vpc-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "connectstorealertsconstructsecuritygroupE12F31EB": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "GroupDescription": "cms-connect-store-stack/connect-store/alerts-construct/security-group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Fn::GetAtt": [
+                  "moduleinputsconstructvpcnamecustomresource12726E51",
+                  "parameter_value"
+                ]
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "connectstoreappregistryconstructappregistryapplication971EBEC7": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::Application"
+    },
+    "connectstoreappregistryconstructappregistryapplicationattributeassociationBAB149E9": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Application": {
+          "Fn::GetAtt": [
+            "connectstoreappregistryconstructappregistryapplication971EBEC7",
+            "Id"
+          ]
+        },
+        "AttributeGroup": {
+          "Fn::GetAtt": [
+            "connectstoreappregistryconstructdefaultapplicationattributes276DB236",
+            "Id"
+          ]
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroupAssociation"
+    },
+    "connectstoreappregistryconstructdefaultapplicationattributes276DB236": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Attributes": {
+          "ApplicationType": "test-application-type",
+          "SolutionID": "test-solution-id",
+          "SolutionName": "test-solution-name",
+          "Version": "test-solution-version"
+        },
+        "Description": "Attribute group for solution information",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroup"
+    },
+    "connectstorecdklambdasvpcconstructsecuritygroup60C317C7": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Metadata": {
+        "cfn_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "W5",
+              "reason": "Unable to know egress requirement. leaving open for now"
+            },
+            {
+              "id": "W40",
+              "reason": "Unable to know egress requirement. leaving open for now"
+            }
+          ]
+        }
+      },
+      "Properties": {
+        "GroupDescription": "cms-connect-store-stack/connect-store/cdk-lambdas-vpc-construct/security-group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Fn::GetAtt": [
+                  "moduleinputsconstructvpcnamecustomresource12726E51",
+                  "parameter_value"
+                ]
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "connectstoredependencylayerconstructlambdadependencylayerversionC961CA5A": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "CompatibleArchitectures": [
+          "x86_64",
+          "arm64"
+        ],
+        "CompatibleRuntimes": [
+          "python3.8",
+          "python3.9",
+          "python3.10"
+        ],
+        "Content": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "str"
+        }
+      },
+      "Type": "AWS::Lambda::LayerVersion"
+    },
+    "connectstoreglueresourcesconstructiotdataconversiongluedatabase53316BBE": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "CatalogId": {
+          "Ref": "AWS::AccountId"
+        },
+        "DatabaseInput": {
+          "Description": "This database holds reference table(s) for Kinesis Firehose",
+          "Name": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "-test-module-short-name-iot-data-conversion-glue-database"
+              ]
+            ]
+          }
+        }
+      },
+      "Type": "AWS::Glue::Database"
+    },
+    "connectstoreglueresourcesconstructiotmainstreamglueschematableCE0ADAE5": {
+      "DependsOn": [
+        "connectstoreglueresourcesconstructiotdataconversiongluedatabase53316BBE",
+        "connectstoreglueresourcesconstructvehiclesignalspecificationjsonschema277B1F8A",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "CatalogId": {
+          "Ref": "AWS::AccountId"
+        },
+        "DatabaseName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-test-module-short-name-iot-data-conversion-glue-database"
+            ]
+          ]
+        },
+        "TableInput": {
+          "Description": "Main data stream for IoT Core reference table",
+          "Name": "iot-main-stream-glue-schema-table",
+          "StorageDescriptor": {
+            "InputFormat": "org.apache.hadoop.mapred.TextInputFormat",
+            "Location": {
+              "Fn::Join": [
+                "",
+                [
+                  "s3://",
+                  {
+                    "Ref": "connectstoreroots3constructcmkencryptedbucketB398B73B"
+                  },
+                  "/cms/data"
+                ]
+              ]
+            },
+            "OutputFormat": "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat",
+            "SchemaReference": {
+              "SchemaId": {
+                "RegistryName": "default-registry",
+                "SchemaName": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Ref": "AppUniqueId"
+                      },
+                      "-test-module-short-name-glue-schema"
+                    ]
+                  ]
+                }
+              },
+              "SchemaVersionNumber": 1
+            },
+            "SerdeInfo": {
+              "SerializationLibrary": "org.openx.data.jsonserde.JsonSerDe"
+            }
+          }
+        }
+      },
+      "Type": "AWS::Glue::Table"
+    },
+    "connectstoreglueresourcesconstructvehiclesignalspecificationjsonschema277B1F8A": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "CheckpointVersion": {
+          "IsLatest": true,
+          "VersionNumber": 1
+        },
+        "Compatibility": "NONE",
+        "DataFormat": "JSON",
+        "Description": "JSON schema for vehicle signal specification data. Vin is required for partitioning.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-test-module-short-name-glue-schema"
+            ]
+          ]
+        },
+        "Registry": {
+          "Name": "default-registry"
+        },
+        "SchemaDefinition": "str",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::Glue::Schema"
+    },
+    "connectstoreiotcoretos3jsonconstructiotcoretos3roleF8D957AE": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "iot.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "s3:GetBucket",
+                    "s3:GetObject",
+                    "s3:List",
+                    "s3:PutObject",
+                    "s3:DeleteObject",
+                    "s3:Abort"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "connectstoreroots3constructcmkencryptedbucketB398B73B",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          {
+                            "Fn::GetAtt": [
+                              "connectstoreroots3constructcmkencryptedbucketB398B73B",
+                              "Arn"
+                            ]
+                          },
+                          "/*"
+                        ]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Action": [
+                    "kms:Decrypt",
+                    "kms:Encrypt",
+                    "kms:GenerateDataKey"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":kms:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":key/",
+                        {
+                          "Ref": "connectstoreroots3constructcmkkeyD4B815A3"
+                        }
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "s3-read-write-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "connectstoreiotcoretos3jsonconstructiotsavetos3jsonCBD4C99E": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "RuleName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Fn::Join": [
+                  "_",
+                  {
+                    "Fn::Split": [
+                      "-",
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            {
+                              "Ref": "AppUniqueId"
+                            },
+                            "_test-module-short-name"
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "_iot_save_to_s3_json"
+            ]
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "TopicRulePayload": {
+          "Actions": [
+            {
+              "S3": {
+                "BucketName": {
+                  "Ref": "connectstoreroots3constructcmkencryptedbucketB398B73B"
+                },
+                "Key": "${topic()}/${timestamp()}",
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "connectstoreiotcoretos3jsonconstructiotcoretos3roleF8D957AE",
+                    "Arn"
+                  ]
+                }
+              }
+            }
+          ],
+          "Description": "Save raw vss data in JSON format to S3 bucket.",
+          "Sql": "SELECT * FROM 'cms/data/#'"
+        }
+      },
+      "Type": "AWS::IoT::TopicRule"
+    },
+    "connectstoreiotcoretos3parquetconstructiotcoretokinesisrole34326AEE": {
+      "DependsOn": [
+        "connectstoreglueresourcesconstructiotdataconversiongluedatabase53316BBE",
+        "connectstoreglueresourcesconstructiotmainstreamglueschematableCE0ADAE5",
+        "connectstoreglueresourcesconstructvehiclesignalspecificationjsonschema277B1F8A",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "iot.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "firehose:PutRecord",
+                    "firehose:PutRecords"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "connectstoreiotcoretos3parquetconstructiotcoretos3withpartitioningstream335EA379",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "firehose-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "connectstoreiotcoretos3parquetconstructiotcoretos3withpartitioningstream335EA379": {
+      "DependsOn": [
+        "connectstoreglueresourcesconstructiotdataconversiongluedatabase53316BBE",
+        "connectstoreglueresourcesconstructiotmainstreamglueschematableCE0ADAE5",
+        "connectstoreglueresourcesconstructvehiclesignalspecificationjsonschema277B1F8A",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "DeliveryStreamEncryptionConfigurationInput": {
+          "KeyARN": {
+            "Fn::GetAtt": [
+              "connectstoreiotcoretos3parquetconstructkinesisfirehosekey8A3936D2",
+              "Arn"
+            ]
+          },
+          "KeyType": "CUSTOMER_MANAGED_CMK"
+        },
+        "DeliveryStreamName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-test-module-short-name-iot-to-s3-with-partitioning"
+            ]
+          ]
+        },
+        "DeliveryStreamType": "DirectPut",
+        "ExtendedS3DestinationConfiguration": {
+          "BucketARN": {
+            "Fn::GetAtt": [
+              "connectstoreroots3constructcmkencryptedbucketB398B73B",
+              "Arn"
+            ]
+          },
+          "BufferingHints": {
+            "IntervalInSeconds": 60,
+            "SizeInMBs": 128
+          },
+          "CloudWatchLoggingOptions": {
+            "Enabled": true,
+            "LogGroupName": {
+              "Ref": "connectstoreiotcoretos3parquetconstructiotkinesisloggroup3181DFF1"
+            },
+            "LogStreamName": {
+              "Ref": "connectstoreiotcoretos3parquetconstructiotkinesislogstreamF3CAC841"
+            }
+          },
+          "DataFormatConversionConfiguration": {
+            "Enabled": true,
+            "InputFormatConfiguration": {
+              "Deserializer": {
+                "OpenXJsonSerDe": {
+                  "CaseInsensitive": false,
+                  "ConvertDotsInJsonKeysToUnderscores": false
+                }
+              }
+            },
+            "OutputFormatConfiguration": {
+              "Serializer": {
+                "ParquetSerDe": {
+                  "EnableDictionaryCompression": false
+                }
+              }
+            },
+            "SchemaConfiguration": {
+              "DatabaseName": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Ref": "AppUniqueId"
+                    },
+                    "-test-module-short-name-iot-data-conversion-glue-database"
+                  ]
+                ]
+              },
+              "Region": {
+                "Ref": "AWS::Region"
+              },
+              "RoleARN": {
+                "Fn::GetAtt": [
+                  "connectstoreiotcoretos3parquetconstructkinesisroleE74298AA",
+                  "Arn"
+                ]
+              },
+              "TableName": "iot-main-stream-glue-schema-table"
+            }
+          },
+          "DynamicPartitioningConfiguration": {
+            "Enabled": true
+          },
+          "ErrorOutputPrefix": "DataError/",
+          "Prefix": "Parquet/!{partitionKeyFromQuery:vin}/!{timestamp:DDD}_!{timestamp:yyyy}/!{timestamp:HH}",
+          "ProcessingConfiguration": {
+            "Enabled": true,
+            "Processors": [
+              {
+                "Parameters": [
+                  {
+                    "ParameterName": "MetadataExtractionQuery",
+                    "ParameterValue": "{vin: .vehicleidentification.vin}"
+                  },
+                  {
+                    "ParameterName": "JsonParsingEngine",
+                    "ParameterValue": "JQ-1.6"
+                  }
+                ],
+                "Type": "MetadataExtraction"
+              },
+              {
+                "Parameters": [
+                  {
+                    "ParameterName": "Delimiter",
+                    "ParameterValue": "\\n"
+                  }
+                ],
+                "Type": "AppendDelimiterToRecord"
+              }
+            ]
+          },
+          "RoleARN": {
+            "Fn::GetAtt": [
+              "connectstoreiotcoretos3parquetconstructkinesisroleE74298AA",
+              "Arn"
+            ]
+          }
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KinesisFirehose::DeliveryStream"
+    },
+    "connectstoreiotcoretos3parquetconstructiotkinesisloggroup3181DFF1": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "connectstoreglueresourcesconstructiotdataconversiongluedatabase53316BBE",
+        "connectstoreglueresourcesconstructiotmainstreamglueschematableCE0ADAE5",
+        "connectstoreglueresourcesconstructvehiclesignalspecificationjsonschema277B1F8A",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "KmsKeyId": {
+          "Fn::GetAtt": [
+            "connectstoreiotcoretos3parquetconstructiotkinesisloggrouploggroupkey4F821379",
+            "Arn"
+          ]
+        },
+        "RetentionInDays": 90,
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "connectstoreiotcoretos3parquetconstructiotkinesisloggrouploggroupkey4F821379": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "connectstoreglueresourcesconstructiotdataconversiongluedatabase53316BBE",
+        "connectstoreglueresourcesconstructiotmainstreamglueschematableCE0ADAE5",
+        "connectstoreglueresourcesconstructvehiclesignalspecificationjsonschema277B1F8A",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "kms:Encrypt",
+                "kms:Decrypt",
+                "kms:GenerateDataKey"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "Service": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "logs.",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ".amazonaws.com"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "connectstoreiotcoretos3parquetconstructiotkinesislogstreamF3CAC841": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "connectstoreglueresourcesconstructiotdataconversiongluedatabase53316BBE",
+        "connectstoreglueresourcesconstructiotmainstreamglueschematableCE0ADAE5",
+        "connectstoreglueresourcesconstructvehiclesignalspecificationjsonschema277B1F8A",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "LogGroupName": {
+          "Ref": "connectstoreiotcoretos3parquetconstructiotkinesisloggroup3181DFF1"
+        },
+        "LogStreamName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-test-module-short-name-iot-connectivity-stream"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::Logs::LogStream",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "connectstoreiotcoretos3parquetconstructiotsendtokinesis8918AB75": {
+      "DependsOn": [
+        "connectstoreglueresourcesconstructiotdataconversiongluedatabase53316BBE",
+        "connectstoreglueresourcesconstructiotmainstreamglueschematableCE0ADAE5",
+        "connectstoreglueresourcesconstructvehiclesignalspecificationjsonschema277B1F8A",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "RuleName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Fn::Join": [
+                  "_",
+                  {
+                    "Fn::Split": [
+                      "-",
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            {
+                              "Ref": "AppUniqueId"
+                            },
+                            "_test-module-short-name"
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "_iot_send_to_kinesis"
+            ]
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "TopicRulePayload": {
+          "Actions": [
+            {
+              "Firehose": {
+                "DeliveryStreamName": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Ref": "AppUniqueId"
+                      },
+                      "-test-module-short-name-iot-to-s3-with-partitioning"
+                    ]
+                  ]
+                },
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "connectstoreiotcoretos3parquetconstructiotcoretokinesisrole34326AEE",
+                    "Arn"
+                  ]
+                }
+              }
+            }
+          ],
+          "Description": "Send payload to Kinesis Firehose stream for processing.",
+          "Sql": "SELECT * FROM 'cms/data/#'"
+        }
+      },
+      "Type": "AWS::IoT::TopicRule"
+    },
+    "connectstoreiotcoretos3parquetconstructkinesisfirehosekey8A3936D2": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "connectstoreglueresourcesconstructiotdataconversiongluedatabase53316BBE",
+        "connectstoreglueresourcesconstructiotmainstreamglueschematableCE0ADAE5",
+        "connectstoreglueresourcesconstructvehiclesignalspecificationjsonschema277B1F8A",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "connectstoreiotcoretos3parquetconstructkinesisroleE74298AA": {
+      "DependsOn": [
+        "connectstoreglueresourcesconstructiotdataconversiongluedatabase53316BBE",
+        "connectstoreglueresourcesconstructiotmainstreamglueschematableCE0ADAE5",
+        "connectstoreglueresourcesconstructvehiclesignalspecificationjsonschema277B1F8A",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "firehose.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Description": "Service role for kinesis firehose",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "connectstoreiotcoretos3parquetconstructiotkinesisloggroup3181DFF1",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "kinesis-cloudwatch-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "glue:GetTable",
+                    "glue:GetTableVersion",
+                    "glue:GetTableVersions",
+                    "glue:GetDatabase"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":glue:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":database/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-test-module-short-name-iot-data-conversion-glue-database"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":glue:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":table/",
+                          {
+                            "Ref": "AppUniqueId"
+                          },
+                          "-test-module-short-name-iot-data-conversion-glue-database/iot-main-stream-glue-schema-table"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":glue:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":catalog"
+                        ]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Action": [
+                    "glue:GetSchema",
+                    "glue:GetSchemaVersion",
+                    "glue:GetRegistry"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":glue:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":registry/default-registry"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::GetAtt": [
+                        "connectstoreglueresourcesconstructvehiclesignalspecificationjsonschema277B1F8A",
+                        "Arn"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "glue-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "s3:AbortMultipartUpload",
+                    "s3:GetBucketLocation",
+                    "s3:GetObject",
+                    "s3:ListBucket",
+                    "s3:ListBucketMultipartUploads",
+                    "s3:PutObject"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "connectstoreroots3constructcmkencryptedbucketB398B73B",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          {
+                            "Fn::GetAtt": [
+                              "connectstoreroots3constructcmkencryptedbucketB398B73B",
+                              "Arn"
+                            ]
+                          },
+                          "/*"
+                        ]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Action": [
+                    "kms:Decrypt",
+                    "kms:Encrypt",
+                    "kms:GenerateDataKey"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":kms:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":key/",
+                        {
+                          "Ref": "connectstoreroots3constructcmkkeyD4B815A3"
+                        }
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "s3-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "connectstoremoduleoutputsconstructssmglueregistryname0DC3E676": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "CMS Connect and Store AWS Glue Registry Name",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/test-module-short-name/glue-registry/name"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": "default-registry"
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "connectstoremoduleoutputsconstructssmglueschemaarn3E57AFE2": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "CMS Connect and Store AWS Glue Schema Arn",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/test-module-short-name/glue-schema/arn"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "connectstoreglueresourcesconstructvehiclesignalspecificationjsonschema277B1F8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "connectstoremoduleoutputsconstructssmtelemetrygluedatabaseEF90F856": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "The Glue database in which the telemetry table is stored.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/test-module-short-name/glue-database/name"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AppUniqueId"
+              },
+              "-test-module-short-name-iot-data-conversion-glue-database"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "connectstoremoduleoutputsconstructssmtelemetrygluedatacatalog150C86BF": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "The Glue data catalog in which the table is to be created.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/test-module-short-name/glue-data-catalog/name"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": "AwsDataCatalog"
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "connectstoremoduleoutputsconstructssmtelemetrygluetableC9216089": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "The Glue table which references to the stored telemetry data.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/test-module-short-name/glue-table/name"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": "iot-main-stream-glue-schema-table"
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "connectstoremoduleoutputsconstructssmtelemetrystoragebucketarnF10C371D": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "The ARN of the S3 bucket in which the telemetry data is stored.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/test-module-short-name/s3-storage-bucket/arn"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "connectstoreroots3constructcmkencryptedbucketB398B73B",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "connectstoremoduleoutputsconstructssmtelemetrystoragebucketkeyarnA25146A0": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "The ARN of the encryption key for the S3 bucket in which the telemetry data is stored.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/test-module-short-name/s3-storage-bucket/key-arn"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "connectstoreroots3constructcmkkeyD4B815A3",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "connectstoremoduleoutputsconstructssmtelemetrystoragebucketname9E314400": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "The name of the S3 bucket in which the telemetry data is stored.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/test-module-short-name/s3-storage-bucket/name"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "connectstoreroots3constructcmkencryptedbucketB398B73B"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "connectstoremoduleoutputsconstructssmtelemetrystoragebucketregionF24D0DE4": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "The region of the S3 bucket in which the telemetry data is stored.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/test-module-short-name/s3-storage-bucket/region"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AppUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "AWS::Region"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "connectstoreroots3constructcmkencryptedbucketB398B73B": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "KMSMasterKeyID": {
+                  "Fn::GetAtt": [
+                    "connectstoreroots3constructcmkkeyD4B815A3",
+                    "Arn"
+                  ]
+                },
+                "SSEAlgorithm": "aws:kms"
+              }
+            }
+          ]
+        },
+        "LoggingConfiguration": {
+          "DestinationBucketName": {
+            "Ref": "connectstoreroots3constructlogbucket7F2AE2BB"
+          }
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "connectstoreroots3constructcmkencryptedbucketPolicyCC38F932": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Bucket": {
+          "Ref": "connectstoreroots3constructcmkencryptedbucketB398B73B"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "connectstoreroots3constructcmkencryptedbucketB398B73B",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "connectstoreroots3constructcmkencryptedbucketB398B73B",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Type": "AWS::S3::BucketPolicy"
+    },
+    "connectstoreroots3constructcmkkeyD4B815A3": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:Encrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "logging.s3.amazonaws.com"
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "connectstoreroots3constructlogbucket7F2AE2BB": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AccessControl": "LogDeliveryWrite",
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "KMSMasterKeyID": {
+                  "Fn::GetAtt": [
+                    "connectstoreroots3constructcmkkeyD4B815A3",
+                    "Arn"
+                  ]
+                },
+                "SSEAlgorithm": "aws:kms"
+              }
+            }
+          ]
+        },
+        "OwnershipControls": {
+          "Rules": [
+            {
+              "ObjectOwnership": "ObjectWriter"
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "connectstoreroots3constructlogbucketPolicy81B09BD5": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Bucket": {
+          "Ref": "connectstoreroots3constructlogbucket7F2AE2BB"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "connectstoreroots3constructlogbucket7F2AE2BB",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "connectstoreroots3constructlogbucket7F2AE2BB",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Type": "AWS::S3::BucketPolicy"
+    },
+    "moduleinputsconstructidentityprovideridcustomresourceFE878685": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "ParameterName": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/config/auth/identity-provider-id"
+            ]
+          ]
+        },
+        "Resource": "SsmParameters",
+        "ServiceToken": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/config/aws-resource-lookup-lambda/arn}}"
+            ]
+          ]
+        }
+      },
+      "Type": "Custom::SsmParameters",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "moduleinputsconstructvpcnamecustomresource12726E51": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "ParameterName": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/config/vpc/name"
+            ]
+          ]
+        },
+        "Resource": "SsmParameters",
+        "ServiceToken": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/config/aws-resource-lookup-lambda/arn}}"
+            ]
+          ]
+        }
+      },
+      "Type": "Custom::SsmParameters",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "ssmappuniqueidregistermodule9C5C2C5D": {
+      "Properties": {
+        "Description": "SSM parameter to register a module with an app unique ID.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "/test-module-short-name"
+            ]
+          ]
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/",
+              {
+                "Ref": "AppUniqueId"
+              },
+              "}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                  ],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,5302 @@
+{
+  "Mappings": {
+    "Solution": {
+      "AssetsConfig": {
+        "S3AssetBucketBaseName": "test-bucket-base-name",
+        "S3AssetKeyPrefix": "test-object-key-prefix"
+      },
+      "Config": {
+        "SendAnonymousUsage": "Yes"
+      }
+    }
+  },
+  "Parameters": {
+    "AcdpUniqueId": {
+      "Default": "acdp",
+      "Description": "Name of the ACDP deployment",
+      "Type": "String"
+    },
+    "BackstageLocalAssetDiscoveryRefreshMins": {
+      "Default": 30,
+      "Description": "Refresh Frequency (minutes) for Backstage catalog provider from the Backstage Local Asset Bucket",
+      "MinValue": 1,
+      "Type": "Number"
+    },
+    "BackstageLogLevel": {
+      "AllowedValues": [
+        "debug",
+        "info"
+      ],
+      "Default": "info",
+      "Description": "Log-level to set for the Backstage resources",
+      "Type": "String"
+    },
+    "BackstageName": {
+      "AllowedPattern": "^[A-Za-z0-9][A-Za-z0-9-_ ]*[A-Za-z0-9]$",
+      "ConstraintDescription": "Backstage Name must begin and end with an alphanumeric character and only consist of alphanumeric characters, space, hyphen(-) and underscore(_)",
+      "Default": "ACDP",
+      "Description": "Name to use for the Backstage Portal",
+      "Type": "String"
+    },
+    "BackstageOrg": {
+      "AllowedPattern": "^[A-Za-z0-9][A-Za-z0-9-_ ]*[A-Za-z0-9]$",
+      "ConstraintDescription": "Backstage Org must begin and end with an alphanumeric character and only consist of alphanumeric characters, space, hyphen(-) and underscore(_)",
+      "Default": "Auto",
+      "Description": "Organization Name to use for the Backstage Portal",
+      "Type": "String"
+    },
+    "Route53BaseDomain": {
+      "AllowedPattern": "^([A-Za-z0-9][A-Za-z0-9-]*\\.)+[A-Za-z]+$",
+      "ConstraintDescription": "Route53 Base Domain must be a valid domain name",
+      "Description": "Route53 Base Domain Name for Backstage Domain",
+      "Type": "String"
+    },
+    "Route53ZoneName": {
+      "AllowedPattern": "^([A-Za-z0-9][A-Za-z0-9-]*\\.)+[A-Za-z]+$",
+      "ConstraintDescription": "Route53 Zone Name must be a valid domain name",
+      "Description": "Route53 Zone Name for Backstage Domain",
+      "Type": "String"
+    },
+    "UserEmail": {
+      "AllowedPattern": "^[A-Za-z0-9][_A-Za-z0-9-\\.]*@([A-Za-z0-9]+[_A-Za-z0-9-]*\\.)+[A-Za-z]+$",
+      "ConstraintDescription": "User email must be a valid email address",
+      "Description": "The user email to access Backstage",
+      "Type": "String"
+    },
+    "VpcName": {
+      "Description": "name of the imported vpc",
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+      "DependsOn": [
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "test.zip"
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 900
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:PutRetentionPolicy",
+                "logs:DeleteRetentionPolicy"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "Roles": [
+          {
+            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "acdpacdpappregistryappregistryapplicationF3E7BCE9": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::Application"
+    },
+    "acdpacdpappregistryappregistryapplicationattributeassociationD25D643C": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Application": {
+          "Fn::GetAtt": [
+            "acdpacdpappregistryappregistryapplicationF3E7BCE9",
+            "Id"
+          ]
+        },
+        "AttributeGroup": {
+          "Fn::GetAtt": [
+            "acdpacdpappregistrydefaultapplicationattributesF28A0104",
+            "Id"
+          ]
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroupAssociation"
+    },
+    "acdpacdpappregistrydefaultapplicationattributesF28A0104": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Attributes": {
+          "ApplicationType": "test-application-type",
+          "SolutionID": "test-solution-id",
+          "SolutionName": "test-solution-name",
+          "Version": "test-solution-version"
+        },
+        "Description": "Attribute group for solution information",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroup"
+    },
+    "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "DestinationBucket": {
+          "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+        },
+        "DestinationKeyPrefix": "backstage-default-assets",
+        "Resource": "ExtractS3ZipToTargetBucket",
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "customresourceconstructlambdafunction78B09163",
+            "Arn"
+          ]
+        },
+        "SourceBucket": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Fn::FindInMap": [
+                  "Solution",
+                  "AssetsConfig",
+                  "S3AssetBucketBaseName"
+                ]
+              },
+              "-",
+              {
+                "Ref": "AWS::Region"
+              }
+            ]
+          ]
+        },
+        "SourceZipKey": "test-solution-name/test-solution-version/backstage.zip"
+      },
+      "Type": "Custom::ExtractS3ZipToTargetBucket",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "DestinationBucket": {
+          "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+        },
+        "DestinationKey": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Fn::FindInMap": [
+                  "Solution",
+                  "AssetsConfig",
+                  "S3AssetKeyPrefix"
+                ]
+              },
+              "/test.zip"
+            ]
+          ]
+        },
+        "Resource": "CopyS3Object",
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "customresourceconstructlambdafunction78B09163",
+            "Arn"
+          ]
+        },
+        "SourceBucket": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Fn::FindInMap": [
+                  "Solution",
+                  "AssetsConfig",
+                  "S3AssetBucketBaseName"
+                ]
+              },
+              "-",
+              {
+                "Ref": "AWS::Region"
+              }
+            ]
+          ]
+        },
+        "SourceKey": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Fn::FindInMap": [
+                  "Solution",
+                  "AssetsConfig",
+                  "S3AssetKeyPrefix"
+                ]
+              },
+              "/test.zip"
+            ]
+          ]
+        }
+      },
+      "Type": "Custom::CopyS3Object",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "acdpbackstageassetsconstructs3policyA50772A6": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetBucketLocation",
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:HeadObject"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Fn::FindInMap": [
+                          "Solution",
+                          "AssetsConfig",
+                          "S3AssetBucketBaseName"
+                        ]
+                      },
+                      "-",
+                      {
+                        "Ref": "AWS::Region"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Fn::FindInMap": [
+                          "Solution",
+                          "AssetsConfig",
+                          "S3AssetBucketBaseName"
+                        ]
+                      },
+                      "-",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "s3:GetBucketLocation",
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:PutObject",
+                "s3:HeadObject"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "kms:GenerateDataKey",
+                "kms:Decrypt",
+                "kms:Encrypt"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "backstageassetbucketconstructcmkkeyDD56344B",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "acdpbackstageassetsconstructs3policyA50772A6",
+        "Roles": [
+          {
+            "Ref": "customresourceconstructlambdaroleB2CB3F79"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "acdpcloudformationroleC3BA7F88": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "cloudformation.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Description": "CloudFormation Role",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "*",
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "admin-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::GetAtt": [
+                "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+                "SolutionUUID"
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "acdpdependencylayerlambdadependencylayerversion496A1EF0": {
+      "Properties": {
+        "CompatibleArchitectures": [
+          "x86_64",
+          "arm64"
+        ],
+        "CompatibleRuntimes": [
+          "python3.8",
+          "python3.9",
+          "python3.10"
+        ],
+        "Content": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "test.zip"
+        }
+      },
+      "Type": "AWS::Lambda::LayerVersion"
+    },
+    "acdpmoduledeployprojectmoduledeploycodebuildkeyC966AB49": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::GetAtt": [
+                "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+                "SolutionUUID"
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "acdpmoduledeployprojectmoduledeploycodebuildprojectADB9C6C3": {
+      "DependsOn": [
+        "acdpmoduledeployprojectmoduledeploycodebuildprojectPolicyDocument480156B7",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Artifacts": {
+          "Type": "NO_ARTIFACTS"
+        },
+        "Cache": {
+          "Type": "NO_CACHE"
+        },
+        "EncryptionKey": {
+          "Fn::GetAtt": [
+            "acdpmoduledeployprojectmoduledeploycodebuildkeyC966AB49",
+            "Arn"
+          ]
+        },
+        "Environment": {
+          "ComputeType": "BUILD_GENERAL1_LARGE",
+          "EnvironmentVariables": [
+            {
+              "Name": "CLOUDFORMATION_ROLE_ARN",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::GetAtt": [
+                  "acdpcloudformationroleC3BA7F88",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Image": "aws/codebuild/standard:7.0",
+          "ImagePullCredentialsType": "CODEBUILD",
+          "PrivilegedMode": false,
+          "Type": "LINUX_CONTAINER"
+        },
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "-deployment-project"
+            ]
+          ]
+        },
+        "ServiceRole": {
+          "Fn::GetAtt": [
+            "acdpmoduledeployprojectmoduledeploycodebuildroleB125328F",
+            "Arn"
+          ]
+        },
+        "Source": {
+          "BuildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"echo \\\"Hello, CodeBuild!\\\"\"\n      ]\n    }\n  }\n}",
+          "Type": "NO_SOURCE"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::GetAtt": [
+                "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+                "SolutionUUID"
+              ]
+            }
+          }
+        ],
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "acdpmoduledeployprojectmoduledeployprojectsecuritygroup2E42EF84",
+                "GroupId"
+              ]
+            }
+          ],
+          "Subnets": [
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Ref": "VpcName"
+                  },
+                  "/subnets/private/1}}"
+                ]
+              ]
+            },
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Ref": "VpcName"
+                  },
+                  "/subnets/private/2}}"
+                ]
+              ]
+            }
+          ],
+          "VpcId": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/vpc/",
+                {
+                  "Ref": "VpcName"
+                },
+                "/vpcid}}"
+              ]
+            ]
+          }
+        }
+      },
+      "Type": "AWS::CodeBuild::Project"
+    },
+    "acdpmoduledeployprojectmoduledeploycodebuildprojectPolicyDocument480156B7": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ec2:CreateNetworkInterface",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DeleteNetworkInterface",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeDhcpOptions",
+                "ec2:DescribeVpcs"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "acdpmoduledeployprojectmoduledeploycodebuildprojectPolicyDocument480156B7",
+        "Roles": [
+          {
+            "Ref": "acdpmoduledeployprojectmoduledeploycodebuildroleB125328F"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "acdpmoduledeployprojectmoduledeploycodebuildroleB125328F": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codebuild.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Description": "Module Deploy CodeBuild Role",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "s3:GetBucketLocation",
+                    "s3:GetObject",
+                    "s3:ListBucket"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::",
+                          {
+                            "Fn::FindInMap": [
+                              "Solution",
+                              "AssetsConfig",
+                              "S3AssetBucketBaseName"
+                            ]
+                          },
+                          "-",
+                          {
+                            "Ref": "AWS::Region"
+                          }
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::",
+                          {
+                            "Fn::FindInMap": [
+                              "Solution",
+                              "AssetsConfig",
+                              "S3AssetBucketBaseName"
+                            ]
+                          },
+                          "-",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          "/*"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::",
+                          {
+                            "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+                          }
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::",
+                          {
+                            "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+                          },
+                          "/*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "s3-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "kms:GenerateDataKey",
+                    "kms:Decrypt",
+                    "kms:Encrypt"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "backstageassetbucketconstructcmkkeyDD56344B",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "s3-kms-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "cloudformation:DescribeStacks",
+                    "cloudformation:CreateChangeSet",
+                    "cloudformation:DescribeChangeSet",
+                    "cloudformation:ExecuteChangeSet",
+                    "cloudformation:DeleteChangeSet",
+                    "cloudformation:CreateStack",
+                    "cloudformation:DeleteStack",
+                    "cloudformation:GetTemplateSummary"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":cloudformation:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":stack/*"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudformation-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "iam:PassRole",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "acdpcloudformationroleC3BA7F88",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "iam-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::GetAtt": [
+                "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+                "SolutionUUID"
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "acdpmoduledeployprojectmoduledeploycodebuildroleDefaultPolicy281C675D": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "ec2:CreateNetworkInterfacePermission",
+              "Condition": {
+                "StringEquals": {
+                  "ec2:AuthorizedService": "codebuild.amazonaws.com",
+                  "ec2:Subnet": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":ec2:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":subnet/{{resolve:ssm:/solution/vpc/",
+                          {
+                            "Ref": "VpcName"
+                          },
+                          "/subnets/private/1}}"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":ec2:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":subnet/{{resolve:ssm:/solution/vpc/",
+                          {
+                            "Ref": "VpcName"
+                          },
+                          "/subnets/private/2}}"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              },
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ec2:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":network-interface/*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":log-group:/aws/codebuild/",
+                      {
+                        "Ref": "acdpmoduledeployprojectmoduledeploycodebuildprojectADB9C6C3"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":log-group:/aws/codebuild/",
+                      {
+                        "Ref": "acdpmoduledeployprojectmoduledeploycodebuildprojectADB9C6C3"
+                      },
+                      ":*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "codebuild:CreateReportGroup",
+                "codebuild:CreateReport",
+                "codebuild:UpdateReport",
+                "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":codebuild:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":report-group/",
+                    {
+                      "Ref": "acdpmoduledeployprojectmoduledeploycodebuildprojectADB9C6C3"
+                    },
+                    "-*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:Encrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "acdpmoduledeployprojectmoduledeploycodebuildkeyC966AB49",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "acdpmoduledeployprojectmoduledeploycodebuildroleDefaultPolicy281C675D",
+        "Roles": [
+          {
+            "Ref": "acdpmoduledeployprojectmoduledeploycodebuildroleB125328F"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "acdpmoduledeployprojectmoduledeployprojectsecuritygroup2E42EF84": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "GroupDescription": "acdp/acdp/module-deploy-project/module-deploy-project-security-group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::GetAtt": [
+                "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+                "SolutionUUID"
+              ]
+            }
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Ref": "VpcName"
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "acdpmoduleoutputsconstructssmacdpdeploymentuuidF2707E3B": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Solution UUID used to tag resources within ACDP",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/deployment-uuid"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+            "SolutionUUID"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmcodebuildprojectarnB877AF6E": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "CodeBuild Project ARN for Backstage ACDP plugin",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/codebuild-project/arn"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "acdpmoduledeployprojectmoduledeploycodebuildprojectADB9C6C3",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmlocalassetconfigassetbucketbackstagecustomtemplatekeyprefix002EBC4A": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Bucket key prefix for the local bucket where custom ACDP deployable resources are discovered",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/acdp-asset-config/local/backstage-custom-template-key-prefix"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": "backstage/templates"
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmlocalassetconfigassetbucketbackstagedefaulttemplatekeyprefixE8CC838A": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Bucket key prefix for the local bucket where deafault ACDP deployable resources are discovered",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/acdp-asset-config/local/backstage-default-template-key-prefix"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": "backstage-default-assets/templates"
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmlocalassetconfigassetbucketcatalogkeyprefix7AD25CDF": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Bucket key prefix where Backstage Catalog Items are published to",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/acdp-asset-config/local/catalog-key-prefix"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": "backstage/catalog"
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmlocalassetconfigassetbucketdefaultassetsprefix3BDC7CA9": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "S3 prefix for default ACDP deployable assets in the local asset bucket",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/acdp-asset-config/local/default-assets-prefix"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": "backstage-default-assets"
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmlocalassetconfigassetbucketrootkey066F4843": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Root s3 prefix to give backstage access to in the local asset bucket",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/acdp-asset-config/local/root-s3-key"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": "backstage"
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmlocalassetconfigassetbuckettechdocskeyprefix35D6AF83": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Bucket key prefix where Techdocs resources are published to",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/acdp-asset-config/local/techdocs-key-prefix"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": "backstage/techdocs"
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmlocalassetconfigbackstagediscoveryrefreshfreqmins11197405": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Frequency to allow refresh of Backstage catalog provider from the local bucket",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/acdp-asset-config/local/discovery-refresh-frequency-mins"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "BackstageLocalAssetDiscoveryRefreshMins"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmlocalassetconfigbucketkeyarn735FE967": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "KMS Key ARN of the local asset bucket",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/acdp-asset-config/local/asset-bucket/key-arn"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "backstageassetbucketconstructcmkkeyDD56344B",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmlocalassetconfigbucketname198EB7B4": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Name of the local asset bucket where ACDP Deployable resources are discovered",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/acdp-asset-config/local/asset-bucket/name"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmlocalassetconfigbucketregionAB4E476F": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Region of the local bucket where ACDP Deployable resources are discovered",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/acdp-asset-config/local/asset-bucket/region"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "AWS::Region"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmregionalassetconfigbackstagebuildspeckeyprefix3E3724F0": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Bucket key prefix where ACDP BuildSpecs are to be accessed from",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/acdp-asset-config/regional/buildspec-key-prefix"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": "solution/version/backstage/acdp"
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmregionalassetconfigbackstagediscoveryrefreshfreqmins36F0CE54": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Frequency to allow refresh of Backstage catalog provider from the regional bucket",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/acdp-asset-config/regional/discovery-refresh-frequency-mins"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": "1440"
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmregionalassetconfigbackstagetemplatekeyprefix7B36400E": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Bucket key prefix for the regional bucket where ACDP Deployable resources are discovered",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/acdp-asset-config/regional/backstage-template-key-prefix"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": "solution/version/backstage/templates"
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmregionalassetconfigbucketname67207F39": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Name of the regional asset bucket where ACDP Deployable resources are discovered",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/acdp-asset-config/regional/asset-bucket/name"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Fn::FindInMap": [
+                  "Solution",
+                  "AssetsConfig",
+                  "S3AssetBucketBaseName"
+                ]
+              },
+              "-",
+              {
+                "Ref": "AWS::Region"
+              }
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmregionalassetconfigbucketregion8923C0E2": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Region of the regional bucket where ACDP Deployable resources are discovered",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/acdp-asset-config/regional/asset-bucket/region"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "AWS::Region"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdppipelinesconstructbackstagebuildkey53146B85": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::GetAtt": [
+                "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+                "SolutionUUID"
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "acdppipelinesconstructbackstagebuildpipelineproject8C07A386": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "acdppipelinesconstructbackstagebuildpipelineprojectPolicyDocument67EA1C00",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Artifacts": {
+          "Type": "CODEPIPELINE"
+        },
+        "Cache": {
+          "Modes": [
+            "LOCAL_DOCKER_LAYER_CACHE",
+            "LOCAL_CUSTOM_CACHE"
+          ],
+          "Type": "LOCAL"
+        },
+        "EncryptionKey": {
+          "Fn::GetAtt": [
+            "acdppipelinesconstructbackstagebuildkey53146B85",
+            "Arn"
+          ]
+        },
+        "Environment": {
+          "ComputeType": "BUILD_GENERAL1_LARGE",
+          "EnvironmentVariables": [
+            {
+              "Name": "VPC_NAME",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "VpcName"
+              }
+            },
+            {
+              "Name": "BACKSTAGE_NAME",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "BackstageName"
+              }
+            },
+            {
+              "Name": "BACKSTAGE_ORG",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "BackstageOrg"
+              }
+            },
+            {
+              "Name": "WEB_HOSTNAME",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "Route53ZoneName"
+              }
+            },
+            {
+              "Name": "DOCKER_BUILDKIT",
+              "Type": "PLAINTEXT",
+              "Value": "1"
+            },
+            {
+              "Name": "IMAGE_NAME",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "acdppipelinesconstructbackstageecrA3584D57"
+              }
+            },
+            {
+              "Name": "IMAGE_TAG",
+              "Type": "PLAINTEXT",
+              "Value": "latest"
+            },
+            {
+              "Name": "AWS_DEFAULT_REGION",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "AWS::Region"
+              }
+            },
+            {
+              "Name": "AWS_ACCOUNT_ID",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "AWS::AccountId"
+              }
+            },
+            {
+              "Name": "NODE_OPTIONS",
+              "Type": "PLAINTEXT",
+              "Value": "--max-old-space-size=8192"
+            }
+          ],
+          "Image": "aws/codebuild/standard:7.0",
+          "ImagePullCredentialsType": "CODEBUILD",
+          "PrivilegedMode": true,
+          "Type": "LINUX_CONTAINER"
+        },
+        "Name": "backstage-build-image",
+        "ServiceRole": {
+          "Fn::GetAtt": [
+            "acdppipelinesconstructbackstagebuildrole470B2DCB",
+            "Arn"
+          ]
+        },
+        "Source": {
+          "BuildSpec": "./cdk/source/infrastructure/buildspecs/backstage_image_buildspec.json",
+          "Type": "CODEPIPELINE"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::GetAtt": [
+                "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+                "SolutionUUID"
+              ]
+            }
+          }
+        ],
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "acdppipelinesconstructbackstagecodebuildsecuritygroupE511867D",
+                "GroupId"
+              ]
+            }
+          ],
+          "Subnets": [
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Ref": "VpcName"
+                  },
+                  "/subnets/private/1}}"
+                ]
+              ]
+            },
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Ref": "VpcName"
+                  },
+                  "/subnets/private/2}}"
+                ]
+              ]
+            }
+          ],
+          "VpcId": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/vpc/",
+                {
+                  "Ref": "VpcName"
+                },
+                "/vpcid}}"
+              ]
+            ]
+          }
+        }
+      },
+      "Type": "AWS::CodeBuild::Project"
+    },
+    "acdppipelinesconstructbackstagebuildpipelineprojectPolicyDocument67EA1C00": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ec2:CreateNetworkInterface",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DeleteNetworkInterface",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeDhcpOptions",
+                "ec2:DescribeVpcs"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "acdppipelinesconstructbackstagebuildpipelineprojectPolicyDocument67EA1C00",
+        "Roles": [
+          {
+            "Ref": "acdppipelinesconstructbackstagebuildrole470B2DCB"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "acdppipelinesconstructbackstagebuildrole470B2DCB": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codebuild.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Description": "Backstage Build Role",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "secretsmanager:GetSecretValue",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":secretsmanager:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":secret:solution/",
+                        {
+                          "Ref": "AcdpUniqueId"
+                        },
+                        "/*"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "backstage-build-secretsmanager-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "ssm:GetParameter",
+                    "ssm:GetParameters"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":ssm:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":parameter:solution/",
+                        {
+                          "Ref": "AcdpUniqueId"
+                        },
+                        "/*"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "backstage-build-ssm-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::GetAtt": [
+                "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+                "SolutionUUID"
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "acdppipelinesconstructbackstagebuildroleDefaultPolicyEF6D76B7": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "ec2:CreateNetworkInterfacePermission",
+              "Condition": {
+                "StringEquals": {
+                  "ec2:AuthorizedService": "codebuild.amazonaws.com",
+                  "ec2:Subnet": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":ec2:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":subnet/{{resolve:ssm:/solution/vpc/",
+                          {
+                            "Ref": "VpcName"
+                          },
+                          "/subnets/private/1}}"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":ec2:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":subnet/{{resolve:ssm:/solution/vpc/",
+                          {
+                            "Ref": "VpcName"
+                          },
+                          "/subnets/private/2}}"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              },
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ec2:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":network-interface/*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":log-group:/aws/codebuild/",
+                      {
+                        "Ref": "acdppipelinesconstructbackstagebuildpipelineproject8C07A386"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":log-group:/aws/codebuild/",
+                      {
+                        "Ref": "acdppipelinesconstructbackstagebuildpipelineproject8C07A386"
+                      },
+                      ":*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "codebuild:CreateReportGroup",
+                "codebuild:CreateReport",
+                "codebuild:UpdateReport",
+                "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":codebuild:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":report-group/",
+                    {
+                      "Ref": "acdppipelinesconstructbackstagebuildpipelineproject8C07A386"
+                    },
+                    "-*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:Encrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "acdppipelinesconstructbackstagebuildkey53146B85",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage",
+                "ecr:CompleteLayerUpload",
+                "ecr:UploadLayerPart",
+                "ecr:InitiateLayerUpload",
+                "ecr:PutImage"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "acdppipelinesconstructbackstageecrA3584D57",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": "ecr:*",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "acdppipelinesconstructbackstageecrA3584D57",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "acdppipelinesconstructbackstagecodepipelineArtifactsBucket9777AC61",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "acdppipelinesconstructbackstagecodepipelineArtifactsBucket9777AC61",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:DescribeKey"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "acdppipelinesconstructbackstagecodepipelineArtifactsBucketEncryptionKeyF6DDC81C",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "acdppipelinesconstructbackstagebuildroleDefaultPolicyEF6D76B7",
+        "Roles": [
+          {
+            "Ref": "acdppipelinesconstructbackstagebuildrole470B2DCB"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "acdppipelinesconstructbackstagecodebuildsecuritygroupE511867D": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "GroupDescription": "acdp/acdp/pipelines-construct/backstage-codebuild-security-group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::GetAtt": [
+                "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+                "SolutionUUID"
+              ]
+            }
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Ref": "VpcName"
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "acdppipelinesconstructbackstagecodepipeline2D3F668A": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "acdppipelinesconstructbackstagepipelineroleDefaultPolicy5CCDEA82",
+        "acdppipelinesconstructbackstagepipelineroleC81291F3",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "ArtifactStore": {
+          "EncryptionKey": {
+            "Id": {
+              "Fn::GetAtt": [
+                "acdppipelinesconstructbackstagecodepipelineArtifactsBucketEncryptionKeyF6DDC81C",
+                "Arn"
+              ]
+            },
+            "Type": "KMS"
+          },
+          "Location": {
+            "Ref": "acdppipelinesconstructbackstagecodepipelineArtifactsBucket9777AC61"
+          },
+          "Type": "S3"
+        },
+        "Name": "Backstage-Pipeline",
+        "RestartExecutionOnUpdate": true,
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "acdppipelinesconstructbackstagepipelineroleC81291F3",
+            "Arn"
+          ]
+        },
+        "Stages": [
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Source",
+                  "Owner": "AWS",
+                  "Provider": "S3",
+                  "Version": "1"
+                },
+                "Configuration": {
+                  "PollForSourceChanges": false,
+                  "S3Bucket": {
+                    "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+                  },
+                  "S3ObjectKey": {
+                    "Fn::GetAtt": [
+                      "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+                      "DestinationKey"
+                    ]
+                  }
+                },
+                "Name": "S3-Source-Backstage-Asset",
+                "OutputArtifacts": [
+                  {
+                    "Name": {
+                      "Ref": "acdppipelinesconstructbackstageecrA3584D57"
+                    }
+                  }
+                ],
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "acdppipelinesconstructbackstagecodepipelineSourceStageBackstageS3SourceBackstageAssetCodePipelineActionRole111364E2",
+                    "Arn"
+                  ]
+                },
+                "RunOrder": 1
+              }
+            ],
+            "Name": "Source-Stage-Backstage"
+          },
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1"
+                },
+                "Configuration": {
+                  "ProjectName": {
+                    "Ref": "acdppipelinesconstructbackstagebuildpipelineproject8C07A386"
+                  }
+                },
+                "InputArtifacts": [
+                  {
+                    "Name": {
+                      "Ref": "acdppipelinesconstructbackstageecrA3584D57"
+                    }
+                  }
+                ],
+                "Name": "Build-Image",
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "acdppipelinesconstructbackstagecodepipelineBuildStageBackstageBuildImageCodePipelineActionRole350B235B",
+                    "Arn"
+                  ]
+                },
+                "RunOrder": 1
+              }
+            ],
+            "Name": "Build-Stage-Backstage"
+          },
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1"
+                },
+                "Configuration": {
+                  "PrimarySource": {
+                    "Ref": "acdppipelinesconstructbackstageecrA3584D57"
+                  },
+                  "ProjectName": {
+                    "Ref": "acdppipelinesconstructbackstagedeploypipelineproject3068AE0E"
+                  }
+                },
+                "InputArtifacts": [
+                  {
+                    "Name": {
+                      "Ref": "acdppipelinesconstructbackstageecrA3584D57"
+                    }
+                  }
+                ],
+                "Name": "Deploy",
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "acdppipelinesconstructbackstagecodepipelineDeployStageBackstageDeployCodePipelineActionRole5B9646C2",
+                    "Arn"
+                  ]
+                },
+                "RunOrder": 1
+              }
+            ],
+            "Name": "Deploy-Stage-Backstage"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::GetAtt": [
+                "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+                "SolutionUUID"
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::CodePipeline::Pipeline"
+    },
+    "acdppipelinesconstructbackstagecodepipelineArtifactsBucket9777AC61": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "KMSMasterKeyID": {
+                  "Fn::GetAtt": [
+                    "acdppipelinesconstructbackstagecodepipelineArtifactsBucketEncryptionKeyF6DDC81C",
+                    "Arn"
+                  ]
+                },
+                "SSEAlgorithm": "aws:kms"
+              }
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::GetAtt": [
+                "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+                "SolutionUUID"
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "acdppipelinesconstructbackstagecodepipelineArtifactsBucketEncryptionKeyAliasDC847BFB": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "AliasName": "alias/codepipeline-acdppipelinesconstructbackstagecodepipeline88fccf7a",
+        "TargetKeyId": {
+          "Fn::GetAtt": [
+            "acdppipelinesconstructbackstagecodepipelineArtifactsBucketEncryptionKeyF6DDC81C",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::KMS::Alias",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "acdppipelinesconstructbackstagecodepipelineArtifactsBucketEncryptionKeyF6DDC81C": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::GetAtt": [
+                "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+                "SolutionUUID"
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "acdppipelinesconstructbackstagecodepipelineArtifactsBucketPolicyA7030BC8": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Bucket": {
+          "Ref": "acdppipelinesconstructbackstagecodepipelineArtifactsBucket9777AC61"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "acdppipelinesconstructbackstagecodepipelineArtifactsBucket9777AC61",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "acdppipelinesconstructbackstagecodepipelineArtifactsBucket9777AC61",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Type": "AWS::S3::BucketPolicy"
+    },
+    "acdppipelinesconstructbackstagecodepipelineBuildStageBackstageBuildImageCodePipelineActionRole350B235B": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::GetAtt": [
+                "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+                "SolutionUUID"
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "acdppipelinesconstructbackstagecodepipelineBuildStageBackstageBuildImageCodePipelineActionRoleDefaultPolicyA57AC59F": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "acdppipelinesconstructbackstagebuildpipelineproject8C07A386",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "acdppipelinesconstructbackstagecodepipelineBuildStageBackstageBuildImageCodePipelineActionRoleDefaultPolicyA57AC59F",
+        "Roles": [
+          {
+            "Ref": "acdppipelinesconstructbackstagecodepipelineBuildStageBackstageBuildImageCodePipelineActionRole350B235B"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "acdppipelinesconstructbackstagecodepipelineDeployStageBackstageDeployCodePipelineActionRole5B9646C2": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::GetAtt": [
+                "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+                "SolutionUUID"
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "acdppipelinesconstructbackstagecodepipelineDeployStageBackstageDeployCodePipelineActionRoleDefaultPolicy5CFA45E0": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "acdppipelinesconstructbackstagedeploypipelineproject3068AE0E",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "acdppipelinesconstructbackstagecodepipelineDeployStageBackstageDeployCodePipelineActionRoleDefaultPolicy5CFA45E0",
+        "Roles": [
+          {
+            "Ref": "acdppipelinesconstructbackstagecodepipelineDeployStageBackstageDeployCodePipelineActionRole5B9646C2"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "acdppipelinesconstructbackstagecodepipelineSourceStageBackstageS3SourceBackstageAssetCodePipelineActionRole111364E2": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::GetAtt": [
+                "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+                "SolutionUUID"
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "acdppipelinesconstructbackstagecodepipelineSourceStageBackstageS3SourceBackstageAssetCodePipelineActionRoleDefaultPolicyCAB844F9": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "backstageassetbucketconstructcmkencryptedbucketE8CD3782",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "backstageassetbucketconstructcmkencryptedbucketE8CD3782",
+                          "Arn"
+                        ]
+                      },
+                      "/",
+                      {
+                        "Fn::GetAtt": [
+                          "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+                          "DestinationKey"
+                        ]
+                      }
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:DescribeKey"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "backstageassetbucketconstructcmkkeyDD56344B",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": [
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "acdppipelinesconstructbackstagecodepipelineArtifactsBucket9777AC61",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "acdppipelinesconstructbackstagecodepipelineArtifactsBucket9777AC61",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "kms:Encrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*",
+                "kms:Decrypt"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "acdppipelinesconstructbackstagecodepipelineArtifactsBucketEncryptionKeyF6DDC81C",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "acdppipelinesconstructbackstagecodepipelineSourceStageBackstageS3SourceBackstageAssetCodePipelineActionRoleDefaultPolicyCAB844F9",
+        "Roles": [
+          {
+            "Ref": "acdppipelinesconstructbackstagecodepipelineSourceStageBackstageS3SourceBackstageAssetCodePipelineActionRole111364E2"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "acdppipelinesconstructbackstagedeploykey6400441D": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::GetAtt": [
+                "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+                "SolutionUUID"
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "acdppipelinesconstructbackstagedeploypipelineproject3068AE0E": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "acdppipelinesconstructbackstagedeploypipelineprojectPolicyDocumentB45C6A12",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Artifacts": {
+          "Type": "CODEPIPELINE"
+        },
+        "Cache": {
+          "Type": "NO_CACHE"
+        },
+        "EncryptionKey": {
+          "Fn::GetAtt": [
+            "acdppipelinesconstructbackstagedeploykey6400441D",
+            "Arn"
+          ]
+        },
+        "Environment": {
+          "ComputeType": "BUILD_GENERAL1_LARGE",
+          "EnvironmentVariables": [
+            {
+              "Name": "ACDP_UNIQUE_ID",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "AcdpUniqueId"
+              }
+            },
+            {
+              "Name": "VPC_NAME",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "VpcName"
+              }
+            },
+            {
+              "Name": "AWS_REGION",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "AWS::Region"
+              }
+            },
+            {
+              "Name": "AWS_ACCOUNT_ID",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "AWS::AccountId"
+              }
+            },
+            {
+              "Name": "NODE_OPTIONS",
+              "Type": "PLAINTEXT",
+              "Value": "--max-old-space-size=8192"
+            },
+            {
+              "Name": "CLOUDFORMATION_ROLE_ARN",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::GetAtt": [
+                  "acdpcloudformationroleC3BA7F88",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Name": "SOLUTION_ID",
+              "Type": "PLAINTEXT",
+              "Value": "test-solution-id"
+            },
+            {
+              "Name": "SOLUTION_VERSION",
+              "Type": "PLAINTEXT",
+              "Value": "v0.0.0"
+            },
+            {
+              "Name": "SOLUTION_NAME",
+              "Type": "PLAINTEXT",
+              "Value": "test-solution-name"
+            },
+            {
+              "Name": "APPLICATION_TYPE",
+              "Type": "PLAINTEXT",
+              "Value": "test-application-type"
+            },
+            {
+              "Name": "REGIONAL_ASSET_BUCKET_BASE_NAME",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Fn::FindInMap": [
+                  "Solution",
+                  "AssetsConfig",
+                  "S3AssetBucketBaseName"
+                ]
+              }
+            },
+            {
+              "Name": "LOCAL_ASSET_BUCKET_NAME",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+              }
+            },
+            {
+              "Name": "BACKSTAGE_IMAGE_TAG",
+              "Type": "PLAINTEXT",
+              "Value": "latest"
+            }
+          ],
+          "Image": "aws/codebuild/standard:7.0",
+          "ImagePullCredentialsType": "CODEBUILD",
+          "PrivilegedMode": false,
+          "Type": "LINUX_CONTAINER"
+        },
+        "Name": "backstage-deploy-project",
+        "ServiceRole": {
+          "Fn::GetAtt": [
+            "acdppipelinesconstructbackstagedeployroleC909101A",
+            "Arn"
+          ]
+        },
+        "Source": {
+          "BuildSpec": "./cdk/source/infrastructure/buildspecs/backstage_deploy_buildspec.json",
+          "Type": "CODEPIPELINE"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::GetAtt": [
+                "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+                "SolutionUUID"
+              ]
+            }
+          }
+        ],
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "acdppipelinesconstructbackstagecodebuildsecuritygroupE511867D",
+                "GroupId"
+              ]
+            }
+          ],
+          "Subnets": [
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Ref": "VpcName"
+                  },
+                  "/subnets/private/1}}"
+                ]
+              ]
+            },
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Ref": "VpcName"
+                  },
+                  "/subnets/private/2}}"
+                ]
+              ]
+            }
+          ],
+          "VpcId": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/vpc/",
+                {
+                  "Ref": "VpcName"
+                },
+                "/vpcid}}"
+              ]
+            ]
+          }
+        }
+      },
+      "Type": "AWS::CodeBuild::Project"
+    },
+    "acdppipelinesconstructbackstagedeploypipelineprojectPolicyDocumentB45C6A12": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ec2:CreateNetworkInterface",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DeleteNetworkInterface",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeDhcpOptions",
+                "ec2:DescribeVpcs"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "acdppipelinesconstructbackstagedeploypipelineprojectPolicyDocumentB45C6A12",
+        "Roles": [
+          {
+            "Ref": "acdppipelinesconstructbackstagedeployroleC909101A"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "acdppipelinesconstructbackstagedeployroleC909101A": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codebuild.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Description": "Backstage Configuration Deploy Role",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "s3:PutObject",
+                    "s3:GetBucketAcl",
+                    "s3:GetBucketLocation",
+                    "s3:GetBucketVersioning",
+                    "s3:GetObject",
+                    "s3:GetObjectAcl",
+                    "s3:GetObjectAttributes",
+                    "s3:GetObjectVersion",
+                    "s3:GetObjectVersionAcl",
+                    "s3:GetObjectVersionTagging",
+                    "s3:ListAllMyBuckets",
+                    "s3:ListBucket",
+                    "s3:ListBucketVersions"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::",
+                          {
+                            "Fn::FindInMap": [
+                              "Solution",
+                              "AssetsConfig",
+                              "S3AssetBucketBaseName"
+                            ]
+                          },
+                          "-",
+                          {
+                            "Ref": "AWS::Region"
+                          }
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::",
+                          {
+                            "Fn::FindInMap": [
+                              "Solution",
+                              "AssetsConfig",
+                              "S3AssetBucketBaseName"
+                            ]
+                          },
+                          "-",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          "/*"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::",
+                          {
+                            "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+                          }
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::",
+                          {
+                            "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+                          },
+                          "/*"
+                        ]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Action": [
+                    "kms:Decrypt",
+                    "kms:Encrypt",
+                    "kms:GenerateDataKey"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "backstageassetbucketconstructcmkkeyDD56344B",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "s3-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "cloudformation:DescribeStacks",
+                    "cloudformation:CreateChangeSet",
+                    "cloudformation:DescribeChangeSet",
+                    "cloudformation:ExecuteChangeSet",
+                    "cloudformation:CreateStack",
+                    "cloudformation:GetTemplateSummary"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":cloudformation:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":stack/",
+                          {
+                            "Ref": "AcdpUniqueId"
+                          },
+                          "--acdp-backstage-*"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":cloudformation:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":stack/",
+                          {
+                            "Ref": "AcdpUniqueId"
+                          },
+                          "--acdp-backstage"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":cloudformation:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":stack/",
+                          {
+                            "Ref": "AcdpUniqueId"
+                          },
+                          "--acdp-backstage/*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "cloudformation-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "ssm:GetParameters",
+                    "ssm:GetParameter"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":ssm:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":parameter/solution/",
+                        {
+                          "Ref": "AcdpUniqueId"
+                        },
+                        "/*"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ssm-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "iam:PassRole",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "acdpcloudformationroleC3BA7F88",
+                      "Arn"
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "iam-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "ec2:DescribeVpcs",
+                    "ec2:DescribeSubnets",
+                    "ec2:DescribeRouteTables",
+                    "ec2:DescribeVpnGateways"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ec2-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "route53:ListHostedZonesByName",
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "route53-policy"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::GetAtt": [
+                "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+                "SolutionUUID"
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "acdppipelinesconstructbackstagedeployroleDefaultPolicy79C58584": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "ec2:CreateNetworkInterfacePermission",
+              "Condition": {
+                "StringEquals": {
+                  "ec2:AuthorizedService": "codebuild.amazonaws.com",
+                  "ec2:Subnet": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":ec2:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":subnet/{{resolve:ssm:/solution/vpc/",
+                          {
+                            "Ref": "VpcName"
+                          },
+                          "/subnets/private/1}}"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":ec2:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":subnet/{{resolve:ssm:/solution/vpc/",
+                          {
+                            "Ref": "VpcName"
+                          },
+                          "/subnets/private/2}}"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              },
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ec2:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":network-interface/*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":log-group:/aws/codebuild/",
+                      {
+                        "Ref": "acdppipelinesconstructbackstagedeploypipelineproject3068AE0E"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":log-group:/aws/codebuild/",
+                      {
+                        "Ref": "acdppipelinesconstructbackstagedeploypipelineproject3068AE0E"
+                      },
+                      ":*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "codebuild:CreateReportGroup",
+                "codebuild:CreateReport",
+                "codebuild:UpdateReport",
+                "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":codebuild:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":report-group/",
+                    {
+                      "Ref": "acdppipelinesconstructbackstagedeploypipelineproject3068AE0E"
+                    },
+                    "-*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:Encrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "acdppipelinesconstructbackstagedeploykey6400441D",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "acdppipelinesconstructbackstagecodepipelineArtifactsBucket9777AC61",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "acdppipelinesconstructbackstagecodepipelineArtifactsBucket9777AC61",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:DescribeKey"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "acdppipelinesconstructbackstagecodepipelineArtifactsBucketEncryptionKeyF6DDC81C",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "acdppipelinesconstructbackstagedeployroleDefaultPolicy79C58584",
+        "Roles": [
+          {
+            "Ref": "acdppipelinesconstructbackstagedeployroleC909101A"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "acdppipelinesconstructbackstageecrA3584D57": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "ImageScanningConfiguration": {
+          "ScanOnPush": true
+        },
+        "ImageTagMutability": "MUTABLE",
+        "RepositoryName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "-backstage"
+            ]
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::GetAtt": [
+                "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+                "SolutionUUID"
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::ECR::Repository",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "acdppipelinesconstructbackstagepipelineroleC81291F3": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codepipeline.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Description": "Backstage Pipeline Role",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "s3:GetBucketAcl",
+                    "s3:GetBucketLocation",
+                    "s3:GetBucketVersioning",
+                    "s3:GetObject",
+                    "s3:GetObjectAcl",
+                    "s3:GetObjectAttributes",
+                    "s3:GetObjectVersion",
+                    "s3:GetObjectVersionAcl",
+                    "s3:GetObjectVersionTagging",
+                    "s3:ListAllMyBuckets",
+                    "s3:ListBucket",
+                    "s3:ListBucketVersions"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::",
+                          {
+                            "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+                          }
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::",
+                          {
+                            "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+                          },
+                          "/",
+                          {
+                            "Fn::GetAtt": [
+                              "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+                              "DestinationKey"
+                            ]
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "backstage-s3-asset"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "secretsmanager:GetSecretValue",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":secretsmanager:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":secret:solution/",
+                        {
+                          "Ref": "AcdpUniqueId"
+                        },
+                        "/*"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "backstage-pipeline-role"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "ssm:GetParameter",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":ssm:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":parameter:solution/",
+                        {
+                          "Ref": "AcdpUniqueId"
+                        },
+                        "/*"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "backstage-pipeline-ssm-policy"
+          }
+        ],
+        "RoleName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-backstage-codepipeline"
+            ]
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::GetAtt": [
+                "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+                "SolutionUUID"
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "acdppipelinesconstructbackstagepipelineroleDefaultPolicy5CCDEA82": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "acdppipelinesconstructbackstagecodepipelineArtifactsBucket9777AC61",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "acdppipelinesconstructbackstagecodepipelineArtifactsBucket9777AC61",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:DescribeKey",
+                "kms:Encrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "acdppipelinesconstructbackstagecodepipelineArtifactsBucketEncryptionKeyF6DDC81C",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "acdppipelinesconstructbackstagecodepipelineSourceStageBackstageS3SourceBackstageAssetCodePipelineActionRole111364E2",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "acdppipelinesconstructbackstagecodepipelineBuildStageBackstageBuildImageCodePipelineActionRole350B235B",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "acdppipelinesconstructbackstagecodepipelineDeployStageBackstageDeployCodePipelineActionRole5B9646C2",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "acdppipelinesconstructbackstagepipelineroleDefaultPolicy5CCDEA82",
+        "Roles": [
+          {
+            "Ref": "acdppipelinesconstructbackstagepipelineroleC81291F3"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "acdppipelinesconstructssmadminemailBE580034": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "The Cognito admin user",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/backstage/admin-email"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "UserEmail"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdppipelinesconstructssmadminusernameEEA5BB60": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "The Cognito admin user",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/backstage/admin-username"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::Split": [
+                "@",
+                {
+                  "Ref": "UserEmail"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdppipelinesconstructssmbackstageecrrepositorynameE222C11F": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Backstage ECR Repository Name",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/backstage/ecr-repository/name"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "acdppipelinesconstructbackstageecrA3584D57"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdppipelinesconstructssmbackstageloglevel773E25B7": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Level of logs to display (trace, debug, info, warn, error, critical)",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/backstage/log-level"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "BackstageLogLevel"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdppipelinesconstructssmbackstagenameFC25FE0E": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "The name to display on Backstage",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/backstage/name"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "BackstageName"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdppipelinesconstructssmbackstageorg551A5A09": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "The organization to display on Backstage",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/backstage/organization"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "BackstageOrg"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdppipelinesconstructssmroute53basedomainF0D17CA3": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "The name of the base domain to deploy in",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/route53/base-domain"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "Route53BaseDomain"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdppipelinesconstructssmroute53zonename8C5C0B9F": {
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "The name of the hosted zone to deploy in",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/route53/zone-name"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "Route53ZoneName"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "appregistryapplicationstackassociation": {
+      "Properties": {
+        "Application": {
+          "Fn::GetAtt": [
+            "acdpacdpappregistryappregistryapplicationF3E7BCE9",
+            "Id"
+          ]
+        },
+        "Resource": {
+          "Ref": "AWS::StackId"
+        },
+        "ResourceType": "CFN_STACK"
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::ResourceAssociation"
+    },
+    "backstageassetbucketconstructcmkencryptedbucketE8CD3782": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "KMSMasterKeyID": {
+                  "Fn::GetAtt": [
+                    "backstageassetbucketconstructcmkkeyDD56344B",
+                    "Arn"
+                  ]
+                },
+                "SSEAlgorithm": "aws:kms"
+              }
+            }
+          ]
+        },
+        "LoggingConfiguration": {
+          "DestinationBucketName": {
+            "Ref": "backstageassetbucketconstructlogbucketC5C46452"
+          }
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "backstageassetbucketconstructcmkencryptedbucketPolicy0B97E32C": {
+      "Properties": {
+        "Bucket": {
+          "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "backstageassetbucketconstructcmkencryptedbucketE8CD3782",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "backstageassetbucketconstructcmkencryptedbucketE8CD3782",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Type": "AWS::S3::BucketPolicy"
+    },
+    "backstageassetbucketconstructcmkkeyDD56344B": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "backstageassetbucketconstructlogbucketC5C46452": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AccessControl": "LogDeliveryWrite",
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        },
+        "OwnershipControls": {
+          "Rules": [
+            {
+              "ObjectOwnership": "ObjectWriter"
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "backstageassetbucketconstructlogbucketPolicyAAD7C2A4": {
+      "Properties": {
+        "Bucket": {
+          "Ref": "backstageassetbucketconstructlogbucketC5C46452"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "backstageassetbucketconstructlogbucketC5C46452",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "backstageassetbucketconstructlogbucketC5C46452",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Type": "AWS::S3::BucketPolicy"
+    },
+    "cdklambdasvpcconstructsecuritygroupF9971F98": {
+      "Metadata": {
+        "cfn_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "W5",
+              "reason": "Unable to know egress requirement. leaving open for now"
+            },
+            {
+              "id": "W40",
+              "reason": "Unable to know egress requirement. leaving open for now"
+            }
+          ]
+        }
+      },
+      "Properties": {
+        "GroupDescription": "acdp/cdk-lambdas-vpc-construct/security-group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Ref": "VpcName"
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "customresourceconstructlambdafunction78B09163": {
+      "DependsOn": [
+        "customresourceconstructlambdaroleB2CB3F79"
+      ],
+      "Metadata": {
+        "cdk_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "AwsSolutions-L1",
+              "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+            }
+          ]
+        },
+        "cfn_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "W92",
+              "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+          ]
+        }
+      },
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+          },
+          "S3Key": "test.zip"
+        },
+        "Environment": {
+          "Variables": {
+            "USER_AGENT_STRING": "AWSSOLUTION/test-solution-id/test-solution-version AWSSOLUTION-CAPABILITY/test-capability-id/test-solution-version"
+          }
+        },
+        "FunctionName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "-test-module-short-name-custom-resource"
+            ]
+          ]
+        },
+        "Handler": "function.main.handler",
+        "Layers": [
+          {
+            "Ref": "acdpdependencylayerlambdadependencylayerversion496A1EF0"
+          }
+        ],
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "customresourceconstructlambdaroleB2CB3F79",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.10",
+        "Timeout": 300,
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "customresourceconstructsecuritygroup50DD39AF",
+                "GroupId"
+              ]
+            }
+          ],
+          "SubnetIds": [
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Ref": "VpcName"
+                  },
+                  "/subnets/private/1}}"
+                ]
+              ]
+            },
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/vpc/",
+                  {
+                    "Ref": "VpcName"
+                  },
+                  "/subnets/private/2}}"
+                ]
+              ]
+            }
+          ]
+        }
+      },
+      "Type": "AWS::Lambda::Function"
+    },
+    "customresourceconstructlambdafunctionLogRetentionEBB715A8": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "customresourceconstructlambdafunction78B09163"
+              }
+            ]
+          ]
+        },
+        "RetentionInDays": 90,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::LogRetention"
+    },
+    "customresourceconstructlambdaroleB2CB3F79": {
+      "Metadata": {
+        "cdk_nag": {
+          "rules_to_suppress": [
+            {
+              "appliesTo": [
+                "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-test-module-short-name-custom-resource:log-stream:*",
+                "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AcdpUniqueId>-test-module-short-name-custom-resource:log-stream:*"
+              ],
+              "id": "AwsSolutions-IAM5",
+              "reason": "Log retention lambda uses policies that require wildcard permissions"
+            },
+            {
+              "appliesTo": [
+                "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*",
+                "Resource::*"
+              ],
+              "id": "AwsSolutions-IAM5",
+              "reason": "ec2 Network Interfaces permissions need to be wildcard"
+            }
+          ]
+        },
+        "cfn_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "AwsSolutions-IAM5",
+              "reason": "Wildcard permissions required to write to log streams."
+            },
+            {
+              "id": "W11",
+              "reason": "ec2 Network Interfaces permissions need to be wildcard"
+            }
+          ]
+        }
+      },
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/",
+                          {
+                            "Ref": "AcdpUniqueId"
+                          },
+                          "-test-module-short-name-custom-resource"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":logs:",
+                          {
+                            "Ref": "AWS::Region"
+                          },
+                          ":",
+                          {
+                            "Ref": "AWS::AccountId"
+                          },
+                          ":log-group:/aws/lambda/",
+                          {
+                            "Ref": "AcdpUniqueId"
+                          },
+                          "-test-module-short-name-custom-resource:log-stream:*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "lambda-logs-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "ec2:CreateNetworkInterfacePermission",
+                  "Condition": {
+                    "StringEquals": {
+                      "ec2:AuthorizedService": "lambda.amazonaws.com",
+                      "ec2:Subnet": [
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Ref": "VpcName"
+                              },
+                              "/subnets/private/1}}"
+                            ]
+                          ]
+                        },
+                        {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":ec2:",
+                              {
+                                "Ref": "AWS::Region"
+                              },
+                              ":",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              ":subnet/{{resolve:ssm:/solution/vpc/",
+                              {
+                                "Ref": "VpcName"
+                              },
+                              "/subnets/private/2}}"
+                            ]
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":ec2:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":network-interface/*"
+                      ]
+                    ]
+                  }
+                },
+                {
+                  "Action": [
+                    "ec2:DescribeNetworkInterfaces",
+                    "ec2:CreateNetworkInterface",
+                    "ec2:DeleteNetworkInterface"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ec2-policy"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "customresourceconstructsecuritygroup50DD39AF": {
+      "Metadata": {
+        "cfn_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "W40",
+              "reason": "Lambdas need outbound communication to contact other resources in VPC"
+            },
+            {
+              "id": "W5",
+              "reason": "Lambdas are inside Private Subnets and may need to communicate to services over internet. So the CIDR is wide open on egress for now"
+            }
+          ]
+        }
+      },
+      "Properties": {
+        "GroupDescription": "acdp/custom-resource-construct/security-group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Ref": "VpcName"
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "deploymentuuidconstructdeploymentuuidcustomresourceC885F329": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "Resource": "CreateDeploymentUUID",
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "customresourceconstructlambdafunction78B09163",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::CreateDeploymentUUID",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "ssmappuniqueidD1DCE51D": {
+      "Properties": {
+        "Description": "SSM parameter to register an app unique ID.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              }
+            ]
+          ]
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "AcdpUniqueId"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    }
+  }
+}
