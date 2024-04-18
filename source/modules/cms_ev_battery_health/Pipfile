@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-requests = ">=2.28.1"
+requests = ">=2.31.0"
 aws_lambda_powertools = {extras=["tracer", "validation"], version=">=2.4.0"}
 grafanalib = ">=0.7.0"
 cms_common = {path = "./../../lib", editable = true}
@@ -30,7 +30,7 @@ toml = ">=0.10.2"
 types-boto3 = ">=1.0.2"
 types-python-dateutil = "*"
 types-pyyaml = "*"
-types-requests = ">=2.28.1"
+types-requests = ">=2.31.0"
 types-setuptools = ">=65.6.0.1"
 types-toml = ">=0.10.2"
 wheel = "*"
