@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2024-04-18
+
+### Fixed
+
+- Upgrade mysql2 to resolve CVE
+- Upgrade requests library with idna peer dependency to resolve pip-audit
+- Upgrade @backstage/cli to resolve Jest errors
+- Pin moto version in Alerts module to avoid moto Athena bug introduced in moto 5.0.3
+
 ## [1.1.0] - 2024-04-11
 
 ### Added
@@ -38,7 +47,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgrade backstage to 1.23.3 to mitigate vulnerability.
 - Fix a bug that could occur if the s3 version of the backstage source was prefixed with a special character.
 
-
 ## [1.0.3] - 2024-02-23
 
 ### Fixed
@@ -46,7 +54,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added resolution for the ECDSA package to mitigate vulnerability.
 - Added resolution for the cyrptography package to mitigate vulnerability.
 - Added resolution for node-ip package to mitigate vulnerability.
-
 
 ## [1.0.2] - 2024-01-10
 

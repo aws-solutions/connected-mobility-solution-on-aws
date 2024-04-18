@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 aws_lambda_powertools = {extras=["tracer", "validation"], version=">=2.4.0"}
-requests = ">=2.28.1"
+requests = ">=2.31.0"
 
 [dev-packages]
 aws-cdk-lib = ">=2.63.2"
@@ -27,7 +27,7 @@ toml = ">=0.10.2"
 types-boto3 = ">=1.0.2"
 types-python-dateutil = "*"
 types-pyyaml = "*"
-types-requests = ">=2.28.1"
+types-requests = ">=2.31.0"
 types-setuptools = ">=65.6.0.1"
 types-toml = ">=0.10.2"
 wheel = "*"

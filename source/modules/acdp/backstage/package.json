@@ -1,6 +1,6 @@
 {
   "name": "acdp-backstage",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "license": "Apache-2.0",
   "description": "Backstage implementation preconfigured to work with CMS",
@@ -31,7 +31,7 @@
     ]
   },
   "devDependencies": {
-    "@backstage/cli": "^0.25.2",
+    "@backstage/cli": "^0.26.2",
     "@types/supertest": "^2.0.14",
     "concurrently": "^8.0.1",
     "lerna": "^7.1.5",
@@ -43,7 +43,8 @@
   },
   "resolutions": {
     "@types/react": "^18",
-    "@types/react-dom": "^18"
+    "@types/react-dom": "^18",
+    "mysql2": "^3.9.4"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,mjs,cjs}": [

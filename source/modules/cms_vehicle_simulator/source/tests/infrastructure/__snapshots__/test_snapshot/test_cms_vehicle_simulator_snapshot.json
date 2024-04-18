@@ -4108,7 +4108,24 @@
             ]
           ]
         },
-        "PricingPlan": "RequestBasedUsage"
+        "PricingPlan": "RequestBasedUsage",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
       },
       "Type": "AWS::Location::Map"
     },
@@ -4169,7 +4186,24 @@
             ]
           ]
         },
-        "PricingPlan": "RequestBasedUsage"
+        "PricingPlan": "RequestBasedUsage",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
       },
       "Type": "AWS::Location::PlaceIndex"
     },
@@ -4285,7 +4319,24 @@
             }
           ],
           "Version": "2012-10-17"
-        }
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
       },
       "Type": "AWS::IoT::Policy"
     },
@@ -6773,7 +6824,7 @@
           "Fn::Join": [
             "",
             [
-              "{\"StartAt\":\"get-device-type-map\",\"States\":{\"get-device-type-map\":{\"Type\":\"Map\",\"End\":true,\"Parameters\":{\"type_id.$\":\"$$.Map.Item.Value.type_id\",\"amount.$\":\"States.StringToJson($$.Map.Item.Value.amount)\",\"simulation.$\":\"$.simulation\"},\"ItemsPath\":\"$.simulation.devices\",\"MaxConcurrency\":0,\"Iterator\":{\"StartAt\":\"get-device-type-info\",\"States\":{\"get-device-type-info\":{\"Next\":\"device-pass\",\"Type\":\"Task\",\"ResultPath\":\"$.info\",\"ResultSelector\":{\"name.$\":\"$.Item.name\",\"topic.$\":\"$.Item.topic\",\"payload.$\":\"$.Item.payload\",\"simulation\":\"$.simulation\",\"amount\":\"$.amount\"},\"Resource\":\"arn:",
+              "{\"StartAt\":\"get-device-type-map\",\"States\":{\"get-device-type-map\":{\"Type\":\"Map\",\"End\":true,\"Parameters\":{\"type_id.$\":\"$$.Map.Item.Value.type_id\",\"amount.$\":\"States.StringToJson($$.Map.Item.Value.amount)\",\"simulation.$\":\"$.simulation\"},\"ItemsPath\":\"$.simulation.devices\",\"Iterator\":{\"StartAt\":\"get-device-type-info\",\"States\":{\"get-device-type-info\":{\"Next\":\"device-pass\",\"Type\":\"Task\",\"ResultPath\":\"$.info\",\"ResultSelector\":{\"name.$\":\"$.Item.name\",\"topic.$\":\"$.Item.topic\",\"payload.$\":\"$.Item.payload\",\"simulation\":\"$.simulation\",\"amount\":\"$.amount\"},\"Resource\":\"arn:",
               {
                 "Ref": "AWS::Partition"
               },
@@ -6804,7 +6855,7 @@
                   }
                 ]
               },
-              "\",\"ConsistentRead\":false}},\"device-pass\":{\"Type\":\"Pass\",\"Parameters\":{\"amount_range.$\":\"States.ArrayRange(1,$.amount,1)\",\"info.$\":\"$.info\",\"simulation.$\":\"$.simulation\"},\"Next\":\"device-map\"},\"device-map\":{\"Type\":\"Map\",\"ResultPath\":null,\"Next\":\"cleanup-invoke\",\"Parameters\":{\"simulation.$\":\"$.simulation\",\"info.$\":\"$.info\",\"index.$\":\"$$.Map.Item.Index\"},\"Catch\":[{\"ErrorEquals\":[\"States.ALL\"],\"Next\":\"cleanup-invoke\"}],\"ItemsPath\":\"$.amount_range\",\"MaxConcurrency\":0,\"Iterator\":{\"StartAt\":\"provisioning-invoke\",\"States\":{\"provisioning-invoke\":{\"Next\":\"simulator-invoke\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Catch\":[{\"ErrorEquals\":[\"States.ALL\"],\"Next\":\"Done\"}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
+              "\",\"ConsistentRead\":false}},\"device-pass\":{\"Type\":\"Pass\",\"Parameters\":{\"amount_range.$\":\"States.ArrayRange(1,$.amount,1)\",\"info.$\":\"$.info\",\"simulation.$\":\"$.simulation\"},\"Next\":\"device-map\"},\"device-map\":{\"Type\":\"Map\",\"ResultPath\":null,\"Next\":\"cleanup-invoke\",\"Parameters\":{\"simulation.$\":\"$.simulation\",\"info.$\":\"$.info\",\"index.$\":\"$$.Map.Item.Index\"},\"Catch\":[{\"ErrorEquals\":[\"States.ALL\"],\"Next\":\"cleanup-invoke\"}],\"ItemsPath\":\"$.amount_range\",\"Iterator\":{\"StartAt\":\"provisioning-invoke\",\"States\":{\"provisioning-invoke\":{\"Next\":\"simulator-invoke\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Catch\":[{\"ErrorEquals\":[\"States.ALL\"],\"Next\":\"Done\"}],\"Type\":\"Task\",\"ResultPath\":null,\"Resource\":\"",
               {
                 "Fn::GetAtt": [
                   "cmsvehiclesimulatorsimulatorconstructprovisioninglambda957E16DB",

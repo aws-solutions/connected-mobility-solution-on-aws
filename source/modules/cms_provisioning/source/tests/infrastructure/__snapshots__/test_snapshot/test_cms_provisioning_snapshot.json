@@ -2155,7 +2155,24 @@
               "-test-module-short-name-claim-cert-provisioning-policy"
             ]
           ]
-        }
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
       },
       "Type": "AWS::IoT::Policy"
     },

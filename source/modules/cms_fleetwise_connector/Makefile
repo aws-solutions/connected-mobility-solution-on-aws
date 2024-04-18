@@ -20,7 +20,7 @@ MODULE_PATH := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 # ========================================================
 
 export APP_UNIQUE_ID ?= cms
-export STACK_NAME ?= ${APP_UNIQUE_ID}-app--cms-fleetwise-connector-module
+export STACK_NAME ?= ${APP_UNIQUE_ID}-app--${MODULE_NAME}
 export STACK_TEMPLATE_NAME = ${MODULE_NAME}.template
 export STACK_TEMPLATE_PATH ?= deployment/global-s3-assets/${MODULE_NAME}/${STACK_TEMPLATE_NAME}
 

@@ -10,7 +10,7 @@ aws_lambda_powertools = {extras=["tracer", "validation"], version=">=2.4.0"}
 cattrs = ">=22.1.0"
 cms_common = {path = "./../../lib", editable = true}
 pyhumps = "*"
-requests = ">=2.28.1"
+requests = ">=2.31.0"
 
 [dev-packages]
 aws-cdk-lib = ">=2.63.2"
