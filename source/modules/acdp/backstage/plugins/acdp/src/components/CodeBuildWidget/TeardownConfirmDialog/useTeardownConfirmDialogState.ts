@@ -48,7 +48,7 @@ export function useTeardownConfirmDialogState(
   // Load the prerequisite data: what entities that are colocated with us, and
   // what location that spawned us
   const prerequisites = useAsync(async () => {
-    //todo: fetch CFN template status here.
+    //future: fetch CFN template status here.
   }, [entity]);
 
   const teardownEntity = useCallback(

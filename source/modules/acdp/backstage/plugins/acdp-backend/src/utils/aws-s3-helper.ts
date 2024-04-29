@@ -14,7 +14,6 @@ import { Upload } from "@aws-sdk/lib-storage";
 import { Logger } from "winston";
 import createLimiter from "p-limit";
 import recursiveReadDir from "recursive-readdir";
-import platformPath from "path";
 import path from "path";
 import fs from "fs";
 import { Entity, DEFAULT_NAMESPACE } from "@backstage/catalog-model";
@@ -81,8 +80,6 @@ export class AwsS3Helper {
     localDirectoryPath: string,
     s3Prefix: string,
   ) {
-    const objects: string[] = [];
-
     try {
       const fileList = await recursiveReadDir(localDirectoryPath).catch(
         (error: Error) => {
@@ -94,7 +91,7 @@ export class AwsS3Helper {
 
       await bulkStorageOperation(
         async (absoluteFilePath: string) => {
-          const relativeFilePath = platformPath.relative(
+          const relativeFilePath = path.relative(
             localDirectoryPath,
             absoluteFilePath,
           );
@@ -106,8 +103,6 @@ export class AwsS3Helper {
             Body: fileStream,
             ...(this.sse && { ServerSideEncryption: this.sse }),
           };
-
-          objects.push(params.Key!);
 
           const upload = new Upload({
             client: this.s3Client,

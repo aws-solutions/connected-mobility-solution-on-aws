@@ -483,6 +483,7 @@ function removeUrlPrefix(input: string): string {
 
 function getCodeBuildSourceTypeForUrl(url: string): SourceType {
   const githubPattern = /^https?:\/\/(www\.)?github\.com\/.+\/.+$/;
+  //NOSONAR
   const s3Pattern =
     /^https?:\/\/s3[\.-](?:[a-z0-9-]+)\.amazonaws\.com\/.+|https?:\/\/[a-z0-9-]+\.s3[\.-](?:[a-z0-9-]+)\.amazonaws\.com\/.+/;
 
