@@ -30,7 +30,7 @@
 
 CMS Alerts is a deployable module within [Connected Mobility Solution on AWS](/README.md) (CMS)
 that enables a notification mechanism for vehicles and modules to send alerts to user via email.
-A User must subscribe to these notification via subscription management API provided in the module, 
+A User must subscribe to these notification via subscription management API provided in the module,
 and modules can send the notification via publish API.
 
 For more information and a detailed deployment guide, visit the

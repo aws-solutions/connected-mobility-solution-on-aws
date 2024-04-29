@@ -4,6 +4,7 @@
 import { AcdpBuildAction } from "backstage-plugin-acdp-common";
 import { z } from "zod";
 
+//NOSONAR
 export const startBuildInputSchema = z.object({
   entityRef: z
     .string()

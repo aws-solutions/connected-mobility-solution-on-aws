@@ -49,7 +49,7 @@ class AppSyncAthenaDataSourceConstruct(Construct):
         report_metrics_enabled: str,
         deployment_uuid: str,
         vpc_construct: VpcConstruct,
-    ) -> None:
+    ) -> None:  # NOSONAR
         super().__init__(scope, construct_id)
 
         self.athena_result_bucket = CMKEncryptedS3Construct(

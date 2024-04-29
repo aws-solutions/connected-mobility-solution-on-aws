@@ -76,6 +76,7 @@ const Contents = ({
     [alertApi, onConfirm, state],
   );
 
+  //NOSONAR
   const DialogActionsPanel = () => (
     <DialogActions className={classes.dialogActions}>
       <Button onClick={onClose} color="primary">

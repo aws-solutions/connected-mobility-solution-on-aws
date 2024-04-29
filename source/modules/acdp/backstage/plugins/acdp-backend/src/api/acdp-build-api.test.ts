@@ -55,7 +55,7 @@ function setupCommonBuildMocks() {
           {
             name: "CFN_TEMPLATE_URL",
             value:
-              "https://acdp-assets.s3.us-west-2.amazonaws.com/connected-mobility-solution-on-aws/v1.1.1/cms-sample/cms-sample.template",
+              "https://acdp-assets.s3.us-west-2.amazonaws.com/connected-mobility-solution-on-aws/v1.1.2/cms-sample/cms-sample.template",
           },
           { name: "APP_UNIQUE_ID", value: "cms" },
         ]),

@@ -79,7 +79,6 @@ export const WidgetContent = (props: WidgetContentProps) => {
       entityRef: entityRef,
       action: AcdpBuildAction.TEARDOWN,
     });
-    //todo: on success, unregister the entity?
   };
 
   return (
