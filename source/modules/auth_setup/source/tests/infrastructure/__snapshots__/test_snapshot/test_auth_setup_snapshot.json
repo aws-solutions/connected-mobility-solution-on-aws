@@ -512,7 +512,7 @@
               {
                 "Ref": "cognitousersuserpoolserviceclient76A43875"
               },
-              "\"}}"
+              "\"},\"logApiResponseData\":true}"
             ]
           ]
         },
@@ -543,7 +543,7 @@
               {
                 "Ref": "cognitousersuserpoolserviceclient76A43875"
               },
-              "\"}}"
+              "\"},\"logApiResponseData\":true}"
             ]
           ]
         }
@@ -605,7 +605,7 @@
               {
                 "Ref": "cognitousersuserpooluserclientE8342D23"
               },
-              "\"}}"
+              "\"},\"logApiResponseData\":true}"
             ]
           ]
         },
@@ -636,7 +636,7 @@
               {
                 "Ref": "cognitousersuserpooluserclientE8342D23"
               },
-              "\"}}"
+              "\"},\"logApiResponseData\":true}"
             ]
           ]
         }
