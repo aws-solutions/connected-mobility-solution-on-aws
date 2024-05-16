@@ -156,7 +156,7 @@
       ],
       "Properties": {
         "Code": {
-          "ZipFile": "import boto3  # type: ignore\nimport json\nimport logging\nimport urllib.request\n\ns3 = boto3.client(\"s3\")\n\nEVENTBRIDGE_CONFIGURATION = 'EventBridgeConfiguration'\nCONFIGURATION_TYPES = [\"TopicConfigurations\", \"QueueConfigurations\", \"LambdaFunctionConfigurations\"]\n\ndef handler(event: dict, context):\n  response_status = \"SUCCESS\"\n  error_message = \"\"\n  try:\n    props = event[\"ResourceProperties\"]\n    notification_configuration = props[\"NotificationConfiguration\"]\n    managed = props.get('Managed', 'true').lower() == 'true'\n    stack_id = event['StackId']\n    old = event.get(\"OldResourceProperties\", {}).get(\"NotificationConfiguration\", {})\n    if managed:\n      config = handle_managed(event[\"RequestType\"], notification_configuration)\n    else:\n      config = handle_unmanaged(props[\"BucketName\"], stack_id, event[\"RequestType\"], notification_configuration, old)\n    s3.put_bucket_notification_configuration(Bucket=props[\"BucketName\"], NotificationConfiguration=config)\n  except Exception as e:\n    logging.exception(\"Failed to put bucket notification configuration\")\n    response_status = \"FAILED\"\n    error_message = f\"Error: {str(e)}. \"\n  finally:\n    submit_response(event, context, response_status, error_message)\n\ndef handle_managed(request_type, notification_configuration):\n  if request_type == 'Delete':\n    return {}\n  return notification_configuration\n\ndef handle_unmanaged(bucket, stack_id, request_type, notification_configuration, old):\n  def with_id(n):\n    n['Id'] = f\"{stack_id}-{hash(json.dumps(n, sort_keys=True))}\"\n    return n\n\n  external_notifications = {}\n  existing_notifications = s3.get_bucket_notification_configuration(Bucket=bucket)\n  for t in CONFIGURATION_TYPES:\n    if request_type == 'Update':\n        ids = [with_id(n) for n in old.get(t, [])]\n        old_incoming_ids = [n['Id'] for n in ids]\n        external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'] in old_incoming_ids]\n    elif request_type == 'Create':\n        external_notifications[t] = [n for n in existing_notifications.get(t, [])]\n  if EVENTBRIDGE_CONFIGURATION in existing_notifications:\n    external_notifications[EVENTBRIDGE_CONFIGURATION] = existing_notifications[EVENTBRIDGE_CONFIGURATION]\n\n  if request_type == 'Delete':\n    return external_notifications\n\n  notifications = {}\n  for t in CONFIGURATION_TYPES:\n    external = external_notifications.get(t, [])\n    incoming = [with_id(n) for n in notification_configuration.get(t, [])]\n    notifications[t] = external + incoming\n\n  if EVENTBRIDGE_CONFIGURATION in notification_configuration:\n    notifications[EVENTBRIDGE_CONFIGURATION] = notification_configuration[EVENTBRIDGE_CONFIGURATION]\n  elif EVENTBRIDGE_CONFIGURATION in external_notifications:\n    notifications[EVENTBRIDGE_CONFIGURATION] = external_notifications[EVENTBRIDGE_CONFIGURATION]\n\n  return notifications\n\ndef submit_response(event: dict, context, response_status: str, error_message: str):\n  response_body = json.dumps(\n    {\n      \"Status\": response_status,\n      \"Reason\": f\"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}\",\n      \"PhysicalResourceId\": event.get(\"PhysicalResourceId\") or event[\"LogicalResourceId\"],\n      \"StackId\": event[\"StackId\"],\n      \"RequestId\": event[\"RequestId\"],\n      \"LogicalResourceId\": event[\"LogicalResourceId\"],\n      \"NoEcho\": False,\n    }\n  ).encode(\"utf-8\")\n  headers = {\"content-type\": \"\", \"content-length\": str(len(response_body))}\n  try:\n    req = urllib.request.Request(url=event[\"ResponseURL\"], headers=headers, data=response_body, method=\"PUT\")\n    with urllib.request.urlopen(req) as response:\n      print(response.read().decode(\"utf-8\"))\n    print(\"Status code: \" + response.reason)\n  except Exception as e:\n      print(\"send(..) failed executing request.urlopen(..): \" + str(e))\n"
+          "ZipFile": "import boto3  # type: ignore\nimport json\nimport logging\nimport urllib.request\n\ns3 = boto3.client(\"s3\")\n\nEVENTBRIDGE_CONFIGURATION = 'EventBridgeConfiguration'\nCONFIGURATION_TYPES = [\"TopicConfigurations\", \"QueueConfigurations\", \"LambdaFunctionConfigurations\"]\n\ndef handler(event: dict, context):\n  response_status = \"SUCCESS\"\n  error_message = \"\"\n  try:\n    props = event[\"ResourceProperties\"]\n    notification_configuration = props[\"NotificationConfiguration\"]\n    managed = props.get('Managed', 'true').lower() == 'true'\n    stack_id = event['StackId']\n    old = event.get(\"OldResourceProperties\", {}).get(\"NotificationConfiguration\", {})\n    if managed:\n      config = handle_managed(event[\"RequestType\"], notification_configuration)\n    else:\n      config = handle_unmanaged(props[\"BucketName\"], stack_id, event[\"RequestType\"], notification_configuration, old)\n    s3.put_bucket_notification_configuration(Bucket=props[\"BucketName\"], NotificationConfiguration=config)\n  except Exception as e:\n    logging.exception(\"Failed to put bucket notification configuration\")\n    response_status = \"FAILED\"\n    error_message = f\"Error: {str(e)}. \"\n  finally:\n    submit_response(event, context, response_status, error_message)\n\ndef handle_managed(request_type, notification_configuration):\n  if request_type == 'Delete':\n    return {}\n  return notification_configuration\n\ndef handle_unmanaged(bucket, stack_id, request_type, notification_configuration, old):\n  def with_id(n):\n    n['Id'] = f\"{stack_id}-{hash(json.dumps(n, sort_keys=True))}\"\n    return n\n\n  external_notifications = {}\n  existing_notifications = s3.get_bucket_notification_configuration(Bucket=bucket)\n  for t in CONFIGURATION_TYPES:\n    if request_type == 'Update':\n        ids = [with_id(n) for n in old.get(t, [])]\n        old_incoming_ids = [n['Id'] for n in ids]\n        external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'] in old_incoming_ids]\n    elif request_type == 'Delete':\n        external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'].startswith(f\"{stack_id}-\")]\n    elif request_type == 'Create':\n        external_notifications[t] = [n for n in existing_notifications.get(t, [])]\n  if EVENTBRIDGE_CONFIGURATION in existing_notifications:\n    external_notifications[EVENTBRIDGE_CONFIGURATION] = existing_notifications[EVENTBRIDGE_CONFIGURATION]\n\n  if request_type == 'Delete':\n    return external_notifications\n\n  notifications = {}\n  for t in CONFIGURATION_TYPES:\n    external = external_notifications.get(t, [])\n    incoming = [with_id(n) for n in notification_configuration.get(t, [])]\n    notifications[t] = external + incoming\n\n  if EVENTBRIDGE_CONFIGURATION in notification_configuration:\n    notifications[EVENTBRIDGE_CONFIGURATION] = notification_configuration[EVENTBRIDGE_CONFIGURATION]\n  elif EVENTBRIDGE_CONFIGURATION in external_notifications:\n    notifications[EVENTBRIDGE_CONFIGURATION] = external_notifications[EVENTBRIDGE_CONFIGURATION]\n\n  return notifications\n\ndef submit_response(event: dict, context, response_status: str, error_message: str):\n  response_body = json.dumps(\n    {\n      \"Status\": response_status,\n      \"Reason\": f\"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}\",\n      \"PhysicalResourceId\": event.get(\"PhysicalResourceId\") or event[\"LogicalResourceId\"],\n      \"StackId\": event[\"StackId\"],\n      \"RequestId\": event[\"RequestId\"],\n      \"LogicalResourceId\": event[\"LogicalResourceId\"],\n      \"NoEcho\": False,\n    }\n  ).encode(\"utf-8\")\n  headers = {\"content-type\": \"\", \"content-length\": str(len(response_body))}\n  try:\n    req = urllib.request.Request(url=event[\"ResponseURL\"], headers=headers, data=response_body, method=\"PUT\")\n    with urllib.request.urlopen(req) as response:\n      print(response.read().decode(\"utf-8\"))\n    print(\"Status code: \" + response.reason)\n  except Exception as e:\n      print(\"send(..) failed executing request.urlopen(..): \" + str(e))\n"
         },
         "Description": "AWS CloudFormation handler for \"Custom::S3BucketNotifications\" resources (@aws-cdk/aws-s3)",
         "Handler": "index.handler",
@@ -1519,6 +1519,7 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -1586,6 +1587,7 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -2765,6 +2767,7 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -2830,6 +2833,7 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -2907,6 +2911,7 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -2955,6 +2960,7 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -3041,6 +3047,7 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -3083,6 +3090,7 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -3227,6 +3235,7 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -3275,6 +3284,7 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -3315,6 +3325,7 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -3613,6 +3624,7 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -3685,6 +3697,7 @@
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeout21679E7E",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRoleDefaultPolicy031DA9BA",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkonTimeoutServiceRole808810C3",
+        "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineCCC4E670",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRoleDefaultPolicyDA54D559",
         "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
@@ -4981,14 +4994,87 @@
             ]
           ]
         },
+        "LoggingConfiguration": {
+          "Destinations": [
+            {
+              "CloudWatchLogsLogGroup": {
+                "LogGroupArn": {
+                  "Fn::GetAtt": [
+                    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277",
+                    "Arn"
+                  ]
+                }
+              }
+            }
+          ],
+          "IncludeExecutionData": false,
+          "Level": "ERROR"
+        },
         "RoleArn": {
           "Fn::GetAtt": [
             "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8",
             "Arn"
           ]
-        }
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
       },
       "Type": "AWS::StepFunctions::StateMachine"
+    },
+    "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineLogGroupBA635277": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/vendedlogs/states/waiter-state-machine-",
+              {
+                "Ref": "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderframeworkisComplete52D76927"
+              },
+              "-c8bce547ed0413c481592bef81d93538c274857ef3"
+            ]
+          ]
+        },
+        "RetentionInDays": 731,
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain"
     },
     "cmsevbatteryhealthcmsevprovisionalertsconstructcustomresourceproviderwaiterstatemachineRole18E8C6F8": {
       "DependsOn": [
@@ -5093,6 +5179,22 @@
                   ]
                 }
               ]
+            },
+            {
+              "Action": [
+                "logs:CreateLogDelivery",
+                "logs:CreateLogStream",
+                "logs:GetLogDelivery",
+                "logs:UpdateLogDelivery",
+                "logs:DeleteLogDelivery",
+                "logs:ListLogDeliveries",
+                "logs:PutLogEvents",
+                "logs:PutResourcePolicy",
+                "logs:DescribeResourcePolicies",
+                "logs:DescribeLogGroups"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
             }
           ],
           "Version": "2012-10-17"

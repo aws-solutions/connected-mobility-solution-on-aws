@@ -5360,7 +5360,7 @@
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
-        "Create": "{\"action\":\"describeEndpoint\",\"service\":\"Iot\",\"parameters\":{\"endpointType\":\"iot:Data-ATS\"},\"physicalResourceId\":{\"responsePath\":\"endpointAddress\"}}",
+        "Create": "{\"action\":\"describeEndpoint\",\"service\":\"Iot\",\"parameters\":{\"endpointType\":\"iot:Data-ATS\"},\"physicalResourceId\":{\"responsePath\":\"endpointAddress\"},\"logApiResponseData\":true}",
         "InstallLatestAwsSdk": false,
         "ServiceToken": {
           "Fn::GetAtt": [

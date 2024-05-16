@@ -4012,7 +4012,7 @@
               {
                 "Ref": "AWS::Region"
               },
-              ".s3\"]}]},\"physicalResourceId\":{\"responsePath\":\"PrefixLists.0.PrefixListId\"}}"
+              ".s3\"]}]},\"physicalResourceId\":{\"responsePath\":\"PrefixLists.0.PrefixListId\"},\"logApiResponseData\":true}"
             ]
           ]
         },

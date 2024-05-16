@@ -2734,7 +2734,7 @@
               {
                 "Ref": "acdpbackstagecognitoconstructuserpooluserpooldomain9AB3C450"
               },
-              "\"}}"
+              "\"},\"logApiResponseData\":true}"
             ]
           ]
         },
@@ -2757,7 +2757,7 @@
               {
                 "Ref": "acdpbackstagecognitoconstructuserpooluserpooldomain9AB3C450"
               },
-              "\"}}"
+              "\"},\"logApiResponseData\":true}"
             ]
           ]
         }
