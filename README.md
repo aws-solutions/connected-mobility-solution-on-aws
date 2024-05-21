@@ -298,7 +298,7 @@ The build target manages dependencies, builds required assets (e.g. packaged lam
 AWS CloudFormation templates for all modules.
 
 ```bash
-make build
+make build-all
 ```
 
 ### Upload Assets to S3
