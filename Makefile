@@ -15,11 +15,45 @@ module_name-target: ## Call a module make target. Run "make module_name-help" fo
 MODULES := source/lib $(shell find ${SOLUTION_PATH}/source/modules -type d -maxdepth 1 -mindepth 1 -not -name __pycache__)
 GLOBAL_TARGETS := $(shell grep -E '^[a-zA-Z0-9-]+:' ${SOLUTION_PATH}/makefiles/global_targets.mk | awk -F: '/^[^.]/ {print $$1;}')
 COMMON_TARGETS := $(shell grep -E '^[a-zA-Z0-9-]+:' ${SOLUTION_PATH}/makefiles/module_targets.mk | awk -F: '/^[^.]/ {print $$1;}')
+
+## $2が hoge/fuga/piyoだと
+## hoge fuga piyo にsubstで分割されて
+## piyo が lastwordで選択されて
+## piyo-$1
+## Makefile のターゲットを動的に生成している。
 define make-module-target
 $(lastword $(subst /, ,$2))-$1:
 	@$(MAKE) -C $2 -f Makefile $1
 endef
+
+
+## 動作例
+## 前提条件：
+##    hogeディレクトリ内のMakefileには、buildとinstallの2つのターゲットが定義されています。
+##    fugaディレクトリ内のMakefileには、cleanとtestの2つのターゲットが定義されています。
+##
+## 具体的な動作：
+##    foreachループが最初のディレクトリであるhogeに対して実行されます。
+##    hogeディレクトリのMakefileからターゲット名を抽出し、buildとinstallという2つのターゲットが取得されます。
+##    make-module-targetマクロが2回呼び出されて、hoge-buildとhoge-installの2つのターゲットルールが動的に生成されます。
+##    次に、foreachループが2番目のディレクトリであるfugaに対して同じプロセスを実行します。
+##    fugaディレクトリのMakefileからターゲット名を抽出し、cleanとtestという2つのターゲットが取得されます。
+##    make-module-targetマクロが2回呼び出されて、fuga-cleanとfuga-testの2つのターゲットルールが動的に生成されます。
+## hoge-build:
+##     @$(MAKE) -C hoge -f Makefile build
+## hoge-install:
+##     @$(MAKE) -C hoge -f Makefile install
+## 
+## fuga-clean:
+##     @$(MAKE) -C fuga -f Makefile clean
+## 
+## fuga-test:
+##     @$(MAKE) -C fuga -f Makefile test
 $(foreach module,$(MODULES),$(foreach element,$(shell grep -E '^[a-zA-Z0-9-]+:' $(module)/Makefile | awk -F: '/^[^.]/ {print $$1;}'),$(eval $(call make-module-target,$(element),$(module)))))
+
+## modulename-command:
+##     @$(MAKE) -C modulename-f Makefile command
+## みたいなのがglobal及びcommonに定義されたコマンドから生成される
 $(foreach module,$(MODULES),$(foreach target,$(GLOBAL_TARGETS),$(eval $(call make-module-target,$(target),$(module)))))
 $(foreach module,$(MODULES),$(foreach target,$(COMMON_TARGETS),$(eval $(call make-module-target,$(target),$(module)))))
 
