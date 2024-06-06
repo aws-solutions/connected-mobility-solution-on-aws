@@ -163,6 +163,11 @@
       "MinLength": 1,
       "Type": "String"
     },
+    "GlueCrawlerCronExpression": {
+      "Default": "cron(0 0/1 * * ? *)",
+      "Description": "The CRON expression to define how often the Glue Crawler runs.",
+      "Type": "String"
+    },
     "TimestreamToS3UnloadIntervalMinutes": {
       "ConstraintDescription": "Must be between 1 minute and 10080 minutes (1 week)",
       "Default": "15",
@@ -3171,7 +3176,9 @@
           ]
         },
         "Schedule": {
-          "ScheduleExpression": "cron(0 0/1 * * ? *)"
+          "ScheduleExpression": {
+            "Ref": "GlueCrawlerCronExpression"
+          }
         },
         "TablePrefix": "fleetwise-data-",
         "Tags": {
