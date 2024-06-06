@@ -316,7 +316,7 @@ class S3GlueAthenaConstruct(Construct):
                 recrawl_behavior="CRAWL_EVERYTHING"
             ),
             schedule=aws_glue.CfnCrawler.ScheduleProperty(
-                schedule_expression="cron(0 0/1 * * ? *)"
+                schedule_expression=module_config.glue_crawler_cron_expression,
             ),  # Run every hour
             targets=aws_glue.CfnCrawler.TargetsProperty(
                 s3_targets=[

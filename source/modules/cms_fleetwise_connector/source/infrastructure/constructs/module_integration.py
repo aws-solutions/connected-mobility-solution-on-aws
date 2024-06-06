@@ -38,6 +38,7 @@ class ModuleConfigInputs:
     fleetwise_vehicle_vin_attribute_name: str
     timestream_to_s3_unload_interval_minutes: int | float
     timestream_unload_s3_prefix_path: str
+    glue_crawler_cron_expression: str
 
 
 @define(auto_attribs=True, frozen=True)
@@ -88,6 +89,14 @@ class ModuleInputsConstruct(Construct):
             constraint_description=f"Must be between 1 minute and {MINUTES_IN_A_WEEK} minutes (1 week)",
         ).value_as_number
 
+        glue_crawler_cron_expression = CfnParameter(
+            Stack.of(self),
+            "GlueCrawlerCronExpression",
+            type="String",
+            default="cron(0 0/1 * * ? *)",
+            description="The CRON expression to define how often the Glue Crawler runs.",
+        ).value_as_string
+
         module_ssm_prefix = ResourcePrefix.slash_separated(
             app_unique_id=app_unique_id,
             module_name=solution_config_inputs.module_short_name,
@@ -99,6 +108,7 @@ class ModuleInputsConstruct(Construct):
             fleetwise_vehicle_vin_attribute_name=fleetwise_vehicle_vin_attribute_name,
             timestream_to_s3_unload_interval_minutes=timestream_to_s3_unload_interval_minutes,
             timestream_unload_s3_prefix_path="fleetwise_timestream_to_s3",
+            glue_crawler_cron_expression=glue_crawler_cron_expression,
         )
 
         self.operational_metrics = OperationalMetricsInput.from_app_unique_id(
