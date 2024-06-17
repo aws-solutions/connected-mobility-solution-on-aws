@@ -164,17 +164,13 @@ make destroy
 After installing dependencies, you can run backstage locally.
 Note: All commands assume the PWD is [git_root]/source/modules/acdp/backstage
 
-Start the postgres dev server
+Start the postgres instance, backstage backend, and backstage frontend:
 
 ```bash
-docker-compose up
+make run-backstage-local
 ```
 
-Start the frontend and backend
-
-```bash
-yarn run dev
-```
+There are Make targets available to separately run each component when required. Refer to the Makefile for these targets.
 
 ## Cost Scaling
 

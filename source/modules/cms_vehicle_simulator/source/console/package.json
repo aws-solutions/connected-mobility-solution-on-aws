@@ -47,7 +47,8 @@
   "overrides": {
     "nth-check": "^2.0.1",
     "typescript": "5.1.6",
-    "@babel/traverse": "^7.23.2"
+    "@babel/traverse": "^7.23.2",
+    "braces": "^3.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
