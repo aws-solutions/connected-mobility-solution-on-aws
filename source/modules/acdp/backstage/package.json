@@ -1,6 +1,6 @@
 {
   "name": "acdp-backstage",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "private": true,
   "license": "Apache-2.0",
   "description": "Backstage implementation preconfigured to work with CMS",
@@ -46,7 +46,8 @@
     "@types/react-dom": "^18",
     "mysql2": "^3.9.8",
     "formidable": "^3.2.4",
-    "braces": "^3.0.3"
+    "braces": "^3.0.3",
+    "ws": "^8.17.1"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,mjs,cjs}": [
