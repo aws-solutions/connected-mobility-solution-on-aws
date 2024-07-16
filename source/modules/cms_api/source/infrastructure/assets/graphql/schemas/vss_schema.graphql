@@ -1,14 +1,3 @@
-type Query @aws_lambda {
-  getVehicle(
-    # VIN of the vehicle that you want to request data for.
-    vin: String!
-  ): Vehicle
-
-  listVehicles(
-    # page number of paginated results
-    page: Int
-  ): [Vehicle]
-}
 # High-level vehicle data.
 type Vehicle {
   # Supported Version of VSS.
@@ -10246,4 +10235,15 @@ type Vehicle_Connectivity {
 type Vehicle_Connectivity_IsConnectivityAvailable {
   # Value: Indicates if connectivity between vehicle and cloud is available. True = Connectivity is available. False = Connectivity is not available.
   value: Boolean
+}
+type Query @aws_lambda {
+  getVehicle(
+    # VIN of the vehicle that you want to request data for.
+    vin: String!
+  ): Vehicle
+
+  listVehicles(
+    # page number of paginated results
+    page: Int
+  ): [Vehicle]
 }
