@@ -9,12 +9,12 @@
     "node": "18 || 20"
   },
   "dependencies": {
-    "@aws-amplify/api": "^5.0.29",
-    "@aws-amplify/auth": "^5.3.3",
-    "@aws-amplify/core": "^5.1.12",
-    "@aws-amplify/geo": "^2.0.29",
-    "@aws-amplify/interactions": "^5.0.29",
-    "@aws-amplify/storage": "^5.2.3",
+    "@aws-amplify/api": "^5.4.13",
+    "@aws-amplify/auth": "^5.6.13",
+    "@aws-amplify/core": "^5.8.13",
+    "@aws-amplify/geo": "^2.3.13",
+    "@aws-amplify/interactions": "^5.2.19",
+    "@aws-amplify/storage": "^5.9.14",
     "@aws-amplify/ui-react": "^4.6.0",
     "@maplibre/maplibre-gl-geocoder": "^1.5.0",
     "@testing-library/jest-dom": "^6.0.0",
@@ -25,8 +25,8 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.1",
     "@types/react-router-dom": "^5.3.3",
-    "aws-amplify": "^5.1.4",
-    "aws-sdk": "^2.1374.0",
+    "aws-amplify": "^5.3.21",
+    "aws-sdk": "^2.1665.0",
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.10.5",
     "maplibre-gl": "^2.4.0",
@@ -42,7 +42,8 @@
     "web-vitals": "^3.3.1"
   },
   "resolutions": {
-    "follow-redirects": "^1.15.4"
+    "follow-redirects": "^1.15.4",
+    "axios": "^1.7.4"
   },
   "overrides": {
     "nth-check": "^2.0.1",

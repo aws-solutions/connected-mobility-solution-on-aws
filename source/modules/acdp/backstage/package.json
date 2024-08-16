@@ -1,6 +1,6 @@
 {
   "name": "acdp-backstage",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "private": true,
   "license": "Apache-2.0",
   "description": "Backstage implementation preconfigured to work with CMS",
@@ -48,7 +48,8 @@
     "formidable": "^3.2.4",
     "braces": "^3.0.3",
     "ws": "^8.17.1",
-    "inline-style-prefixer": "^7.0.1"
+    "inline-style-prefixer": "^7.0.1",
+    "axios": "^1.7.4"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,mjs,cjs}": [
