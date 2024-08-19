@@ -1,6 +1,6 @@
 {
   "name": "backend",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "main": "dist/index.cjs.js",
   "types": "src/index.ts",
   "private": true,
@@ -18,7 +18,7 @@
     "build-image": "docker build ../.. -f Dockerfile --tag backstage"
   },
   "dependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "3.515.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.621.0",
     "@backstage/backend-common": "^0.21.3",
     "@backstage/backend-tasks": "^0.5.18",
     "@backstage/catalog-client": "^1.6.0",
