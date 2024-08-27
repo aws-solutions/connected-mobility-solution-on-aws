@@ -1,4 +1,4 @@
-# Connected Mobility Solution on AWS - Authentication Module
+# Connected Mobility Solution on AWS - Auth Module
 <!-- markdownlint-disable-next-line -->
 **[Connected Mobility Solution on AWS](https://aws.amazon.com/solutions/implementations/connected-mobility-solution-on-aws/)** | **[🚧 Feature request](https://github.com/aws-solutions/connected-mobility-solution-on-aws/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=)** | **[🐛 Bug Report](https://github.com/aws-solutions/connected-mobility-solution-on-aws/issues/new?assignees=&labels=bug&template=bug_report.md&title=)** | **[❓ General Question](https://github.com/aws-solutions/connected-mobility-solution-on-aws/issues/new?assignees=&labels=question&template=general_question.md&title=)**
 
@@ -6,7 +6,7 @@
 
 ## Table of Contents
 
-- [Connected Mobility Solution on AWS - Authentication Module](#connected-mobility-solution-on-aws---authentication-module)
+- [Connected Mobility Solution on AWS - Auth Module](#connected-mobility-solution-on-aws---auth-module)
   - [Table of Contents](#table-of-contents)
   - [Solution Overview](#solution-overview)
   - [Architecture Diagram](#architecture-diagram)
@@ -63,7 +63,7 @@ In addition to the AWS Solutions Constructs, the solution uses AWS CDK directly 
 
 ## Prerequisites
 
-- [Python 3.8+](https://www.python.org/downloads/)
+- [Python 3.12+](https://www.python.org/downloads/)
 - [NVM](https://github.com/nvm-sh/nvm)
 - [NPM 8+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [Node 18+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
@@ -75,7 +75,7 @@ Pyenv [Github Repository](https://github.com/pyenv/pyenv)
 
 ```bash
 brew install pyenv
-pyenv install 3.10.9
+pyenv install 3.12
 ```
 
 Pipenv [Github Repository](https://github.com/pypa/pipenv)
@@ -160,7 +160,7 @@ A Proof Key for Code Exchange (PKCE) code verifier can also be used to protect a
 could intercept the user tokens.
 
 Retrieving an authorization code will be specified to the identity provider in use, but is generally defined
-by OAuth2.0 standards and the `/authorize` endpoint. See the [OAuth2.0 RFC](https://datatracker.ietf.org/doc/html/rfc6749)
+by OAuth 2.0 standards and the `/authorize` endpoint. See the [OAuth 2.0 RFC](https://datatracker.ietf.org/doc/html/rfc6749)
 documentation for more details.
 
 ### Token Validation Lambda

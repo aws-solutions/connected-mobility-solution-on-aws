@@ -12,12 +12,11 @@ from moto import mock_aws
 # Connected Mobility Solution on AWS
 from ..auth_configs import (
     AuthConfigError,
-    CMSAuthorizationCodeFlowConfig,
     CMSClientConfig,
     CMSIdPConfig,
-    get_authorization_code_flow_config,
-    get_client_config,
     get_idp_config,
+    get_service_client_config,
+    get_user_client_config,
 )
 from .fixture_auth import TEST_IDENTITY_PROVIDER_ID, TEST_USER_AGENT_STRING
 
@@ -30,7 +29,12 @@ def test_get_idp_config_success(
     mock_idp_config_valid()
     idp_config = get_idp_config(TEST_USER_AGENT_STRING, TEST_IDENTITY_PROVIDER_ID)
     assert isinstance(idp_config, CMSIdPConfig)
-    assert idp_config.iss_domain == idp_config_secret_string_valid["iss_domain"]
+    assert idp_config.issuer == idp_config_secret_string_valid["issuer"]
+    assert idp_config.token_endpoint == idp_config_secret_string_valid["token_endpoint"]
+    assert (
+        idp_config.authorization_endpoint
+        == idp_config_secret_string_valid["authorization_endpoint"]
+    )
     assert (
         idp_config.alternate_aud_key
         == idp_config_secret_string_valid["alternate_aud_key"]
@@ -78,46 +82,43 @@ def test_get_idp_config_class_validation_error(
 
 
 @mock_aws
-def test_get_client_config_success(
-    client_config_secret_string_valid: dict[str, str | Tuple[str, ...]],
-    mock_client_config_valid: Callable[[], None],
+def test_get_service_client_config_success(
+    service_client_config_secret_string_valid: dict[str, str | Tuple[str, ...]],
+    mock_service_client_config_valid: Callable[[], None],
 ) -> None:
-    mock_client_config_valid()
-    client_config = get_client_config(TEST_USER_AGENT_STRING, TEST_IDENTITY_PROVIDER_ID)
-    assert isinstance(client_config, CMSClientConfig)
-    assert client_config.audience == client_config_secret_string_valid["audience"]
-    assert (
-        client_config.token_endpoint
-        == client_config_secret_string_valid["token_endpoint"]
+    mock_service_client_config_valid()
+    client_config = get_service_client_config(
+        TEST_USER_AGENT_STRING, TEST_IDENTITY_PROVIDER_ID
     )
-    assert client_config.client_id == client_config_secret_string_valid["client_id"]
+    assert isinstance(client_config, CMSClientConfig)
+    assert (
+        client_config.audience == service_client_config_secret_string_valid["audience"]
+    )
+    assert (
+        client_config.client_id
+        == service_client_config_secret_string_valid["client_id"]
+    )
     assert (
         client_config.client_secret
-        == client_config_secret_string_valid["client_secret"]
+        == service_client_config_secret_string_valid["client_secret"]
     )
 
 
 @mock_aws
-def test_get_authorization_code_flow_config_success(
-    authorization_code_flow_config_secret_string_valid: dict[
-        str, str | Tuple[str, ...]
-    ],
-    mock_authorization_code_flow_config_valid: Callable[[], None],
+def test_get_user_client_config_success(
+    user_client_config_secret_string_valid: dict[str, str | Tuple[str, ...]],
+    mock_user_client_config_valid: Callable[[], None],
 ) -> None:
-    mock_authorization_code_flow_config_valid()
-    authorization_code_flow_config = get_authorization_code_flow_config(
+    mock_user_client_config_valid()
+    user_client_config = get_user_client_config(
         TEST_USER_AGENT_STRING, TEST_IDENTITY_PROVIDER_ID
     )
-    assert isinstance(authorization_code_flow_config, CMSAuthorizationCodeFlowConfig)
+    assert isinstance(user_client_config, CMSClientConfig)
     assert (
-        authorization_code_flow_config.token_endpoint
-        == authorization_code_flow_config_secret_string_valid["token_endpoint"]
+        user_client_config.client_id
+        == user_client_config_secret_string_valid["client_id"]
     )
     assert (
-        authorization_code_flow_config.client_id
-        == authorization_code_flow_config_secret_string_valid["client_id"]
-    )
-    assert (
-        authorization_code_flow_config.client_secret
-        == authorization_code_flow_config_secret_string_valid["client_secret"]
+        user_client_config.client_secret
+        == user_client_config_secret_string_valid["client_secret"]
     )

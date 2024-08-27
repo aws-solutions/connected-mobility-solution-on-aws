@@ -1,0 +1,31 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+
+[dev-packages]
+cms_common = {path = "../../../lib", editable = true}
+aws-cdk-lib = ">=2.139.1"
+cdk-nag = "*"
+moto = {extras = ["all"], version = ">=5.0.6"}
+mypy = "*"
+pre-commit = "*"
+pycln = "*"
+pyjsparser = "*"
+pylint = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+setuptools = ">=71.0.0"
+syrupy = "*"
+types-boto3 = ">=1.0.2"
+types-setuptools = ">=65.6.0.1"
+types-pyyaml = "*"
+wheel = "*"
+zipp = "*"
+
+
+[requires]
+python_version = "3.12"

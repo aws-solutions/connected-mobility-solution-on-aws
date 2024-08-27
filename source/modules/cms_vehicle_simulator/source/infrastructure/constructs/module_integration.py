@@ -9,6 +9,7 @@ from aws_cdk import CfnOutput, CfnParameter, Stack
 from constructs import Construct
 
 # CMS Common Library
+from cms_common.config.regex import RegexPattern
 from cms_common.constructs.app_unique_id import AppUniqueId
 from cms_common.constructs.vpc_construct import create_vpc_config, get_vpc_name
 
@@ -28,7 +29,7 @@ class ModuleInputsConstruct(Construct):
             "UserEmail",
             type="String",
             description="The user E-Mail to access the UI",
-            allowed_pattern="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$",
+            allowed_pattern=RegexPattern.EMAIL,
             constraint_description="User E-Mail must be a valid E-Mail address",
         )
 

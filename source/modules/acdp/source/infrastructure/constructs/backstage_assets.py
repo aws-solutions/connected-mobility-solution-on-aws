@@ -6,15 +6,7 @@
 from attrs import define
 
 # AWS Libraries
-from aws_cdk import (
-    ArnFormat,
-    CfnMapping,
-    CustomResource,
-    Fn,
-    Stack,
-    aws_iam,
-    aws_s3_assets,
-)
+from aws_cdk import ArnFormat, CfnMapping, CustomResource, Stack, aws_iam
 from constructs import Construct
 
 # CMS Common Library
@@ -23,7 +15,10 @@ from cms_common.constructs.custom_resource_lambda import CustomResourceLambdaCon
 
 # Connected Mobility Solution on AWS
 from ...handlers.custom_resource.function.main import CustomResourceTypes
-from .module_integration import BackstageS3LocalAssetsConfigInputs
+from .module_integration import (
+    BackstageS3LocalAssetsConfigInputs,
+    BackstageS3RegionalAssetsConfigInputs,
+)
 
 
 @define(auto_attribs=True, frozen=True)
@@ -39,6 +34,7 @@ class BackstageAssetsConstruct(Construct):
         construct_id: str,
         solution_mapping: CfnMapping,
         solution_config_inputs: SolutionConfigInputs,
+        regional_asset_bucket_inputs: BackstageS3RegionalAssetsConfigInputs,
         local_asset_bucket_inputs: BackstageS3LocalAssetsConfigInputs,
         custom_resource_lambda_construct: CustomResourceLambdaConstruct,
     ) -> None:
@@ -119,44 +115,6 @@ class BackstageAssetsConstruct(Construct):
             backstage_asset_custom_resource_policy
         )
 
-        exclude_list = [
-            "dist",
-            "dist-types",
-            "build",
-            "cdk.out",
-            "__pycache__",
-            ".pytest_cache",
-            ".mypy_cache",
-            ".cdk_cache",
-            "None",
-            "*_dependency_layer",
-            ".vscode",
-            "node_modules",
-            "examples",
-            ".venv",
-            "staging",
-            "global-s3-assets",
-            "regional-s3-assets",
-        ]
-
-        backstage_zip = aws_s3_assets.Asset(
-            self,
-            "acdp-backstage-asset",
-            path="./backstage",
-            exclude=exclude_list,
-        )
-
-        backstage_zip_asset_key = Fn.join(
-            "",
-            [
-                Fn.find_in_map(
-                    "Solution",
-                    "AssetsConfig",
-                    "S3AssetKeyPrefix",
-                ),
-                f"/asset{backstage_zip.s3_object_key}",
-            ],
-        )
         backstage_zip_copy_custom_resource = CustomResource(
             self,
             "deployment-backstage-zip-asset",
@@ -165,9 +123,9 @@ class BackstageAssetsConstruct(Construct):
             properties={
                 "Resource": CustomResourceTypes.ResourceTypes.COPY_S3_OBJECT.value,
                 "SourceBucket": f'{solution_mapping.find_in_map("AssetsConfig", "S3AssetBucketBaseName")}-{Stack.of(self).region}',
-                "SourceKey": backstage_zip_asset_key,
+                "SourceKey": regional_asset_bucket_inputs.backstage_pipeline_zip_asset_key,
                 "DestinationBucket": local_asset_bucket_inputs.bucket_name,
-                "DestinationKey": backstage_zip_asset_key,
+                "DestinationKey": regional_asset_bucket_inputs.backstage_pipeline_zip_asset_key,
             },
         )
 

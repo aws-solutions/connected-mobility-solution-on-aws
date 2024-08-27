@@ -1,0 +1,40 @@
+{
+    "version": "0.2",
+    "env": {
+        "variables": {}
+    },
+    "phases": {
+        "install": {
+            "runtime-versions": {
+                "nodejs": 18
+            },
+            "commands": [
+                "cd source/modules/backstage",
+                "export PIPENV_VENV_IN_PROJECT=1",
+                "export PIPENV_IGNORE_VIRTUALENVS=1",
+                "export NODE_VERSION=$(cat .nvmrc)",
+                "n auto",
+                "npm install -g aws-cdk@latest --force",
+                "export PYTHON_VERSION=$(cat .python-version)",
+                "pyenv install -s ${PYTHON_VERSION}",
+                "pyenv global ${PYTHON_VERSION}",
+                "pyenv exec pip install pipenv",
+                "make install",
+                "cd cdk",
+                "make install"
+            ]
+        },
+        "build": {
+            "commands": [
+                "echo running build in: $(pwd)",
+                "export BACKSTAGE_IMAGE_TAG=s3_$CODEBUILD_RESOLVED_SOURCE_VERSION",
+                "chmod +x ./deployment/build-s3-dist.sh",
+                "chmod +x ./deployment/upload-s3-dist.sh",
+                "rm -f cdk.context.json",
+                "make build",
+                "make upload-local-assets",
+                "make deploy"
+            ]
+        }
+    }
+}

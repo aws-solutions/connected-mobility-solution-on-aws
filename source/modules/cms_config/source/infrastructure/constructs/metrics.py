@@ -102,7 +102,7 @@ class MetricsConstruct(Construct):
             handler="function.main.handler",
             function_name=metrics_lambda_function_name,
             role=metrics_lambda_role,
-            runtime=aws_lambda.Runtime.PYTHON_3_10,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             timeout=Duration.seconds(300),
             layers=[dependency_layer],
             environment={

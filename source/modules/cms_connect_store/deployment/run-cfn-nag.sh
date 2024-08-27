@@ -2,25 +2,9 @@
 
 set -e && [[ "$DEBUG" == 'true' ]] && set -x
 
-showHelp() {
-cat << EOF
-Usage: ./deployment/run-cfn-nag.sh --help
-
-Run "cdk-nag" and cfn-nag in this module.
-
--dl, --deny-list-path       Pass the file name which contains cfn-nag rules to suppress
-
-EOF
-}
-
 while [[ $# -gt 0 ]]
 do
-key="$1"
-  case $key in
-    -h|--help)
-        showHelp
-        exit 0
-        ;;
+  case $1 in
     -dl|--deny-list-path)
         deny_list_path="$2"
         shift
@@ -28,6 +12,7 @@ key="$1"
         ;;
     *)
         shift
+        ;;
   esac
 done
 

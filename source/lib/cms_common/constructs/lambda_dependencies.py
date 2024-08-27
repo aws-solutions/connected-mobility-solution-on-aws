@@ -60,7 +60,7 @@ class LambdaDependenciesConstruct(Construct):
         requirements_building_exit_code = os.system(  # nosec
             (
                 f"/bin/bash -c 'python -m pip install -q "
-                f"--platform manylinux2014_x86_64 --python-version 3.10 --implementation cp --only-binary=:all: --upgrade --no-cache-dir "
+                f"--platform manylinux2014_x86_64 --python-version 3.12 --implementation cp --only-binary=:all: --upgrade --no-cache-dir "
                 f"--target {pip_path} --requirement {requirements}'"
             )
         )
@@ -77,9 +77,7 @@ class LambdaDependenciesConstruct(Construct):
                 aws_lambda.Architecture.ARM_64,
             ],
             compatible_runtimes=[
-                aws_lambda.Runtime.PYTHON_3_8,
-                aws_lambda.Runtime.PYTHON_3_9,
-                aws_lambda.Runtime.PYTHON_3_10,
+                aws_lambda.Runtime.PYTHON_3_12,
             ],
         )
 

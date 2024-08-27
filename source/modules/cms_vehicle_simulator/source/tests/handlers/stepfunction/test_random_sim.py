@@ -103,6 +103,8 @@ def test_generic_sim_timestamp(limits: Dict[str, Any]) -> None:
     assert datetime.strptime(sim_timestamp, iso_format)
 
 
-def test_generic_sim_pickOne(limits: Dict[str, Any]) -> None:  # pylint: disable=C0103
+def test_generic_sim_pickOne(  # pylint: disable=invalid-name
+    limits: Dict[str, Any]
+) -> None:
     sim_choice = GenericSim.generic_sim_pickOne(limits)
     assert sim_choice in limits["arr"]

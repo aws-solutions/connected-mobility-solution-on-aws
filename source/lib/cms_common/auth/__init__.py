@@ -4,7 +4,7 @@
 
 # Connected Mobility Solution on AWS
 from .auth_configs import (
-    get_authorization_code_flow_config,
-    get_client_config,
     get_idp_config,
+    get_service_client_config,
+    get_user_client_config,
 )

@@ -19,6 +19,7 @@ from aws_cdk import (
 from constructs import Construct
 
 # CMS Common Library
+from cms_common.config.regex import RegexPattern
 from cms_common.config.resource_names import ResourceName, ResourcePrefix
 from cms_common.config.stack_inputs import SolutionConfigInputs
 from cms_common.constructs.vpc_construct import VpcConstruct
@@ -73,7 +74,7 @@ class PublishApiConstruct(Construct):
                     lambda_authorizer_config=aws_appsync.LambdaAuthorizerConfig(
                         handler=authorization_lambda,
                         results_cache_ttl=Duration.minutes(5),
-                        validation_regex=r"^Bearer [\w-]+\.[\w-]+\.[\w-]+$",
+                        validation_regex=RegexPattern.BEARER_TOKEN_AUTH_HEADER,
                     ),
                 )
             ),
@@ -129,7 +130,7 @@ class PublishApiConstruct(Construct):
                 "ALERTS_SNS_TOPIC_ARN": sns_topic_arn,
             },
             handler="main.handler",
-            runtime=aws_lambda.Runtime.PYTHON_3_10,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             timeout=Duration.minutes(1),
             role=aws_iam.Role(
                 self,

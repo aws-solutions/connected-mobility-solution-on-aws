@@ -62,7 +62,7 @@ class FleetWiseTimestreamTimeRangeHandler:
             string_value="UNSET",
             description="ISO Timestamp representing the last successful Timestream Unload Query end time",
             parameter_name=f"/{last_unload_end_time_ssm_parameter_name_without_slash_prefix}",
-            simple_name=True,
+            simple_name=False,
         )
 
         lambda_role = FleetWiseTimestreamTimeRangeHandler._create_lambda_role(
@@ -89,7 +89,7 @@ class FleetWiseTimestreamTimeRangeHandler:
                 "UNLOAD_END_TIME_PARAMETER_NAME": last_unload_end_time_ssm_parameter.parameter_name,
             },
             handler="function.main.handler",
-            runtime=aws_lambda.Runtime.PYTHON_3_10,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             timeout=Duration.minutes(15),
             role=lambda_role,
             layers=[dependency_layer],

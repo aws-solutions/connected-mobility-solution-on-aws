@@ -3,19 +3,21 @@
 A lightweight helper function that cleans-up synthesized templates from the AWS Cloud Development Kit (CDK) and prepares
 them for use with the AWS Solutions publishing pipeline. This function performs the following tasks:
 
-#### Lambda function preparation
+## Lambda function preparation
 
 Replaces the AssetParameter-style properties that identify source code for Lambda functions with the common variables
 used by the AWS Solutions publishing pipeline.
 
 - `Code.S3Bucket` is assigned the `%%DIST_BUCKET_NAME%%` placeholder value.
 - `Code.S3Key` is assigned the `%%SOLUTION_NAME%%`/`%%VERSION%%` placeholder value.
-- `Handler` is given a prefix identical to the artifact hash, enabling the Lambda function to properly find the handler in the extracted source code package.
+- `Handler` is given a prefix identical to the artifact hash, enabling the Lambda function to properly find the handler
+in the extracted source code package.
 
 These placeholders are then replaced with the appropriate values using the default find/replace operation run by the pipeline.
 
 Before:
-```
+
+```json
 "examplefunction67F55935": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -61,7 +63,8 @@ Before:
 ```
 
 After helper function run:
-```
+
+```json
 "examplefunction67F55935": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -73,7 +76,8 @@ After helper function run:
 ```
 
 After build script run:
-```
+
+```json
 "examplefunction67F55935": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -85,7 +89,8 @@ After build script run:
 ```
 
 After CloudFormation deployment:
-```
+
+```json
 "examplefunction67F55935": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -96,14 +101,15 @@ After CloudFormation deployment:
         "Handler": "assetd513e93e266931de36e1c7e79c27b196f84ab928fce63d364d9152ca501551f7/index.handler"
 ```
 
-#### Template cleanup
+## Template cleanup
 
 Cleans-up the parameters section and improves readability by removing the AssetParameter-style fields that would have
 been used to specify Lambda source code properties. This allows solution-specific parameters to be highlighted and
 removes unnecessary clutter.
 
 Before:
-```
+
+```json
 "Parameters": {
     "AssetParametersd513e93e266931de36e1c7e79c27b196f84ab928fce63d364d9152ca501551f7S3Bucket54E71A95": {
       "Type": "String",
@@ -132,7 +138,8 @@ Before:
   ```
 
 After:
-```
+
+```json
 "Parameters": {
     "CorsEnabled" : {
         "Description" : "Would you like to enable Cross-Origin Resource Sharing (CORS) for the image handler API? Select 'Yes' if so.",

@@ -1,50 +1,6 @@
 {
   "Conditions": {
-    "configurationsecretsauthorizationcodeexchangeconfigshouldcreatesecretcondition7EC56421": {
-      "Fn::Or": [
-        {
-          "Fn::Equals": [
-            {
-              "Ref": "ShouldCreateCognitoResources"
-            },
-            "true"
-          ]
-        },
-        {
-          "Fn::Equals": [
-            {
-              "Ref": "AuthorizationCodeExchangeConfigSecretArn"
-            },
-            ""
-          ]
-        }
-      ]
-    },
-    "configurationsecretsauthorizationcodeexchangeconfigshoulduseexistingsecretcondition13A19C12": {
-      "Fn::And": [
-        {
-          "Fn::Equals": [
-            {
-              "Ref": "ShouldCreateCognitoResources"
-            },
-            "false"
-          ]
-        },
-        {
-          "Fn::Not": [
-            {
-              "Fn::Equals": [
-                {
-                  "Ref": "AuthorizationCodeExchangeConfigSecretArn"
-                },
-                ""
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    "configurationsecretsidpconfigshouldcreatesecretcondition762C5806": {
+    "oauth2configurationsidpconfigshouldcreatesecretcondition8E1ACAD7": {
       "Fn::Or": [
         {
           "Fn::Equals": [
@@ -64,7 +20,7 @@
         }
       ]
     },
-    "configurationsecretsidpconfigshoulduseexistingsecretcondition4893D434": {
+    "oauth2configurationsidpconfigshoulduseexistingsecretcondition887152F8": {
       "Fn::And": [
         {
           "Fn::Equals": [
@@ -88,7 +44,7 @@
         }
       ]
     },
-    "configurationsecretsserviceclientconfigshouldcreatesecretcondition2EE770AA": {
+    "oauth2configurationsserviceclientconfigshouldcreatesecretcondition3EF28293": {
       "Fn::Or": [
         {
           "Fn::Equals": [
@@ -108,7 +64,7 @@
         }
       ]
     },
-    "configurationsecretsserviceclientconfigshoulduseexistingsecretcondition555D4426": {
+    "oauth2configurationsserviceclientconfigshoulduseexistingsecretcondition49AAE2D1": {
       "Fn::And": [
         {
           "Fn::Equals": [
@@ -132,6 +88,50 @@
         }
       ]
     },
+    "oauth2configurationsuserclientconfigshouldcreatesecretconditionD0828367": {
+      "Fn::Or": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ShouldCreateCognitoResources"
+            },
+            "true"
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "UserClientConfigSecretArn"
+            },
+            ""
+          ]
+        }
+      ]
+    },
+    "oauth2configurationsuserclientconfigshoulduseexistingsecretcondition956E1625": {
+      "Fn::And": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "ShouldCreateCognitoResources"
+            },
+            "false"
+          ]
+        },
+        {
+          "Fn::Not": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "UserClientConfigSecretArn"
+                },
+                ""
+              ]
+            }
+          ]
+        }
+      ]
+    },
     "shouldcreatecognitoresourcescondition": {
       "Fn::Equals": [
         {
@@ -142,6 +142,128 @@
     }
   },
   "Mappings": {
+    "LatestNodeRuntimeMap": {
+      "af-south-1": {
+        "value": "nodejs20.x"
+      },
+      "ap-east-1": {
+        "value": "nodejs20.x"
+      },
+      "ap-northeast-1": {
+        "value": "nodejs20.x"
+      },
+      "ap-northeast-2": {
+        "value": "nodejs20.x"
+      },
+      "ap-northeast-3": {
+        "value": "nodejs20.x"
+      },
+      "ap-south-1": {
+        "value": "nodejs20.x"
+      },
+      "ap-south-2": {
+        "value": "nodejs20.x"
+      },
+      "ap-southeast-1": {
+        "value": "nodejs20.x"
+      },
+      "ap-southeast-2": {
+        "value": "nodejs20.x"
+      },
+      "ap-southeast-3": {
+        "value": "nodejs20.x"
+      },
+      "ap-southeast-4": {
+        "value": "nodejs20.x"
+      },
+      "ap-southeast-5": {
+        "value": "nodejs20.x"
+      },
+      "ap-southeast-7": {
+        "value": "nodejs20.x"
+      },
+      "ca-central-1": {
+        "value": "nodejs20.x"
+      },
+      "ca-west-1": {
+        "value": "nodejs20.x"
+      },
+      "cn-north-1": {
+        "value": "nodejs18.x"
+      },
+      "cn-northwest-1": {
+        "value": "nodejs18.x"
+      },
+      "eu-central-1": {
+        "value": "nodejs20.x"
+      },
+      "eu-central-2": {
+        "value": "nodejs20.x"
+      },
+      "eu-isoe-west-1": {
+        "value": "nodejs18.x"
+      },
+      "eu-north-1": {
+        "value": "nodejs20.x"
+      },
+      "eu-south-1": {
+        "value": "nodejs20.x"
+      },
+      "eu-south-2": {
+        "value": "nodejs20.x"
+      },
+      "eu-west-1": {
+        "value": "nodejs20.x"
+      },
+      "eu-west-2": {
+        "value": "nodejs20.x"
+      },
+      "eu-west-3": {
+        "value": "nodejs20.x"
+      },
+      "il-central-1": {
+        "value": "nodejs20.x"
+      },
+      "me-central-1": {
+        "value": "nodejs20.x"
+      },
+      "me-south-1": {
+        "value": "nodejs20.x"
+      },
+      "mx-central-1": {
+        "value": "nodejs20.x"
+      },
+      "sa-east-1": {
+        "value": "nodejs20.x"
+      },
+      "us-east-1": {
+        "value": "nodejs20.x"
+      },
+      "us-east-2": {
+        "value": "nodejs20.x"
+      },
+      "us-gov-east-1": {
+        "value": "nodejs18.x"
+      },
+      "us-gov-west-1": {
+        "value": "nodejs18.x"
+      },
+      "us-iso-east-1": {
+        "value": "nodejs18.x"
+      },
+      "us-iso-west-1": {
+        "value": "nodejs18.x"
+      },
+      "us-isob-east-1": {
+        "value": "nodejs18.x"
+      },
+      "us-west-1": {
+        "value": "nodejs20.x"
+      },
+      "us-west-2": {
+        "value": "nodejs20.x"
+      }
+    },
     "Solution": {
       "AssetsConfig": {
         "S3AssetBucketBaseName": "test-bucket-base-name",
@@ -150,13 +272,6 @@
     }
   },
   "Parameters": {
-    "AuthorizationCodeExchangeConfigSecretArn": {
-      "AllowedPattern": "(^$)|(arn:aws:secretsmanager:[a-z0-9-]+:\\d{12}:secret:[a-zA-Z0-9/_+=.@-]+)",
-      "ConstraintDescription": "Value must be a valid AWS SecretsManger secret Arn",
-      "Default": "",
-      "Description": "Secret Arn of preexisting authorization code exchange config json",
-      "Type": "String"
-    },
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
       "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
@@ -164,7 +279,7 @@
     },
     "CallbackUrls": {
       "AllowedPattern": "^[a-zA_Z]{1}[a-zA-Z0-9+-.]*:\\/\\/(www\\.)?[a-zA-Z0-9\\/@%._\\+~=-]*\\b\\/?$",
-      "Default": "https://example.com,https://localhost",
+      "Default": "https://example.com",
       "Description": "List of callback URLs allowed for the Cognito user pool. These are the allowed redirect uris during authentication",
       "Type": "CommaDelimitedList"
     },
@@ -198,6 +313,13 @@
       "Default": "true",
       "Description": "Boolean flag that creates resources for a default identity provider using Amazon Cognito",
       "Type": "String"
+    },
+    "UserClientConfigSecretArn": {
+      "AllowedPattern": "(^$)|(arn:aws:secretsmanager:[a-z0-9-]+:\\d{12}:secret:[a-zA-Z0-9/_+=.@-]+)",
+      "ConstraintDescription": "Value must be a valid AWS SecretsManger secret Arn",
+      "Default": "",
+      "Description": "Secret Arn of preexisting user client configuration json",
+      "Type": "String"
     }
   },
   "Resources": {
@@ -219,7 +341,15 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": {
+          "Fn::FindInMap": [
+            "LatestNodeRuntimeMap",
+            {
+              "Ref": "AWS::Region"
+            },
+            "value"
+          ]
+        },
         "Timeout": 120
       },
       "Type": "AWS::Lambda::Function"
@@ -512,7 +642,7 @@
               {
                 "Ref": "cognitousersuserpoolserviceclient76A43875"
               },
-              "\"},\"logApiResponseData\":true}"
+              "\"}}"
             ]
           ]
         },
@@ -543,7 +673,7 @@
               {
                 "Ref": "cognitousersuserpoolserviceclient76A43875"
               },
-              "\"},\"logApiResponseData\":true}"
+              "\"}}"
             ]
           ]
         }
@@ -605,7 +735,7 @@
               {
                 "Ref": "cognitousersuserpooluserclientE8342D23"
               },
-              "\"},\"logApiResponseData\":true}"
+              "\"}}"
             ]
           ]
         },
@@ -636,7 +766,7 @@
               {
                 "Ref": "cognitousersuserpooluserclientE8342D23"
               },
-              "\"},\"logApiResponseData\":true}"
+              "\"}}"
             ]
           ]
         }
@@ -681,6 +811,7 @@
         "AllowedOAuthScopes": [
           "email",
           "openid",
+          "profile",
           {
             "Fn::Join": [
               "",
@@ -810,11 +941,9 @@
       },
       "Type": "AWS::Cognito::UserPoolResourceServer"
     },
-    "configurationsecretsauthorizationcodeexchangeconfignewsecret80960EA7": {
-      "Condition": "configurationsecretsauthorizationcodeexchangeconfigshouldcreatesecretcondition7EC56421",
-      "DeletionPolicy": "Delete",
+    "moduleoutputsssmidpconfigsecretarnCF8D6D64": {
       "Properties": {
-        "Description": "Domain and Client configurations needed to perform the authorization code flow token exchange.",
+        "Description": "Secret Arn for IdP configurations needed to facilitate authentication and authorization via OAuth 2.0 identity providers.",
         "Name": {
           "Fn::Join": [
             "",
@@ -823,52 +952,90 @@
               {
                 "Ref": "IdentityProviderId"
               },
-              "/authorization-code-flow/config"
+              "/idp-config/secret/arn"
             ]
           ]
         },
-        "SecretString": {
+        "Type": "String",
+        "Value": {
           "Fn::If": [
-            "shouldcreatecognitoresourcescondition",
+            "oauth2configurationsidpconfigshouldcreatesecretcondition8E1ACAD7",
             {
-              "Fn::Join": [
-                "",
-                [
-                  "{\"token_endpoint\": \"https://",
-                  {
-                    "Ref": "cognitousersuserpooluserpoolcognitodomain284E63B2"
-                  },
-                  ".auth.",
-                  {
-                    "Ref": "AWS::Region"
-                  },
-                  ".amazoncognito.com/oauth2/token\", \"client_id\": \"",
-                  {
-                    "Ref": "cognitousersuserpooluserclientE8342D23"
-                  },
-                  "\", \"client_secret\": \"",
-                  {
-                    "Fn::GetAtt": [
-                      "cognitousersuserpooluserclientDescribeCognitoUserPoolClient58A73904",
-                      "UserPoolClient.ClientSecret"
-                    ]
-                  },
-                  "\"}"
-                ]
-              ]
+              "Ref": "oauth2configurationsidpconfignewsecret8744D945"
             },
-            "{\"token_endpoint\": \"\", \"client_id\": \"\", \"client_secret\": \"\"}"
+            {
+              "Ref": "IdPConfigSecretArn"
+            }
           ]
         }
       },
-      "Type": "AWS::SecretsManager::Secret",
-      "UpdateReplacePolicy": "Delete"
+      "Type": "AWS::SSM::Parameter"
     },
-    "configurationsecretsidpconfignewsecret663C86DE": {
-      "Condition": "configurationsecretsidpconfigshouldcreatesecretcondition762C5806",
+    "moduleoutputsssmserviceclientconfigsecretarn57E3B212": {
+      "Properties": {
+        "Description": "Secret Arn for service client configuration needed for OAuth 2.0 operations.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/auth/",
+              {
+                "Ref": "IdentityProviderId"
+              },
+              "/service-client-config/default/secret/arn"
+            ]
+          ]
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::If": [
+            "oauth2configurationsserviceclientconfigshouldcreatesecretcondition3EF28293",
+            {
+              "Ref": "oauth2configurationsserviceclientconfignewsecret4AAF7254"
+            },
+            {
+              "Ref": "ServiceClientConfigSecretArn"
+            }
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "moduleoutputsssmuserclientconfigsecretarn6B355AC9": {
+      "Properties": {
+        "Description": "Secret Arn for user client configuration needed for OAuth 2.0 operations.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/auth/",
+              {
+                "Ref": "IdentityProviderId"
+              },
+              "/user-client-config/default/secret/arn"
+            ]
+          ]
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::If": [
+            "oauth2configurationsuserclientconfigshouldcreatesecretconditionD0828367",
+            {
+              "Ref": "oauth2configurationsuserclientconfignewsecret26306020"
+            },
+            {
+              "Ref": "UserClientConfigSecretArn"
+            }
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "oauth2configurationsidpconfignewsecret8744D945": {
+      "Condition": "oauth2configurationsidpconfigshouldcreatesecretcondition8E1ACAD7",
       "DeletionPolicy": "Delete",
       "Properties": {
-        "Description": "IdP configurations needed to perform JWT validation for OAuth OpenID Connect auth tokens.",
+        "Description": "IdP configurations needed to facilitate authentication and authorization via OAuth 2.0 identity providers.",
         "Name": {
           "Fn::Join": [
             "",
@@ -888,7 +1055,7 @@
               "Fn::Join": [
                 "",
                 [
-                  "{\"iss_domain\": \"cognito-idp.",
+                  "{\"issuer\": \"https://cognito-idp.",
                   {
                     "Ref": "AWS::Region"
                   },
@@ -896,7 +1063,23 @@
                   {
                     "Ref": "cognitousersuserpool51A5F544"
                   },
-                  "\", \"alternate_aud_key\": \"client_id\", \"auds\": [\"",
+                  "\", \"token_endpoint\": \"https://",
+                  {
+                    "Ref": "cognitousersuserpooluserpoolcognitodomain284E63B2"
+                  },
+                  ".auth.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".amazoncognito.com/oauth2/token\", \"authorization_endpoint\": \"https://",
+                  {
+                    "Ref": "cognitousersuserpooluserpoolcognitodomain284E63B2"
+                  },
+                  ".auth.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".amazoncognito.com/oauth2/authorize\", \"alternate_aud_key\": \"client_id\", \"auds\": [\"",
                   {
                     "Ref": "cognitousersuserpooluserclientE8342D23"
                   },
@@ -904,7 +1087,7 @@
                   {
                     "Ref": "cognitousersuserpoolserviceclient76A43875"
                   },
-                  "\"], \"scopes\": [\"email\", \"openid\", \"",
+                  "\"], \"scopes\": [\"email\", \"openid\", \"profile\", \"",
                   {
                     "Ref": "cognitousersuserresourceserver92FD33B9"
                   },
@@ -924,18 +1107,41 @@
                 ]
               ]
             },
-            "{\"iss_domain\": \"\", \"alternate_aud_key\": \"\", \"auds\": [], \"scopes\": []}"
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "{\"issuer\": \"\", \"token_endpoint\": \"https://",
+                  {
+                    "Ref": "cognitousersuserpooluserpoolcognitodomain284E63B2"
+                  },
+                  ".auth.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".amazoncognito.com/oauth2/token\", \"authorization_endpoint\": \"https://",
+                  {
+                    "Ref": "cognitousersuserpooluserpoolcognitodomain284E63B2"
+                  },
+                  ".auth.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".amazoncognito.com/oauth2/authorize\", \"alternate_aud_key\": \"\", \"auds\": [], \"scopes\": []}"
+                ]
+              ]
+            }
           ]
         }
       },
       "Type": "AWS::SecretsManager::Secret",
       "UpdateReplacePolicy": "Delete"
     },
-    "configurationsecretsserviceclientconfignewsecretDA9FCD03": {
-      "Condition": "configurationsecretsserviceclientconfigshouldcreatesecretcondition2EE770AA",
+    "oauth2configurationsserviceclientconfignewsecret4AAF7254": {
+      "Condition": "oauth2configurationsserviceclientconfigshouldcreatesecretcondition3EF28293",
       "DeletionPolicy": "Delete",
       "Properties": {
-        "Description": "Client configurations needed for services to execute the Client Credentials flow, and be granted access tokens.",
+        "Description": "Service client configuration needed for OAuth 2.0 operations.",
         "Name": {
           "Fn::Join": [
             "",
@@ -944,7 +1150,7 @@
               {
                 "Ref": "IdentityProviderId"
               },
-              "/client-config/default"
+              "/service-client-config/default"
             ]
           ]
         },
@@ -955,15 +1161,7 @@
               "Fn::Join": [
                 "",
                 [
-                  "{\"token_endpoint\": \"https://",
-                  {
-                    "Ref": "cognitousersuserpooluserpoolcognitodomain284E63B2"
-                  },
-                  ".auth.",
-                  {
-                    "Ref": "AWS::Region"
-                  },
-                  ".amazoncognito.com/oauth2/token\", \"client_id\": \"",
+                  "{\"client_id\": \"",
                   {
                     "Ref": "cognitousersuserpoolserviceclient76A43875"
                   },
@@ -978,16 +1176,18 @@
                 ]
               ]
             },
-            "{\"token_endpoint\": \"\", \"client_id\": \"\", \"client_secret\": \"\", \"audience\": \"\"}"
+            "{\"client_id\": \"\", \"client_secret\": \"\", \"audience\": \"\"}"
           ]
         }
       },
       "Type": "AWS::SecretsManager::Secret",
       "UpdateReplacePolicy": "Delete"
     },
-    "moduleoutputsssmauthorizationcodeexchangeconfigsecretarn3D816DA8": {
+    "oauth2configurationsuserclientconfignewsecret26306020": {
+      "Condition": "oauth2configurationsuserclientconfigshouldcreatesecretconditionD0828367",
+      "DeletionPolicy": "Delete",
       "Properties": {
-        "Description": "Secret Arn for Domain and Client configurations needed to perform the authorization code flow token exchange.",
+        "Description": "User client configuration needed for OAuth 2.0 operations.",
         "Name": {
           "Fn::Join": [
             "",
@@ -996,84 +1196,38 @@
               {
                 "Ref": "IdentityProviderId"
               },
-              "/authorization-code-flow/config/secret/arn"
+              "/user-client-config/default"
             ]
           ]
         },
-        "Type": "String",
-        "Value": {
+        "SecretString": {
           "Fn::If": [
-            "configurationsecretsauthorizationcodeexchangeconfigshouldcreatesecretcondition7EC56421",
+            "shouldcreatecognitoresourcescondition",
             {
-              "Ref": "configurationsecretsauthorizationcodeexchangeconfignewsecret80960EA7"
+              "Fn::Join": [
+                "",
+                [
+                  "{\"client_id\": \"",
+                  {
+                    "Ref": "cognitousersuserpooluserclientE8342D23"
+                  },
+                  "\", \"client_secret\": \"",
+                  {
+                    "Fn::GetAtt": [
+                      "cognitousersuserpooluserclientDescribeCognitoUserPoolClient58A73904",
+                      "UserPoolClient.ClientSecret"
+                    ]
+                  },
+                  "\"}"
+                ]
+              ]
             },
-            {
-              "Ref": "AuthorizationCodeExchangeConfigSecretArn"
-            }
+            "{\"client_id\": \"\", \"client_secret\": \"\"}"
           ]
         }
       },
-      "Type": "AWS::SSM::Parameter"
-    },
-    "moduleoutputsssmidpconfigsecretarnCF8D6D64": {
-      "Properties": {
-        "Description": "Secret Arn for IdP configurations needed to perform JWT validation for OAuth OpenID Connect auth tokens.",
-        "Name": {
-          "Fn::Join": [
-            "",
-            [
-              "/solution/auth/",
-              {
-                "Ref": "IdentityProviderId"
-              },
-              "/idp-config/secret/arn"
-            ]
-          ]
-        },
-        "Type": "String",
-        "Value": {
-          "Fn::If": [
-            "configurationsecretsidpconfigshouldcreatesecretcondition762C5806",
-            {
-              "Ref": "configurationsecretsidpconfignewsecret663C86DE"
-            },
-            {
-              "Ref": "IdPConfigSecretArn"
-            }
-          ]
-        }
-      },
-      "Type": "AWS::SSM::Parameter"
-    },
-    "moduleoutputsssmserviceclientconfigsecretarn57E3B212": {
-      "Properties": {
-        "Description": "Secret Arn for Client configurations needed for services to execute the Client Credentials flow, and be granted access tokens.",
-        "Name": {
-          "Fn::Join": [
-            "",
-            [
-              "/solution/auth/",
-              {
-                "Ref": "IdentityProviderId"
-              },
-              "/client-config/default/secret/arn"
-            ]
-          ]
-        },
-        "Type": "String",
-        "Value": {
-          "Fn::If": [
-            "configurationsecretsserviceclientconfigshouldcreatesecretcondition2EE770AA",
-            {
-              "Ref": "configurationsecretsserviceclientconfignewsecretDA9FCD03"
-            },
-            {
-              "Ref": "ServiceClientConfigSecretArn"
-            }
-          ]
-        }
-      },
-      "Type": "AWS::SSM::Parameter"
+      "Type": "AWS::SecretsManager::Secret",
+      "UpdateReplacePolicy": "Delete"
     }
   },
   "Rules": {

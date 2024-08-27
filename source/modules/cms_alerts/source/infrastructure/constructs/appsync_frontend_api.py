@@ -18,6 +18,7 @@ from aws_cdk import (
 from constructs import Construct
 
 # CMS Common Library
+from cms_common.config.regex import RegexPattern
 from cms_common.config.resource_names import ResourceName, ResourcePrefix
 from cms_common.config.stack_inputs import SolutionConfigInputs
 
@@ -61,7 +62,7 @@ class FrontendApisConstruct(Construct):
                     lambda_authorizer_config=aws_appsync.LambdaAuthorizerConfig(
                         handler=authorization_lambda,
                         results_cache_ttl=Duration.minutes(5),
-                        validation_regex=r"^Bearer [\w-]+\.[\w-]+\.[\w-]+$",
+                        validation_regex=RegexPattern.BEARER_TOKEN_AUTH_HEADER,
                     ),
                 )
             ),

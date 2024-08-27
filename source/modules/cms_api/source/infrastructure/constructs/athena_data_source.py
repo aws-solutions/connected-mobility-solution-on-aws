@@ -28,6 +28,7 @@ from cms_common.policy_generators.ec2_vpc import generate_ec2_vpc_policy
 # Connected Mobility Solution on AWS
 from ..lib.policy_generators import generate_lambda_cloudwatch_logs_policy_document
 from .cmk_encrypted_s3 import CMKEncryptedS3Construct
+from .module_integration import GlueInputs
 
 
 class AppSyncAthenaDataSourceConstruct(Construct):
@@ -40,10 +41,7 @@ class AppSyncAthenaDataSourceConstruct(Construct):
         appsync_api: aws_appsync.GraphqlApi,
         bucket_arn: str,
         bucket_key_arn: str,
-        glue_registry_name: str,
-        glue_database_name: str,
-        glue_schema_arn: str,
-        glue_table_name: str,
+        glue_inputs: GlueInputs,
         dependency_layer: aws_lambda.LayerVersion,
         metrics_url: str,
         report_metrics_enabled: str,
@@ -51,6 +49,11 @@ class AppSyncAthenaDataSourceConstruct(Construct):
         vpc_construct: VpcConstruct,
     ) -> None:  # NOSONAR
         super().__init__(scope, construct_id)
+
+        glue_registry_name = glue_inputs.registry_name
+        glue_schema_arn = glue_inputs.schema_arn
+        glue_database_name = glue_inputs.database_name
+        glue_table_name = glue_inputs.table_name
 
         self.athena_result_bucket = CMKEncryptedS3Construct(
             self, "athena-result-cmk-s3"
@@ -209,7 +212,7 @@ class AppSyncAthenaDataSourceConstruct(Construct):
             code=aws_lambda.Code.from_asset("dist/lambda/athena_data_source.zip"),
             description="CMS API Athena data source Lambda",
             handler="function.main.handler",
-            runtime=aws_lambda.Runtime.PYTHON_3_10,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             layers=[dependency_layer],
             vpc=vpc_construct.vpc,
             vpc_subnets=vpc_construct.private_subnet_selection,

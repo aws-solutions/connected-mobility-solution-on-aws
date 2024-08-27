@@ -74,7 +74,7 @@ class ModuleOutputsConstruct(Construct):
                 name="glue-data-catalog/name",
             ),
             string_value=glue_catalog_name,
-            simple_name=True,
+            simple_name=False,
         )
         aws_ssm.StringParameter(
             self,
@@ -85,7 +85,7 @@ class ModuleOutputsConstruct(Construct):
                 name="glue-database/name",
             ),
             string_value=glue_resources.glue_database.database_input.name,  # type: ignore [union-attr, arg-type]
-            simple_name=True,
+            simple_name=False,
         )
         aws_ssm.StringParameter(
             self,
@@ -96,7 +96,7 @@ class ModuleOutputsConstruct(Construct):
                 name="glue-table/name",
             ),
             string_value=glue_resources.glue_table.table_input.name,  # type: ignore [union-attr, arg-type]
-            simple_name=True,
+            simple_name=False,
         )
         aws_ssm.StringParameter(
             self,
@@ -107,7 +107,7 @@ class ModuleOutputsConstruct(Construct):
                 name="glue-schema/arn",
             ),
             string_value=glue_resources.glue_schema.attr_arn,
-            simple_name=True,
+            simple_name=False,
         )
         aws_ssm.StringParameter(
             self,
@@ -118,7 +118,7 @@ class ModuleOutputsConstruct(Construct):
                 name="glue-registry/name",
             ),
             string_value=glue_resources.glue_schema.registry.name,  # type: ignore [union-attr, arg-type]
-            simple_name=True,
+            simple_name=False,
         )
         aws_ssm.StringParameter(
             self,
@@ -129,7 +129,7 @@ class ModuleOutputsConstruct(Construct):
                 name="s3-storage-bucket/region",
             ),
             string_value=Stack.of(self).region,
-            simple_name=True,
+            simple_name=False,
         )
         aws_ssm.StringParameter(
             self,
@@ -140,7 +140,7 @@ class ModuleOutputsConstruct(Construct):
                 name="s3-storage-bucket/name",
             ),
             string_value=root_s3_bucket.bucket_name,
-            simple_name=True,
+            simple_name=False,
         )
         aws_ssm.StringParameter(
             self,
@@ -151,7 +151,7 @@ class ModuleOutputsConstruct(Construct):
                 name="s3-storage-bucket/arn",
             ),
             string_value=root_s3_bucket.bucket_arn,
-            simple_name=True,
+            simple_name=False,
         )
         aws_ssm.StringParameter(
             self,
@@ -162,5 +162,5 @@ class ModuleOutputsConstruct(Construct):
                 name="s3-storage-bucket/key-arn",
             ),
             string_value=root_s3_bucket.encryption_key.key_arn,  # type: ignore[union-attr]
-            simple_name=True,
+            simple_name=False,
         )

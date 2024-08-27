@@ -6,9 +6,23 @@ showHelp() {
 cat << EOF
 Usage: Call this script from a module's ./deployment/build-s3-dist.sh
 
-build and stage a module's ACDP assets (templates/docs)
+Build and stage a module's ACDP assets (templates/docs).
+
 EOF
 }
+
+while [[ $# -gt 0 ]]
+do
+  case $1 in
+    -h|--help)
+        showHelp
+        exit 0
+        ;;
+    *)
+        shift
+        ;;
+  esac
+done
 
 script_dir="$(dirname "$(realpath "$0")")"
 dot_acdp_dir="$MODULE_ROOT_DIR/.acdp"

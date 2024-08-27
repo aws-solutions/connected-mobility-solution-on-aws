@@ -6,9 +6,8 @@ metadata:
   tags:
   - cms
   - auth
-  - user
-  - client-credentials
   - authorization-code
+  - token-validation
   title: CMS Auth Module
   annotations:
     backstage.io/techdocs-ref: dir:../docs/components/cms-auth/

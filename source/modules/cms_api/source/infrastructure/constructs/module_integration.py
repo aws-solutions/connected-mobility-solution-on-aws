@@ -143,7 +143,7 @@ class ModuleOutputsConstruct(Construct):
             parameter_name=ResourceName.slash_separated(
                 prefix=ssm_parameter_name_prefix, name="athena-result-bucket/name"
             ),
-            simple_name=True,
+            simple_name=False,
         )
         self.athena_result_bucket_arn = aws_ssm.StringParameter(
             self,
@@ -153,7 +153,7 @@ class ModuleOutputsConstruct(Construct):
             parameter_name=ResourceName.slash_separated(
                 prefix=ssm_parameter_name_prefix, name="athena-result-bucket/arn"
             ),
-            simple_name=True,
+            simple_name=False,
         )
         self.athena_result_bucket_region = aws_ssm.StringParameter(
             self,
@@ -163,7 +163,7 @@ class ModuleOutputsConstruct(Construct):
             parameter_name=ResourceName.slash_separated(
                 prefix=ssm_parameter_name_prefix, name="athena-result-bucket/region"
             ),
-            simple_name=True,
+            simple_name=False,
         )
         self.athena_result_bucket_key_arn = aws_ssm.StringParameter(
             self,
@@ -173,7 +173,7 @@ class ModuleOutputsConstruct(Construct):
             parameter_name=ResourceName.slash_separated(
                 prefix=ssm_parameter_name_prefix, name="athena-result-bucket/key-arn"
             ),
-            simple_name=True,
+            simple_name=False,
         )
         self.athena_workgroup_name = aws_ssm.StringParameter(
             self,
@@ -183,7 +183,7 @@ class ModuleOutputsConstruct(Construct):
             parameter_name=ResourceName.slash_separated(
                 prefix=ssm_parameter_name_prefix, name="athena-workgroup/name"
             ),
-            simple_name=True,
+            simple_name=False,
         )
         self.appsync_graphql_url = aws_ssm.StringParameter(
             self,
@@ -193,7 +193,7 @@ class ModuleOutputsConstruct(Construct):
             parameter_name=ResourceName.slash_separated(
                 prefix=ssm_parameter_name_prefix, name="graphql-endpoint/url"
             ),
-            simple_name=True,
+            simple_name=False,
         )
 
         # Cfn Outputs

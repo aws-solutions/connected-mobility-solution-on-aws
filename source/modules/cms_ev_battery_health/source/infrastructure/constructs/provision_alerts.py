@@ -93,7 +93,7 @@ class ProvisionAlertsConstruct(Construct):
             description="Lambda that checks if grafana workspace is active.",
             handler="main.handler",
             function_name=check_workspace_active_lambda_name,
-            runtime=aws_lambda.Runtime.PYTHON_3_10,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             code=aws_lambda.Code.from_asset("dist/lambda/check_workspace_active.zip"),
             timeout=Duration.seconds(60),
             role=check_workspace_active_lambda_role,

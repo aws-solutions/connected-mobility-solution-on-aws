@@ -18,8 +18,7 @@ from ....handlers.provisioning.function.lib.dynamo_schema import (
 def test_type_validation_fails_with_missing_args() -> None:
     # need to specify all arguments
     with pytest.raises(Exception):
-        # pylint: disable=no-value-for-parameter
-        AuthorizedVehicle()  # type: ignore
+        AuthorizedVehicle()  # type: ignore # pylint: disable=no-value-for-parameter
 
 
 def test_type_validation_fails_with_incorrect_type() -> None:

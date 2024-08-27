@@ -36,7 +36,7 @@ from .infrastructure.tests.fixture_infrastructure import (
 
 
 # Prevents boto from accidentally using default AWS credentials if not mocked
-@pytest.fixture(name="aws_credentials_env_vars", scope="module")
+@pytest.fixture(name="aws_credentials_env_vars", scope="session")
 def fixture_aws_credentials_env_vars() -> Dict[str, str]:
     return {
         "AWS_ACCESS_KEY_ID": "testing",  # nosec
@@ -48,7 +48,7 @@ def fixture_aws_credentials_env_vars() -> Dict[str, str]:
     }
 
 
-@pytest.fixture(name="mock_module_env_vars", scope="module")
+@pytest.fixture(name="mock_module_env_vars", scope="session")
 def fixture_mock_module_env_vars() -> Dict[str, str]:
     return {
         "APPLICATION_TYPE": "test-application-type",

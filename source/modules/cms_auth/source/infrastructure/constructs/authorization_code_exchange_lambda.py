@@ -64,8 +64,11 @@ class AuthorizationCodeExchangeLambdaConstruct(Construct):
                             actions=["secretsmanager:GetSecretValue"],
                             resources=[
                                 resolve_ssm_parameter(
-                                    auth_resource_names.authorization_code_flow_config_secret_arn_ssm_parameter
-                                )
+                                    auth_resource_names.user_client_config_secret_arn_ssm_parameter
+                                ),
+                                resolve_ssm_parameter(
+                                    auth_resource_names.idp_config_secret_arn_ssm_parameter
+                                ),
                             ],
                         )
                     ]
@@ -80,7 +83,14 @@ class AuthorizationCodeExchangeLambdaConstruct(Construct):
                                     service="ssm",
                                     resource="parameter",
                                     resource_name=remove_leading_slash(
-                                        auth_resource_names.authorization_code_flow_config_secret_arn_ssm_parameter
+                                        auth_resource_names.user_client_config_secret_arn_ssm_parameter
+                                    ),  # Leading slash must not be present on SSM IAM permissions
+                                ),
+                                Stack.of(self).format_arn(
+                                    service="ssm",
+                                    resource="parameter",
+                                    resource_name=remove_leading_slash(
+                                        auth_resource_names.idp_config_secret_arn_ssm_parameter
                                     ),  # Leading slash must not be present on SSM IAM permissions
                                 ),
                             ],
@@ -102,7 +112,7 @@ class AuthorizationCodeExchangeLambdaConstruct(Construct):
             description="Authorization Code Flow - Authorization Code Exchange Lambda Function",
             handler="function.main.handler",
             function_name=lambda_function_name,
-            runtime=aws_lambda.Runtime.PYTHON_3_10,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             code=aws_lambda.Code.from_asset(
                 "deployment/dist/lambda/authorization_code_exchange_lambda.zip"
             ),

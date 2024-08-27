@@ -30,7 +30,7 @@ from ....handlers.token_validation_lambda.function.main import (
 )
 from ..fixtures.fixture_shared_jwt_mocks import (
     TEST_ALTERNATE_AUD_KEY,
-    TEST_ISS_DOMAIN,
+    TEST_ISSUER,
     TEST_KNOWN_AUDS,
 )
 
@@ -210,7 +210,7 @@ def test_get_cached_issuer_jwks_key_error(
         WellKnownJWKError,
         match=r"Validation Failure: the retrieved JWKs did not have the expected 'keys' key. This is likely an issue with the response provided by your IdP.",
     ):
-        get_cached_issuer_jwks(TEST_ISS_DOMAIN)
+        get_cached_issuer_jwks(TEST_ISSUER)
 
 
 def test_get_cached_issuer_jwks_client_error() -> None:
@@ -218,7 +218,7 @@ def test_get_cached_issuer_jwks_client_error() -> None:
         WellKnownJWKError,
         match=r"Validation Failure: request exception while attempting to retrieve the known JWKs.",
     ):
-        get_cached_issuer_jwks(TEST_ISS_DOMAIN)
+        get_cached_issuer_jwks(TEST_ISSUER)
 
 
 def test_get_cached_issuer_jwks_decode_error(
@@ -228,7 +228,7 @@ def test_get_cached_issuer_jwks_decode_error(
         WellKnownJWKError,
         match=r"Validation Failure: well known JWKs response could not be decoded as JSON.",
     ):
-        get_cached_issuer_jwks(TEST_ISS_DOMAIN)
+        get_cached_issuer_jwks(TEST_ISSUER)
 
 
 # =============== GET_CACHED_TOKEN_CLAIMS ===============

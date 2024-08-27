@@ -52,7 +52,7 @@ repos:
         exclude: ^(source/|.nightswatch/)
       - id: detect-aws-credentials
         name: (ROOT) Detect AWS credentials
-        exclude: ^(source/|.nightswatch/)
+        exclude: ^(source/|.nightswatch/|buildspec.yml)
         args: ["--credentials-file", "~/.ada/credentials"]
       - id: detect-private-key
         name: (ROOT) Detect private keys
@@ -85,7 +85,7 @@ repos:
         name: (ROOT) Black
         exclude: ^(source/|.nightswatch/)
   - repo: https://github.com/hadialqattan/pycln
-    rev: v2.3.0
+    rev: v2.4.0
     hooks:
       - id: pycln
         name: (ROOT) Pycln
@@ -117,6 +117,12 @@ repos:
       - id: prettier
         name: (ROOT) Prettier
         types_or: [javascript, jsx, ts, tsx]
+        exclude: ^(source/|.nightswatch/)
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.39.0
+    hooks:
+      - id: markdownlint
+        name: (ROOT) MarkdownLint
         exclude: ^(source/|.nightswatch/)
   # Local
   - repo: local
@@ -159,6 +165,14 @@ repos:
         args: ["--module-path", "source/modules/acdp", "--files-list"]
         entry: ./deployment/script_run_module_hooks.py
         files: ^source/modules/acdp
+        verbose: true
+        require_serial: true
+      - id: backstage
+        name: (Backstage)
+        language: script
+        args: ["--module-path", "source/modules/backstage", "--files-list"]
+        entry: ./deployment/script_run_module_hooks.py
+        files: ^source/modules/backstage
         verbose: true
         require_serial: true
       - id: cms-alerts
@@ -210,7 +224,7 @@ repos:
         verbose: true
         require_serial: true
       - id: cms-provisioning
-        name: (Vehicle Provisioning)
+        name: (Provisioning)
         language: script
         args: ["--module-path", "source/modules/cms_provisioning", "--files-list"]
         entry: ./deployment/script_run_module_hooks.py

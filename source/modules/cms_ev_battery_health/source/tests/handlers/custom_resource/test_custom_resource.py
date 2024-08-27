@@ -67,10 +67,12 @@ class CustomResourceAPICallBooleans:
         return are_all_values_false
 
 
-# pylint: disable=protected-access
-orig = botocore.client.BaseClient._make_api_call  # type: ignore
-# pylint: disable=too-many-return-statements, inconsistent-return-statements
-def mock_make_api_call(self: Any, operation_name: str, kwarg: Any) -> Any:
+orig = botocore.client.BaseClient._make_api_call  # type: ignore # pylint: disable=protected-access
+
+
+def mock_make_api_call(
+    self: Any, operation_name: str, kwarg: Any
+) -> Any:  # pylint: disable=too-many-return-statements, inconsistent-return-statements
     setattr(CustomResourceAPICallBooleans, operation_name, True)
     mock_api_responses = {
         "CreateWorkspaceApiKey": {

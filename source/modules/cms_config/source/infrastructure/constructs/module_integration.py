@@ -68,7 +68,7 @@ class ModuleOutputsConstruct(Construct):
             parameter_name=ResourceName.slash_separated(
                 prefix=ssm_prefix_with_leading_slash, name="deployment-uuid"
             ),
-            simple_name=True,
+            simple_name=False,
         )
 
         aws_ssm.StringParameter(
@@ -77,7 +77,7 @@ class ModuleOutputsConstruct(Construct):
             string_value=module_inputs_construct.identity_provider_id,
             description=f"Identity Provider ID associated with app unique ID - {app_unique_id}",
             parameter_name=config_resource_names.identity_provider_id_ssm_parameter,
-            simple_name=True,
+            simple_name=False,
         )
 
         aws_ssm.StringParameter(
@@ -86,7 +86,7 @@ class ModuleOutputsConstruct(Construct):
             string_value=vpc_config.vpc_name,
             description="VPC Name",
             parameter_name=config_resource_names.vpc_name_ssm_parameter,
-            simple_name=True,
+            simple_name=False,
         )
 
         aws_ssm.StringParameter(
@@ -95,7 +95,7 @@ class ModuleOutputsConstruct(Construct):
             string_value=vpc_name_provider_construct.function.function_arn,
             description="Arn of AWS resource lookup Lambda function",
             parameter_name=config_resource_names.aws_resource_lookup_lambda_arn_ssm_parameter,
-            simple_name=True,
+            simple_name=False,
         )
 
         aws_ssm.StringParameter(
@@ -106,7 +106,7 @@ class ModuleOutputsConstruct(Construct):
             parameter_name=ResourceName.slash_separated(
                 prefix=ssm_prefix_with_leading_slash, name="metrics/enabled"
             ),
-            simple_name=True,
+            simple_name=False,
         )
 
         metrics_parameter = aws_ssm.StringParameter(
@@ -117,7 +117,7 @@ class ModuleOutputsConstruct(Construct):
             parameter_name=ResourceName.slash_separated(
                 prefix=ssm_prefix_with_leading_slash, name="metrics/url"
             ),
-            simple_name=True,
+            simple_name=False,
         )
 
         metrics_cfn_resource: CfnResource = cast(

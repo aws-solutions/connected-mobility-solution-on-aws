@@ -166,5 +166,5 @@ class ModuleOutputsConstruct(Construct):
                 prefix=ssm_parameter_name_prefix_with_leading_slash,
                 name="grafana-workspace-endpoint/url",
             ),
-            simple_name=True,
+            simple_name=False,
         )

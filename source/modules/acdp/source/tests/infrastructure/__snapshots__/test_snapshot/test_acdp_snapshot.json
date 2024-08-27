@@ -1,5 +1,165 @@
 {
+  "Conditions": {
+    "moduleinputsconstructisbackstageadditionalscopessetcondition622861A7": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "BackstageAdditionalScopes"
+            },
+            ""
+          ]
+        }
+      ]
+    },
+    "moduleinputsconstructiscustomacmcertificatearnsetcondition409229F6": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "CustomAcmCertificateArn"
+            },
+            ""
+          ]
+        }
+      ]
+    },
+    "moduleinputsconstructisroute53hostedzoneidsetcondition7B6D6B93": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "Route53HostedZoneId"
+            },
+            ""
+          ]
+        }
+      ]
+    }
+  },
   "Mappings": {
+    "LatestNodeRuntimeMap": {
+      "af-south-1": {
+        "value": "nodejs20.x"
+      },
+      "ap-east-1": {
+        "value": "nodejs20.x"
+      },
+      "ap-northeast-1": {
+        "value": "nodejs20.x"
+      },
+      "ap-northeast-2": {
+        "value": "nodejs20.x"
+      },
+      "ap-northeast-3": {
+        "value": "nodejs20.x"
+      },
+      "ap-south-1": {
+        "value": "nodejs20.x"
+      },
+      "ap-south-2": {
+        "value": "nodejs20.x"
+      },
+      "ap-southeast-1": {
+        "value": "nodejs20.x"
+      },
+      "ap-southeast-2": {
+        "value": "nodejs20.x"
+      },
+      "ap-southeast-3": {
+        "value": "nodejs20.x"
+      },
+      "ap-southeast-4": {
+        "value": "nodejs20.x"
+      },
+      "ap-southeast-5": {
+        "value": "nodejs20.x"
+      },
+      "ap-southeast-7": {
+        "value": "nodejs20.x"
+      },
+      "ca-central-1": {
+        "value": "nodejs20.x"
+      },
+      "ca-west-1": {
+        "value": "nodejs20.x"
+      },
+      "cn-north-1": {
+        "value": "nodejs18.x"
+      },
+      "cn-northwest-1": {
+        "value": "nodejs18.x"
+      },
+      "eu-central-1": {
+        "value": "nodejs20.x"
+      },
+      "eu-central-2": {
+        "value": "nodejs20.x"
+      },
+      "eu-isoe-west-1": {
+        "value": "nodejs18.x"
+      },
+      "eu-north-1": {
+        "value": "nodejs20.x"
+      },
+      "eu-south-1": {
+        "value": "nodejs20.x"
+      },
+      "eu-south-2": {
+        "value": "nodejs20.x"
+      },
+      "eu-west-1": {
+        "value": "nodejs20.x"
+      },
+      "eu-west-2": {
+        "value": "nodejs20.x"
+      },
+      "eu-west-3": {
+        "value": "nodejs20.x"
+      },
+      "il-central-1": {
+        "value": "nodejs20.x"
+      },
+      "me-central-1": {
+        "value": "nodejs20.x"
+      },
+      "me-south-1": {
+        "value": "nodejs20.x"
+      },
+      "mx-central-1": {
+        "value": "nodejs20.x"
+      },
+      "sa-east-1": {
+        "value": "nodejs20.x"
+      },
+      "us-east-1": {
+        "value": "nodejs20.x"
+      },
+      "us-east-2": {
+        "value": "nodejs20.x"
+      },
+      "us-gov-east-1": {
+        "value": "nodejs18.x"
+      },
+      "us-gov-west-1": {
+        "value": "nodejs18.x"
+      },
+      "us-iso-east-1": {
+        "value": "nodejs18.x"
+      },
+      "us-iso-west-1": {
+        "value": "nodejs18.x"
+      },
+      "us-isob-east-1": {
+        "value": "nodejs18.x"
+      },
+      "us-west-1": {
+        "value": "nodejs20.x"
+      },
+      "us-west-2": {
+        "value": "nodejs20.x"
+      }
+    },
     "Solution": {
       "AssetsConfig": {
         "S3AssetBucketBaseName": "test-bucket-base-name",
@@ -14,6 +174,13 @@
     "AcdpUniqueId": {
       "Default": "acdp",
       "Description": "Name of the ACDP deployment",
+      "Type": "String"
+    },
+    "BackstageAdditionalScopes": {
+      "AllowedPattern": "^(?:[^\\s]+(?: [^\\s]+)*)?$",
+      "ConstraintDescription": "Scopes should be a space separated list of strings, allowing most printable ASCII characters",
+      "Default": "",
+      "Description": "Additional scopes which Backstage will request from the configured identity provider on sign-in",
       "Type": "String"
     },
     "BackstageLocalAssetDiscoveryRefreshMins": {
@@ -45,22 +212,51 @@
       "Description": "Organization Name to use for the Backstage Portal",
       "Type": "String"
     },
-    "Route53BaseDomain": {
-      "AllowedPattern": "^([A-Za-z0-9][A-Za-z0-9-]*\\.)+[A-Za-z]+$",
-      "ConstraintDescription": "Route53 Base Domain must be a valid domain name",
-      "Description": "Route53 Base Domain Name for Backstage Domain",
+    "CustomAcmCertificateArn": {
+      "AllowedPattern": "(^$)|(^arn:aws:acm:[a-z0-9-]+:[0-9]{12}:certificate/[a-f0-9-]+$)",
+      "ConstraintDescription": "Must be '' or a valid ACM certificate ARN",
+      "Default": "",
+      "Description": "Optional when using a Public Hosted Zone with Route53. Required when HostedZoneId is Private or not provided. Provide a custom ACM Certificate ARN to use for TLS.",
       "Type": "String"
     },
-    "Route53ZoneName": {
+    "FullyQualifiedDomainName": {
       "AllowedPattern": "^([A-Za-z0-9][A-Za-z0-9-]*\\.)+[A-Za-z]+$",
-      "ConstraintDescription": "Route53 Zone Name must be a valid domain name",
-      "Description": "Route53 Zone Name for Backstage Domain",
+      "ConstraintDescription": "Fully Qualified Domain Name must be a valid domain name",
+      "Description": "Fully Qualified Domain Name for ACDP resources to be accessed. If using Route53, this must be a subset of the Route53 Zone Name",
       "Type": "String"
     },
-    "UserEmail": {
-      "AllowedPattern": "^[A-Za-z0-9][_A-Za-z0-9-\\.]*@([A-Za-z0-9]+[_A-Za-z0-9-]*\\.)+[A-Za-z]+$",
-      "ConstraintDescription": "User email must be a valid email address",
-      "Description": "The user email to access Backstage",
+    "IdentityProviderId": {
+      "ConstraintDescription": "The identity provider ID must be a minimum of 3 characters.",
+      "Default": "cms",
+      "Description": "The ID associated with the identity provider configurations used for validation and exchange.",
+      "MinLength": 3,
+      "Type": "String"
+    },
+    "IsPublicFacing": {
+      "AllowedValues": [
+        "true",
+        "false"
+      ],
+      "ConstraintDescription": "Value must be boolean (true, false)",
+      "Default": "true",
+      "Description": "Boolean flag that configures if public endpoints should be created for ACDP/Backstage resources. If true, the VPC must have an Internet Gateway",
+      "Type": "String"
+    },
+    "Route53HostedZoneId": {
+      "AllowedPattern": "^(|Z[A-Z0-9]{1,30})$",
+      "ConstraintDescription": "Must be '' or a valid Route53 Hosted Zone Id",
+      "Default": "",
+      "Description": "Optional: Id of the Route53 Hosted Zone. Set to create records in Route53 for the required DNS entries.",
+      "Type": "String"
+    },
+    "UseBackstageAuthRedirectFlow": {
+      "AllowedValues": [
+        "true",
+        "false"
+      ],
+      "ConstraintDescription": "Value must be boolean (true, false)",
+      "Default": "true",
+      "Description": "Boolean flag that determines whether Backstage uses an experimental redirect flow instead of the default popup flow",
       "Type": "String"
     },
     "VpcName": {
@@ -88,7 +284,15 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": {
+          "Fn::FindInMap": [
+            "LatestNodeRuntimeMap",
+            {
+              "Ref": "AWS::Region"
+            },
+            "value"
+          ]
+        },
         "Timeout": 900
       },
       "Type": "AWS::Lambda::Function"
@@ -292,21 +496,7 @@
         "DestinationBucket": {
           "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
         },
-        "DestinationKey": {
-          "Fn::Join": [
-            "",
-            [
-              {
-                "Fn::FindInMap": [
-                  "Solution",
-                  "AssetsConfig",
-                  "S3AssetKeyPrefix"
-                ]
-              },
-              "/test.zip"
-            ]
-          ]
-        },
+        "DestinationKey": "test-backstage-s3-assets-key-prefix/pipeline/backstage_pipeline_source.zip",
         "Resource": "CopyS3Object",
         "ServiceToken": {
           "Fn::GetAtt": [
@@ -332,21 +522,7 @@
             ]
           ]
         },
-        "SourceKey": {
-          "Fn::Join": [
-            "",
-            [
-              {
-                "Fn::FindInMap": [
-                  "Solution",
-                  "AssetsConfig",
-                  "S3AssetKeyPrefix"
-                ]
-              },
-              "/test.zip"
-            ]
-          ]
-        }
+        "SourceKey": "test-backstage-s3-assets-key-prefix/pipeline/backstage_pipeline_source.zip"
       },
       "Type": "Custom::CopyS3Object",
       "UpdateReplacePolicy": "Delete"
@@ -539,9 +715,7 @@
           "arm64"
         ],
         "CompatibleRuntimes": [
-          "python3.8",
-          "python3.9",
-          "python3.10"
+          "python3.12"
         ],
         "Content": {
           "S3Bucket": {
@@ -1244,6 +1418,210 @@
       },
       "Type": "AWS::SSM::Parameter"
     },
+    "acdpmoduleoutputsconstructssmbackstageadditionalscopes3C55C0A2": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Additional scopes which Backstage will request from the configured identity provider on login",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/backstage/additional-scopes"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::If": [
+            "moduleinputsconstructisbackstageadditionalscopessetcondition622861A7",
+            {
+              "Ref": "BackstageAdditionalScopes"
+            },
+            "cms-unset"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmbackstageecrrepositoryname672ECAF5": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Backstage ECR Repository Name",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/backstage/ecr-repository/name"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "acdppipelinesconstructbackstageecrA3584D57"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmbackstageloglevel5613964C": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Level of logs to display (trace, debug, info, warn, error, critical)",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/backstage/log-level"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "BackstageLogLevel"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmbackstagenameDECB65E1": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "The name to display on Backstage",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/backstage/name"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "BackstageName"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmbackstageorgAC460578": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "The organization to display on Backstage",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/backstage/organization"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "BackstageOrg"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmbackstageuseauthredirectflow2B9477EC": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Whether Backstage should use the experimental auth redirect flow rather than the default popup flow",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/backstage/use-auth-redirect-flow"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "UseBackstageAuthRedirectFlow"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
     "acdpmoduleoutputsconstructssmcodebuildprojectarnB877AF6E": {
       "DependsOn": [
         "ssmappuniqueidD1DCE51D"
@@ -1276,6 +1654,39 @@
             "acdpmoduledeployprojectmoduledeploycodebuildprojectADB9C6C3",
             "Arn"
           ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmcodepipelineprojectname6551C577": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "CodePipeline Project Name for ACDP Backstage Deployment",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/codepipeline-project/name"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "acdppipelinesconstructbackstagecodepipeline2D3F668A"
         }
       },
       "Type": "AWS::SSM::Parameter"
@@ -1628,7 +2039,7 @@
           }
         },
         "Type": "String",
-        "Value": "solution/version/backstage/acdp"
+        "Value": "test-backstage-s3-assets-key-prefix/acdp"
       },
       "Type": "AWS::SSM::Parameter"
     },
@@ -1690,7 +2101,7 @@
           }
         },
         "Type": "String",
-        "Value": "solution/version/backstage/templates"
+        "Value": "test-backstage-s3-assets-key-prefix/templates"
       },
       "Type": "AWS::SSM::Parameter"
     },
@@ -1857,34 +2268,6 @@
           "ComputeType": "BUILD_GENERAL1_LARGE",
           "EnvironmentVariables": [
             {
-              "Name": "VPC_NAME",
-              "Type": "PLAINTEXT",
-              "Value": {
-                "Ref": "VpcName"
-              }
-            },
-            {
-              "Name": "BACKSTAGE_NAME",
-              "Type": "PLAINTEXT",
-              "Value": {
-                "Ref": "BackstageName"
-              }
-            },
-            {
-              "Name": "BACKSTAGE_ORG",
-              "Type": "PLAINTEXT",
-              "Value": {
-                "Ref": "BackstageOrg"
-              }
-            },
-            {
-              "Name": "WEB_HOSTNAME",
-              "Type": "PLAINTEXT",
-              "Value": {
-                "Ref": "Route53ZoneName"
-              }
-            },
-            {
               "Name": "DOCKER_BUILDKIT",
               "Type": "PLAINTEXT",
               "Value": "1"
@@ -1934,7 +2317,7 @@
           ]
         },
         "Source": {
-          "BuildSpec": "./cdk/source/infrastructure/buildspecs/backstage_image_buildspec.json",
+          "BuildSpec": "./source/modules/backstage/cdk/source/infrastructure/buildspecs/backstage_image_buildspec.json",
           "Type": "CODEPIPELINE"
         },
         "Tags": [
@@ -2097,8 +2480,8 @@
               "Statement": [
                 {
                   "Action": [
-                    "ssm:GetParameter",
-                    "ssm:GetParameters"
+                    "ssm:GetParameters",
+                    "ssm:GetParameter"
                   ],
                   "Effect": "Allow",
                   "Resource": {
@@ -2117,7 +2500,7 @@
                         {
                           "Ref": "AWS::AccountId"
                         },
-                        ":parameter:solution/",
+                        ":parameter/solution/",
                         {
                           "Ref": "AcdpUniqueId"
                         },
@@ -2496,7 +2879,17 @@
           },
           "Type": "S3"
         },
-        "Name": "Backstage-Pipeline",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "-backstage-pipeline"
+            ]
+          ]
+        },
         "RestartExecutionOnUpdate": true,
         "RoleArn": {
           "Fn::GetAtt": [
@@ -3231,6 +3624,13 @@
               }
             },
             {
+              "Name": "IDENTITY_PROVIDER_ID",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "IdentityProviderId"
+              }
+            },
+            {
               "Name": "AWS_REGION",
               "Type": "PLAINTEXT",
               "Value": {
@@ -3267,7 +3667,7 @@
             {
               "Name": "SOLUTION_VERSION",
               "Type": "PLAINTEXT",
-              "Value": "v0.0.0"
+              "Value": "test-solution-version"
             },
             {
               "Name": "SOLUTION_NAME",
@@ -3301,6 +3701,34 @@
               "Name": "BACKSTAGE_IMAGE_TAG",
               "Type": "PLAINTEXT",
               "Value": "latest"
+            },
+            {
+              "Name": "ROUTE53_HOSTED_ZONE_ID",
+              "Type": "PARAMETER_STORE",
+              "Value": {
+                "Ref": "moduleinputsconstructssmroute53hostedzonename917E8884"
+              }
+            },
+            {
+              "Name": "FULLY_QUALIFIED_DOMAIN_NAME",
+              "Type": "PARAMETER_STORE",
+              "Value": {
+                "Ref": "moduleinputsconstructssmfullyqualifieddomainname6F31B012"
+              }
+            },
+            {
+              "Name": "CUSTOM_ACM_CERTIFICATE_ARN",
+              "Type": "PARAMETER_STORE",
+              "Value": {
+                "Ref": "moduleinputsconstructssmacmcustomcertificatearn8344C6B1"
+              }
+            },
+            {
+              "Name": "IS_PUBLIC_FACING",
+              "Type": "PARAMETER_STORE",
+              "Value": {
+                "Ref": "moduleinputsconstructssmispublicfacing787E6E85"
+              }
             }
           ],
           "Image": "aws/codebuild/standard:7.0",
@@ -3316,7 +3744,7 @@
           ]
         },
         "Source": {
-          "BuildSpec": "./cdk/source/infrastructure/buildspecs/backstage_deploy_buildspec.json",
+          "BuildSpec": "./source/modules/backstage/cdk/source/infrastructure/buildspecs/backstage_deploy_buildspec.json",
           "Type": "CODEPIPELINE"
         },
         "Tags": [
@@ -3765,6 +4193,104 @@
         "PolicyDocument": {
           "Statement": [
             {
+              "Action": "ssm:GetParameters",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":parameter/",
+                      {
+                        "Ref": "moduleinputsconstructssmroute53hostedzonename917E8884"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":parameter/",
+                      {
+                        "Ref": "moduleinputsconstructssmfullyqualifieddomainname6F31B012"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":parameter/",
+                      {
+                        "Ref": "moduleinputsconstructssmacmcustomcertificatearn8344C6B1"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":parameter/",
+                      {
+                        "Ref": "moduleinputsconstructssmispublicfacing787E6E85"
+                      }
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
               "Action": "ec2:CreateNetworkInterfacePermission",
               "Condition": {
                 "StringEquals": {
@@ -4169,7 +4695,10 @@
             "PolicyDocument": {
               "Statement": [
                 {
-                  "Action": "ssm:GetParameter",
+                  "Action": [
+                    "ssm:GetParameter",
+                    "ssm:GetParameters"
+                  ],
                   "Effect": "Allow",
                   "Resource": {
                     "Fn::Join": [
@@ -4187,7 +4716,7 @@
                         {
                           "Ref": "AWS::AccountId"
                         },
-                        ":parameter:solution/",
+                        ":parameter/solution/",
                         {
                           "Ref": "AcdpUniqueId"
                         },
@@ -4335,304 +4864,6 @@
         ]
       },
       "Type": "AWS::IAM::Policy"
-    },
-    "acdppipelinesconstructssmadminemailBE580034": {
-      "DependsOn": [
-        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
-        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
-        "acdpbackstageassetsconstructs3policyA50772A6",
-        "ssmappuniqueidD1DCE51D"
-      ],
-      "Properties": {
-        "Description": "The Cognito admin user",
-        "Name": {
-          "Fn::Join": [
-            "",
-            [
-              "/solution/",
-              {
-                "Ref": "AcdpUniqueId"
-              },
-              "/config/backstage/admin-email"
-            ]
-          ]
-        },
-        "Tags": {
-          "Solutions:DeploymentUUID": {
-            "Fn::GetAtt": [
-              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
-              "SolutionUUID"
-            ]
-          }
-        },
-        "Type": "String",
-        "Value": {
-          "Ref": "UserEmail"
-        }
-      },
-      "Type": "AWS::SSM::Parameter"
-    },
-    "acdppipelinesconstructssmadminusernameEEA5BB60": {
-      "DependsOn": [
-        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
-        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
-        "acdpbackstageassetsconstructs3policyA50772A6",
-        "ssmappuniqueidD1DCE51D"
-      ],
-      "Properties": {
-        "Description": "The Cognito admin user",
-        "Name": {
-          "Fn::Join": [
-            "",
-            [
-              "/solution/",
-              {
-                "Ref": "AcdpUniqueId"
-              },
-              "/config/backstage/admin-username"
-            ]
-          ]
-        },
-        "Tags": {
-          "Solutions:DeploymentUUID": {
-            "Fn::GetAtt": [
-              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
-              "SolutionUUID"
-            ]
-          }
-        },
-        "Type": "String",
-        "Value": {
-          "Fn::Select": [
-            0,
-            {
-              "Fn::Split": [
-                "@",
-                {
-                  "Ref": "UserEmail"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "Type": "AWS::SSM::Parameter"
-    },
-    "acdppipelinesconstructssmbackstageecrrepositorynameE222C11F": {
-      "DependsOn": [
-        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
-        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
-        "acdpbackstageassetsconstructs3policyA50772A6",
-        "ssmappuniqueidD1DCE51D"
-      ],
-      "Properties": {
-        "Description": "Backstage ECR Repository Name",
-        "Name": {
-          "Fn::Join": [
-            "",
-            [
-              "/solution/",
-              {
-                "Ref": "AcdpUniqueId"
-              },
-              "/config/backstage/ecr-repository/name"
-            ]
-          ]
-        },
-        "Tags": {
-          "Solutions:DeploymentUUID": {
-            "Fn::GetAtt": [
-              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
-              "SolutionUUID"
-            ]
-          }
-        },
-        "Type": "String",
-        "Value": {
-          "Ref": "acdppipelinesconstructbackstageecrA3584D57"
-        }
-      },
-      "Type": "AWS::SSM::Parameter"
-    },
-    "acdppipelinesconstructssmbackstageloglevel773E25B7": {
-      "DependsOn": [
-        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
-        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
-        "acdpbackstageassetsconstructs3policyA50772A6",
-        "ssmappuniqueidD1DCE51D"
-      ],
-      "Properties": {
-        "Description": "Level of logs to display (trace, debug, info, warn, error, critical)",
-        "Name": {
-          "Fn::Join": [
-            "",
-            [
-              "/solution/",
-              {
-                "Ref": "AcdpUniqueId"
-              },
-              "/config/backstage/log-level"
-            ]
-          ]
-        },
-        "Tags": {
-          "Solutions:DeploymentUUID": {
-            "Fn::GetAtt": [
-              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
-              "SolutionUUID"
-            ]
-          }
-        },
-        "Type": "String",
-        "Value": {
-          "Ref": "BackstageLogLevel"
-        }
-      },
-      "Type": "AWS::SSM::Parameter"
-    },
-    "acdppipelinesconstructssmbackstagenameFC25FE0E": {
-      "DependsOn": [
-        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
-        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
-        "acdpbackstageassetsconstructs3policyA50772A6",
-        "ssmappuniqueidD1DCE51D"
-      ],
-      "Properties": {
-        "Description": "The name to display on Backstage",
-        "Name": {
-          "Fn::Join": [
-            "",
-            [
-              "/solution/",
-              {
-                "Ref": "AcdpUniqueId"
-              },
-              "/config/backstage/name"
-            ]
-          ]
-        },
-        "Tags": {
-          "Solutions:DeploymentUUID": {
-            "Fn::GetAtt": [
-              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
-              "SolutionUUID"
-            ]
-          }
-        },
-        "Type": "String",
-        "Value": {
-          "Ref": "BackstageName"
-        }
-      },
-      "Type": "AWS::SSM::Parameter"
-    },
-    "acdppipelinesconstructssmbackstageorg551A5A09": {
-      "DependsOn": [
-        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
-        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
-        "acdpbackstageassetsconstructs3policyA50772A6",
-        "ssmappuniqueidD1DCE51D"
-      ],
-      "Properties": {
-        "Description": "The organization to display on Backstage",
-        "Name": {
-          "Fn::Join": [
-            "",
-            [
-              "/solution/",
-              {
-                "Ref": "AcdpUniqueId"
-              },
-              "/config/backstage/organization"
-            ]
-          ]
-        },
-        "Tags": {
-          "Solutions:DeploymentUUID": {
-            "Fn::GetAtt": [
-              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
-              "SolutionUUID"
-            ]
-          }
-        },
-        "Type": "String",
-        "Value": {
-          "Ref": "BackstageOrg"
-        }
-      },
-      "Type": "AWS::SSM::Parameter"
-    },
-    "acdppipelinesconstructssmroute53basedomainF0D17CA3": {
-      "DependsOn": [
-        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
-        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
-        "acdpbackstageassetsconstructs3policyA50772A6",
-        "ssmappuniqueidD1DCE51D"
-      ],
-      "Properties": {
-        "Description": "The name of the base domain to deploy in",
-        "Name": {
-          "Fn::Join": [
-            "",
-            [
-              "/solution/",
-              {
-                "Ref": "AcdpUniqueId"
-              },
-              "/config/route53/base-domain"
-            ]
-          ]
-        },
-        "Tags": {
-          "Solutions:DeploymentUUID": {
-            "Fn::GetAtt": [
-              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
-              "SolutionUUID"
-            ]
-          }
-        },
-        "Type": "String",
-        "Value": {
-          "Ref": "Route53BaseDomain"
-        }
-      },
-      "Type": "AWS::SSM::Parameter"
-    },
-    "acdppipelinesconstructssmroute53zonename8C5C0B9F": {
-      "DependsOn": [
-        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
-        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
-        "acdpbackstageassetsconstructs3policyA50772A6",
-        "ssmappuniqueidD1DCE51D"
-      ],
-      "Properties": {
-        "Description": "The name of the hosted zone to deploy in",
-        "Name": {
-          "Fn::Join": [
-            "",
-            [
-              "/solution/",
-              {
-                "Ref": "AcdpUniqueId"
-              },
-              "/config/route53/zone-name"
-            ]
-          ]
-        },
-        "Tags": {
-          "Solutions:DeploymentUUID": {
-            "Fn::GetAtt": [
-              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
-              "SolutionUUID"
-            ]
-          }
-        },
-        "Type": "String",
-        "Value": {
-          "Ref": "Route53ZoneName"
-        }
-      },
-      "Type": "AWS::SSM::Parameter"
     },
     "appregistryapplicationstackassociation": {
       "Properties": {
@@ -4892,14 +5123,6 @@
         "customresourceconstructlambdaroleB2CB3F79"
       ],
       "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
-            }
-          ]
-        },
         "cfn_nag": {
           "rules_to_suppress": [
             {
@@ -4945,7 +5168,7 @@
             "Arn"
           ]
         },
-        "Runtime": "python3.10",
+        "Runtime": "python3.12",
         "Timeout": 300,
         "VpcConfig": {
           "SecurityGroupIds": [
@@ -5276,6 +5499,106 @@
       },
       "Type": "Custom::CreateDeploymentUUID",
       "UpdateReplacePolicy": "Delete"
+    },
+    "moduleinputsconstructssmacmcustomcertificatearn8344C6B1": {
+      "Properties": {
+        "Description": "Optional when using a Public Hosted Zone with Route53. Required when HostedZoneId is Private or not provided. Provide a custom ACM Certificate ARN to use for TLS.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/dns/acm-custom-certificate-arn"
+            ]
+          ]
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::If": [
+            "moduleinputsconstructiscustomacmcertificatearnsetcondition409229F6",
+            {
+              "Ref": "CustomAcmCertificateArn"
+            },
+            "unset"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "moduleinputsconstructssmfullyqualifieddomainname6F31B012": {
+      "Properties": {
+        "Description": "The name of the base domain to deploy in",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/dns/fully-qualified-domain-name"
+            ]
+          ]
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "FullyQualifiedDomainName"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "moduleinputsconstructssmispublicfacing787E6E85": {
+      "Properties": {
+        "Description": "Boolean value representing if public endpoints should be created for relevant resources",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/dns/is-public-facing"
+            ]
+          ]
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "IsPublicFacing"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "moduleinputsconstructssmroute53hostedzonename917E8884": {
+      "Properties": {
+        "Description": "The id of the Route53 hosted zone to deploy in if Route53 is used",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/dns/route53-hosted-zone-id"
+            ]
+          ]
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::If": [
+            "moduleinputsconstructisroute53hostedzoneidsetcondition7B6D6B93",
+            {
+              "Ref": "Route53HostedZoneId"
+            },
+            "unset"
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
     },
     "ssmappuniqueidD1DCE51D": {
       "Properties": {

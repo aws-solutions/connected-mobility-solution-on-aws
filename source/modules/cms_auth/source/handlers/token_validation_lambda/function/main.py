@@ -39,7 +39,7 @@ MAX_CACHE_SIZE_CONFIG = 1
 MAX_CACHE_SIZE_TOKENS = 1024
 
 # Usage:
-#   This function is designed to work with any OAuth2.0 compliant IdP, and can validate both CMS user and service access tokens.
+#   This function is designed to work with any OAuth 2.0 compliant IdP, and can validate both CMS user and service access tokens.
 #   It requires a secret with IdP configurations necessary to complete the authorization code flow token exchange. This secret has
 #   an expected JSON structure. See cms_common.auth_config for the JSON data structures.
 #
@@ -187,20 +187,19 @@ def verify_expiration(
 def verify_and_cache_token(
     token: str, idp_config: CMSIdPConfig, verify_using_alternate_aud: bool
 ) -> bool:
-    well_known_jwks = get_cached_issuer_jwks(idp_config.iss_domain)
+    well_known_jwks = get_cached_issuer_jwks(idp_config.issuer)
     token_jwk = verify_signing_kid(token, well_known_jwks)
-    issuer = f"https://{idp_config.iss_domain}"
 
     if not verify_using_alternate_aud:
         token_claims = verify_claims(
             token,
             token_jwk,
-            issuer=issuer,
+            issuer=idp_config.issuer,
             audience=idp_config.auds,
         )  # Validate iss and aud during decode
     else:
         token_claims = verify_claims(
-            token, token_jwk, issuer, audience=None
+            token, token_jwk, idp_config.issuer, audience=None
         )  # Set audience to None to 'skip' aud check during decode
         verify_alternate_aud(
             alternate_aud_key=str(idp_config.alternate_aud_key),
@@ -214,10 +213,10 @@ def verify_and_cache_token(
 
 @lru_cache(maxsize=MAX_CACHE_SIZE_CONFIG)
 @tracer.capture_method
-def get_cached_issuer_jwks(iss_domain: str) -> List[Dict[str, str]]:
+def get_cached_issuer_jwks(issuer: str) -> List[Dict[str, str]]:
     try:
         known_jwks: List[Dict[str, str]] = requests.get(
-            f"https://{iss_domain.rstrip('/')}/.well-known/jwks.json",
+            f"{issuer.rstrip('/')}/.well-known/jwks.json",
             timeout=10,
         ).json()["keys"]
     except KeyError as e:

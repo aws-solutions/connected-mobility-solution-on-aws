@@ -14,10 +14,10 @@ class AuthResourceNames:
     auth_prefix: str
     idp_config_secret: str
     idp_config_secret_arn_ssm_parameter: str
-    client_config_secret: str
-    client_config_secret_arn_ssm_parameter: str
-    authorization_code_flow_config_secret: str
-    authorization_code_flow_config_secret_arn_ssm_parameter: str
+    service_client_config_secret: str
+    service_client_config_secret_arn_ssm_parameter: str
+    user_client_config_secret: str
+    user_client_config_secret_arn_ssm_parameter: str
 
     @classmethod
     def from_identity_provider_id(
@@ -29,8 +29,8 @@ class AuthResourceNames:
             auth_prefix=auth_prefix_with_id,
             idp_config_secret=f"{auth_prefix_with_id}/idp-config",
             idp_config_secret_arn_ssm_parameter=f"{auth_prefix_with_id}/idp-config/secret/arn",
-            client_config_secret=f"{auth_prefix_with_id}/client-config/default",
-            client_config_secret_arn_ssm_parameter=f"{auth_prefix_with_id}/client-config/default/secret/arn",
-            authorization_code_flow_config_secret=f"{auth_prefix_with_id}/authorization-code-flow/config",
-            authorization_code_flow_config_secret_arn_ssm_parameter=f"{auth_prefix_with_id}/authorization-code-flow/config/secret/arn",
+            service_client_config_secret=f"{auth_prefix_with_id}/service-client-config/default",
+            service_client_config_secret_arn_ssm_parameter=f"{auth_prefix_with_id}/service-client-config/default/secret/arn",
+            user_client_config_secret=f"{auth_prefix_with_id}/user-client-config/default",
+            user_client_config_secret_arn_ssm_parameter=f"{auth_prefix_with_id}/user-client-config/default/secret/arn",
         )

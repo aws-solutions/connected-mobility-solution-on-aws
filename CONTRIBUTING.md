@@ -10,7 +10,10 @@ information to effectively respond to your bug report or contribution.
 
 We welcome you to use the GitHub issue tracker to report bugs or suggest features.
 
-When filing an issue, please check [existing open](https://github.com/aws-solutions/connected-mobility-solution-on-aws/issues), or [recently closed](https://github.com/aws-solutions/connected-mobility-solution-on-aws/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aclosed%20), issues to make sure somebody else hasn't already reported the issue. Please try to include as much information as you can. Details like these are incredibly useful:
+When filing an issue, please check [existing open](https://github.com/aws-solutions/connected-mobility-solution-on-aws/issues),
+or [recently closed](https://github.com/aws-solutions/connected-mobility-solution-on-aws/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aclosed%20),
+issues to make sure somebody else hasn't already reported the issue. Please try to include as much information as you can.
+Details like these are incredibly useful:
 
 - A reproducible test case or series of steps
 - The version of our code being used
@@ -34,27 +37,38 @@ To send us a pull request, please:
 1. Run _npx npm run prettier-format_ in _source_ to ensure that code format standards are maintained.
 1. If your changes include new capabilities, include in the PR description text that can be folded into the solution documentation.
 1. Commit to your fork using clear commit messages.
-1. In your repository _Security_ section, ensure that security advisories are enabled and address any Dependabot issues that appear.
+1. In your repository _Security_ section, ensure that security advisories are enabled and address any Dependabot issues
+   that appear.
 1. Send us a pull request, answering any default questions in the pull request interface.
-1. If the changes are complex or may involve additional communication, we may create a feature branch specific to your PR and ask you to rebase using that branch.
+1. If the changes are complex or may involve additional communication, we may create a feature branch specific to your
+   PR and ask you to rebase using that branch.
 
-GitHub provides additional documentation on [forking a repository](https://help.github.com/articles/fork-a-repo/) and [creating a pull request](https://help.github.com/articles/creating-a-pull-request/).
+GitHub provides additional documentation on [forking a repository](https://help.github.com/articles/fork-a-repo/) and
+[creating a pull request](https://help.github.com/articles/creating-a-pull-request/).
 
 ## Finding contributions to work on
 
-Looking at the existing issues is a great way to find something to contribute on. As our projects, by default, use the default GitHub issue labels ((enhancement/bug/duplicate/help wanted/invalid/question/wontfix), looking at any ['help wanted'](https://github.com/aws-solutions/connected-mobility-solution-on-aws/labels/help%20wanted) issues is a great place to start.
+Looking at the existing issues is a great way to find something to contribute on. As our projects, by default, use the
+default GitHub issue labels ((enhancement/bug/duplicate/help wanted/invalid/question/wontfix), looking at any
+['help wanted'](https://github.com/aws-solutions/connected-mobility-solution-on-aws/labels/help%20wanted) issues is a
+great place to start.
 
 ## Code of Conduct
 
 This project has adopted the [Amazon Open Source Code of Conduct](https://aws.github.io/code-of-conduct).
-For more information see the [Code of Conduct FAQ](https://aws.github.io/code-of-conduct-faq) or contact opensource-codeofconduct@amazon.com with any additional questions or comments.
+For more information see the [Code of Conduct FAQ](https://aws.github.io/code-of-conduct-faq) or contact
+<opensource-codeofconduct@amazon.com> with any additional questions or comments.
 
 ## Security issue notifications
 
-If you discover a potential security issue in this project we ask that you notify AWS/Amazon Security via our [vulnerability reporting page](http://aws.amazon.com/security/vulnerability-reporting/). Please do **not** create a public github issue.
+If you discover a potential security issue in this project we ask that you notify AWS/Amazon Security via our
+[vulnerability reporting page](http://aws.amazon.com/security/vulnerability-reporting/). Please do **not** create
+a public github issue.
 
 ## Licensing
 
-See the [LICENSE](https://github.com/aws-solutions/connected-mobility-solution-on-aws/blob/main/LICENSE) file for our project's licensing. We will ask you to confirm the licensing of your contribution.
+See the [LICENSE](https://github.com/aws-solutions/connected-mobility-solution-on-aws/blob/main/LICENSE) file for our
+project's licensing. We will ask you to confirm the licensing of your contribution.
 
-We may ask you to sign a [Contributor License Agreement (CLA)](https://en.wikipedia.org/wiki/Contributor_License_Agreement) for larger changes.
+We may ask you to sign a [Contributor License Agreement (CLA)](https://en.wikipedia.org/wiki/Contributor_License_Agreement)
+for larger changes.

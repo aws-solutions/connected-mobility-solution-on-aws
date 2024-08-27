@@ -60,7 +60,7 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
     try:
         response["Data"] = resource_map[event["ResourceProperties"]["Resource"]](event)
         response["Status"] = CustomResourceStatusType.SUCCESS.value
-    except Exception as exception:  # pylint: disable=W0703
+    except Exception as exception:  # pylint: disable=broad-exception-caught
         # Wrap all exceptions so CloudFormation doesn't hang
         logger.error("CustomResource error: %s", exception, exc_info=True)
 

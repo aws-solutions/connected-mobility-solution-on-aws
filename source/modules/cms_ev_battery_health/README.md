@@ -77,7 +77,7 @@ In addition to the AWS Solutions Constructs, the solution uses AWS CDK directly 
 
 ## Prerequisites
 
-- [Python 3.8+](https://www.python.org/downloads/)
+- [Python 3.12+](https://www.python.org/downloads/)
 - [NVM](https://github.com/nvm-sh/nvm)
 - [NPM 8+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [Node 18+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
@@ -89,7 +89,7 @@ Pyenv [Github Repository](https://github.com/pyenv/pyenv)
 
 ```bash
 brew install pyenv
-pyenv install 3.10.9
+pyenv install 3.12
 ```
 
 Pipenv [Github Repository](https://github.com/pypa/pipenv)
@@ -175,29 +175,29 @@ Follow the instructions for Step 1 and Step 2 in the AWS IAM Identity Center
 
 1. Navigate to Amazon Managed Grafana from the AWS console
    ![Navigate to Amazon Managed Grafana Console](documentation/images/readme/amazon-managed-grafana-console.png)
-2. Click on the newly created workspace named `ev-battery-health-grafana-workspace-<STAGE>`
-3. In the authentication tab within the Grafana workspace console, click the `Assign new user or group`
-button under the `AWS IAM Identity Center (successor to AWS SSO)` section
+1. Click on the newly created workspace named `ev-battery-health-grafana-workspace-<STAGE>`
+1. In the authentication tab within the Grafana workspace console, click the `Assign new user or group`
+   button under the `AWS IAM Identity Center (successor to AWS SSO)` section
    ![Amazon Identity Center Authentication](documentation/images/readme/grafana-iam-identity-center-authentication.png)
-4. Assign the users created in `AWS IAM Identity Center` to the Grafana workspace
+1. Assign the users created in `AWS IAM Identity Center` to the Grafana workspace
    ![Assign SSO Users to Grafana](documentation/images/readme/grafana-assign-users-to-workspace.png)
-5. Set the appropriate role for the assigned user. Click the checkbox next to the user and on the top right
-corner click the `Actions` dropdown and choose the role to assign to the user
+1. Set the appropriate role for the assigned user. Click the checkbox next to the user and on the top right
+   corner click the `Actions` dropdown and choose the role to assign to the user
    ![Assign Grafana workspace role to user](documentation/images/readme/grafana-assign-user-role.png)
-6. In the Grafana workspace page in the console, click on the workspace URL and sign in using the `AWS IAM Identity Center`
-credentials to access the Grafana workspace
+1. In the Grafana workspace page in the console, click on the workspace URL and sign in using the `AWS IAM Identity Center`
+   credentials to access the Grafana workspace
    ![Grafana Workspace URL](documentation/images/readme/grafana-navigate-to-workspace.png)
 
 #### Grafana workspace
 
 1. To access the dashboard, navigate to `Home -> Dashboards -> General -> EV Battery Health Dashboard` in the Grafana workspace
-2. To access the alert rules, navigate to `Home -> Alerting -> Alert rules` in the Grafana workspace
+1. To access the alert rules, navigate to `Home -> Alerting -> Alert rules` in the Grafana workspace
 
 ## Customizing the Solution
 
 1. Customizing the dashboard: add/remove panels in the `create_ev_battery_health_dashboard`
 function [here](./source/handlers/custom_resource/lib/dashboards.py)
-2. Customizing the alerts: add/remove alert rules in the `create_ev_battery_health_alert_rule_group`
+1. Customizing the alerts: add/remove alert rules in the `create_ev_battery_health_alert_rule_group`
 function [here](./source/handlers/custom_resource/lib/alerts.py)
 
 ## Securing the Solution

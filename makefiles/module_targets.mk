@@ -4,6 +4,11 @@ SHELL := /bin/bash
 # Custom location for library installation. OS level file restrictions causes issues.
 export MODULE_LIB_DIST_PATH = ${MODULE_PATH}/dist-lib
 
+# JSII_RUNTIME_PACKAGE_CACHE_ROOT is defined so lock collisions don't occur when modules are running concurrently
+# - RuntimeError: EEXIST: file already exists, open '<default>/.cache/<path>/aws-cdk-lib/2.130.0/<hash>.lock'
+# - https://github.com/aws/jsii/blob/main/packages/%40jsii/kernel/src/tar-cache/default-cache-root.ts
+export JSII_RUNTIME_PACKAGE_CACHE_ROOT = ${MODULE_PATH}/.cdk_cache
+
 ## ========================================================
 ## COMMON TARGETS
 ## ========================================================
@@ -12,6 +17,11 @@ pipenv-install: ## Using pipenv, installs pip dependencies.
 	@printf "%bInstalling pip dependencies: %s%b\n" "${MAGENTA}" "${MODULE_NAME}" "${NC}"
 	@pipenv install --dev --python ${PYTHON_VERSION}
 	@pipenv clean --python ${PYTHON_VERSION}
+
+.PHONY: cdk-solution-helper-install
+cdk-solution-helper-install: ## Using npm, installs node modules for cdk-solution-helper.
+	@printf "%bInstalling cdk-solution-helper node dependencies: %s%b\n" "${MAGENTA}" "${MODULE_NAME}" "${NC}"
+	@npm i --prefix deployment/cdk-solution-helper
 
 .PHONY: build
 build: verify-required-tools ## Build templates and assets for the module.
@@ -62,6 +72,31 @@ unit-tests: ## Run unit-tests for the module.
 update-snapshots: ## Update snapshot files for the module.
 	@printf "%bUpdating unit test snapshots.%b\n" "${MAGENTA}" "${NC}"
 	pipenv run ${MODULE_PATH}/deployment/run-unit-tests.sh -r -s
+
+.PHONY: verify-required-tools
+verify-required-tools: ## Checks the environment for the required dependencies.
+ifneq (v${NODE_VERSION}, $(shell node --version | cut -d "." -f 1-2))
+	$(error Node version "v${NODE_VERSION}" is required, as specified in .nvmrc. "$(shell node --version | cut -d "." -f 1-2)" was found instead. Please install the correct version by running `nvm install`.)
+endif
+ifeq (, $(shell which npm))
+	$(error Npm is required and should be automatically installed with node. Please check your node installation.`)
+endif
+ifeq (, $(shell which yarn))
+	$(error Yarn is required, as specified in the README. Please see the following link for installation (OS specific): https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable)
+endif
+ifneq (Python ${PYTHON_VERSION}, $(shell python --version | cut -d "." -f 1-2))
+	$(error Python version "Python ${PYTHON_VERSION}" is required, as specified in .python-version. "$(shell python --version | cut -d "." -f 1-2)" was found instead. Please install the correct version by running `pyenv install -s`)
+endif
+ifeq (, $(shell which pipenv))
+	$(error pipenv is required, as specified in the README. Please see the following link for installation: https://pipenv.pypa.io/en/latest/installation.html)
+endif
+ifeq (, $(shell which aws))
+	$(error The aws CLI is required, as specified in the README. Please see the following link for installation: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)
+endif
+ifeq (, $(shell which cdk))
+	$(error The aws-cdk CLI is required, as specified in the README. Please see the following link for installation: https://docs.aws.amazon.com/cdk/v2/guide/cli.html)
+endif
+	@printf "%bDependencies verified.%b\n" "${GREEN}" "${NC}"
 
 ## ========================================================
 ## HELP COMMANDS

@@ -2,7 +2,7 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-# pylint: disable=W0611
+# pylint: disable=unused-import
 
 # Connected Mobility Solution on AWS
 from .fixtures.fixture_custom_resource import (
@@ -17,7 +17,9 @@ from .fixtures.fixture_custom_resource import (
 )
 from .fixtures.fixture_process_alerts import (
     fixture_auth_client_config_secret_string_valid,
+    fixture_auth_idp_config_secret_string_valid,
     fixture_mock_boto_client_config_valid,
+    fixture_mock_boto_idp_config_valid,
     fixture_mock_process_alerts_environment_valid,
     fixture_process_alerts_clear_lru_caches,
     fixture_process_alerts_event,

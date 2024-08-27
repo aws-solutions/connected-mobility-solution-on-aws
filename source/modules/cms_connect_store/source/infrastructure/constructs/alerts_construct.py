@@ -77,8 +77,11 @@ class AlertsConstruct(Construct):
                             ],
                             resources=[
                                 resolve_ssm_parameter(
-                                    auth_resource_names.client_config_secret_arn_ssm_parameter
-                                )
+                                    auth_resource_names.service_client_config_secret_arn_ssm_parameter
+                                ),
+                                resolve_ssm_parameter(
+                                    auth_resource_names.idp_config_secret_arn_ssm_parameter
+                                ),
                             ],
                         )
                     ]
@@ -105,7 +108,14 @@ class AlertsConstruct(Construct):
                                     service="ssm",
                                     resource="parameter",
                                     resource_name=remove_leading_slash(
-                                        auth_resource_names.client_config_secret_arn_ssm_parameter
+                                        auth_resource_names.service_client_config_secret_arn_ssm_parameter
+                                    ),  # Leading slash must not be present on SSM IAM permissions
+                                ),
+                                Stack.of(self).format_arn(
+                                    service="ssm",
+                                    resource="parameter",
+                                    resource_name=remove_leading_slash(
+                                        auth_resource_names.idp_config_secret_arn_ssm_parameter
                                     ),  # Leading slash must not be present on SSM IAM permissions
                                 ),
                             ],
@@ -128,7 +138,7 @@ class AlertsConstruct(Construct):
             code=aws_lambda.Code.from_asset("dist/lambda/vehicle_trigger_alarm.zip"),
             description="Vehicle Trigger Alarm Function",
             handler="function.main.handler",
-            runtime=aws_lambda.Runtime.PYTHON_3_10,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             role=vehicle_trigger_alarm_lambda_role,
             layers=[dependency_layer],
             timeout=Duration.minutes(1),

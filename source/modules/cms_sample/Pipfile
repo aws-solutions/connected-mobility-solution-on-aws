@@ -7,10 +7,11 @@ name = "pypi"
 
 [dev-packages]
 "cms_common" = {path = "./../../lib", editable = true}
-aws-cdk-lib = ">=2.63.2"
+aws-cdk-lib = ">=2.139.1"
 boto3 = ">=1.26.0"
 boto3-stubs = {extras = ["essential"], version = "*"}
 cdk-nag = "*"
+freezegun="*"
 jinja2 = "*"
 markdown-to-json = "*"
 mkdocs-techdocs-core = "*"
@@ -23,17 +24,17 @@ pytest-cov = "*"
 pytest-mock = "*"
 pyyaml = "*"
 requests = "*"
+setuptools = ">=71.0.0"
 syrupy = "*"
 toml = "*"
 types-boto3 = "*"
 types-python-dateutil = "*"
 types-pyyaml = "*"
-types-requests = ">=2.31.0"
+types-requests = ">=2.32.0"
 types-setuptools = "*"
 types-urllib3 = "*"
 types-toml = "*"
 wrapt = "*"
-freezegun="*"
 
 [requires]
-python_version = "3.10"
+python_version = "3.12"

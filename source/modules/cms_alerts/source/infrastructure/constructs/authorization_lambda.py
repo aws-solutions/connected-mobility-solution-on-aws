@@ -52,7 +52,7 @@ class AuthorizationLambdaConstruct(Construct):
                 "TOKEN_VALIDATION_LAMBDA_ARN": token_validation_lambda_arn,
             },
             handler="main.handler",
-            runtime=aws_lambda.Runtime.PYTHON_3_10,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             timeout=Duration.minutes(1),
             role=aws_iam.Role(
                 self,

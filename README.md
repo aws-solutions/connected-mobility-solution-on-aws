@@ -1,4 +1,5 @@
 # Connected Mobility Solution on AWS
+
 <!-- markdownlint-disable-next-line -->
 **[Connected Mobility Solution on AWS](https://aws.amazon.com/solutions/implementations/connected-mobility-solution-on-aws/)** | **[🚧 Feature request](https://github.com/aws-solutions/connected-mobility-solution-on-aws/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=)** | **[🐛 Bug Report](https://github.com/aws-solutions/connected-mobility-solution-on-aws/issues/new?assignees=&labels=bug&template=bug_report.md&title=)** | **[❓ General Question](https://github.com/aws-solutions/connected-mobility-solution-on-aws/issues/new?assignees=&labels=question&template=general_question.md&title=)**
 
@@ -40,11 +41,13 @@ navigate to the [AWS Solution Page](https://aws.amazon.com/solutions/implementat
     - [Upload Assets to S3](#upload-assets-to-s3)
     - [Deploy on AWS](#deploy-on-aws)
     - [Monitoring the ACDP Deployment](#monitoring-the-acdp-deployment)
-    - [Deploy CMS Modules via Backstage](#deploy-cms-modules-via-backstage)
+    - [Module Dependencies](#module-dependencies)
+      - [ACDP Deployment Order](#acdp-deployment-order)
       - [CMS Module Deployment Order](#cms-module-deployment-order)
-        - [Deployment Order of Required CMS Config](#deployment-order-of-required-cms-config)
-        - [Deployment Order of Modules with Dependencies](#deployment-order-of-modules-with-dependencies)
-        - [Modules Without Dependencies After CMS Config](#modules-without-dependencies-after-cms-config)
+        - [Deployment Order Diagram](#deployment-order-diagram)
+      - [Functional Dependencies](#functional-dependencies)
+        - [Functional Dependency Diagram](#functional-dependency-diagram)
+    - [Deploy CMS Modules via Backstage](#deploy-cms-modules-via-backstage)
       - [Example Module Deployment via Backstage](#example-module-deployment-via-backstage)
   - [Cost Scaling](#cost-scaling)
   - [Collection of Operational Metrics](#collection-of-operational-metrics)
@@ -78,7 +81,7 @@ solution page.
 
 ### ACDP Architecture Diagram
 
-![ACDP Architecture Diagram](source/modules/acdp/documentation/architecture/cms-acdp-deployment-diagram.svg)
+![ACDP Architecture Diagram](./source/modules/acdp/documentation/architecture/cms-acdp-deployment-diagram.svg)
 
 ### ACDP Deployment Sequence Diagram
 
@@ -86,14 +89,14 @@ solution page.
 
 ### Module Deployment Sequence Diagram
 
-![Module Deployment Sequence Diagram](./source/modules/acdp/backstage/documentation/sequence/cms-module-deployment-sequence-diagram.svg)
+![Module Deployment Sequence Diagram](./source/modules/backstage/documentation/sequence/cms-module-deployment-sequence-diagram.svg)
 
 ## CMS Modules
 
 For detailed information visit the modules' README
 
 - [ACDP](./source/modules/acdp/README.md)
-  - [Backstage](./source/modules/acdp/backstage/README.md)
+  - [Backstage](./source/modules/backstage/README.md)
 - [Alerts](./source/modules/cms_alerts/README.md)
 - [API](./source/modules/cms_api/README.md)
 - [Auth](./source/modules/cms_auth/README.md)
@@ -146,7 +149,7 @@ For tools not listed here, stable versions should work appropriately.
 | Dependency | Version  |
 |------------|----------|
 | [NodeJS](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)   | 18.17.*    |
-| [Python](https://www.python.org)                                              | 3.10.*     |
+| [Python](https://www.python.org)                                              | 3.12.*     |
 
 ### Install Required Tools (OSX/Linux)
 
@@ -259,9 +262,12 @@ make install
 
 ### Create an Amazon Route 53 Hosted Zone
 
-To deploy the solution, an Amazon Route53 Hosted Zone is required to be setup in your account.
-You will provide the domain for this hosted zone in the following step when you setup your environment variables.
-This is a manual step. For more details, see
+To deploy the solution, either an Amazon Route53 Hosted Zone or external DNS provider is required to be setup in your account.
+When using Route53, you can either use a Public or Private Hosted Zone, but if you use private,
+you must manually configure a TLS Certificate in ACM.
+You will provide the Route53 Hosted Zone ID and a fully qualified domain name for this
+deployment in the following step when you setup your environment variables.
+Creating a hosted zone is a manual step. For more details, see
 [Working with hosted zones](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-working-with.html).
 
 ### Setup Environment Variables
@@ -271,11 +277,15 @@ provide the values to your deployment. To generate the file which will store the
 provide their values, run the following command:
 
 ```bash
-make deploy-variables
+make create-rc-file
+source .cmsrc
 ```
 
-> **NOTE:** The `ROUTE53_ZONE_NAME` can be found from the Amazon Route53 Hosted Zone you setup in the previous step.
-Use the AWS Management Console to find this domain.
+> **IMPORTANT:** The `source .cmsrc` command is essential for getting the configuration settings for CMS set in your
+> terminal.
+
+The `ROUTE53_HOSTED_ZONE_ID` can be found from the Amazon Route53 Hosted Zone you setup in the previous step.
+Use the AWS Management Console to find this information.  It is located under the 'Hosted zone details' expander.
 
 ## Deploy
 
@@ -298,8 +308,10 @@ The build target manages dependencies, builds required assets (e.g. packaged lam
 AWS CloudFormation templates for all modules.
 
 ```bash
-make build
+make build-all
 ```
+
+> **NOTE:** There is also a `build` target. Running that instead of `build-all` will trigger an error for a "missing file".
 
 ### Upload Assets to S3
 
@@ -321,68 +333,72 @@ make deploy
 ### Monitoring the ACDP Deployment
 
 After the CDK deployment is completed, browse to [CodePipeline](https://console.aws.amazon.com/codesuite/codepipeline/pipelines)
-in the AWS Management Console and verify that the "Backstage-Pipeline" execution completes successfully.
+in the AWS Management Console and verify that the "acdp-backstage-pipeline" execution completes successfully.
 
-![Successful CodePipeline Execution](./documentation/images/readme/deployment-codepipeline-success.png)
+![Successful CodePipeline Execution](./documentation/images/readme/acdp-backstage-pipeline-success.png)
 
 After the pipeline has completed, the deployment can be considered successfully complete and Backstage is ready for use.
 
-> **NOTE:** It can take up to **10 minutes** after the Backstage pipeline completes for Amazon Cognito's auth domain to become
-> available for use with Backstage. If your Backstage domain will not load, please wait and try again.
+### Module Dependencies
 
-### Deploy CMS Modules via Backstage
+It is worth noting that many dependencies, be it deployment or functional, can be met by other means rather than
+the specified module, such as manually creating/providing SSM Parameters, or any other required resources and their
+respective functionality. Details for how to accomplish this will vary by module and dependency, and are best understood
+by reviewing the source code for the modules under question.
+
+#### ACDP Deployment Order
+
+The ACDP deployment is dependent on the VPC and Auth Setup deployments, since it uses them as its own VPC and IdP
+configuration. These deployments can be separate from the configuration deployments used to configure further CMS
+module deployments.
+
+> **NOTE:** Backstage currently only support the usage of `cms` as the AppUniqueId when deploying from Backstage.
+> Since AppUniqueId must be unique per module deployment, to utilize a separate deployment of VPC or Auth Setup for
+> ACDP and CMS module deployments, the VPC and Auth Setup deployments used by ACDP must specify an AppUniqueId other
+> than `cms`.
 
 #### CMS Module Deployment Order
 
-All CMS modules have dependencies on the initial three deployments for configuring CMS.
+All CMS modules have dependencies on the initial three deployments for configuring CMS: VPC, Auth Setup, and CMS Config.
 
 Some CMS on AWS modules have secondary dependencies on other modules and must be deployed in order.
 
-The rest of the modules do not have dependencies on other modules and can be deployed in any order after CMS Config.
+The remaining modules do not have dependencies on other modules and can be deployed in any order after CMS Config.
 
-The deployment order that must be observed is as follows:
+##### Deployment Order Diagram
 
-##### Deployment Order of Required CMS Config
+![CMS Deployment Order Diagram](./documentation/dependencies/cms-deployment-dependencies.svg)
 
-1. VPC
-2. Auth Setup
-3. CMS Config
+#### Functional Dependencies
 
-##### Deployment Order of Modules with Dependencies
+CMS Modules also have functional dependencies that do not inherently align with deployment dependencies.
 
-1. CMS Auth
-2. CMS Connect & Store
-3. CMS Alerts
-4. CMS API
-5. CMS EV Battery Health
-6. CMS FleetWise Connector
+##### Functional Dependency Diagram
 
-##### Modules Without Dependencies After CMS Config
+![CMS Functional Dependency Diagram](./documentation/dependencies/cms-functional-dependencies.svg)
 
-- CMS Vehicle Provisioning
-- CMS Vehicle Simulator
+### Deploy CMS Modules via Backstage
 
 #### Example Module Deployment via Backstage
 
 The following instructions detail how to deploy the CMS Vehicle Simulator module.
 The same steps can be applied to other modules as well by replacing the URLs and names.
 
-1. Navigate to the Backstage URL in a web browser (ROUTE53_BASE_DOMAIN that was specified during deployment).
-2. Sign in to Backstage using the credentials that were emailed to the user-email specified during deployment.
-3. Follow the prompts to create a new password and set up multi-factor authentication (MFA).
-4. On Backstage, navigate to the `Create` page available from the `Catalog` menu in the side bar.
+1. Navigate to the Backstage URL in a web browser (FULLY_QUALIFIED_DOMAIN_NAME that was specified during deployment).
+1. Sign in to Backstage using the identity provider of choice, configurd via the Auth Setup module and IdentityProviderId.
+1. On Backstage, navigate to the `Create` page available from the `Catalog` menu in the side bar.
    Select the `CHOOSE` button on the `CMS Vehicle Simulator` card.
    ![Vehicle Simulator Choose Card](./documentation/images/readme/backstage-choose-vehicle-sim-card.png)
 
-5. Fill in the form as required by the Vehicle Simulator template and click the `Next` button and then the `Review` button.
+1. Fill in the form as required by the Vehicle Simulator template and click the `Next` button and then the `Review` button.
    ![Vehicle Simulator Form Page 1](./documentation/images/readme/backstage-vehicle-simulator-form-page-1.png)
    ![Vehicle Simulator Form Page 2](./documentation/images/readme/backstage-vehicle-simulator-form-page-2.png)
 
-6. Click the `Create` button.
+1. Click the `Create` button.
 
    ![Vehicle Simulator Form Confirmation](./documentation/images/readme/backstage-vehicle-simulator-form-confirm.png)
 
-7. Monitor the deployment and ensure that the Vehicle Simulator module deploys successfully.
+1. Monitor the deployment and ensure that the Vehicle Simulator module deploys successfully.
 
    ![Vehicle Simulator Deployment Successful](./documentation/images/readme/backstage-vehicle-simulator-deployment-success.png)
 
@@ -404,18 +420,18 @@ how to disable this capability, please see the
 
 1. Capture and store the deployment UUIDs of the solution.
 
-   - This is used to look for any resources not destroyed by CloudFormation after teardown completes
+    This is used to look for any resources not destroyed by CloudFormation after teardown completes
 
-   ```bash
-   make get-acdp-deployment-uuid
-   make get-cms-deployment-uuid
-   ```
+    ```bash
+    make get-acdp-deployment-uuid
+    make get-cms-deployment-uuid
+    ```
 
-   the outputs will be uuidv4 strings, capture and store both:
+    the outputs will be uuidv4 strings, capture and store both:
 
-   ```bash
-   XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
-   ```
+    ```bash
+    XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+    ```
 
 1. Delete CMS modules in order.
 
@@ -423,11 +439,11 @@ how to disable this capability, please see the
    make destroy
    ```
 
-  > **NOTE:** Backstage might fail to delete due to the ACM certificate creation custom resource.
-  After delete fails, click delete again and select retain on the custom resource.
-  This will not leave any resources in the account.
+    > **NOTE:** Backstage might fail to delete due to the ACM certificate creation custom resource.
+    After delete fails, click delete again and select retain on the custom resource.
+    This will not leave any resources in the account.
 
-  ![Delete Backstage with Cert Error](documentation/images/readme/delete-backstage-on-cert-error.png)
+    ![Delete Backstage with Cert Error](documentation/images/readme/delete-backstage-on-cert-error.png)
 
 1. Delete the Backstage ACM Certificate (optional)
 
@@ -435,10 +451,10 @@ how to disable this capability, please see the
 
 1. Manually cleanup the following resources:
 
-- S3 buckets
-- DynamoDB tables
-- Cognito user pool
-- KMS keys
+   - S3 buckets
+   - DynamoDB tables
+   - Cognito user pool
+   - KMS keys
 
    Locate the leftover resources using the following command which first requires you to export the `DEPLOYMENT_UUID`
    variable using each of the values previously acquired from AWS Systems Manager.

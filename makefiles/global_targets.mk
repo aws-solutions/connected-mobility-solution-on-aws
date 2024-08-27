@@ -20,28 +20,3 @@ build-python-package: ## Wraps normal setup.py commands to leverage the environm
 .PHONY: install-python-package
 install-python-package: ## Wraps normal setup.py commands to leverage the environment variables defined in Makefiles
 	@pipenv run python setup.py install
-
-.PHONY: verify-required-tools
-verify-required-tools: ## Checks the environment for the required dependencies.
-ifneq (v${NODE_VERSION}, $(shell node --version | cut -d "." -f 1-2))
-	$(error Node version "v${NODE_VERSION}" is required, as specified in .nvmrc. "$(shell node --version | cut -d "." -f 1-2)" was found instead. Please install the correct version by running `nvm install`.)
-endif
-ifeq (, $(shell which npm))
-	$(error Npm is required and should be automatically installed with node. Please check your node installation.`)
-endif
-ifeq (, $(shell which yarn))
-	$(error Yarn is required, as specified in the README. Please see the following link for installation (OS specific): https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable)
-endif
-ifneq (Python ${PYTHON_VERSION}, $(shell python --version | cut -d "." -f 1-2))
-	$(error Python version "Python ${PYTHON_VERSION}" is required, as specified in .python-version. "$(shell python --version | cut -d "." -f 1-2)" was found instead. Please install the correct version by running `pyenv install -s`)
-endif
-ifeq (, $(shell which pipenv))
-	$(error pipenv is required, as specified in the README. Please see the following link for installation: https://pipenv.pypa.io/en/latest/installation.html)
-endif
-ifeq (, $(shell which aws))
-	$(error The aws CLI is required, as specified in the README. Please see the following link for installation: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)
-endif
-ifeq (, $(shell which cdk))
-	$(error The aws-cdk CLI is required, as specified in the README. Please see the following link for installation: https://docs.aws.amazon.com/cdk/v2/guide/cli.html)
-endif
-	@printf "%bDependencies verified.%b\n" "${GREEN}" "${NC}"

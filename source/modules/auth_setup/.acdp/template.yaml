@@ -2,14 +2,12 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: auth-setup
-  description: A CDK Python app for deploying a customizable but structured OAuth configuration, with optional Cognito infrastructure to populate this configuration.
+  description: A CDK Python app for deploying a customizable but structured OAuth 2.0 configuration, with optional Cognito infrastructure to populate this configuration.
   tags:
   - cms
   - auth
-  - user
   - config
-  - client-credentials
-  - authorization-code
+  - oauth2
   title: CMS Auth Setup Module
   annotations:
     backstage.io/techdocs-ref: dir:../docs/components/auth-setup/
@@ -54,21 +52,21 @@ spec:
       shouldCreateCognitoResources:
         oneOf:
         - properties:
-            authorizationCodeExchangeConfigSecretArn:
+            userClientConfigSecretArn:
               description: Leave blank to deploy new secret with empty JSON values. Otherwise, ARN of an existing Secret. Secret value is a JSON string
-                providing config used for the AWS Cognito Authorization Code flow.
+                providing OAuth 2.0 client configuration for a user client.
               pattern: ^arn:aws:secretsmanager:[a-z0-9-]+:\d{12}:secret:[a-zA-Z0-9/_+=.@-]+$
-              title: Authorization Code Exchange Config Secret Arn (Optional)
+              title: User Client Config Secret Arn (Optional)
               type: string
             idpConfigSecretArn:
               description: Leave blank to deploy new secret with empty JSON values. Otherwise, ARN of an existing Secret. Secret value is a JSON string
-                providing config used to validate OAuth 2.0 OpenID Connect auth tokens.
+                providing configurations for an OAuth 2.0 identity provider.
               pattern: ^arn:aws:secretsmanager:[a-z0-9-]+:\d{12}:secret:[a-zA-Z0-9/_+=.@-]+$
               title: IdP Config Secret Arn (Optional)
               type: string
             serviceClientConfigSecretArn:
               description: Leave blank to deploy new secret with empty JSON values. Otherwise, ARN of an existing Secret. Secret value is a JSON string
-                providing config used for the Client Credentials flow.
+                providing OAuth 2.0 client configuration for a service client.
               pattern: ^arn:aws:secretsmanager:[a-z0-9-]+:\d{12}:secret:[a-zA-Z0-9/_+=.@-]+$
               title: Service Client Config Secret Arn (Optional)
               type: string
@@ -148,10 +146,10 @@ spec:
       - name: SHOULD_CREATE_COGNITO_RESOURCES
         value: ${{ parameters.shouldCreateCognitoResources }}
       - name: CALLBACK_URLS
-        value: ${{ parameters.callbackUrls | join(",") | default("https://example.com,https://localhost", true) }}
+        value: ${{ parameters.callbackUrls | join(",") | default("https://example.com", true) }}
       - name: IDP_CONFIG_SECRET_ARN
         value: ${{ parameters.idpConfigSecretArn | default("") }}
       - name: SERVICE_CLIENT_CONFIG_SECRET_ARN
         value: ${{ parameters.serviceClientConfigSecretArn | default("") }}
-      - name: AUTHORIZATION_CODE_EXCHANGE_CONFIG_SECRET_ARN
-        value: ${{ parameters.authorizationCodeExchangeConfigSecretArn | default("") }}
+      - name: USER_CLIENT_CONFIG_SECRET_ARN
+        value: ${{ parameters.userClientConfigSecretArn | default("") }}

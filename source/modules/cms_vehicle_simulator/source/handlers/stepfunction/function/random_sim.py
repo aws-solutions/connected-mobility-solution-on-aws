@@ -108,7 +108,7 @@ class GenericSim:
         return arrow.utcnow().isoformat()
 
     @staticmethod
-    def generic_sim_pickOne(  # pylint: disable=C0103 # NOSONAR
+    def generic_sim_pickOne(  # pylint: disable=invalid-name # NOSONAR
         limits: Dict[str, Any], counter: int = 0
     ) -> Any:
         # This field is to generate random data, there is no security implication

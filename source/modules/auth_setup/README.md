@@ -22,25 +22,40 @@
     - [Deploy on AWS](#deploy-on-aws)
     - [Delete](#delete)
   - [Usage](#usage)
-    - [1. Cognito Deploy](#1-cognito-deploy)
-    - [2. Empty Config Deploy](#2-empty-config-deploy)
-    - [3. Existing Config Deploy](#3-existing-config-deploy)
+    - [Deployment Options](#deployment-options)
+      - [1. Cognito Deploy](#1-cognito-deploy)
+      - [2. Empty Config Deploy](#2-empty-config-deploy)
+      - [3. Existing Config Deploy](#3-existing-config-deploy)
+    - [Integration with ACDP / Backstage](#integration-with-acdp--backstage)
+      - [Callback URIs](#callback-uris)
+      - [Scopes](#scopes)
+    - [Secret Structure](#secret-structure)
+      - [IdP Config](#idp-config)
+      - [User Client Config](#user-client-config)
+      - [Service Client Config](#service-client-config)
   - [Cost Scaling](#cost-scaling)
   - [Collection of Operational Metrics](#collection-of-operational-metrics)
   - [License](#license)
 
 ## Solution Overview
 
-The Auth Setup module performs two important roles within CMS. First, it provides the means to configure the CMS Auth module's
-lambda functions, and other CMS module's client credential flows, via three configuration secrets.
+The Auth Setup module supports the following features within CMS:
+
+- Create IdP configuration for CMS Auth module's Token Validation and Authorization Code Exchange lambda functions
+- Create IdP configuration for Users to login to the Backstage module
+- Create IdP configuration for CMS modules to perform service-to-service auth via the Client Credentials flow
+- Provide an optional deployment of Cognito infrastructure compatible with Backstage, and populate the IdP configurations
+  appropriately
+
+These features are accomplished primarily via three AWS Secrets Manager secrets, which provide configuration structure
+for any OAuth 2.0 identity provider. The secrets are as follows:
 
 - IdP Config
-  - Used by the CMS Auth token validation lambda for validating access tokens with the configured identity provider
-- Client Config
-  - Used by CMS module's to communicate with the identity provider's `/token` endpoint and execute the client_credentials
-flow. Retrieving an access token.
-- Authorization Code Exchange Config
-  - Used by the CMS Auth authorization code exchange lambda for exchanging an authorization code for an access token.
+  - IdP configurations needed to facilitate authentication and authorization via OAuth 2.0 identity providers.
+- Service Client Config
+  - Service client configuration needed for OAuth 2.0 operations.
+- User Client Config
+  - User client configuration needed for OAuth 2.0 operations.
 
 This module also provides an optional deployment of Cognito infrastructure which is
 configured for basic usage within CMS. If deploying the Cognito infrastructure, the configuration secrets will be populated
@@ -69,7 +84,7 @@ In addition to the AWS Solutions Constructs, the solution uses AWS CDK directly 
 
 ## Prerequisites
 
-- [Python 3.8+](https://www.python.org/downloads/)
+- [Python 3.12+](https://www.python.org/downloads/)
 - [NVM](https://github.com/nvm-sh/nvm)
 - [NPM 8+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [Node 18+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
@@ -81,7 +96,7 @@ Pyenv [Github Repository](https://github.com/pyenv/pyenv)
 
 ```bash
 brew install pyenv
-pyenv install 3.10.9
+pyenv install 3.12
 ```
 
 Pipenv [Github Repository](https://github.com/pypa/pipenv)
@@ -155,17 +170,19 @@ make destroy
 
 ## Usage
 
+### Deployment Options
+
 The Auth Setup module has three primary deployment paths depending on your existing identity provider setup. These paths
 are detailed below.
 
-### 1. Cognito Deploy
+#### 1. Cognito Deploy
 
 If using the optional Cognito infrastructure deployment which is provided by this module, deploy the module with
 the CloudFormation parameter `ShouldCreateCognitoResources` set to "True". This will deploy a basic Cognito infrastructure
 including a user pool, service app client, and user app client, to your account. It will also populate the three configuration
 secrets with values specific to the Cognito deployment.
 
-### 2. Empty Config Deploy
+#### 2. Empty Config Deploy
 
 If using your own identity provider, and you do not have existing configuration secrets from a previous deployment,
 the Auth Setup module will deploy the three configuration secrets in the expected JSON format with empty values. These
@@ -173,13 +190,65 @@ values can be populated after the deployment with values specific to your identi
 deploy the module with the CloudFormation parameter `ShouldCreateCognitoResources` set to "False", and do not provide
 values for the existing secret arn parameters.
 
-### 3. Existing Config Deploy
+#### 3. Existing Config Deploy
 
 If using your own identity provider, and you have existing configuration secrets from a previous deployment with
 appropriate values that you would like to reuse, the Auth Setup module will connect the existing secrets to SSM parameters
 expected by other CMS module's. This can be done for any or all of the three configuration secrets. To execute this deployment,
 deploy the module with the CloudFormation parameter `ShouldCreateCognitoResources` set to "False", and provide an existing
 secret arn for any of the three existing secret arn CloudFormation parameters.
+
+### Integration with ACDP / Backstage
+
+#### Callback URIs
+
+If you would like to use the Auth Setup module for authenticating logins to the Backstage portal deployed by ACDP, it is
+necessary to include the appropriate Backstage Callback URI in your identity provider's user client. This Callback Uri
+is defined as '<https://your-backstage-domain/api/auth/provider-id/handler/frame>'. See the backstage docs for more info:
+<https://backstage.io/docs/auth/oidc#the-configuration>.
+
+This value is added by default to the Cognito user app client when deploying Cognito infrastructure, and when deploying via
+the Makefile `make deploy` target, by using the `FULLY_QUALIFIED_DOMAIN_NAME` environment variable (this is the same variable
+used to set the Backstage domain during an ACDP / Backstage deploy). Otherwise, you must configure the Callback URIs for
+your identity provider client manually to facilitate the Backstage login redirect.
+
+#### Scopes
+
+To allow login to Backstage, the IdP must be configured to allow the following three scopes: openid, email,
+profile. Without these scopes, Backstage will fail to authenticate users on login. This can be adjusted from the Backstage
+source code if desired.
+
+### Secret Structure
+
+#### IdP Config
+
+- issuer
+  - Issuer URL for the IdP that will be included in the `iss` claim of access tokens
+- token_endpoint
+  - `/oauth2/token` endpoint for the IdP
+- authorization_endpoint
+  - `/oauth2/authorize` endpoint for the IdP
+- alternate_aud_key
+  - Claim key to use for validating access tokens instead of `aud`, if `aud` is not including in the access tokens provided
+    by your IdP
+- auds
+  - Array of allowed audience values for the `aud` claim of access tokens
+- scopes
+  - Array of scopes used to validate the `scopes` claim of access tokens
+
+#### User Client Config
+
+- client_id
+  - Client ID of User client
+- client_secret
+  - Client Secret of User client
+
+#### Service Client Config
+
+- client_id
+  - Client ID of Service client
+- client_secret
+  - Client Secret of Service client
 
 ## Cost Scaling
 

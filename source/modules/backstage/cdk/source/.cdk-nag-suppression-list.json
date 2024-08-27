@@ -1,0 +1,82 @@
+{
+    "/acdp-backstage/backstage/backstage-elb-logs-bucket/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-S1",
+                "reason": "An logs bucket does not need S3 bucket for access logs"
+            }
+        ]
+    },
+    "/acdp-backstage/backstage/backstage-task-definition-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Wildcards are restricted and prefixed where possible to limit their scope"
+            }
+        ]
+    },
+    "/acdp-backstage/backstage/backstage-task-definition-role/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Default policy here is least privilege"
+            }
+        ]
+    },
+    "/acdp-backstage/backstage/backstage-ecs-fargate-task-definition/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-ECS2",
+                "reason": "All environment variables defined this way are not sensitive information."
+            }
+        ]
+    },
+    "/acdp-backstage/backstage/acdp-backstage-alb/SecurityGroup/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-EC23",
+                "reason": "This is expected as it is accessed from the web and auth is in place to prevent unintended users"
+            }
+        ]
+    },
+    "/acdp-backstage/backstage/alb-listener-certificate/CertificateRequestorFunction/ServiceRole/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM4",
+                "reason": "Default policy here is least privilege"
+            }
+        ]
+    },
+    "/acdp-backstage/backstage/alb-listener-certificate/CertificateRequestorFunction/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Default policy here is least privilege"
+            }
+        ]
+    },
+    "/acdp-backstage/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM4",
+                "reason": "Default policy here is least privilege"
+            }
+        ]
+    },
+    "/backstage-env-dev/backstage-env/backstage-aurora-postgres/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-RDS6",
+                "reason": "IAM Database Authentication is not enabled by default and can easily be added in"
+            },
+            {
+                "id": "AwsSolutions-RDS11",
+                "reason": "The default endpoint port is expected to be used here"
+            },
+            {
+                "id": "AwsSolutions-RDS10",
+                "reason": "Delete protection disabled intentionally. Preference is to use backup and restore capabilities."
+            }
+        ]
+    }
+}

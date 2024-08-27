@@ -12,7 +12,7 @@ import pytest
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 
-@pytest.fixture(name="context", scope="module")
+@pytest.fixture(name="context", scope="session")
 def fixture_context() -> LambdaContext:
     class MockLambdaContext:
         def __init__(self) -> None:

@@ -12,4 +12,4 @@ cms_common = {path = "./../lib", editable = true}
 [dev-packages]
 
 [requires]
-python_version = "3.10"
+python_version = "3.12"

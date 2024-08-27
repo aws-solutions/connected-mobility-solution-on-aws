@@ -24,7 +24,7 @@ TEST_CONFIG_RESOURCE_NAMES_CLASS = ConfigResourceNames.from_app_unique_id(
 )
 
 
-@pytest.fixture(name="aws_resource_lookup_event", scope="module")
+@pytest.fixture(name="aws_resource_lookup_event", scope="session")
 def fixture_aws_resource_lookup_event() -> Dict[str, Any]:
     return {
         "ResponseURL": "https://test-response-url.com",
@@ -38,7 +38,7 @@ def fixture_aws_resource_lookup_event() -> Dict[str, Any]:
     }
 
 
-@pytest.fixture(name="aws_resource_lookup_event_identity_provider_id", scope="module")
+@pytest.fixture(name="aws_resource_lookup_event_identity_provider_id", scope="session")
 def fixture_aws_resource_lookup_event_identity_provider_id(
     aws_resource_lookup_event: Dict[str, Any],
 ) -> Dict[str, Any]:

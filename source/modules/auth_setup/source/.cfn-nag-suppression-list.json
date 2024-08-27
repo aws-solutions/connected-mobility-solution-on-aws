@@ -1,5 +1,5 @@
 {
-    "/auth-setup/configuration-secrets/authorization-code-exchange-config/new-secret/Resource": {
+    "/auth-setup/oauth2-configurations/user-client-config/new-secret/Resource": {
         "rules_to_suppress": [
             {
                 "id": "W77",
@@ -7,7 +7,7 @@
             }
         ]
     },
-    "/auth-setup/configuration-secrets/idp-config/new-secret/Resource": {
+    "/auth-setup/oauth2-configurations/idp-config/new-secret/Resource": {
         "rules_to_suppress": [
             {
                 "id": "W77",
@@ -15,7 +15,7 @@
             }
         ]
     },
-    "/auth-setup/configuration-secrets/service-client-config/new-secret/Resource": {
+    "/auth-setup/oauth2-configurations/service-client-config/new-secret/Resource": {
         "rules_to_suppress": [
             {
                 "id": "W77",

@@ -87,6 +87,7 @@ class UsersConstruct(Construct):
             scopes=[
                 aws_cognito.OAuthScope.EMAIL,
                 aws_cognito.OAuthScope.OPENID,
+                aws_cognito.OAuthScope.PROFILE,
                 aws_cognito.OAuthScope.resource_server(resource_server, user_scope),
             ],
             callback_urls=module_inputs_construct.stack_config.callback_urls,

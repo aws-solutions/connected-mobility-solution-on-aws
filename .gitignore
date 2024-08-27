@@ -7,7 +7,6 @@ environment_tars
 
 *.d.ts
 node_modules
-coverage/
 
 # Certification files
 # In case you have these in your directory for deployment/testing
@@ -81,6 +80,7 @@ htmlcov/
 .tox/
 .nox/
 .coverage
+coverage/
 .coverage.*
 .cache
 nosetests.xml
@@ -93,7 +93,11 @@ coverage-reports/
 cover/
 *-cfnlogs.txt
 .nightswatch/functional/results
-.cdk_cache
+.cdk_cache/
+
+# Solutions
+.temp_redpencil/
+bom.json
 
 # Translations
 *.mo

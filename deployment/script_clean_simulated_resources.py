@@ -50,10 +50,12 @@ def get_simulated_things() -> Generator[str, None, None]:
     parameters = {"thingGroupName": "cms-simulated-vehicle"}
 
     for page in list_things_iterator.paginate(**parameters):  # type: ignore
-        yield from page["things"]  # pylint: disable=W0621
+        yield from page["things"]  # pylint: disable=redefined-outer-name
 
 
-def delete_secretsmanager_secret(secret_arn: str) -> None:  # pylint: disable=W0621
+def delete_secretsmanager_secret(
+    secret_arn: str,  # pylint: disable=redefined-outer-name
+) -> None:
     secretsmanager_client.delete_secret(
         SecretId=secret_arn, ForceDeleteWithoutRecovery=True
     )

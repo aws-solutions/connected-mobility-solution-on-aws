@@ -57,7 +57,7 @@ class IncomingAlertsConstruct(Construct):
                 "SNS_TOPIC_PREFIX": sns_topic_prefix,
             },
             handler="app.main.handler",
-            runtime=aws_lambda.Runtime.PYTHON_3_10,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             timeout=Duration.seconds(30),
             role=aws_iam.Role(
                 self,

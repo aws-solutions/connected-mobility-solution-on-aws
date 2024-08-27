@@ -24,7 +24,6 @@ from cms_common.constructs.lambda_dependencies import LambdaDependenciesConstruc
 from cms_common.constructs.vpc_construct import VpcConstruct
 
 # Connected Mobility Solution on AWS
-from .aspects.validation import apply_validations
 from .constructs.cloudfront import CloudFrontConstruct
 from .constructs.cognito import CognitoConstruct
 from .constructs.console import ConsoleConstruct
@@ -156,7 +155,6 @@ class CmsVehicleSimulatorConstruct(Construct):
             cloudfront_domain_name=cloudfront_construct.console_cloudfront_dist.cloud_front_web_distribution.domain_name,
             custom_resource_lambda_construct=custom_resource_construct,
         )
-        cognito_construct.node.add_dependency(cloudfront_construct)
 
         simulator_construct = SimulatorConstruct(
             self,
@@ -170,7 +168,6 @@ class CmsVehicleSimulatorConstruct(Construct):
             iot_topic_prefix=self.IOT_TOPIC_PREFIX,
             vpc_construct=vpc_construct,
         )
-        simulator_construct.node.add_dependency(custom_resource_construct)
 
         vs_api_construct = VSApiConstruct(
             self,
@@ -183,10 +180,8 @@ class CmsVehicleSimulatorConstruct(Construct):
             api_gateway_stage=self.API_GATEWAY_STAGE,
             vpc_construct=vpc_construct,
         )
-        vs_api_construct.node.add_dependency(cloudfront_construct)
-        vs_api_construct.node.add_dependency(simulator_construct)
 
-        console_construct = ConsoleConstruct(
+        ConsoleConstruct(
             self,
             "console-construct",
             template_folder_path="source/infrastructure/assets/templates",
@@ -200,10 +195,6 @@ class CmsVehicleSimulatorConstruct(Construct):
             iot_topic_prefix=self.IOT_TOPIC_PREFIX,
             vpc_construct=vpc_construct,
         )
-
-        console_construct.node.add_dependency(vs_api_construct)
-        console_construct.node.add_dependency(custom_resource_construct)
-        console_construct.node.add_dependency(simulator_construct)
 
         ModuleOutputsConstruct(
             self,
@@ -250,5 +241,3 @@ class CmsVehicleSimulatorConstruct(Construct):
                 ]
             },
         )
-
-        apply_validations(scope)

@@ -5,60 +5,85 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.8] - 2024-08-19
+## [1.2.0] - 2024-08-28
+
+### Added
+
+#### Automotive Cloud Developer Portal
+
+- Upgrade Backstage to v1.28.
+- Support for Transit Gateway attachment to the VPC.
+- Support Private Hosted Zones.
+- Support external DNS when not using Route53.
+- Support using a custom TLS certificate uploaded to ACM.
+- Add generic OAuth 2.0 support to Backstage. CMS Auth-Setup is now used to configure Backstage's IdP.
+- Add CFN parameter for Backstage auth scopes.
+- Add CFN parameter to set Backstage auth mode to redirect login flow instead of popup flow.
+
+#### CMS
+
+- Add CFN parameter to Auth Setup for callback URLs.
+
+### Removed
+
+#### Automotive Cloud Developer Portal
+
+- Custom Cognito IdP for Backstage no longer needed.
+
+## [1.1.8] - 2024-08-15
 
 ### Fixed
 
-- Upgrade fast-xml-parser to resolve CVE
-- Upgrade axios to resolve CVE
+- Upgrade fast-xml-parser to resolve CVE.
+- Upgrade axios to resolve CVE.
 
 ## [1.1.7] - 2024-07-16
 
 ### Fixed
 
-- Upgrade inline-style-prefixer to resolve CVE
+- Upgrade inline-style-prefixer to resolve CVE.
 
 ## [1.1.6] - 2024-06-24
 
 ### Fixed
 
-- Upgrade ws to resolve CVE
+- Upgrade ws to resolve CVE.
 
 ## [1.1.5] - 2024-06-17
 
 ### Fixed
 
-- Upgrade braces to resolve CVE
-- Update README instructions to run Backstage locally
+- Upgrade braces to resolve CVE.
+- Update README instructions to run Backstage locally.
 
 ## [1.1.4] - 2024-06-06
 
 ### Fixed
 
-- Upgrade mysql to resolve CVE
-- Fix integration test issue by allowing cron to be supplied to FleetWise Glue Job
+- Upgrade mysql to resolve CVE.
+- Fix integration test issue by allowing cron to be supplied to FleetWise Glue Job.
 
 ## [1.1.3] - 2024-05-16
 
 ### Fixed
 
-- Upgrade werkzeug to resolve CVE
+- Upgrade werkzeug to resolve CVE.
 
-## [1.1.2] - 2024-04-29
+## [1.1.2] - 2024-04-30
 
 ### Fixed
 
-- Upgrade formidable to resolve CVE
-- Upgrade mysql2 to resolve CVE
+- Upgrade formidable to resolve CVE.
+- Upgrade mysql2 to resolve CVE.
 
 ## [1.1.1] - 2024-04-18
 
 ### Fixed
 
-- Upgrade mysql2 to resolve CVE
-- Upgrade requests library with idna peer dependency to resolve pip-audit
-- Upgrade @backstage/cli to resolve Jest errors
-- Pin moto version in Alerts module to avoid moto Athena bug introduced in moto 5.0.3
+- Upgrade mysql2 to resolve CVE.
+- Upgrade requests library with idna peer dependency to resolve pip-audit.
+- Upgrade @backstage/cli to resolve Jest errors.
+- Pin moto version in Alerts module to avoid moto Athena bug introduced in moto 5.0.3.
 
 ## [1.1.0] - 2024-04-11
 

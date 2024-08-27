@@ -39,8 +39,9 @@ def fixture_mock_module_env_vars() -> Dict[str, str]:
         "BACKSTAGE_TEMPLATE_S3_UPDATE_REFRESH_MINS": "30",
         "BACKSTAGE_NAME": "test-backstage-name",
         "BACKSTAGE_ORG": "test-org-name",
-        "ROUTE53_ZONE_NAME": "test-zone-name",
-        "ROUTE53_BASE_DOMAIN": "test-base.test-zone-name",
+        "ROUTE53_HOSTED_ZONE_ID": "Z0123456789ABCDE12PKU",
+        "FULLY_QUALIFIED_DOMAIN_NAME": "test-base.test-zone-name",
+        "IS_PUBLIC_FACING": "true",
     }
 
 

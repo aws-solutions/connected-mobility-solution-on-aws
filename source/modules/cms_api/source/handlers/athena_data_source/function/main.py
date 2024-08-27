@@ -42,7 +42,7 @@ def get_athena_client() -> AthenaClient:
 
 @logger.inject_lambda_context
 @tracer.capture_lambda_handler
-def handler(  # pylint: disable=R1710
+def handler(  # pylint: disable=inconsistent-return-statements
     event: Dict[str, Any], context: LambdaContext
 ) -> Union[List[Dict[str, Any]], Dict[str, Any]]:
     try:
@@ -60,7 +60,7 @@ def handler(  # pylint: disable=R1710
                     },
                 )
             # Catch all exceptions here so that publishing metrics will never break API functionality
-            except Exception:  # pylint: disable=W0718
+            except Exception:  # pylint: disable=broad-exception-caught
                 logger.error("Failed to write operational metrics", exc_info=True)
 
         # Builds query based on query type

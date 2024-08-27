@@ -18,41 +18,34 @@ MODULE_PATH := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 # ========================================================
 # VARIABLES
 # ========================================================
-export ACDP_UNIQUE_ID ?= acdp
-
 export STACK_NAME ?= ${ACDP_UNIQUE_ID}--${MODULE_NAME}
 export STACK_TEMPLATE_NAME = ${MODULE_NAME}.template
 export STACK_TEMPLATE_PATH ?= deployment/global-s3-assets/${MODULE_NAME}/${STACK_TEMPLATE_NAME}
 
 export CAPABILITY_ID ?= CMS.6
 
-export BACKSTAGE_ASSETS_PREFIX ?= ${SOLUTION_NAME}/${SOLUTION_VERSION}/backstage
+# Deploy variables not in .cmsrc
+export ACDP_UNIQUE_ID ?= acdp
 export BACKSTAGE_LOG_LEVEL ?= info
 export BACKSTAGE_S3_DISCOVERY_REFRESH_MINS ?= 30
-export BACKSTAGE_NAME ?= DEFAULT_NAME
-export BACKSTAGE_ORG ?= DEFAULT_ORG
 
-export ROUTE53_BASE_DOMAIN ?= ${ROUTE53_ZONE_NAME}
+# NOTE:
+# Assess whether this needs to be an environment variable. It's only read in the ACDP CDK, and shouldn't be customized. Can it be set in the CDK?
+export BACKSTAGE_ASSETS_PREFIX ?= ${SOLUTION_NAME}/${SOLUTION_VERSION}/backstage
 
 include ${SOLUTION_PATH}/makefiles/common_config.mk
 include ${SOLUTION_PATH}/makefiles/global_targets.mk
 include ${SOLUTION_PATH}/makefiles/module_targets.mk
 
 ## ========================================================
-## INSTALL
-## ========================================================
-.PHONY: yarn-install
-yarn-install: ## Using yarn, installs node dependencies for all modules.
-	@printf "%bInstalling node dependencies using yarn.%b\n" "${MAGENTA}" "${NC}"
-	cd backstage && yarn install
-
-.PHONY: install
-install: pipenv-install yarn-install ## Installs the resources and dependencies required to build the solution.
-	@printf "%bInstall finished.%b\n" "${GREEN}" "${NC}"
-
-## ========================================================
 ## BUILD AND DEPLOY
 ## ========================================================
+
+.PHONY: install
+install: pipenv-install cdk-solution-helper-install ## Installs the resources and dependencies required to build the solution.
+	@printf "%bInstall finished.%b\n" "${GREEN}" "${NC}"
+
+
 .PHONY: deploy
 deploy: verify-environment ## Deploy the stack for the module.
 	@printf "%bDeploy the module.%b\n" "${MAGENTA}" "${NC}"
@@ -64,14 +57,19 @@ deploy: verify-environment ## Deploy the stack for the module.
 		--capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
 		--parameter-overrides \
 			"AcdpUniqueId"="${ACDP_UNIQUE_ID}" \
-			"UserEmail"="${USER_EMAIL}" \
-			"Route53ZoneName"="${ROUTE53_ZONE_NAME}" \
-			"Route53BaseDomain"="${ROUTE53_BASE_DOMAIN}" \
+			"VpcName"="${VPC_NAME}" \
+			"IdentityProviderId"="${IDENTITY_PROVIDER_ID}" \
+			"UseBackstageAuthRedirectFlow"="${USE_BACKSTAGE_AUTH_REDIRECT_FLOW}" \
+			"BackstageAdditionalScopes"="${BACKSTAGE_ADDITIONAL_SCOPES}" \
+			"FullyQualifiedDomainName"="${FULLY_QUALIFIED_DOMAIN_NAME}" \
+			"Route53HostedZoneId"="${ROUTE53_HOSTED_ZONE_ID}" \
+			"CustomAcmCertificateArn"="${CUSTOM_ACM_CERTIFICATE_ARN}" \
+			"IsPublicFacing"="${IS_PUBLIC_FACING}" \
 			"BackstageName"="${BACKSTAGE_NAME}" \
 			"BackstageOrg"="${BACKSTAGE_ORG}" \
 			"BackstageLogLevel"="${BACKSTAGE_LOG_LEVEL}" \
 			"BackstageLocalAssetDiscoveryRefreshMins"="${BACKSTAGE_S3_DISCOVERY_REFRESH_MINS}" \
-			"VpcName"="${VPC_NAME}" \
+
 
 .PHONY: destroy-ecr
 destroy-ecr: ## Destroy the ECR images since CloudFormation cannot.
@@ -86,44 +84,32 @@ destroy: destroy-ecr destroy-stack ## Delete the stack for the module.
 		--stack-name ${STACK_NAME} \
 
 ## ========================================================
-## LOCAL UTILITY
-## ========================================================
-
-.PHONY: run-backstage-local
-run-backstage-local: run-postgres-local ## Start a local instance of Backstage
-	cd backstage && yarn run dev
-
-.PHONY: run-backstage-backend-local
-run-backstage-backend-local: run-postgres-local ## Start a local instance of Backstage's backend
-	cd backstage && yarn run start-backend
-
-.PHONY: run-backstage-frontend-local
-run-backstage-frontend-local: ## Start a local instance of Backstage's frontend
-	cd backstage && yarn start
-
-.PHONY: run-postgres-local
-run-postgres-local: ## Start a local instance of postgres for use with Backstage
-	cd backstage && docker-compose up &> ./docker_postgres.log &
-
-.PHONY: stop-backstage-local
-stop-backstage-local:
-	cd backstage && docker-compose stop && rm -f ./docker_postgres.log
-
-## ========================================================
 ## UTILITY
 ## ========================================================
 .PHONY: verify-environment
-verify-environment: ## Checks the cdk environment for the required environment variables.
+verify-environment: ## Checks the cdk environment for the required environment variables, as set via .cmsrc or manual export.
 ifneq (, $(wildcard ./cdk.context.json))
 	$(error 'cdk.context.json' cannot exist. Please delete the file and try again)
 endif
+ifndef FULLY_QUALIFIED_DOMAIN_NAME
+	$(error FULLY_QUALIFIED_DOMAIN_NAME is undefined. Set the variable using `export FULLY_QUALIFIED_DOMAIN_NAME=...`, run `source .cmsrc` if it exists, or run `make create-rc-file` to generate .cmsrc)
+endif
+ifndef IS_PUBLIC_FACING
+	$(error IS_PUBLIC_FACING is undefined. Set the variable using `export IS_PUBLIC_FACING=...`, run `source .cmsrc` if it exists, or run `make create-rc-file` to generate .cmsrc)
+endif
 ifndef VPC_NAME
-	$(error VPC_NAME is undefined. Set the variable using `export VPC_NAME=...`, or run `source .cmsrc`)
+	$(error VPC_NAME is undefined. Set the variable using `export VPC_NAME=...`, run `source .cmsrc` if it exists, or run `make create-rc-file` to generate .cmsrc)
 endif
-ifndef USER_EMAIL
-	$(error USER_EMAIL is undefined. Set the variable using `export USER_EMAIL=...`, or run `source .cmsrc`)
+ifndef IDENTITY_PROVIDER_ID
+	$(error IDENTITY_PROVIDER_ID is undefined. Set the variable using `export IDENTITY_PROVIDER_ID=...`, run `source .cmsrc` if it exists, or run `make create-rc-file` to generate .cmsrc)
 endif
-ifndef ROUTE53_ZONE_NAME
-	$(error ROUTE53_ZONE_NAME is undefined. Set the variable using `export ROUTE53_ZONE_NAME=...`, or run `source .cmsrc`)
+ifndef USE_BACKSTAGE_AUTH_REDIRECT_FLOW
+	$(error USE_BACKSTAGE_AUTH_REDIRECT_FLOW is undefined. Set the variable using `export USE_BACKSTAGE_AUTH_REDIRECT_FLOW=...`, run `source .cmsrc` if it exists, or run `make create-rc-file` to generate .cmsrc)
+endif
+ifndef BACKSTAGE_NAME
+	$(error BACKSTAGE_NAME is undefined. Set the variable using `export BACKSTAGE_NAME=...`, run `source .cmsrc` if it exists, or run `make create-rc-file` to generate .cmsrc)
+endif
+ifndef BACKSTAGE_ORG
+	$(error BACKSTAGE_ORG is undefined. Set the variable using `export BACKSTAGE_ORG=...`, run `source .cmsrc` if it exists, or run `make create-rc-file` to generate .cmsrc)
 endif
 	@printf "%bEnvironment variables verified.%b\n" "${GREEN}" "${NC}"

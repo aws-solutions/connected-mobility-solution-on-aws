@@ -147,7 +147,7 @@ class S3ToGrafanaConstruct(Construct):
             description="CMS EV battery health update s3 assets to grafana lambda function",
             handler="function.main.handler",
             function_name=s3_to_grafana_lambda_function_name,
-            runtime=aws_lambda.Runtime.PYTHON_3_10,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             code=aws_lambda.Code.from_asset("dist/lambda/s3_to_grafana.zip"),
             timeout=Duration.seconds(60),
             role=s3_to_grafana_lambda_role,

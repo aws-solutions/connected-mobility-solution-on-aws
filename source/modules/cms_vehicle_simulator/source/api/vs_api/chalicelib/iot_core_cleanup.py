@@ -70,13 +70,13 @@ class IotCoreCleanup:
         list_things_iterator = self.iot_client().get_paginator("list_things")
 
         for page in list_things_iterator.paginate():
-            for thing in page["things"]:  # pylint: disable=W0621
+            for thing in page["things"]:  # pylint: disable=redefined-outer-name
                 if thing["attributes"].get("simulation_id", None) == simulation_id:
                     yield thing  # type: ignore
 
     def delete_secretsmanager_secret(
         self, secret_arn: str
-    ) -> None:  # pylint: disable=W0621
+    ) -> None:  # pylint: disable=redefined-outer-name
         self.secret_manager_client().delete_secret(
             SecretId=secret_arn, ForceDeleteWithoutRecovery=True
         )

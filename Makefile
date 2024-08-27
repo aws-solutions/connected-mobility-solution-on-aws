@@ -12,24 +12,27 @@ include makefiles/global_targets.mk
 ## ========================================================
 module_name-target: ## Call a module make target. Run "make module_name-help" for target lists. Run "ls source/modules" for module list.
 
-MODULES := source/lib $(shell find ${SOLUTION_PATH}/source/modules -type d -maxdepth 1 -mindepth 1 -not -name __pycache__)
-GLOBAL_TARGETS := $(shell grep -E '^[a-zA-Z0-9-]+:' ${SOLUTION_PATH}/makefiles/global_targets.mk | awk -F: '/^[^.]/ {print $$1;}')
-COMMON_TARGETS := $(shell grep -E '^[a-zA-Z0-9-]+:' ${SOLUTION_PATH}/makefiles/module_targets.mk | awk -F: '/^[^.]/ {print $$1;}')
-define make-module-target
+# Create a target with the naming convention module_name-target, where $1=target and $2=path to module directory (**/module_name)
+define create-target
 $(lastword $(subst /, ,$2))-$1:
 	@$(MAKE) -C $2 -f Makefile $1
 endef
-$(foreach module,$(MODULES),$(foreach element,$(shell grep -E '^[a-zA-Z0-9-]+:' $(module)/Makefile | awk -F: '/^[^.]/ {print $$1;}'),$(eval $(call make-module-target,$(element),$(module)))))
-$(foreach module,$(MODULES),$(foreach target,$(GLOBAL_TARGETS),$(eval $(call make-module-target,$(target),$(module)))))
-$(foreach module,$(MODULES),$(foreach target,$(COMMON_TARGETS),$(eval $(call make-module-target,$(target),$(module)))))
+
+MODULES := source/lib $(shell find ${SOLUTION_PATH}/source/modules -type d -maxdepth 1 -mindepth 1 -not -name __pycache__)
+GLOBAL_TARGETS := $(shell grep -E '^[a-zA-Z0-9-]+:' ${SOLUTION_PATH}/makefiles/global_targets.mk | awk -F: '/^[^.]/ {print $$1;}')
+MODULE_TARGETS := $(shell grep -E '^[a-zA-Z0-9-]+:' ${SOLUTION_PATH}/makefiles/module_targets.mk | awk -F: '/^[^.]/ {print $$1;}')
+
+$(foreach module,$(MODULES),$(foreach target,$(shell grep -E '^[a-zA-Z0-9-]+:' $(module)/Makefile | awk -F: '/^[^.]/ {print $$1;}'),$(eval $(call create-target,$(target),$(module))))) # For each module, create root target for each module target
+$(foreach module,$(MODULES),$(foreach target,$(GLOBAL_TARGETS),$(eval $(call create-target,$(target),$(module))))) # For each module, create targets from global_targets.mk
+$(foreach module,$(MODULES),$(foreach target,$(MODULE_TARGETS),$(eval $(call create-target,$(target),$(module))))) # For each module, create targets from module_targets.mk
 
 ## ========================================================
 ## INVOKE MAKE TARGET FROM EACH MODULES' MAKEFILE
 ## ========================================================
-SubMakefiles    = source/lib/ $(shell find source \( -name lib -o -name deployment -o -name cdk.out -o -name .venv -o -name node_modules -o -name backstage \) -prune -false -o -name Makefile)
+SubMakefiles    = $(shell find source \( -name deployment -o -name cdk.out -o -name .venv -o -name node_modules -o -path **/backstage/cdk \) -prune -false -o -name Makefile)
 SubMakeDirs     = $(filter-out ${SOLUTION_PATH},$(dir $(SubMakefiles)))
 Prereqs         = source/modules/vpc/ source/modules/auth_setup/ source/modules/cms_config/ source/modules/cms_auth/ source/modules/cms_connect_store/ source/modules/cms_alerts/ source/modules/cms_api/
-DeployableDirs  = $(filter-out source/lib/ source/modules/cms_sample_on_aws ${Prereqs},${SubMakeDirs})
+DeployableDirs  = $(filter-out source/lib/ source/modules/cms_sample_on_aws source/modules/backstage ${Prereqs},${SubMakeDirs})
 
 define run-module-target
 	run_make_with_logging() { \
@@ -44,11 +47,16 @@ define run-module-target
 	}; \
 	did_make_target_fail=0; \
 	process_pids=(); \
-	for dir in $2; do \
-		printf "%bStarting %sMakefile %s.%b\n" "${MAGENTA}" "$$dir" "$1" "${NC}"; \
-		(run_make_with_logging "$$dir") & process_pids+=($$!); \
+	IFS=' ' read -a s <<< "$2"; \
+	bs=5; \
+	printf "%bStarting %sMakefile %s.%b\n" "${MAGENTA}" "$$dir" "$1" "${NC}"; \
+	for ((i=0; i<=$${#s[@]}; i+=bs)); do \
+		for module in "$${s[@]:i:bs}"; do \
+			(run_make_with_logging "$$module") & process_pids+=($$!); \
+		done; \
+		for pid in $${process_pids[@]}; do wait "$${pid}" || did_make_target_fail=1; done; \
+		process_pids=(); \
 	done; \
-	for pid in $${process_pids[@]}; do wait "$${pid}" || did_make_target_fail=1; done; \
 	exit $$did_make_target_fail;
 endef
 
@@ -64,7 +72,7 @@ build: ## Call all modules' "make build".
 	@printf "%bFinished build.%b\n" "${GREEN}" "${NC}"
 
 .PHONY: deploy
-deploy: deploy-variables ## Call all modules' "make deploy". Order enforced.
+deploy: create-rc-file ## Call all modules' "make deploy". Order enforced.
 	@printf "%bStarting deploy.%b\n" "${MAGENTA}" "${NC}"
 	@for dir in $(Prereqs); do \
 		printf "%bDeploying %s.%b\n" "${MAGENTA}" "$$dir" "${NC}"; \
@@ -106,6 +114,11 @@ verify-module: ## Run all verifications for CMS. CAUTION: Takes a long time.
 	@$(call run-module-target,verify-module,${SubMakeDirs})
 	@printf "%bFinished verify-module.%b\n" "${GREEN}" "${NC}"
 
+.PHONY: verify-required-tools
+verify-required-tools: ## Checks the environment for the required dependencies.
+	@$(call run-module-target,verify-required-tools,${SubMakeDirs})
+	@printf "%bFinished verify-required-tools.%b\n" "${GREEN}" "${NC}"
+
 .PHONY: cfn-nag
 cfn-nag: ## Run cfn-nag for the entire solution.
 	@$(call run-module-target,cfn-nag,${SubMakeDirs})
@@ -137,9 +150,9 @@ version: root-version ## Display solution name and current version and each modu
 ## ========================================================
 .PHONY: root-install
 root-install: ## Using pipenv, installs pip dependencies for root.
-	@printf "%bInstalling pip dependencies.%b\n" "${MAGENTA}" "${NC}"
-	pipenv install --dev --python ${PYTHON_VERSION}
-	pipenv clean --python ${PYTHON_VERSION}
+	@printf "%bInstalling root pip dependencies.%b\n" "${MAGENTA}" "${NC}"
+	@pipenv install --dev --python ${PYTHON_VERSION}
+	@pipenv clean --python ${PYTHON_VERSION}
 
 ## ========================================================
 ## BUILD
@@ -148,10 +161,10 @@ root-install: ## Using pipenv, installs pip dependencies for root.
 asset-copy: ## Copy modules' build artifacts to root level folders
 	@printf "%bCopying global assets to ${SOLUTION_PATH}/deployment%b\n" "${MAGENTA}" "${NC}"
 	@rm -rf ${SOLUTION_PATH}/deployment/global-s3-assets && mkdir ${SOLUTION_PATH}/deployment/global-s3-assets
-	@find source \( -name cdk.out -o -name .venv -o -name node_modules -o -name backstage -o -name build \) -prune -false -o -name "global-s3-assets" -exec bash -c "cp -r {}/* ${SOLUTION_PATH}/deployment/global-s3-assets" \;
+	@find source \( -name cdk.out -o -name .venv -o -name node_modules -o -name build \) -prune -false -o -name "global-s3-assets" -exec bash -c "cp -r {}/* ${SOLUTION_PATH}/deployment/global-s3-assets" \;
 	@printf "%bCopying regional assets to ${SOLUTION_PATH}/deployment%b\n" "${MAGENTA}" "${NC}"
 	@rm -rf ${SOLUTION_PATH}/deployment/regional-s3-assets && mkdir ${SOLUTION_PATH}/deployment/regional-s3-assets
-	@find source \( -name cdk.out -o -name .venv -o -name node_modules -o -name backstage -o -name build \) -prune -false -o -name "regional-s3-assets" -exec bash -c "cp -r {}/* ${SOLUTION_PATH}/deployment/regional-s3-assets" \;
+	@find source \( -name cdk.out -o -name .venv -o -name node_modules -o -name build \) -prune -false -o -name "regional-s3-assets" -exec bash -c "cp -r {}/* ${SOLUTION_PATH}/deployment/regional-s3-assets" \;
 	@printf "%bFinished asset collation.%b\n" "${GREEN}" "${NC}"
 
 .PHONY: zip-backstage-assets
@@ -172,7 +185,7 @@ build-all: build asset-copy zip-backstage-assets ## Builds all modules and copie
 .PHONY: pre-commit-all
 pre-commit-all: ## Run pre-commit for the entire solution for all files.
 	@printf "%bRunning all pre-commits.%b\n" "${MAGENTA}" "${NC}"
-	-pipenv run pre-commit run --all-files
+	pipenv run pre-commit run --all-files
 
 ## ========================================================
 ## UTILITY
@@ -189,14 +202,10 @@ clean-build-artifacts-release: ## Cleans up build files, including release build
 	${SOLUTION_PATH}/deployment/run-clean-build-artifacts.sh --release-build
 	@printf "%bFinished clean script.%b\n" "${GREEN}" "${NC}"
 
-.PHONY: clean-build-artifacts-dependencies
-clean-build-artifacts-dependencies: ## Cleans up build files, including venvs and dependencies.
-	@LOCK_FILES_OPTION="--lock-files"; \
-	if [ "$${PIPELINE_TYPE}" = "dtas" ]; then \
-		LOCK_FILES_OPTION=""; \
-	fi; \
+.PHONY: clean-build-artifacts-pipeline
+clean-build-artifacts-pipeline: ## Cleans up build files, including venvs, dependencies, and module s3 assets.
 	printf "%bRunning clean scripts.%b\n" "${MAGENTA}" "${NC}"; \
-	${SOLUTION_PATH}/deployment/run-clean-build-artifacts.sh --dependencies $$LOCK_FILES_OPTION
+	${SOLUTION_PATH}/deployment/run-clean-build-artifacts.sh --dependencies --module-s3-assets
 	@printf "%bFinished clean script.%b\n" "${GREEN}" "${NC}"
 
 .PHONY: clean-build-artifacts-all
@@ -205,19 +214,29 @@ clean-build-artifacts-all: ## Cleans up existing build files, including venvs, d
 	${SOLUTION_PATH}/deployment/run-clean-build-artifacts.sh --all
 	@printf "%bFinished clean script.%b\n" "${GREEN}" "${NC}"
 
-.PHONY: deploy-variables
-deploy-variables: ## Get variable values to deploy with.
+.PHONY: create-rc-file
+create-rc-file: ## Create rc file for environment variables which are likely to be customized. Default values provided where able for default CMS deployment.
 	@[[ -f .cmsrc ]] || printf "%bInstead of using this target, you can run the following command.\n%b" "${MAGENTA}" "${NC}"
-	@[[ -f .cmsrc ]] || printf "%bcat > .cmsrc <<EOL\nexport USER_EMAIL=\"jie_liu@example.com\"\nexport VPC_NAME=\"cms-vpc\"\nexport IDENTITY_PROVIDER_ID=\"cms\"\nexport ROUTE53_ZONE_NAME=\"domain.com\"\nexport ROUTE53_BASE_DOMAIN=\"subdomain.domain.com\"\nexport BACKSTAGE_NAME=\"Default Name\"\nexport BACKSTAGE_ORG=\"Default Name\"\nEOL\n%b" "${YELLOW}" "${NC}"
-	@source .cmsrc \
-	[[ -n $${USER_EMAIL} ]] || read -p "Enter User Email: " USER_EMAIL; \
-	[[ -n $${ROUTE53_ZONE_NAME} ]] || read -p "Enter Route53 Zone Name: " ROUTE53_ZONE_NAME; \
-	[[ -n $${ROUTE53_BASE_DOMAIN} ]] || read -p "Enter Route53 Base Domain: " ROUTE53_BASE_DOMAIN; \
-	[[ -n $${VPC_NAME} ]] || read -p "Enter VPC Name: " VPC_NAME; \
-	[[ -n $${IDENTITY_PROVIDER_ID} ]] || read -p "Enter Identity Provider ID: " IDENTITY_PROVIDER_ID; \
-	[[ -n $${BACKSTAGE_NAME} ]] || read -p "Enter Backstage Name: " BACKSTAGE_NAME; \
-	[[ -n $${BACKSTAGE_ORG} ]] || read -p "Enter Backstage Organization: " BACKSTAGE_ORG; \
-	printf "#!/bin/bash\nexport USER_EMAIL=\"%s\"\nexport ROUTE53_ZONE_NAME=\"%s\"\nexport ROUTE53_BASE_DOMAIN=\"%s\"\nexport VPC_NAME=\"%s\"\nexport IDENTITY_PROVIDER_ID=\"%s\"\nexport BACKSTAGE_NAME=\"%s\"\nexport BACKSTAGE_ORG=\"%s\"\n" "$$USER_EMAIL" "$$ROUTE53_ZONE_NAME" "$$ROUTE53_BASE_DOMAIN" "$$VPC_NAME" "$$IDENTITY_PROVIDER_ID" "$$BACKSTAGE_NAME" "$$BACKSTAGE_ORG" > .cmsrc
+	@[[ -f .cmsrc ]] || printf "%bcat > .cmsrc <<EOL\nexport USER_EMAIL=\"\"\nexport VPC_NAME=\"cms-vpc\"\nexport IDENTITY_PROVIDER_ID=\"cms\"\nexport FULLY_QUALIFIED_DOMAIN_NAME=\"\"\nexport ROUTE53_HOSTED_ZONE_ID=\"\"\nexport CUSTOM_ACM_CERTIFICATE_ARN=\"\"\nexport IS_PUBLIC_FACING=\"true\"\nexport USE_BACKSTAGE_AUTH_REDIRECT_FLOW=\"true\"\nexport BACKSTAGE_ADDITIONAL_SCOPES=\"\"\nexport SHOULD_CREATE_COGNITO_RESOURCES=\"true\"\nexport BACKSTAGE_NAME=\"Default Name\"\nexport BACKSTAGE_ORG=\"Default Org\"\nEOL\n%b" "${YELLOW}" "${NC}"
+	@[[ -f .cmsrc ]] || printf "%bTo do so, exit this script now (CTRL+C). Otherwise, continue.\n\n%b" "${MAGENTA}" "${NC}"
+	@[[ -f .cmsrc ]] && printf "%bFound existing .cmsrc file. Getting user input before updating file...\n%b" "${MAGENTA}" "${NC}" || printf "%bNo .cmsrc file found. Getting user input before creating file...\n%b" "${MAGENTA}" "${NC}"
+	@printf "%bInput the required fields. Defaults are available for some values. Existing environment variables in the session will be used automatically.\n%b" "${MAGENTA}" "${NC}"
+	@[[ -f .cmsrc ]] && source .cmsrc; \
+	[[ -n "$$USER_EMAIL" ]] && printf "%bFound existing value for USER_EMAIL: %s\n%b" "${GREEN}" "${USER_EMAIL}" "${NC}" || while [[ -z "$$USER_EMAIL" ]]; do read -p "Enter User Email: " USER_EMAIL; done; \
+	[[ -n "$$VPC_NAME" ]] && printf "%bFound existing value for VPC_NAME: %s\n%b" "${GREEN}" "${VPC_NAME}" "${NC}" || while [[ -z "$$VPC_NAME" ]]; do read -p "Enter VPC_NAME [cms-vpc]: " VPC_NAME; VPC_NAME=$${VPC_NAME:-cms-vpc}; done; \
+	[[ -n "$$IDENTITY_PROVIDER_ID" ]] && printf "%bFound existing value for IDENTITY_PROVIDER_ID: %s\n%b" "${GREEN}" "${IDENTITY_PROVIDER_ID}" "${NC}" || while [[ -z "$$IDENTITY_PROVIDER_ID" ]]; do read -p "Enter IDENTITY_PROVIDER_ID [cms]: " IDENTITY_PROVIDER_ID; IDENTITY_PROVIDER_ID=$${IDENTITY_PROVIDER_ID:-cms}; done; \
+	[[ -n "$$FULLY_QUALIFIED_DOMAIN_NAME" ]] && printf "%bFound existing value for FULLY_QUALIFIED_DOMAIN_NAME: %s\n%b" "${GREEN}" "${FULLY_QUALIFIED_DOMAIN_NAME}" "${NC}" || while [[ -z "$$FULLY_QUALIFIED_DOMAIN_NAME" ]]; do read -p "Enter FULLY_QUALIFIED_DOMAIN_NAME: " FULLY_QUALIFIED_DOMAIN_NAME; done; \
+	[[ -n "$$ROUTE53_HOSTED_ZONE_ID" ]] && printf "%bFound existing value for ROUTE53_HOSTED_ZONE_ID: %s\n%b" "${GREEN}" "${ROUTE53_HOSTED_ZONE_ID}" "${NC}" || read -p "Enter ROUTE53_HOSTED_ZONE_ID (Optional, if providing CUSTOM_ACM_CERTIFICATE_ARN): " ROUTE53_HOSTED_ZONE_ID; ROUTE53_HOSTED_ZONE_ID=$${ROUTE53_HOSTED_ZONE_ID:-}; \
+	[[ -n "$$CUSTOM_ACM_CERTIFICATE_ARN" ]] && printf "%bFound existing value for CUSTOM_ACM_CERTIFICATE_ARN: %s\n%b" "${GREEN}" "${CUSTOM_ACM_CERTIFICATE_ARN}" "${NC}" || read -p "Enter CUSTOM_ACM_CERTIFICATE_ARN (Optional, if providing ROUTE53_HOSTED_ZONE_ID): " CUSTOM_ACM_CERTIFICATE_ARN; CUSTOM_ACM_CERTIFICATE_ARN=$${CUSTOM_ACM_CERTIFICATE_ARN:-}; \
+	[[ -n "$$IS_PUBLIC_FACING" ]] && printf "%bFound existing value for IS_PUBLIC_FACING: %s\n%b" "${GREEN}" "${IS_PUBLIC_FACING}" "${NC}" || while [[ -z "$$IS_PUBLIC_FACING" ]]; do read -p "Enter IS_PUBLIC_FACING [true]: " IS_PUBLIC_FACING; IS_PUBLIC_FACING=$${IS_PUBLIC_FACING:-true}; done; \
+	[[ -n "$$USE_BACKSTAGE_AUTH_REDIRECT_FLOW" ]] && printf "%bFound existing value for USE_BACKSTAGE_AUTH_REDIRECT_FLOW: %s\n%b" "${GREEN}" "${USE_BACKSTAGE_AUTH_REDIRECT_FLOW}" "${NC}" || while [[ -z "$$USE_BACKSTAGE_AUTH_REDIRECT_FLOW" ]]; do read -p "Enter USE_BACKSTAGE_AUTH_REDIRECT_FLOW [true]: " USE_BACKSTAGE_AUTH_REDIRECT_FLOW; USE_BACKSTAGE_AUTH_REDIRECT_FLOW=$${USE_BACKSTAGE_AUTH_REDIRECT_FLOW:-true}; done; \
+	[[ -n "$$BACKSTAGE_ADDITIONAL_SCOPES" ]] && printf "%bFound existing value for BACKSTAGE_ADDITIONAL_SCOPES: %s\n%b" "${GREEN}" "${BACKSTAGE_ADDITIONAL_SCOPES}" "${NC}" || read -p "Enter BACKSTAGE_ADDITIONAL_SCOPES as space delimited list (Optional): " BACKSTAGE_ADDITIONAL_SCOPES; BACKSTAGE_ADDITIONAL_SCOPES=$${BACKSTAGE_ADDITIONAL_SCOPES:-}; \
+	[[ -n "$$SHOULD_CREATE_COGNITO_RESOURCES" ]] && printf "%bFound existing value for SHOULD_CREATE_COGNITO_RESOURCES: %s\n%b" "${GREEN}" "${SHOULD_CREATE_COGNITO_RESOURCES}" "${NC}" || while [[ -z "$$SHOULD_CREATE_COGNITO_RESOURCES" ]]; do read -p "Enter SHOULD_CREATE_COGNITO_RESOURCES [true]: " SHOULD_CREATE_COGNITO_RESOURCES; SHOULD_CREATE_COGNITO_RESOURCES=$${SHOULD_CREATE_COGNITO_RESOURCES:-true}; done; \
+	[[ -n "$$BACKSTAGE_NAME" ]] && printf "%bFound existing value for BACKSTAGE_NAME: %s\n%b" "${GREEN}" "${BACKSTAGE_NAME}" "${NC}" || while [[ -z "$$BACKSTAGE_NAME" ]]; do read -p "Enter BACKSTAGE_NAME [Default Name]:" BACKSTAGE_NAME; BACKSTAGE_NAME=$${BACKSTAGE_NAME:-Default Name}; done; \
+	[[ -n "$$BACKSTAGE_ORG" ]] && printf "%bFound existing value for BACKSTAGE_ORG: %s\n%b" "${GREEN}" "${BACKSTAGE_ORG}" "${NC}" || while [[ -z "$$BACKSTAGE_ORG" ]]; do read -p "Enter BACKSTAGE_ORG [Default Org]:" BACKSTAGE_ORG; BACKSTAGE_ORG=$${BACKSTAGE_ORG:-Default Org}; done; \
+	printf "#!/bin/bash\nexport USER_EMAIL=\"%s\"\nexport VPC_NAME=\"%s\"\nexport IDENTITY_PROVIDER_ID=\"%s\"\nexport FULLY_QUALIFIED_DOMAIN_NAME=\"%s\"\nexport ROUTE53_HOSTED_ZONE_ID=\"%s\"\nexport CUSTOM_ACM_CERTIFICATE_ARN=\"%s\"\nexport IS_PUBLIC_FACING=\"%s\"\nexport USE_BACKSTAGE_AUTH_REDIRECT_FLOW=\"%s\"\nexport BACKSTAGE_ADDITIONAL_SCOPES=\"%s\"\nexport SHOULD_CREATE_COGNITO_RESOURCES=\"%s\"\nexport BACKSTAGE_NAME=\"%s\"\nexport BACKSTAGE_ORG=\"%s\"\n" "$$USER_EMAIL" "$$VPC_NAME" "$$IDENTITY_PROVIDER_ID" "$$FULLY_QUALIFIED_DOMAIN_NAME" "$$ROUTE53_HOSTED_ZONE_ID" "$$CUSTOM_ACM_CERTIFICATE_ARN" "$$IS_PUBLIC_FACING" "$$USE_BACKSTAGE_AUTH_REDIRECT_FLOW" "$$BACKSTAGE_ADDITIONAL_SCOPES" "$$SHOULD_CREATE_COGNITO_RESOURCES" "$$BACKSTAGE_NAME" "$$BACKSTAGE_ORG" > .cmsrc; \
+	printf "%b.cmsrc is now populated. Run \`source .cmsrc\` before performing a deployment.\n%b" "${MAGENTA}" "${NC}"
+
 
 .PHONY: generate-python-requirements-files
 generate-python-requirements-files: ## Generates requirements.txt files from the pipfiles throughout the solution.

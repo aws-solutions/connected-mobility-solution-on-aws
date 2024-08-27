@@ -34,7 +34,7 @@ def main(args: argparse.Namespace) -> None:
         module_path,
         ".pre-commit-config.yaml",
     )
-    pre_commit = f"source {module_path}/.venv/bin/activate; pre-commit run --config {cfg} --files {' '.join(args.files_list)}"
+    pre_commit = f". {module_path}/.venv/bin/activate; pre-commit run --config {cfg} --files {' '.join(args.files_list)}"
 
     exit_status = os.system(pre_commit)  # nosec
     if os.name == "posix":

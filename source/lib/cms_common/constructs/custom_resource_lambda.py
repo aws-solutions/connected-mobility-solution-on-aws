@@ -126,7 +126,7 @@ class CustomResourceLambdaConstruct(Construct):
             handler="function.main.handler",
             function_name=custom_resource_lambda_name,
             role=self.role,
-            runtime=aws_lambda.Runtime.PYTHON_3_10,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             timeout=Duration.minutes(5),
             layers=[dependency_layer],
             memory_size=1024,
@@ -137,23 +137,6 @@ class CustomResourceLambdaConstruct(Construct):
             vpc=vpc_construct.vpc,  # type: ignore[arg-type]
             vpc_subnets=vpc_construct.private_subnet_selection,
             security_groups=[self.security_group],
-        )
-        NagSuppression.add_inline_suppression(
-            node=self.function.node.default_child,
-            suppression={
-                "rules_to_suppress": [
-                    {
-                        "id": "AwsSolutions-L1",
-                        "reason": (
-                            "Some libraries used throughout the solution are not yet "
-                            "supported in Python 3.11. For consistency, all lambdas are currently "
-                            "kept at Python 3.10. Future refactoring of unsupported libraries will "
-                            "enable the use of 3.11 throughout the solution."
-                        ),
-                    }
-                ]
-            },
-            nag_type=NagType.CDK_NAG,
         )
 
         NagSuppression.add_inline_suppression(

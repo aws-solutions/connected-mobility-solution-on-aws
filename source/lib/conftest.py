@@ -15,11 +15,11 @@ import pytest
 
 # Connected Mobility Solution on AWS
 from .cms_common.auth.tests.fixture_auth import (
-    fixture_authorization_code_flow_config_secret_string_valid,
-    fixture_client_config_secret_string_valid,
+    fixture_mock_user_client_config_valid,
+    fixture_service_client_config_secret_string_valid,
     fixture_idp_config_secret_string_valid,
-    fixture_mock_client_config_valid,
-    fixture_mock_authorization_code_flow_config_valid,
+    fixture_mock_service_client_config_valid,
+    fixture_user_client_config_secret_string_valid,
     fixture_mock_idp_config_invalid_data_format,
     fixture_mock_idp_config_invalid_json,
     fixture_mock_idp_config_valid,

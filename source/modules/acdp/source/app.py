@@ -12,6 +12,7 @@ from aws_cdk import App, Aspects, DefaultStackSynthesizer
 from cdk_nag import AwsSolutionsChecks
 
 # CMS Common Library
+from cms_common.aspects.nag_suppression import NagSuppression, NagType
 from cms_common.aspects.vpc_aspect import ApplyVpcOnCustomResource
 from cms_common.config.stack_inputs import (
     S3AssetConfigInputs,
@@ -22,7 +23,6 @@ from cms_common.config.stack_inputs import (
 
 # Connected Mobility Solution on AWS
 from .infrastructure.acdp_stack import AcdpStack
-from .infrastructure.aspects.nag_suppression import NagSuppression, NagType
 
 solution_config_inputs = SolutionConfigInputs(
     solution_id=os.environ["SOLUTION_ID"],

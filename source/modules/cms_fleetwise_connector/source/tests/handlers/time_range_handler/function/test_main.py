@@ -18,14 +18,15 @@ from botocore.stub import Stubber
 # Connected Mobility Solution on AWS
 from .....handlers.time_range_handler.function.request_type import RequestType
 
-# pylint: disable=W0212 # Due to runtime import, pylint thinks methods in main are private
+# pylint: disable=protected-access # Due to runtime import, pylint thinks methods in main are private
 
 
 @pytest.fixture(name="time_range_handler")
 def fixture_time_range_handler() -> Any:
     # Connected Mobility Solution on AWS
-    # pylint: disable=C0415
-    from .....handlers.time_range_handler.function import main
+    from .....handlers.time_range_handler.function import (  # pylint: disable=import-outside-toplevel
+        main,
+    )
 
     return importlib.reload(main)
 

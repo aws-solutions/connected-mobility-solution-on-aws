@@ -51,8 +51,7 @@ def function_singleton(function: Any) -> Callable[[SimulatorConstruct], Any]:
     return wrapper
 
 
-# pylint: disable=too-many-instance-attributes
-class SimulatorConstruct(Construct):
+class SimulatorConstruct(Construct):  # pylint: disable=too-many-instance-attributes
     def __init__(
         self,
         scope: Construct,
@@ -422,7 +421,7 @@ class SimulatorConstruct(Construct):
                 "USER_AGENT_STRING": solution_config_inputs.get_user_agent_string(),
             },
             handler="function.handlers.provision_handler",
-            runtime=aws_lambda.Runtime.PYTHON_3_10,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             timeout=Duration.minutes(1),
             role=provisioning_lambda_role,
             layers=[dependency_layer],
@@ -455,7 +454,7 @@ class SimulatorConstruct(Construct):
                 "USER_AGENT_STRING": solution_config_inputs.get_user_agent_string(),
             },
             handler="function.handlers.data_sim_handler",
-            runtime=aws_lambda.Runtime.PYTHON_3_10,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             timeout=Duration.minutes(1),
             role=simulator_lambda_role,
             layers=[dependency_layer],
@@ -488,7 +487,7 @@ class SimulatorConstruct(Construct):
                 "USER_AGENT_STRING": solution_config_inputs.get_user_agent_string(),
             },
             handler="function.handlers.cleanup_handler",
-            runtime=aws_lambda.Runtime.PYTHON_3_10,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             timeout=Duration.minutes(1),
             role=cleanup_lambda_role,
             layers=[dependency_layer],

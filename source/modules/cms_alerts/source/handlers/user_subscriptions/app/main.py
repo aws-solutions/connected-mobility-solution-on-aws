@@ -8,7 +8,7 @@ from functools import lru_cache
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
 
 # Third Party Libraries
-import humps  # NOTE: not yet supported on Python 3.11
+import humps
 
 # AWS Libraries
 import boto3

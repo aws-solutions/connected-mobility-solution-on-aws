@@ -33,10 +33,10 @@ include ${SOLUTION_PATH}/makefiles/module_targets.mk
 .PHONY: npm-install
 npm-install: ## Using npm, installs node dependencies.
 	@printf "%bInstalling node dependencies using npm.%b\n" "${MAGENTA}" "${NC}"
-	npm ci --prefix source/console
+	@npm i --prefix source/console
 
 .PHONY: install
-install: pipenv-install npm-install ## Installs the resources and dependencies required to build the solution.
+install: pipenv-install npm-install cdk-solution-helper-install ## Installs the resources and dependencies required to build the solution.
 	@printf "%bInstall finished.%b\n" "${GREEN}" "${NC}"
 
 .PHONY: deploy
@@ -58,7 +58,10 @@ destroy: destroy-stack ## Teardown deployed stack
 
 .PHONY: verify-environment
 verify-environment: ## Checks for the required environment variables.
+ifneq (, $(wildcard ./cdk.context.json))
+	$(error 'cdk.context.json' cannot exist. Please delete the file and try again)
+endif
 ifndef USER_EMAIL
-	$(error USER_EMAIL is undefined. Set the variable using `export USER_EMAIL=...`, or run `source .cmsrc`)
+	$(error USER_EMAIL is undefined. Set the variable using `export USER_EMAIL=...`, run `source .cmsrc` if it exists, or run `make create-rc-file` to generate .cmsrc)
 endif
 	@printf "%bEnvironment variables verified.%b\n" "${GREEN}" "${NC}"

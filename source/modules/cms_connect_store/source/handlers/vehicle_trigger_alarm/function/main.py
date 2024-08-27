@@ -17,7 +17,12 @@ from aws_lambda_powertools.utilities.typing import LambdaContext
 from botocore.config import Config
 
 # CMS Common Library
-from cms_common.auth.auth_configs import CMSClientConfig, get_client_config
+from cms_common.auth.auth_configs import (
+    CMSClientConfig,
+    CMSIdPConfig,
+    get_idp_config,
+    get_service_client_config,
+)
 from cms_common.cache.ttl_cache import get_ttl_cache_check
 
 # Connected Mobility Solution on AWS
@@ -55,11 +60,16 @@ def get_ssm_parameter(ssm_name: str) -> str:
 @logger.inject_lambda_context
 @tracer.capture_lambda_handler
 def handler(event: Dict[str, Any], context: LambdaContext) -> None:
-    client_config = get_client_config_from_common(
+    idp_config = get_idp_config_from_common(
         user_agent_string=os.environ["USER_AGENT_STRING"],
         identity_provider_id=os.environ["IDENTITY_PROVIDER_ID"],
     )
-    access_token = get_access_token(client_config)
+
+    client_config = get_service_client_config_from_common(
+        user_agent_string=os.environ["USER_AGENT_STRING"],
+        identity_provider_id=os.environ["IDENTITY_PROVIDER_ID"],
+    )
+    access_token = get_access_token(idp_config, client_config)
 
     response = post_mutation(access_token=access_token, event=event)
 
@@ -76,12 +86,12 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> None:
 
 @lru_cache(maxsize=MAX_CACHE_SIZE_CLIENT_AUTH)
 @tracer.capture_method
-def get_client_config_from_common(
+def get_service_client_config_from_common(
     user_agent_string: str,
     identity_provider_id: str,
     ttl_cache_check: int = get_ttl_cache_check(),  # Add a TTL to cache in case of SSM or Secrets Manager value changes.
 ) -> CMSClientConfig:
-    return get_client_config(
+    return get_service_client_config(
         user_agent_string=user_agent_string,
         identity_provider_id=identity_provider_id,
     )
@@ -89,27 +99,40 @@ def get_client_config_from_common(
 
 @lru_cache(maxsize=MAX_CACHE_SIZE_CLIENT_AUTH)
 @tracer.capture_method
-def get_access_token(client_config: CMSClientConfig) -> str:
-    authorization_code_exchange_payload = {
+def get_idp_config_from_common(
+    user_agent_string: str,
+    identity_provider_id: str,
+    ttl_cache_check: int = get_ttl_cache_check(),  # Add a TTL to cache in case of SSM or Secrets Manager value changes.
+) -> CMSIdPConfig:
+    return get_idp_config(
+        user_agent_string=user_agent_string,
+        identity_provider_id=identity_provider_id,
+    )
+
+
+@lru_cache(maxsize=MAX_CACHE_SIZE_CLIENT_AUTH)
+@tracer.capture_method
+def get_access_token(idp_config: CMSIdPConfig, client_config: CMSClientConfig) -> str:
+    client_credentials_payload = {
         "grant_type": "client_credentials",
-        "audience": client_config.audience,  # For Cognito and potentially other IdPs, this value will be empty and unused as it is not required by the token endpoint for the client_credentials flow.
+        "audience": client_config.audience,
         "client_id": client_config.client_id,
         "client_secret": client_config.client_secret,
     }
 
-    authorization_code_exchange_response = requests.post(
-        url=client_config.token_endpoint,
+    client_credentials_flow_response = requests.post(
+        url=idp_config.token_endpoint,
         headers={"Content-Type": "application/x-www-form-urlencoded"},
-        data=authorization_code_exchange_payload,
+        data=client_credentials_payload,
         timeout=10,
     )
 
-    if not authorization_code_exchange_response.ok:
+    if not client_credentials_flow_response.ok:
         raise ClientAuthenticationError(
-            f'Error when getting access token for authentication: {authorization_code_exchange_response.content.decode("utf-8")}'
+            f'Error when getting access token for authentication: {client_credentials_flow_response.content.decode("utf-8")}'
         )
 
-    return str(authorization_code_exchange_response.json()["access_token"])
+    return str(client_credentials_flow_response.json()["access_token"])
 
 
 @tracer.capture_method

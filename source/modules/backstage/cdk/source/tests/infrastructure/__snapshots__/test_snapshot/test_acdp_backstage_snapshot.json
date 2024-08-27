@@ -1,0 +1,3345 @@
+{
+  "Conditions": {
+    "shouldcreateroute53recordscondition": {
+      "Fn::Not": [
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "Route53HostedZoneId"
+                },
+                "unset"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "Route53HostedZoneId"
+                },
+                ""
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "useacmcustomcertificatecondition": {
+      "Fn::Not": [
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "CustomAcmCertificateArn"
+                },
+                "unset"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "CustomAcmCertificateArn"
+                },
+                ""
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "useacmdnscertificatecondition": {
+      "Fn::Or": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "CustomAcmCertificateArn"
+            },
+            "unset"
+          ]
+        },
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "CustomAcmCertificateArn"
+            },
+            ""
+          ]
+        }
+      ]
+    }
+  },
+  "Mappings": {
+    "Solution": {
+      "AssetsConfig": {
+        "S3AssetBucketName": "test-bucket-name",
+        "S3AssetKeyPrefix": "test-object-key-prefix"
+      }
+    },
+    "acdpbackstageauroradatabaseconstructauroraserverlessclusterRotationSingleUserSARMapping62943CC5": {
+      "aws": {
+        "applicationId": "test",
+        "semanticVersion": "1.1.367"
+      },
+      "aws-cn": {
+        "applicationId": "test",
+        "semanticVersion": "1.1.237"
+      },
+      "aws-us-gov": {
+        "applicationId": "test",
+        "semanticVersion": "1.1.93"
+      }
+    }
+  },
+  "Parameters": {
+    "AcdpUniqueId": {
+      "Default": "acdp",
+      "Description": "Name of the ACDP deployment",
+      "Type": "String"
+    },
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "CustomAcmCertificateArn": {
+      "AllowedPattern": "(^$)|(^unset$)|(^arn:aws:acm:[a-z0-9-]+:[0-9]{12}:certificate/[a-f0-9-]+$)",
+      "ConstraintDescription": "Must be '' or a valid ACM certificate ARN",
+      "Default": "",
+      "Description": "Optional when using a Public Hosted Zone with Route53. Required when HostedZoneId is Private or not provided. Provide a custom ACM Certificate ARN to use for TLS.",
+      "Type": "String"
+    },
+    "FullyQualifiedDomainName": {
+      "AllowedPattern": "^([A-Za-z0-9][A-Za-z0-9-]*\\.)+[A-Za-z]+$",
+      "ConstraintDescription": "Fully Qualified Domain Name must be a valid domain name",
+      "Description": "Fully Qualified Domain Name for ACDP resources to be accessed. If using Route53, this must be a subset of the Route53 Zone Name",
+      "Type": "String"
+    },
+    "IdentityProviderId": {
+      "ConstraintDescription": "The identity provider ID must be a minimum of 3 characters.",
+      "Default": "cms",
+      "Description": "The ID associated with the identity provider configurations used for validation and exchange.",
+      "MinLength": 3,
+      "Type": "String"
+    },
+    "IsPublicFacing": {
+      "AllowedValues": [
+        "true",
+        "false"
+      ],
+      "ConstraintDescription": "Value must be boolean (true, false)",
+      "Default": "true",
+      "Description": "Boolean flag that configures if public endpoints should be created for Backstage resources. If true, the VPC must have an Internet Gateway",
+      "Type": "String"
+    },
+    "Route53HostedZoneId": {
+      "AllowedPattern": "^(|unset|Z[A-Z0-9]{1,30})$",
+      "ConstraintDescription": "Must be '' or a valid Route53 Hosted Zone Id",
+      "Default": "",
+      "Description": "Optional: Id of the Route53 Hosted Zone. Set to create records in Route53 for the required DNS entries.",
+      "Type": "String"
+    },
+    "VpcName": {
+      "Description": "name of the imported vpc",
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "acdpbackstageauroradatabaseconstructauroraserverlesscluster0FD1CD15": {
+      "DeletionPolicy": "Snapshot",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "CopyTagsToSnapshot": true,
+        "DBClusterParameterGroupName": "default.aurora-postgresql13",
+        "DBSubnetGroupName": {
+          "Ref": "acdpbackstageauroradatabaseconstructauroraserverlessclusterSubnets00E2E32A"
+        },
+        "DeletionProtection": false,
+        "Engine": "aurora-postgresql",
+        "EngineMode": "serverless",
+        "EngineVersion": "13.9",
+        "MasterUserPassword": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:secretsmanager:",
+              {
+                "Ref": "acdpbackstageauroradatabaseconstructdatabasesecret557C9B62"
+              },
+              ":SecretString:password::}}"
+            ]
+          ]
+        },
+        "MasterUsername": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:secretsmanager:",
+              {
+                "Ref": "acdpbackstageauroradatabaseconstructdatabasesecret557C9B62"
+              },
+              ":SecretString:username::}}"
+            ]
+          ]
+        },
+        "StorageEncrypted": true,
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AcdpUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VpcSecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "acdpbackstageauroradatabaseconstructdatabasesecuritygroup40706936",
+              "GroupId"
+            ]
+          }
+        ]
+      },
+      "Type": "AWS::RDS::DBCluster",
+      "UpdateReplacePolicy": "Snapshot"
+    },
+    "acdpbackstageauroradatabaseconstructauroraserverlessclusterRotationSingleUser489CBB82": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Location": {
+          "ApplicationId": {
+            "Fn::FindInMap": [
+              "acdpbackstageauroradatabaseconstructauroraserverlessclusterRotationSingleUserSARMapping62943CC5",
+              {
+                "Ref": "AWS::Partition"
+              },
+              "applicationId"
+            ]
+          },
+          "SemanticVersion": {
+            "Fn::FindInMap": [
+              "acdpbackstageauroradatabaseconstructauroraserverlessclusterRotationSingleUserSARMapping62943CC5",
+              {
+                "Ref": "AWS::Partition"
+              },
+              "semanticVersion"
+            ]
+          }
+        },
+        "Parameters": {
+          "endpoint": {
+            "Fn::Join": [
+              "",
+              [
+                "https://secretsmanager.us-west-2.",
+                {
+                  "Ref": "AWS::URLSuffix"
+                }
+              ]
+            ]
+          },
+          "excludeCharacters": " %+~`#$&*()|[]{}:;<>?!'/@\"\\",
+          "functionName": "tabaseconstructauroraserverlessclusterRotationSingleUserD8895971",
+          "vpcSecurityGroupIds": {
+            "Fn::GetAtt": [
+              "acdpbackstageauroradatabaseconstructdatabasesecuritygroup40706936",
+              "GroupId"
+            ]
+          },
+          "vpcSubnetIds": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/vpc/",
+                {
+                  "Ref": "VpcName"
+                },
+                "/subnets/isolated/1}},{{resolve:ssm:/solution/vpc/",
+                {
+                  "Ref": "VpcName"
+                },
+                "/subnets/isolated/2}}"
+              ]
+            ]
+          }
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AcdpUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        }
+      },
+      "Type": "AWS::Serverless::Application",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "acdpbackstageauroradatabaseconstructauroraserverlessclusterSubnets00E2E32A": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "DBSubnetGroupDescription": "Subnets for aurora-serverless-cluster database",
+        "SubnetIds": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/vpc/",
+                {
+                  "Ref": "VpcName"
+                },
+                "/subnets/isolated/1}}"
+              ]
+            ]
+          },
+          {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/vpc/",
+                {
+                  "Ref": "VpcName"
+                },
+                "/subnets/isolated/2}}"
+              ]
+            ]
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AcdpUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::RDS::DBSubnetGroup"
+    },
+    "acdpbackstageauroradatabaseconstructdatabasesecret557C9B62": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": {
+          "Fn::Join": [
+            "",
+            [
+              "Generated by the CDK for stack: ",
+              {
+                "Ref": "AWS::StackName"
+              }
+            ]
+          ]
+        },
+        "GenerateSecretString": {
+          "ExcludeCharacters": " %+~`#$&*()|[]{}:;<>?!'/@\"\\",
+          "GenerateStringKey": "password",
+          "PasswordLength": 30,
+          "SecretStringTemplate": "{\"username\":\"db_admin\"}"
+        },
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/backstage/db_credentials"
+            ]
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AcdpUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::SecretsManager::Secret",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "acdpbackstageauroradatabaseconstructdatabasesecretAttachment1583CE9A": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "SecretId": {
+          "Ref": "acdpbackstageauroradatabaseconstructdatabasesecret557C9B62"
+        },
+        "TargetId": {
+          "Ref": "acdpbackstageauroradatabaseconstructauroraserverlesscluster0FD1CD15"
+        },
+        "TargetType": "AWS::RDS::DBCluster"
+      },
+      "Type": "AWS::SecretsManager::SecretTargetAttachment"
+    },
+    "acdpbackstageauroradatabaseconstructdatabasesecretAttachmentPolicyE6FA7D24": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "ResourcePolicy": {
+          "Statement": [
+            {
+              "Action": "secretsmanager:DeleteSecret",
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::test-account-id:root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "SecretId": {
+          "Ref": "acdpbackstageauroradatabaseconstructdatabasesecretAttachment1583CE9A"
+        }
+      },
+      "Type": "AWS::SecretsManager::ResourcePolicy"
+    },
+    "acdpbackstageauroradatabaseconstructdatabasesecretAttachmentRotationSchedule0A8062E2": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "RotationLambdaARN": {
+          "Fn::GetAtt": [
+            "acdpbackstageauroradatabaseconstructauroraserverlessclusterRotationSingleUser489CBB82",
+            "Outputs.RotationLambdaARN"
+          ]
+        },
+        "RotationRules": {
+          "ScheduleExpression": "rate(90 days)"
+        },
+        "SecretId": {
+          "Ref": "acdpbackstageauroradatabaseconstructdatabasesecretAttachment1583CE9A"
+        }
+      },
+      "Type": "AWS::SecretsManager::RotationSchedule"
+    },
+    "acdpbackstageauroradatabaseconstructdatabasesecuritygroup40706936": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "GroupDescription": "backstage/acdp-backstage/aurora-database-construct/database-security-group",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AcdpUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Ref": "VpcName"
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "acdpbackstageauroradatabaseconstructdatabasesecuritygroupfrombackstageacdpbackstageauroradatabaseconstructdatabasesecuritygroup833C86EBIndirectPort9AD5CBFC": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "from backstageacdpbackstageauroradatabaseconstructdatabasesecuritygroup833C86EB:{IndirectPort}",
+        "FromPort": {
+          "Fn::GetAtt": [
+            "acdpbackstageauroradatabaseconstructauroraserverlesscluster0FD1CD15",
+            "Endpoint.Port"
+          ]
+        },
+        "GroupId": {
+          "Fn::GetAtt": [
+            "acdpbackstageauroradatabaseconstructdatabasesecuritygroup40706936",
+            "GroupId"
+          ]
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "acdpbackstageauroradatabaseconstructdatabasesecuritygroup40706936",
+            "GroupId"
+          ]
+        },
+        "ToPort": {
+          "Fn::GetAtt": [
+            "acdpbackstageauroradatabaseconstructauroraserverlesscluster0FD1CD15",
+            "Endpoint.Port"
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress"
+    },
+    "acdpbackstageauroradatabaseconstructdatabasesecuritygroupfrombackstageacdpbackstagebackstagecontainerconstructfargatesecuritygroup77FE88265432E027E757": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Allow ingress from fargate",
+        "FromPort": 5432,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "acdpbackstageauroradatabaseconstructdatabasesecuritygroup40706936",
+            "GroupId"
+          ]
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "acdpbackstagebackstagecontainerconstructfargatesecuritygroupB778CC94",
+            "GroupId"
+          ]
+        },
+        "ToPort": 5432
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress"
+    },
+    "acdpbackstageauroradatabaseconstructdatabasesecuritygrouptobackstageacdpbackstageauroradatabaseconstructdatabasesecuritygroup833C86EBIndirectPort6D302B2C": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "to backstageacdpbackstageauroradatabaseconstructdatabasesecuritygroup833C86EB:{IndirectPort}",
+        "DestinationSecurityGroupId": {
+          "Fn::GetAtt": [
+            "acdpbackstageauroradatabaseconstructdatabasesecuritygroup40706936",
+            "GroupId"
+          ]
+        },
+        "FromPort": {
+          "Fn::GetAtt": [
+            "acdpbackstageauroradatabaseconstructauroraserverlesscluster0FD1CD15",
+            "Endpoint.Port"
+          ]
+        },
+        "GroupId": {
+          "Fn::GetAtt": [
+            "acdpbackstageauroradatabaseconstructdatabasesecuritygroup40706936",
+            "GroupId"
+          ]
+        },
+        "IpProtocol": "tcp",
+        "ToPort": {
+          "Fn::GetAtt": [
+            "acdpbackstageauroradatabaseconstructauroraserverlesscluster0FD1CD15",
+            "Endpoint.Port"
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress"
+    },
+    "acdpbackstagebackstagecontainerconstructalbsecuritygroupD655A4E9": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "GroupDescription": "backstage/acdp-backstage/backstage-container-construct/alb-security-group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 443",
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AcdpUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Ref": "VpcName"
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "acdpbackstagebackstagecontainerconstructbackendsecretACD7C77E": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Backend secret",
+        "GenerateSecretString": {},
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/backstage/backend-secret"
+            ]
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AcdpUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::SecretsManager::Secret",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "acdpbackstagebackstagecontainerconstructcontainerloggroup00CD59BA": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "KmsKeyId": {
+          "Fn::GetAtt": [
+            "acdpbackstagebackstagecontainerconstructcontainerloggroupkmskeyF9390F98",
+            "Arn"
+          ]
+        },
+        "RetentionInDays": 90,
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AcdpUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "acdpbackstagebackstagecontainerconstructcontainerloggroupkmskeyF9390F98": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "EnableKeyRotation": true,
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::test-account-id:root"
+                    ]
+                  ]
+                }
+              },
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "kms:Encrypt",
+                "kms:Decrypt",
+                "kms:GenerateDataKey"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "logs.us-west-2.amazonaws.com"
+              },
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AcdpUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "acdpbackstagebackstagecontainerconstructecsclusterFDB21F65": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "ClusterSettings": [
+          {
+            "Name": "containerInsights",
+            "Value": "enabled"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AcdpUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::ECS::Cluster"
+    },
+    "acdpbackstagebackstagecontainerconstructfargatesecuritygroupB778CC94": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "GroupDescription": "backstage/acdp-backstage/backstage-container-construct/fargate-security-group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AcdpUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Ref": "VpcName"
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "acdpbackstagebackstagecontainerconstructfargatesecuritygroupfrombackstageacdpbackstagebackstagecontainerconstructalbsecuritygroup8BE9CB6C4436415AFF1": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "alb security group to fargate security group connection",
+        "FromPort": 443,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "acdpbackstagebackstagecontainerconstructfargatesecuritygroupB778CC94",
+            "GroupId"
+          ]
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "acdpbackstagebackstagecontainerconstructalbsecuritygroupD655A4E9",
+            "GroupId"
+          ]
+        },
+        "ToPort": 443
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress"
+    },
+    "acdpbackstagebackstagecontainerconstructfargatesecuritygroupfrombackstageacdpbackstagebackstagecontainerconstructalbsecuritygroup8BE9CB6C808061F43E0E": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Load balancer to target",
+        "FromPort": 8080,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "acdpbackstagebackstagecontainerconstructfargatesecuritygroupB778CC94",
+            "GroupId"
+          ]
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "acdpbackstagebackstagecontainerconstructalbsecuritygroupD655A4E9",
+            "GroupId"
+          ]
+        },
+        "ToPort": 8080
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress"
+    },
+    "acdpbackstagebackstagecontainerconstructfargateserviceServiceDABFAF3F": {
+      "DependsOn": [
+        "acdpbackstagebackstagecontainerconstructtaskdefinitionroleDefaultPolicyE666B526",
+        "acdpbackstagebackstagecontainerconstructtaskdefinitionrole8D0F5D23",
+        "acdpbackstageloadbalancerconstructapplicationloadbalancerlistenerfleetGroupF9A486B0",
+        "acdpbackstageloadbalancerconstructapplicationloadbalancerlistenerC3A53880",
+        "acdpbackstageloadbalancerconstructlistenerrule6E295068",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Cluster": {
+          "Ref": "acdpbackstagebackstagecontainerconstructecsclusterFDB21F65"
+        },
+        "DeploymentConfiguration": {
+          "Alarms": {
+            "AlarmNames": [],
+            "Enable": false,
+            "Rollback": false
+          },
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50
+        },
+        "DesiredCount": 2,
+        "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 60,
+        "LaunchType": "FARGATE",
+        "LoadBalancers": [
+          {
+            "ContainerName": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AWS::StackName"
+                  },
+                  "-backend"
+                ]
+              ]
+            },
+            "ContainerPort": 8080,
+            "TargetGroupArn": {
+              "Ref": "acdpbackstageloadbalancerconstructapplicationloadbalancerlistenerfleetGroupF9A486B0"
+            }
+          }
+        ],
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": [
+                  "acdpbackstagebackstagecontainerconstructfargatesecuritygroupB778CC94",
+                  "GroupId"
+                ]
+              }
+            ],
+            "Subnets": [
+              {
+                "Fn::Join": [
+                  "",
+                  [
+                    "{{resolve:ssm:/solution/vpc/",
+                    {
+                      "Ref": "VpcName"
+                    },
+                    "/subnets/private/1}}"
+                  ]
+                ]
+              },
+              {
+                "Fn::Join": [
+                  "",
+                  [
+                    "{{resolve:ssm:/solution/vpc/",
+                    {
+                      "Ref": "VpcName"
+                    },
+                    "/subnets/private/2}}"
+                  ]
+                ]
+              }
+            ]
+          }
+        },
+        "ServiceName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-fargate-service"
+            ]
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AcdpUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "TaskDefinition": {
+          "Ref": "acdpbackstagebackstagecontainerconstructfargatetaskdefinition26D75CF1"
+        }
+      },
+      "Type": "AWS::ECS::Service"
+    },
+    "acdpbackstagebackstagecontainerconstructfargatetaskdefinition26D75CF1": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Environment": [
+              {
+                "Name": "SOLUTION_NAME",
+                "Value": "connected-mobility-solution-on-aws"
+              },
+              {
+                "Name": "SOLUTION_VERSION",
+                "Value": "v1.2.0"
+              },
+              {
+                "Name": "WEB_HOSTNAME",
+                "Value": {
+                  "Ref": "FullyQualifiedDomainName"
+                }
+              },
+              {
+                "Name": "BACKEND_HOSTNAME",
+                "Value": {
+                  "Ref": "FullyQualifiedDomainName"
+                }
+              },
+              {
+                "Name": "NODE_ENV",
+                "Value": "production"
+              },
+              {
+                "Name": "LOG_LEVEL",
+                "Value": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "{{resolve:ssm:/solution/",
+                      {
+                        "Ref": "AcdpUniqueId"
+                      },
+                      "/config/backstage/log-level}}"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "USER_AGENT_STRING",
+                "Value": "AWSSOLUTION/test-solution-id/test-solution-version AWSSOLUTION-CAPABILITY/test-capability-id/test-solution-version"
+              }
+            ],
+            "Essential": true,
+            "Image": {
+              "Fn::Join": [
+                "",
+                [
+                  "test-account-id.dkr.ecr.us-west-2.",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AcdpUniqueId"
+                  },
+                  "/config/backstage/ecr-repository/name}}:DUMMY"
+                ]
+              ]
+            },
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "acdpbackstagebackstagecontainerconstructcontainerloggroup00CD59BA"
+                },
+                "awslogs-region": "us-west-2",
+                "awslogs-stream-prefix": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Ref": "AWS::StackName"
+                      },
+                      "-logs"
+                    ]
+                  ]
+                }
+              }
+            },
+            "Name": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AWS::StackName"
+                  },
+                  "-backend"
+                ]
+              ]
+            },
+            "PortMappings": [
+              {
+                "ContainerPort": 8080,
+                "Protocol": "tcp"
+              }
+            ],
+            "Secrets": [
+              {
+                "Name": "BACKSTAGE_NAME",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:us-west-2:test-account-id:parameter/solution/",
+                      {
+                        "Ref": "AcdpUniqueId"
+                      },
+                      "/config/backstage/name"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "BACKSTAGE_ORG",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:us-west-2:test-account-id:parameter/solution/",
+                      {
+                        "Ref": "AcdpUniqueId"
+                      },
+                      "/config/backstage/organization"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "POSTGRES_USER",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Ref": "acdpbackstageauroradatabaseconstructdatabasesecret557C9B62"
+                      },
+                      ":username::"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "POSTGRES_PASSWORD",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Ref": "acdpbackstageauroradatabaseconstructdatabasesecret557C9B62"
+                      },
+                      ":password::"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "POSTGRES_HOST",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Ref": "acdpbackstageauroradatabaseconstructdatabasesecret557C9B62"
+                      },
+                      ":host::"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "USE_BACKSTAGE_AUTH_REDIRECT_FLOW",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:us-west-2:test-account-id:parameter/solution/",
+                      {
+                        "Ref": "AcdpUniqueId"
+                      },
+                      "/config/backstage/use-auth-redirect-flow"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "BACKSTAGE_ADDITIONAL_SCOPES",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:us-west-2:test-account-id:parameter/solution/",
+                      {
+                        "Ref": "AcdpUniqueId"
+                      },
+                      "/config/backstage/additional-scopes"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "POSTGRES_PORT",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Ref": "acdpbackstageauroradatabaseconstructdatabasesecret557C9B62"
+                      },
+                      ":port::"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "CLIENT_ID",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "{{resolve:ssm:/solution/auth/",
+                      {
+                        "Ref": "IdentityProviderId"
+                      },
+                      "/user-client-config/default/secret/arn}}:client_id::"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "CLIENT_SECRET",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "{{resolve:ssm:/solution/auth/",
+                      {
+                        "Ref": "IdentityProviderId"
+                      },
+                      "/user-client-config/default/secret/arn}}:client_secret::"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "TOKEN_URL",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "{{resolve:ssm:/solution/auth/",
+                      {
+                        "Ref": "IdentityProviderId"
+                      },
+                      "/idp-config/secret/arn}}:token_endpoint::"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "AUTHORIZATION_URL",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "{{resolve:ssm:/solution/auth/",
+                      {
+                        "Ref": "IdentityProviderId"
+                      },
+                      "/idp-config/secret/arn}}:authorization_endpoint::"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "BACKEND_SECRET",
+                "ValueFrom": {
+                  "Ref": "acdpbackstagebackstagecontainerconstructbackendsecretACD7C77E"
+                }
+              },
+              {
+                "Name": "REGIONAL_ASSET_BUCKET_NAME",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:us-west-2:test-account-id:parameter/solution/",
+                      {
+                        "Ref": "AcdpUniqueId"
+                      },
+                      "/config/acdp-asset-config/regional/asset-bucket/name"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "REGIONAL_ASSET_BUCKET_REGION",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:us-west-2:test-account-id:parameter/solution/",
+                      {
+                        "Ref": "AcdpUniqueId"
+                      },
+                      "/config/acdp-asset-config/regional/asset-bucket/region"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "REGIONAL_ASSET_BUCKET_BACKSTAGE_TEMPLATE_KEY_PREFIX",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:us-west-2:test-account-id:parameter/solution/",
+                      {
+                        "Ref": "AcdpUniqueId"
+                      },
+                      "/config/acdp-asset-config/regional/backstage-template-key-prefix"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "REGIONAL_ASSET_BUCKET_DISCOVERY_REFRESH_FREQ",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:us-west-2:test-account-id:parameter/solution/",
+                      {
+                        "Ref": "AcdpUniqueId"
+                      },
+                      "/config/acdp-asset-config/regional/discovery-refresh-frequency-mins"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "REGIONAL_ASSET_BUCKET_BUILDSPEC_KEY_PREFIX",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:us-west-2:test-account-id:parameter/solution/",
+                      {
+                        "Ref": "AcdpUniqueId"
+                      },
+                      "/config/acdp-asset-config/regional/buildspec-key-prefix"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "LOCAL_ASSET_BUCKET_NAME",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:us-west-2:test-account-id:parameter/solution/",
+                      {
+                        "Ref": "AcdpUniqueId"
+                      },
+                      "/config/acdp-asset-config/local/asset-bucket/name"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "LOCAL_ASSET_BUCKET_REGION",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:us-west-2:test-account-id:parameter/solution/",
+                      {
+                        "Ref": "AcdpUniqueId"
+                      },
+                      "/config/acdp-asset-config/local/asset-bucket/region"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "LOCAL_ASSET_BUCKET_ROOT_KEY",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:us-west-2:test-account-id:parameter/solution/",
+                      {
+                        "Ref": "AcdpUniqueId"
+                      },
+                      "/config/acdp-asset-config/local/root-s3-key"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "LOCAL_ASSET_BUCKET_BACKSTAGE_USER_PROVIDED_TEMPLATE_KEY_PREFIX",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:us-west-2:test-account-id:parameter/solution/",
+                      {
+                        "Ref": "AcdpUniqueId"
+                      },
+                      "/config/acdp-asset-config/local/backstage-custom-template-key-prefix"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "LOCAL_ASSET_BUCKET_BACKSTAGE_DEFAULT_TEMPLATE_KEY_PREFIX",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:us-west-2:test-account-id:parameter/solution/",
+                      {
+                        "Ref": "AcdpUniqueId"
+                      },
+                      "/config/acdp-asset-config/local/backstage-default-template-key-prefix"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "LOCAL_ASSET_BUCKET_CATALOG_KEY_PREFIX",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:us-west-2:test-account-id:parameter/solution/",
+                      {
+                        "Ref": "AcdpUniqueId"
+                      },
+                      "/config/acdp-asset-config/local/catalog-key-prefix"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "LOCAL_ASSET_BUCKET_TECHDOCS_KEY_PREFIX",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:us-west-2:test-account-id:parameter/solution/",
+                      {
+                        "Ref": "AcdpUniqueId"
+                      },
+                      "/config/acdp-asset-config/local/techdocs-key-prefix"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "LOCAL_ASSET_BUCKET_DISCOVERY_REFRESH_FREQ",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:us-west-2:test-account-id:parameter/solution/",
+                      {
+                        "Ref": "AcdpUniqueId"
+                      },
+                      "/config/acdp-asset-config/local/discovery-refresh-frequency-mins"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "CODEBUILD_PROJECT_ARN",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:us-west-2:test-account-id:parameter/solution/",
+                      {
+                        "Ref": "AcdpUniqueId"
+                      },
+                      "/config/codebuild-project/arn"
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "ACDP_BUILD_CONFIG_SSM_PREFIX",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:us-west-2:test-account-id:parameter",
+                      {
+                        "Ref": "moduleinputsconstructssmacdpbuildssmprefix22C8087D"
+                      }
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "TARGET_ACCOUNT_ID",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:us-west-2:test-account-id:parameter",
+                      {
+                        "Ref": "acdpbackstagebackstagecontainerconstructssmbackstagetargetaccountid2059ED28"
+                      }
+                    ]
+                  ]
+                }
+              },
+              {
+                "Name": "TARGET_REGION",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":ssm:us-west-2:test-account-id:parameter",
+                      {
+                        "Ref": "acdpbackstagebackstagecontainerconstructssmbackstagetargetregion2154D24B"
+                      }
+                    ]
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "Cpu": "1024",
+        "EphemeralStorage": {
+          "SizeInGiB": 30
+        },
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "acdpbackstagebackstagecontainerconstructtaskdefinitionrole8D0F5D23",
+            "Arn"
+          ]
+        },
+        "Family": {
+          "Ref": "AWS::StackName"
+        },
+        "Memory": "2048",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AcdpUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "acdpbackstagebackstagecontainerconstructtaskdefinitionrole8D0F5D23",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "AWS::ECS::TaskDefinition"
+    },
+    "acdpbackstagebackstagecontainerconstructssmbackstagetargetaccountid2059ED28": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Backstage Deployment Target Account Id",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/deployment-targets/default/account-id"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AcdpUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": "test-account-id"
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpbackstagebackstagecontainerconstructssmbackstagetargetregion2154D24B": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Description": "Backstage Deployment Target Region",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/deployment-targets/default/region"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/",
+                {
+                  "Ref": "AcdpUniqueId"
+                },
+                "/config/deployment-uuid}}"
+              ]
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": "us-west-2"
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpbackstagebackstagecontainerconstructtaskdefinitionrole8D0F5D23": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "ssm:GetParameter",
+                    "ssm:PutParameter"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":ssm:us-west-2:test-account-id:parameter/solution/",
+                          {
+                            "Ref": "AcdpUniqueId"
+                          },
+                          "/acdp-build"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":ssm:us-west-2:test-account-id:parameter/solution/",
+                          {
+                            "Ref": "AcdpUniqueId"
+                          },
+                          "/acdp-build/*"
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ssm-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "s3:GetBucketAcl",
+                    "s3:GetBucketLocation",
+                    "s3:GetBucketVersioning",
+                    "s3:GetObject",
+                    "s3:GetObjectAcl",
+                    "s3:GetObjectAttributes",
+                    "s3:GetObjectVersion",
+                    "s3:GetObjectVersionAcl",
+                    "s3:GetObjectVersionTagging",
+                    "s3:ListAllMyBuckets",
+                    "s3:ListBucket",
+                    "s3:ListBucketVersions"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::{{resolve:ssm:/solution/",
+                          {
+                            "Ref": "AcdpUniqueId"
+                          },
+                          "/config/acdp-asset-config/regional/asset-bucket/name}}"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::{{resolve:ssm:/solution/",
+                          {
+                            "Ref": "AcdpUniqueId"
+                          },
+                          "/config/acdp-asset-config/regional/asset-bucket/name}}/*"
+                        ]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Action": [
+                    "s3:GetBucketAcl",
+                    "s3:GetBucketLocation",
+                    "s3:GetBucketVersioning",
+                    "s3:GetObject",
+                    "s3:GetObjectAcl",
+                    "s3:GetObjectAttributes",
+                    "s3:GetObjectVersion",
+                    "s3:GetObjectVersionAcl",
+                    "s3:GetObjectVersionTagging",
+                    "s3:ListAllMyBuckets",
+                    "s3:ListBucket",
+                    "s3:ListBucketVersions",
+                    "s3:PutObject",
+                    "s3:DeleteObject",
+                    "s3:DeleteObjectVersion"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::{{resolve:ssm:/solution/",
+                          {
+                            "Ref": "AcdpUniqueId"
+                          },
+                          "/config/acdp-asset-config/local/asset-bucket/name}}"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::{{resolve:ssm:/solution/",
+                          {
+                            "Ref": "AcdpUniqueId"
+                          },
+                          "/config/acdp-asset-config/local/asset-bucket/name}}/{{resolve:ssm:/solution/",
+                          {
+                            "Ref": "AcdpUniqueId"
+                          },
+                          "/config/acdp-asset-config/local/root-s3-key}}/*"
+                        ]
+                      ]
+                    },
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":s3:::{{resolve:ssm:/solution/",
+                          {
+                            "Ref": "AcdpUniqueId"
+                          },
+                          "/config/acdp-asset-config/local/asset-bucket/name}}/{{resolve:ssm:/solution/",
+                          {
+                            "Ref": "AcdpUniqueId"
+                          },
+                          "/config/acdp-asset-config/local/default-assets-prefix}}/*"
+                        ]
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Action": [
+                    "kms:GenerateDataKey",
+                    "kms:Decrypt",
+                    "kms:Encrypt"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "{{resolve:ssm:/solution/",
+                        {
+                          "Ref": "AcdpUniqueId"
+                        },
+                        "/config/acdp-asset-config/local/asset-bucket/key-arn}}"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "s3-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "codebuild:StartBuild",
+                    "codebuild:BatchGetProjects",
+                    "codebuild:BatchGetBuilds",
+                    "codebuild:ListBuildsForProject"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":codebuild:us-west-2:test-account-id:project/",
+                        {
+                          "Ref": "AcdpUniqueId"
+                        },
+                        "-*"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "codebuild-policy"
+          }
+        ],
+        "RoleName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "-us-west-2-backstage-task"
+            ]
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AcdpUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "acdpbackstagebackstagecontainerconstructtaskdefinitionroleDefaultPolicyE666B526": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ecr:us-west-2:test-account-id:repository/{{resolve:ssm:/solution/",
+                    {
+                      "Ref": "AcdpUniqueId"
+                    },
+                    "/config/backstage/ecr-repository/name}}"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "acdpbackstagebackstagecontainerconstructcontainerloggroup00CD59BA",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ssm:us-west-2:test-account-id:parameter/solution/",
+                    {
+                      "Ref": "AcdpUniqueId"
+                    },
+                    "/config/backstage/name"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ssm:us-west-2:test-account-id:parameter/solution/",
+                    {
+                      "Ref": "AcdpUniqueId"
+                    },
+                    "/config/backstage/organization"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "acdpbackstageauroradatabaseconstructdatabasesecret557C9B62"
+              }
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ssm:us-west-2:test-account-id:parameter/solution/",
+                    {
+                      "Ref": "AcdpUniqueId"
+                    },
+                    "/config/backstage/use-auth-redirect-flow"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ssm:us-west-2:test-account-id:parameter/solution/",
+                    {
+                      "Ref": "AcdpUniqueId"
+                    },
+                    "/config/backstage/additional-scopes"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "{{resolve:ssm:/solution/auth/",
+                    {
+                      "Ref": "IdentityProviderId"
+                    },
+                    "/user-client-config/default/secret/arn}}"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "{{resolve:ssm:/solution/auth/",
+                    {
+                      "Ref": "IdentityProviderId"
+                    },
+                    "/idp-config/secret/arn}}"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "acdpbackstagebackstagecontainerconstructbackendsecretACD7C77E"
+              }
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ssm:us-west-2:test-account-id:parameter/solution/",
+                    {
+                      "Ref": "AcdpUniqueId"
+                    },
+                    "/config/acdp-asset-config/regional/asset-bucket/name"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ssm:us-west-2:test-account-id:parameter/solution/",
+                    {
+                      "Ref": "AcdpUniqueId"
+                    },
+                    "/config/acdp-asset-config/regional/asset-bucket/region"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ssm:us-west-2:test-account-id:parameter/solution/",
+                    {
+                      "Ref": "AcdpUniqueId"
+                    },
+                    "/config/acdp-asset-config/regional/backstage-template-key-prefix"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ssm:us-west-2:test-account-id:parameter/solution/",
+                    {
+                      "Ref": "AcdpUniqueId"
+                    },
+                    "/config/acdp-asset-config/regional/discovery-refresh-frequency-mins"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ssm:us-west-2:test-account-id:parameter/solution/",
+                    {
+                      "Ref": "AcdpUniqueId"
+                    },
+                    "/config/acdp-asset-config/regional/buildspec-key-prefix"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ssm:us-west-2:test-account-id:parameter/solution/",
+                    {
+                      "Ref": "AcdpUniqueId"
+                    },
+                    "/config/acdp-asset-config/local/asset-bucket/name"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ssm:us-west-2:test-account-id:parameter/solution/",
+                    {
+                      "Ref": "AcdpUniqueId"
+                    },
+                    "/config/acdp-asset-config/local/asset-bucket/region"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ssm:us-west-2:test-account-id:parameter/solution/",
+                    {
+                      "Ref": "AcdpUniqueId"
+                    },
+                    "/config/acdp-asset-config/local/root-s3-key"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ssm:us-west-2:test-account-id:parameter/solution/",
+                    {
+                      "Ref": "AcdpUniqueId"
+                    },
+                    "/config/acdp-asset-config/local/backstage-custom-template-key-prefix"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ssm:us-west-2:test-account-id:parameter/solution/",
+                    {
+                      "Ref": "AcdpUniqueId"
+                    },
+                    "/config/acdp-asset-config/local/backstage-default-template-key-prefix"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ssm:us-west-2:test-account-id:parameter/solution/",
+                    {
+                      "Ref": "AcdpUniqueId"
+                    },
+                    "/config/acdp-asset-config/local/catalog-key-prefix"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ssm:us-west-2:test-account-id:parameter/solution/",
+                    {
+                      "Ref": "AcdpUniqueId"
+                    },
+                    "/config/acdp-asset-config/local/techdocs-key-prefix"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ssm:us-west-2:test-account-id:parameter/solution/",
+                    {
+                      "Ref": "AcdpUniqueId"
+                    },
+                    "/config/acdp-asset-config/local/discovery-refresh-frequency-mins"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ssm:us-west-2:test-account-id:parameter/solution/",
+                    {
+                      "Ref": "AcdpUniqueId"
+                    },
+                    "/config/codebuild-project/arn"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ssm:us-west-2:test-account-id:parameter",
+                    {
+                      "Ref": "moduleinputsconstructssmacdpbuildssmprefix22C8087D"
+                    }
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ssm:us-west-2:test-account-id:parameter",
+                    {
+                      "Ref": "acdpbackstagebackstagecontainerconstructssmbackstagetargetaccountid2059ED28"
+                    }
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ssm:us-west-2:test-account-id:parameter",
+                    {
+                      "Ref": "acdpbackstagebackstagecontainerconstructssmbackstagetargetregion2154D24B"
+                    }
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "acdpbackstagebackstagecontainerconstructtaskdefinitionroleDefaultPolicyE666B526",
+        "Roles": [
+          {
+            "Ref": "acdpbackstagebackstagecontainerconstructtaskdefinitionrole8D0F5D23"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
+    "acdpbackstagecdklambdasvpcconstructsecuritygroupA7B11D31": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Metadata": {
+        "cfn_nag": {
+          "rules_to_suppress": [
+            {
+              "id": "W5",
+              "reason": "Unable to know egress requirement. leaving open for now"
+            },
+            {
+              "id": "W40",
+              "reason": "Unable to know egress requirement. leaving open for now"
+            }
+          ]
+        }
+      },
+      "Properties": {
+        "GroupDescription": "backstage/acdp-backstage/cdk-lambdas-vpc-construct/security-group",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AcdpUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Ref": "VpcName"
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::EC2::SecurityGroup"
+    },
+    "acdpbackstageloadbalancerconstructalbaccesslogsbucket46F5BBD7": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AcdpUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "acdpbackstageloadbalancerconstructalbaccesslogsbucketPolicyE3AC6333": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Bucket": {
+          "Ref": "acdpbackstageloadbalancerconstructalbaccesslogsbucket46F5BBD7"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "acdpbackstageloadbalancerconstructalbaccesslogsbucket46F5BBD7",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "acdpbackstageloadbalancerconstructalbaccesslogsbucket46F5BBD7",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "s3:PutObject",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      "test"
+                    ]
+                  ]
+                }
+              },
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "acdpbackstageloadbalancerconstructalbaccesslogsbucket46F5BBD7",
+                        "Arn"
+                      ]
+                    },
+                    "/backstage-alb/AWSLogs/test-account-id/*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": "s3:PutObject",
+              "Condition": {
+                "StringEquals": {
+                  "s3:x-amz-acl": "bucket-owner-full-control"
+                }
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "delivery.logs.amazonaws.com"
+              },
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "acdpbackstageloadbalancerconstructalbaccesslogsbucket46F5BBD7",
+                        "Arn"
+                      ]
+                    },
+                    "/backstage-alb/AWSLogs/test-account-id/*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": "s3:GetBucketAcl",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "delivery.logs.amazonaws.com"
+              },
+              "Resource": {
+                "Fn::GetAtt": [
+                  "acdpbackstageloadbalancerconstructalbaccesslogsbucket46F5BBD7",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Type": "AWS::S3::BucketPolicy"
+    },
+    "acdpbackstageloadbalancerconstructapplicationloadbalancer72C84123": {
+      "DependsOn": [
+        "acdpbackstageloadbalancerconstructalbaccesslogsbucketPolicyE3AC6333",
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "LoadBalancerAttributes": [
+          {
+            "Key": "deletion_protection.enabled",
+            "Value": "false"
+          },
+          {
+            "Key": "routing.http.drop_invalid_header_fields.enabled",
+            "Value": "true"
+          },
+          {
+            "Key": "access_logs.s3.enabled",
+            "Value": "true"
+          },
+          {
+            "Key": "access_logs.s3.bucket",
+            "Value": {
+              "Ref": "acdpbackstageloadbalancerconstructalbaccesslogsbucket46F5BBD7"
+            }
+          },
+          {
+            "Key": "access_logs.s3.prefix",
+            "Value": "backstage-alb"
+          }
+        ],
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-alb"
+            ]
+          ]
+        },
+        "Scheme": "internet-facing",
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "acdpbackstagebackstagecontainerconstructalbsecuritygroupD655A4E9",
+              "GroupId"
+            ]
+          }
+        ],
+        "Subnets": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/vpc/",
+                {
+                  "Ref": "VpcName"
+                },
+                "/subnets/public/1}}"
+              ]
+            ]
+          },
+          {
+            "Fn::Join": [
+              "",
+              [
+                "{{resolve:ssm:/solution/vpc/",
+                {
+                  "Ref": "VpcName"
+                },
+                "/subnets/public/2}}"
+              ]
+            ]
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AcdpUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "Type": "application"
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer"
+    },
+    "acdpbackstageloadbalancerconstructapplicationloadbalancerlistenerC3A53880": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Certificates": [
+          {
+            "CertificateArn": {
+              "Fn::If": [
+                "useacmcustomcertificatecondition",
+                {
+                  "Ref": "CustomAcmCertificateArn"
+                },
+                {
+                  "Ref": "acdpbackstageloadbalancerconstructlistenercertificateFD326D03"
+                }
+              ]
+            }
+          }
+        ],
+        "DefaultActions": [
+          {
+            "TargetGroupArn": {
+              "Ref": "acdpbackstageloadbalancerconstructapplicationloadbalancerlistenerfleetGroupF9A486B0"
+            },
+            "Type": "forward"
+          }
+        ],
+        "LoadBalancerArn": {
+          "Ref": "acdpbackstageloadbalancerconstructapplicationloadbalancer72C84123"
+        },
+        "Port": 443,
+        "Protocol": "HTTPS",
+        "SslPolicy": "ELBSecurityPolicy-TLS13-1-2-Res-2021-06"
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener"
+    },
+    "acdpbackstageloadbalancerconstructapplicationloadbalancerlistenerfleetGroupF9A486B0": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Port": 443,
+        "Protocol": "HTTP",
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AcdpUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "TargetGroupAttributes": [
+          {
+            "Key": "stickiness.enabled",
+            "Value": "false"
+          }
+        ],
+        "TargetType": "ip",
+        "VpcId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/vpc/",
+              {
+                "Ref": "VpcName"
+              },
+              "/vpcid}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup"
+    },
+    "acdpbackstageloadbalancerconstructlistenercertificateFD326D03": {
+      "Condition": "useacmdnscertificatecondition",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "DomainName": {
+          "Ref": "FullyQualifiedDomainName"
+        },
+        "DomainValidationOptions": [
+          {
+            "DomainName": {
+              "Ref": "FullyQualifiedDomainName"
+            },
+            "HostedZoneId": {
+              "Ref": "Route53HostedZoneId"
+            }
+          },
+          {
+            "DomainName": {
+              "Fn::Join": [
+                "",
+                [
+                  "*.",
+                  {
+                    "Ref": "FullyQualifiedDomainName"
+                  }
+                ]
+              ]
+            },
+            "HostedZoneId": {
+              "Ref": "Route53HostedZoneId"
+            }
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AcdpUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "ValidationMethod": "DNS"
+      },
+      "Type": "AWS::CertificateManager::Certificate"
+    },
+    "acdpbackstageloadbalancerconstructlistenerrule6E295068": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Actions": [
+          {
+            "TargetGroupArn": {
+              "Ref": "acdpbackstageloadbalancerconstructapplicationloadbalancerlistenerfleetGroupF9A486B0"
+            },
+            "Type": "forward"
+          }
+        ],
+        "Conditions": [
+          {
+            "Field": "path-pattern",
+            "PathPatternConfig": {
+              "Values": [
+                "*"
+              ]
+            }
+          }
+        ],
+        "ListenerArn": {
+          "Ref": "acdpbackstageloadbalancerconstructapplicationloadbalancerlistenerC3A53880"
+        },
+        "Priority": 1
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::ListenerRule"
+    },
+    "acdpbackstageloadbalancerconstructrootarecordE1828906": {
+      "Condition": "shouldcreateroute53recordscondition",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AliasTarget": {
+          "DNSName": {
+            "Fn::Join": [
+              "",
+              [
+                "dualstack.",
+                {
+                  "Fn::GetAtt": [
+                    "acdpbackstageloadbalancerconstructapplicationloadbalancer72C84123",
+                    "DNSName"
+                  ]
+                }
+              ]
+            ]
+          },
+          "HostedZoneId": {
+            "Fn::GetAtt": [
+              "acdpbackstageloadbalancerconstructapplicationloadbalancer72C84123",
+              "CanonicalHostedZoneID"
+            ]
+          }
+        },
+        "HostedZoneId": {
+          "Ref": "Route53HostedZoneId"
+        },
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "FullyQualifiedDomainName"
+              },
+              "."
+            ]
+          ]
+        },
+        "Type": "A"
+      },
+      "Type": "AWS::Route53::RecordSet"
+    },
+    "moduleinputsconstructssmacdpbuildssmprefix22C8087D": {
+      "Properties": {
+        "Description": "Description for acdp build config path root parameter",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/acdp-build/build-parameters"
+            ]
+          ]
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/acdp-build"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "ssmappuniqueidregistermodule9C5C2C5D": {
+      "Properties": {
+        "Description": "SSM parameter to register a module with an app unique ID.",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/test-module-short-name"
+            ]
+          ]
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "}}"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                  ],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  },
+  "Transform": "AWS::Serverless-2016-10-31"
+}

@@ -1,0 +1,102 @@
+enableExperimentalRedirectFlow: ${USE_BACKSTAGE_AUTH_REDIRECT_FLOW}
+
+app:
+  title: ${BACKSTAGE_NAME}
+  baseUrl: https://${WEB_HOSTNAME}
+
+organization:
+  name: ${BACKSTAGE_ORG}
+
+backend:
+  auth: # Legacy auth is required for supporting certain plugins: https://backstage.io/docs/auth/service-to-service-auth/#legacy-tokens
+    externalAccess:
+      - type: legacy
+        options:
+          secret: ${BACKEND_SECRET}
+          subject: legacy-auth-option
+  baseUrl: https://${BACKEND_HOSTNAME}
+  listen:
+    port: 8080
+  csp:
+    connect-src: ["'self'", 'http:', 'https:']
+  cors:
+    origin:
+      - https://${WEB_HOSTNAME}:443
+      - https://${WEB_HOSTNAME}
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+  database:
+    client: pg
+    connection:
+      host: ${POSTGRES_HOST}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
+  cache:
+    store: memory
+
+techdocs:
+  generator:
+    runIn: 'local'
+  builder: 'local'
+  publisher:
+    type: 'awsS3'
+    awsS3:
+      bucketName: ${LOCAL_ASSET_BUCKET_NAME}
+      region: ${LOCAL_ASSET_BUCKET_REGION}
+      bucketRootPath: ${LOCAL_ASSET_BUCKET_TECHDOCS_KEY_PREFIX}
+
+auth:
+  environment: production
+  session: # Session secret is necessary to enable session support in the auth-backend
+    secret: ${BACKEND_SECRET}
+  providers:
+    oauth2:
+      production:
+        clientId: ${CLIENT_ID}
+        clientSecret: ${CLIENT_SECRET}
+        authorizationUrl: ${AUTHORIZATION_URL}
+        tokenUrl: ${TOKEN_URL}
+  config:
+    additionalScopes: ${BACKSTAGE_ADDITIONAL_SCOPES}
+
+
+scaffolder:
+  concurrentTasksLimit: 10
+
+acdp:
+  s3Catalog:
+    bucketName: ${LOCAL_ASSET_BUCKET_NAME}
+    prefix: ${LOCAL_ASSET_BUCKET_CATALOG_KEY_PREFIX}
+    region: ${LOCAL_ASSET_BUCKET_REGION}
+  buildConfig:
+    buildConfigStoreSsmPrefix: ${ACDP_BUILD_CONFIG_SSM_PREFIX}
+  deploymentDefaults:
+    codeBuildProjectArn: ${CODEBUILD_PROJECT_ARN}
+    accountId: ${TARGET_ACCOUNT_ID}
+    region: ${TARGET_REGION}
+  metrics:
+    userAgentString: ${USER_AGENT_STRING}
+
+catalog:
+  providers:
+    awsS3:
+      localAssetBucketUserProvidedTemplates:
+        bucketName: ${LOCAL_ASSET_BUCKET_NAME}
+        prefix: ${LOCAL_ASSET_BUCKET_BACKSTAGE_USER_PROVIDED_TEMPLATE_KEY_PREFIX}
+        region: ${LOCAL_ASSET_BUCKET_REGION}
+        schedule:
+          frequency:
+            minutes: ${LOCAL_ASSET_BUCKET_DISCOVERY_REFRESH_FREQ}
+          timeout: { minutes: 3 }
+      localAssetBucketDefaultTemplates:
+        bucketName: ${LOCAL_ASSET_BUCKET_NAME}
+        prefix: ${LOCAL_ASSET_BUCKET_BACKSTAGE_DEFAULT_TEMPLATE_KEY_PREFIX}
+        region: ${LOCAL_ASSET_BUCKET_REGION}
+        schedule:
+          frequency:
+            minutes: ${LOCAL_ASSET_BUCKET_DISCOVERY_REFRESH_FREQ}
+          timeout: { minutes: 3 }
+
+  rules:
+    - allow: [Component, System, API, Group, User, Resource, Location, Template]

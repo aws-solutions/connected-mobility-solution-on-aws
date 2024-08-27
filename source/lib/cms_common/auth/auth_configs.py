@@ -40,30 +40,24 @@ class AuthConfigError(Exception):
 
 @dataclass(frozen=True)
 class CMSIdPConfig:
-    iss_domain: str
-    alternate_aud_key: Optional[str]
+    issuer: str
+    token_endpoint: str
+    authorization_endpoint: str
     auds: List[str]
     scopes: List[str]
+    alternate_aud_key: Optional[str] = None
 
     def __hash__(self) -> int:
         auds_tuple = tuple(sorted(self.auds))
         scopes_tuple = tuple(sorted(self.scopes))
-        return hash((self.iss_domain, self.alternate_aud_key, auds_tuple, scopes_tuple))
+        return hash((self.issuer, self.alternate_aud_key, auds_tuple, scopes_tuple))
 
 
 @dataclass(frozen=True)
 class CMSClientConfig:
-    audience: str
-    token_endpoint: str
     client_id: str
     client_secret: str
-
-
-@dataclass(frozen=True)
-class CMSAuthorizationCodeFlowConfig:
-    token_endpoint: str
-    client_id: str
-    client_secret: str
+    audience: Optional[str] = None
 
 
 MAX_CACHE_SIZE_BOTO_CLIENT = 10
@@ -105,12 +99,14 @@ def get_idp_config(
     )
 
 
-def get_client_config(
+def get_service_client_config(
     user_agent_string: str,
     identity_provider_id: str,
 ) -> CMSClientConfig:
     auth_resource_names = _get_auth_resource_names(identity_provider_id)
-    client_config_ssm_name = auth_resource_names.client_config_secret_arn_ssm_parameter
+    client_config_ssm_name = (
+        auth_resource_names.service_client_config_secret_arn_ssm_parameter
+    )
     return _get_config(
         user_agent_string=user_agent_string,
         ssm_name=client_config_ssm_name,
@@ -118,18 +114,18 @@ def get_client_config(
     )
 
 
-def get_authorization_code_flow_config(
+def get_user_client_config(
     user_agent_string: str,
     identity_provider_id: str,
-) -> CMSAuthorizationCodeFlowConfig:
+) -> CMSClientConfig:
     auth_resource_names = _get_auth_resource_names(identity_provider_id)
-    authorization_code_flow_config_ssm_name = (
-        auth_resource_names.authorization_code_flow_config_secret_arn_ssm_parameter
+    user_client_config_ssm_name = (
+        auth_resource_names.user_client_config_secret_arn_ssm_parameter
     )
     return _get_config(
         user_agent_string=user_agent_string,
-        ssm_name=authorization_code_flow_config_ssm_name,
-        config_dataclass_type=CMSAuthorizationCodeFlowConfig,
+        ssm_name=user_client_config_ssm_name,
+        config_dataclass_type=CMSClientConfig,
     )
 
 
@@ -152,23 +148,12 @@ def _get_config(
     ...
 
 
-@overload
-def _get_config(
-    user_agent_string: str,
-    ssm_name: str,
-    config_dataclass_type: type[CMSAuthorizationCodeFlowConfig],
-) -> CMSAuthorizationCodeFlowConfig:
-    ...
-
-
 # Helper function to dynamically get the right config based on SSM path. Each config has an SSM parameter to expose the config secret Arn.
 def _get_config(
     user_agent_string: str,
     ssm_name: str,
-    config_dataclass_type: Union[
-        type[CMSIdPConfig], type[CMSClientConfig], type[CMSAuthorizationCodeFlowConfig]
-    ],
-) -> Union[CMSIdPConfig, CMSClientConfig, CMSAuthorizationCodeFlowConfig]:
+    config_dataclass_type: Union[type[CMSIdPConfig], type[CMSClientConfig]],
+) -> Union[CMSIdPConfig, CMSClientConfig]:
     try:
         config_secret_arn = _get_ssm_client(user_agent_string).get_parameter(
             Name=ssm_name

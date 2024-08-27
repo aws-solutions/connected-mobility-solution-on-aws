@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: The template creates a Transit Gateway
+Parameters:
+  TransitGatewayName:
+    Description: Name of the Transit Gateway
+    Type: String
+    Default: cms-transit-gateway
+
+Resources:
+  TransitGateway:
+    Type: AWS::EC2::TransitGateway
+    Properties:
+      AutoAcceptSharedAttachments: enable
+      DefaultRouteTableAssociation: disable
+      DefaultRouteTablePropagation: disable
+      Description: A sample transit gateway for use with the CMS VPC
+      Tags:
+        - Key: Name
+          Value: !Ref TransitGatewayName
+
+Outputs:
+  Name:
+    Value: !Ref AWS::StackName
+  TransitGateway:
+    Value: !Ref TransitGateway

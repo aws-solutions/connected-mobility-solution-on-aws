@@ -22,7 +22,7 @@ from cms_common.config.stack_inputs import (
 )
 
 # Connected Mobility Solution on AWS
-from .infrastructure.cms_auth_stack import CmsAuthOnAwsStack
+from .infrastructure.cms_auth_stack import CmsAuthStack
 
 solution_config_inputs = SolutionConfigInputs(
     solution_id=os.environ["SOLUTION_ID"],
@@ -40,7 +40,7 @@ s3_asset_config_inputs = S3AssetConfigInputs(
 )
 
 app = App()
-stack = CmsAuthOnAwsStack(
+stack = CmsAuthStack(
     app,
     solution_config_inputs.module_name,
     stack_name=solution_config_inputs.module_name,
