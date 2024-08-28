@@ -2,50 +2,32 @@
 
 set -e && [[ "$DEBUG" == 'true' ]] && set -x
 
-showHelp() {
-cat << EOF
-Usage: ./deployment/run-unit-tests.sh --help
-
-Run unit tests in this module.
-
--r,   --no-report                       Don't generate the report, this is mainly used for pre-commit
-
--s,   --snapshot-update                 Update cdk snapshots
-
-EOF
-}
-
 generate_report=true
 
-for flag in "$@"
+while [[ $# -gt 0 ]]
 do
-  case "$flag" in
-    -h|--help)
-        showHelp
-        exit 0
-        ;;
+  case $1 in
     -r|--no-report)
         unset generate_report
+        shift
         ;;
     -s|--snapshot-update)
         snapshot_update=true
+        shift
         ;;
     *)
-        printf "Unrecognized flag %s." "${flag}"
-        printf "Please use --help to see the list of supported flags. This script does not use any positional args.\n"
-        printf "Exiting script with error code 1.\n\n"
-        exit 1
+        shift
         ;;
   esac
 done
 
-cd "$(dirname "$0")"/..
-
 # Get reference for all important folders and files
-project_dir="$PWD"
+project_dir="$(dirname "$(dirname "$(realpath "$0")")")"
 source_dir="$project_dir/cms_common"
-python_coverage_report="$source_dir/tests/coverage-reports/coverage.xml"
-python_coverage_report="$source_dir/coverage-reports/coverage.xml"
+
+root_dir="$(dirname "$(dirname "$project_dir")")"
+module_name="$(basename "$project_dir")"
+python_coverage_report="$root_dir/coverage-reports/$module_name-coverage.xml"
 
 rm -f "$project_dir/.coverage"
 
@@ -58,10 +40,8 @@ pytest "$source_dir" \
   ${snapshot_update:+--snapshot-update}
 
 # Only perform the sed transformation if a report was generated, to guarantee the coveragereport file exists
-if [ "$generate_report" = true ]
-then
-  # Linux and MacOS have different ways of calling the sed command for in-place editing.
-  # MacOS takes a mandatory argument for the -i flag whereas linux does not.
+if [ "$generate_report" = true ]; then
+  # Linux and MacOS have different ways of calling the sed command for in-place editing. MacOS takes a mandatory argument for the -i flag whereas linux does not.
   sedi=(-i)
   if [[ "$OSTYPE" == "darwin"* ]]; then
     sedi=(-i "")
@@ -70,6 +50,5 @@ then
   # The pytest coverage report generated includes the absolute path to the root directory.
   # Sonarqube requires a path that is instead relative to the root directory.
   # To accomplish this, we remove the absolute path portion of the root directory.
-  repo_root="$(dirname "$(dirname "$project_dir")")"
-  sed "${sedi[@]}" -e "s,<source>$repo_root/,<source>,g" "$python_coverage_report"
+  sed "${sedi[@]}" -e "s,<source>$root_dir/,<source>,g" "$python_coverage_report"
 fi

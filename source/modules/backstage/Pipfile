@@ -1,0 +1,37 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+
+[dev-packages]
+cms_common = {path = "../../lib", editable = true}
+attrs = ">=22.1.0"
+cdk-nag = "*"
+exceptiongroup = "*"
+jinja2 = "*"
+markdown-to-json = "*"
+mypy = "*"
+pre-commit = "*"
+pycln = "*"
+pylint = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+setuptools = ">=71.0.0"
+syrupy = "*"
+toml = "*"
+types-boto3 = ">=1.0.2"
+types-python-dateutil = "*"
+types-pyyaml = "*"
+types-requests = ">=2.32.0"
+types-setuptools = "*"
+types-urllib3 = "*"
+types-toml = "*"
+wheel = "*"
+wrapt = "*"
+freezegun="*"
+
+[requires]
+python_version = "3.12"

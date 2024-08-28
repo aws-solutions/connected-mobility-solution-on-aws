@@ -170,7 +170,7 @@ class PostProvisioningConstruct(Construct):
             code=aws_lambda.Code.from_asset("dist/lambda/provisioning.zip"),
             description="CMS Provisioning post-provisioning lambda function",
             handler="function.post_provision.handler",
-            runtime=aws_lambda.Runtime.PYTHON_3_10,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             role=post_provisioning_hook_lambda_role,
             layers=[dependency_layer],
             timeout=Duration.minutes(1),

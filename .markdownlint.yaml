@@ -1,2 +1,13 @@
-MD013:
+default: true
+
+MD013: # Line length
   line_length: 120
+  code_blocks: false
+
+MD024: # Duplicate headers
+  siblings_only: true
+
+MD029: # Ordered list style
+  style: "one"
+
+MD041: false # First line top-level header

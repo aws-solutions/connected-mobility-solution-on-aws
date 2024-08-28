@@ -61,7 +61,7 @@ repos:
       - id: black
         name: (VPC) Black
   - repo: https://github.com/hadialqattan/pycln
-    rev: v2.1.3
+    rev: v2.4.0
     hooks:
       - id: pycln
         name: (VPC) Pycln
@@ -89,20 +89,17 @@ repos:
       - id: prettier
         name: (VPC) Prettier
         types_or: [javascript, jsx, ts, tsx]
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.39.0
+    hooks:
+      - id: markdownlint
+        name: (VPC) MarkdownLint
   # Local
   - repo: local
     hooks:
-      - id: run-cfn-nag
-        name: (VPC) run-cfn-nag
-        entry: source/modules/vpc/deployment/run-cfn-nag.sh
-        files: infrastructure
+      - id: shellcheck
+        name: (VPC) Shellchecker
+        entry: shellcheck
+        args: ["-x"]
+        types: [shell]
         language: system
-        types_or: [python, json]
-        pass_filenames: false
-      - id: run-unit-tests
-        name: (VPC) run-unit-tests
-        entry: source/modules/vpc/deployment/run-unit-tests.sh
-        args: ["--no-report"]
-        language: system
-        types: [python]
-        pass_filenames: false

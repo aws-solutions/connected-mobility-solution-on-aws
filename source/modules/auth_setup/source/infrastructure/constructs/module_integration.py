@@ -13,6 +13,7 @@ from aws_cdk import CfnParameter, Stack, aws_ssm
 from constructs import Construct
 
 # CMS Common Library
+from cms_common.config.regex import RegexPattern
 from cms_common.constructs.identity_provider_config import IdentityProviderConfig
 from cms_common.resource_names.auth import AuthResourceNames
 
@@ -24,7 +25,7 @@ class StackConfigInputs:
     callback_urls: List[str]
     idp_config_secret_arn: str
     service_client_config_secret_arn: str
-    authorization_code_exchange_config_secret_arn: str
+    user_client_config_secret_arn: str
 
 
 class ModuleInputsConstruct(Construct):
@@ -50,11 +51,10 @@ class ModuleInputsConstruct(Construct):
             "CallbackUrls",
             type="CommaDelimitedList",
             description="List of callback URLs allowed for the Cognito user pool. These are the allowed redirect uris during authentication",
-            default="https://example.com,https://localhost",
-            allowed_pattern=r"^[a-zA_Z]{1}[a-zA-Z0-9+-.]*:\/\/(www\.)?[a-zA-Z0-9\/@%._\+~=-]*\b\/?$",
+            default="https://example.com",
+            allowed_pattern=RegexPattern.CALLBACK_URLS,
         ).value_as_list
 
-        secret_arn_param_regex = r"(^$)|(arn:aws:secretsmanager:[a-z0-9-]+:\d{12}:secret:[a-zA-Z0-9/_+=.@-]+)"  # nosec
         secret_arn_param_constraint_description = (  # nosec
             "Value must be a valid AWS SecretsManger secret Arn"
         )
@@ -64,7 +64,7 @@ class ModuleInputsConstruct(Construct):
             "IdPConfigSecretArn",
             type="String",
             description="Secret Arn of preexisting IdP configuration json",
-            allowed_pattern=secret_arn_param_regex,
+            allowed_pattern=RegexPattern.SECRETSMANAGER_SECRET_ARN,
             constraint_description=secret_arn_param_constraint_description,
             default="",
         ).value_as_string
@@ -74,17 +74,17 @@ class ModuleInputsConstruct(Construct):
             "ServiceClientConfigSecretArn",
             type="String",
             description="Secret Arn of preexisting service client configuration json",
-            allowed_pattern=secret_arn_param_regex,
+            allowed_pattern=RegexPattern.SECRETSMANAGER_SECRET_ARN,
             constraint_description=secret_arn_param_constraint_description,
             default="",
         ).value_as_string
 
-        authorization_code_exchange_config_secret_arn = CfnParameter(
+        user_client_config_secret_arn = CfnParameter(
             Stack.of(self),
-            "AuthorizationCodeExchangeConfigSecretArn",
+            "UserClientConfigSecretArn",
             type="String",
-            description="Secret Arn of preexisting authorization code exchange config json",
-            allowed_pattern=secret_arn_param_regex,
+            description="Secret Arn of preexisting user client configuration json",
+            allowed_pattern=RegexPattern.SECRETSMANAGER_SECRET_ARN,
             constraint_description=secret_arn_param_constraint_description,
             default="",
         ).value_as_string
@@ -95,7 +95,7 @@ class ModuleInputsConstruct(Construct):
             identity_provider_id=identity_provider_id,
             idp_config_secret_arn=idp_config_secret_arn,
             service_client_config_secret_arn=service_client_config_secret_arn,
-            authorization_code_exchange_config_secret_arn=authorization_code_exchange_config_secret_arn,
+            user_client_config_secret_arn=user_client_config_secret_arn,
         )
 
 
@@ -107,7 +107,7 @@ class ModuleOutputsConstruct(Construct):
         module_inputs_construct: ModuleInputsConstruct,
         idp_config_secret_arn: str,
         service_client_config_secret_arn: str,
-        authorization_code_exchange_config_secret_arn: str,
+        user_client_config_secret_arn: str,
     ) -> None:
         super().__init__(scope, construct_id)
 
@@ -119,25 +119,25 @@ class ModuleOutputsConstruct(Construct):
             self,
             "ssm-idp-config-secret-arn",
             string_value=idp_config_secret_arn,
-            description="Secret Arn for IdP configurations needed to perform JWT validation for OAuth OpenID Connect auth tokens.",
+            description="Secret Arn for IdP configurations needed to facilitate authentication and authorization via OAuth 2.0 identity providers.",
             parameter_name=auth_resource_names.idp_config_secret_arn_ssm_parameter,
-            simple_name=True,
+            simple_name=False,
         )
 
         aws_ssm.StringParameter(
             self,
             "ssm-service-client-config-secret-arn",
             string_value=service_client_config_secret_arn,
-            description="Secret Arn for Client configurations needed for services to execute the Client Credentials flow, and be granted access tokens.",
-            parameter_name=auth_resource_names.client_config_secret_arn_ssm_parameter,
-            simple_name=True,
+            description="Secret Arn for service client configuration needed for OAuth 2.0 operations.",
+            parameter_name=auth_resource_names.service_client_config_secret_arn_ssm_parameter,
+            simple_name=False,
         )
 
         aws_ssm.StringParameter(
             self,
-            "ssm-authorization-code-exchange-config-secret-arn",
-            string_value=authorization_code_exchange_config_secret_arn,
-            description="Secret Arn for Domain and Client configurations needed to perform the authorization code flow token exchange.",
-            parameter_name=auth_resource_names.authorization_code_flow_config_secret_arn_ssm_parameter,
-            simple_name=True,
+            "ssm-user-client-config-secret-arn",
+            string_value=user_client_config_secret_arn,
+            description="Secret Arn for user client configuration needed for OAuth 2.0 operations.",
+            parameter_name=auth_resource_names.user_client_config_secret_arn_ssm_parameter,
+            simple_name=False,
         )

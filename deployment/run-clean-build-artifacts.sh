@@ -1,33 +1,18 @@
 #!/bin/bash
 
-showHelp() {
-cat << EOF
-Usage: ./deployment/run-clean-build-artifacts.sh --help
+set -e && [[ "$DEBUG" == 'true' ]] && set -x
 
-Clean build artifacts.
-
--r, --release-build  Remove the release build files
-
--d, --dependencies   Remove the dependencies and virtual environments
-
--l, --lock-files     Remove the lock files
-
--a, --all            Remove all artifacts
-
-EOF
-}
-
+module_s3_assets=""
 release_build=""
 dependencies=""
 lock_files=""
 
 while [[ $# -gt 0 ]]
 do
-key="$1"
-case $key in
-    -h|--help)
-        showHelp
-        exit 0
+  case $1 in
+    -m|--module-s3-assets)
+        module_s3_assets="yes"
+        shift
         ;;
     -r|--release-build)
         release_build="yes"
@@ -42,6 +27,7 @@ case $key in
         shift
         ;;
     -a|--all)
+        module_s3_assets="yes"
         release_build="yes"
         dependencies="yes"
         lock_files="yes"
@@ -49,7 +35,8 @@ case $key in
         ;;
     *)
         shift
-esac
+        ;;
+  esac
 done
 
 # MEDIUM: find javascript build directories
@@ -89,6 +76,7 @@ if [[ $dependencies == "yes" ]]; then
     # MEDIUM: find any child virtual environments
     printf "%b[Delete Dependencies] Cleaning up Python dependencies%b\n" "${RED}" "${NC}"
     find . -mindepth 2 -name ".venv" -type d -prune -exec rm -rf '{}' +
+    find . -mindepth 2 -name "dist-lib" -type d -prune -exec rm -rf '{}' +
 fi
 
 if [[ $lock_files == "yes" ]]; then
@@ -107,8 +95,15 @@ printf "%b[Delete] Cleaning up AWS Chalice files%b\n" "${RED}" "${NC}"
 find . -name "chalice.out" -type d -prune -exec rm -rf '{}' +
 find . -name "deployments" -type d -prune -exec rm -rf '{}' +
 
+if [[ $module_s3_assets == "yes" ]]; then
+    # LARGE: find module level s3 assets
+    printf "%b[Delete Module S3 Assets] Cleaning up module s3 assets%b\n" "${RED}" "${NC}"
+    find ./source/ -name "global-s3-assets" -type d -prune -exec rm -rf '{}' +
+    find ./source/ -name "regional-s3-assets" -type d -prune -exec rm -rf '{}' +
+fi
+
 if [[ $release_build == "yes" ]]; then
-    # LARGE: find script build and deployment directories
+    # LARGE: find release artifacts
     printf "%b[Delete Release Build] Cleaning up release build files%b\n" "${RED}" "${NC}"
     find . -name "open-source" -type d -prune -exec rm -rf '{}' +
     find . -name "global-s3-assets" -type d -prune -exec rm -rf '{}' +

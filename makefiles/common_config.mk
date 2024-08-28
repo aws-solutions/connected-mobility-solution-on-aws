@@ -15,7 +15,7 @@ export AWS_REGION ?= ${DEFAULTS.AWS_REGION}
 # ========================================================
 export SOLUTION_NAME ?= connected-mobility-solution-on-aws
 export SOLUTION_DESCRIPTION ?= Accelerate development and deployment of connected vehicle assets with purpose-built, deployment-ready accelerators, and an Automotive Cloud Developer Portal
-export SOLUTION_VERSION ?= v1.1.8
+export SOLUTION_VERSION ?= v1.2.0
 export SOLUTION_AUTHOR = AWS Industrial Solutions Team
 export SOLUTION_ID = SO0241
 # Path is relative to this file's location, moving this file requires updating this path.
@@ -31,7 +31,7 @@ DEFAULTS.PYTHON_VERSION := $(shell cat .python-version)
 export NODE_VERSION ?= ${DEFAULTS.NODE_VERSION}
 export PYTHON_VERSION ?= ${DEFAULTS.PYTHON_VERSION}
 
-export PYTHON_MINIMUM_VERSION_SUPPORTED = 3.10
+export PYTHON_MINIMUM_VERSION_SUPPORTED = 3.12
 export PIPENV_IGNORE_VIRTUALENVS = 1
 export PIPENV_VENV_IN_PROJECT = 1
 export LANG = en_US.UTF-8

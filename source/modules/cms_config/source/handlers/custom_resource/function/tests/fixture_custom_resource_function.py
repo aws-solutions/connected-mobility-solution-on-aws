@@ -12,7 +12,7 @@ import pytest
 from cms_common.enums.custom_resource import CustomResourceRequestType
 
 
-@pytest.fixture(name="custom_resource_event", scope="module")
+@pytest.fixture(name="custom_resource_event", scope="session")
 def fixture_custom_resource_event() -> Dict[str, Any]:
     return {
         "ResponseURL": "https://test-response-url.com",
@@ -26,7 +26,7 @@ def fixture_custom_resource_event() -> Dict[str, Any]:
     }
 
 
-@pytest.fixture(name="custom_resource_create_deployment_uuid_event", scope="module")
+@pytest.fixture(name="custom_resource_create_deployment_uuid_event", scope="session")
 def fixture_custom_resource_create_deployment_uuid_event(
     custom_resource_event: Dict[str, Any],
 ) -> Dict[str, Any]:

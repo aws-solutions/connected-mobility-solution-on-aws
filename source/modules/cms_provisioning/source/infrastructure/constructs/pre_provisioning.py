@@ -137,7 +137,7 @@ class PreProvisioningConstruct(Construct):
             code=aws_lambda.Code.from_asset("dist/lambda/provisioning.zip"),
             description="CMS Provisioning pre-provisioning lambda function",
             handler="function.pre_provision.handler",
-            runtime=aws_lambda.Runtime.PYTHON_3_10,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             role=pre_provisioning_hook_lambda_role,
             layers=[dependency_layer],
             vpc=vpc_construct.vpc,

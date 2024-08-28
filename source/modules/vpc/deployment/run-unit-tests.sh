@@ -1,5 +1,5 @@
 #!/bin/bash
 
-echo "This script is not used by the VPC module since there is no code"
+printf "This script is not implemented for the VPC module since there is no code.\n"
 
 exit

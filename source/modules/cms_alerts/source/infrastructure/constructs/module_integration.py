@@ -77,7 +77,7 @@ class ModuleOutputsConstruct(Construct):
             parameter_name=ResourceName.slash_separated(
                 prefix=ssm_parameter_name_prefix, name="publish-api/endpoint"
             ),
-            simple_name=True,
+            simple_name=False,
         )
 
         aws_ssm.StringParameter(
@@ -87,5 +87,5 @@ class ModuleOutputsConstruct(Construct):
             parameter_name=ResourceName.slash_separated(
                 prefix=ssm_parameter_name_prefix, name="frontend-api/endpoint"
             ),
-            simple_name=True,
+            simple_name=False,
         )

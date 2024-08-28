@@ -32,10 +32,12 @@ else:
     SSMClient = object
 
 # IDP CONFIG
-@pytest.fixture(name="idp_config_secret_string_valid", scope="module")
+@pytest.fixture(name="idp_config_secret_string_valid", scope="session")
 def fixture_idp_config_secret_string_valid() -> Dict[str, str | List[str]]:
     idp_config_json: Dict[str, str | List[str]] = {
-        "iss_domain": "TEST_ISS_DOMAIN",
+        "issuer": "TEST_ISSUER",
+        "token_endpoint": "TEST_TOKEN_ENDPOINT",
+        "authorization_endpoint": "TEST_AUTHORIZATION_ENDPOINT",
         "alternate_aud_key": "TEST_ALTERNATE_AUD_KEY",
         "auds": [
             "TEST_USER_CLIENT_ID",
@@ -109,32 +111,31 @@ def fixture_mock_idp_config_invalid_data_format() -> Callable[[], None]:
 
 
 # CLIENT CONFIG
-@pytest.fixture(name="client_config_secret_string_valid", scope="module")
-def fixture_client_config_secret_string_valid() -> dict[str, str]:
+@pytest.fixture(name="service_client_config_secret_string_valid", scope="session")
+def fixture_service_client_config_secret_string_valid() -> dict[str, str]:
     client_config_json: dict[str, str] = {
         "audience": "",
-        "token_endpoint": "TEST_TOKEN_ENDPOINT",
         "client_id": "TEST_CLIENT_ID",
         "client_secret": "TEST_CLIENT_SECRET",
     }
     return client_config_json
 
 
-@pytest.fixture(name="mock_client_config_valid")
-def fixture_mock_client_config_valid(
-    client_config_secret_string_valid: str,
+@pytest.fixture(name="mock_service_client_config_valid")
+def fixture_mock_service_client_config_valid(
+    service_client_config_secret_string_valid: str,
 ) -> Callable[[], None]:
     @mock_aws
     def moto_boto() -> None:
         secretsmanager_client: SecretsManagerClient = boto3.client("secretsmanager")
         secret_arn = secretsmanager_client.create_secret(
-            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.client_config_secret,
-            SecretString=json.dumps(client_config_secret_string_valid),
+            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.service_client_config_secret,
+            SecretString=json.dumps(service_client_config_secret_string_valid),
         )["ARN"]
 
         ssm_client: SSMClient = boto3.client("ssm")
         ssm_client.put_parameter(
-            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.client_config_secret_arn_ssm_parameter,
+            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.service_client_config_secret_arn_ssm_parameter,
             Value=secret_arn,
             Type="String",
         )
@@ -142,34 +143,31 @@ def fixture_mock_client_config_valid(
     return moto_boto
 
 
-# AUTHORIZATION CODE FLOW CONFIG
-@pytest.fixture(
-    name="authorization_code_flow_config_secret_string_valid", scope="module"
-)
-def fixture_authorization_code_flow_config_secret_string_valid() -> dict[str, str]:
+# USER CLIENT CONFIG
+@pytest.fixture(name="user_client_config_secret_string_valid", scope="session")
+def fixture_user_client_config_secret_string_valid() -> dict[str, str]:
     client_config_json: dict[str, str] = {
-        "token_endpoint": "TEST_TOKEN_ENDPOINT",
         "client_id": "TEST_CLIENT_ID",
         "client_secret": "TEST_CLIENT_SECRET",
     }
     return client_config_json
 
 
-@pytest.fixture(name="mock_authorization_code_flow_config_valid")
-def fixture_mock_authorization_code_flow_config_valid(
-    authorization_code_flow_config_secret_string_valid: str,
+@pytest.fixture(name="mock_user_client_config_valid")
+def fixture_mock_user_client_config_valid(
+    user_client_config_secret_string_valid: str,
 ) -> Callable[[], None]:
     @mock_aws
     def moto_boto() -> None:
         secretsmanager_client: SecretsManagerClient = boto3.client("secretsmanager")
         secret_arn = secretsmanager_client.create_secret(
-            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.authorization_code_flow_config_secret,
-            SecretString=json.dumps(authorization_code_flow_config_secret_string_valid),
+            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.user_client_config_secret,
+            SecretString=json.dumps(user_client_config_secret_string_valid),
         )["ARN"]
 
         ssm_client: SSMClient = boto3.client("ssm")
         ssm_client.put_parameter(
-            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.authorization_code_flow_config_secret_arn_ssm_parameter,
+            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.user_client_config_secret_arn_ssm_parameter,
             Value=secret_arn,
             Type="String",
         )

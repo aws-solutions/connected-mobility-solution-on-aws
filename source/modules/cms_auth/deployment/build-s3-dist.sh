@@ -2,19 +2,6 @@
 
 set -e && [[ "$DEBUG" == 'true' ]] && set -x
 
-showHelp() {
-cat << EOF
-Usage: ./deployment/build-s3-dist.sh --help
-
-Build and synthesize the CFN template. Package the templates into the deployment/global-s3-assets
-folder and the build assets in the deployment/regional-s3-assets folder.
-
-Example:
-make build
-The template will then expect the build assets to be located in the solutions-features-[region_name] bucket.
-EOF
-}
-
 # Get reference for all important folders
 root_dir="$(dirname "$(dirname "$(realpath "$0")")")"
 export MODULE_ROOT_DIR="$root_dir"

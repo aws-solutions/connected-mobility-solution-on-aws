@@ -101,6 +101,9 @@ def validate_thing_event(event: Dict[str, Any]) -> None:
         raise err
 
 
+# pylint: enable=pointless-statement
+
+
 @tracer.capture_method
 def set_certificate_record_status_active(vin: str, certificate_id: str) -> None:
     try:
@@ -123,7 +126,6 @@ def set_certificate_record_status_active(vin: str, certificate_id: str) -> None:
         raise err
 
 
-# pylint: disable=unnecessary-lambda
 @tracer.capture_method
 def delete_old_certificates(vin: str, certificate_id: str, thing_name: str) -> None:
     try:
@@ -188,7 +190,7 @@ def get_provisioned_vehicle_records(vin: str) -> list[ProvisionedVehicle]:
         KeyConditionExpression="vin = :vin",
         ExpressionAttributeValues={":vin": {"S": f"{vin}"}},
     )["Items"]
-    provisioned_vehicles_list = list(
+    provisioned_vehicles_list = list(  # pylint: disable=unnecessary-lambda
         map(
             lambda provisioned_vehicle_ddb_item: from_ddb_item(
                 ProvisionedVehicle, provisioned_vehicle_ddb_item

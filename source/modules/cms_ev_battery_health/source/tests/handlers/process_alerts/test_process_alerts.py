@@ -28,6 +28,7 @@ from ...fixtures.fixture_process_alerts import MOCKED_TOKEN_ENDPOINT
 @responses.activate
 def test_process_alerts_handler_success(
     mock_process_alerts_environment_valid: None,
+    mock_boto_idp_config_valid: None,
     mock_boto_client_config_valid: None,
     process_alerts_event: Dict[str, Any],
     context: LambdaContext,
@@ -51,6 +52,7 @@ def test_process_alerts_handler_success(
 @responses.activate
 def test_process_alerts_handler_authentication_fail(
     mock_process_alerts_environment_valid: None,
+    mock_boto_idp_config_valid: None,
     mock_boto_client_config_valid: None,
     process_alerts_event: Dict[str, Any],
     context: LambdaContext,
@@ -75,6 +77,7 @@ def test_process_alerts_handler_authentication_fail(
 @responses.activate
 def test_process_alerts_handler_send_alert_fail(
     mock_process_alerts_environment_valid: None,
+    mock_boto_idp_config_valid: None,
     mock_boto_client_config_valid: None,
     process_alerts_event: Dict[str, Any],
     context: LambdaContext,

@@ -1,7 +1,30 @@
 #!/bin/bash
 
-cache_file="${TMPDIR:-/tmp/}${BUCKET}"
-[ -f "$cache_file" ] && cat "$cache_file" && exit 0
+set -e && [[ "$DEBUG" == 'true' ]] && set -x
+
+showHelp() {
+cat << EOF
+Usage: ./deployment/determine-bucket-region.sh --help
+
+Determines the region of an S3 bucket.
+
+To run manually, you must set the "BUCKET" environment variable to the buckets name as it appears in the S3 URL.
+
+EOF
+}
+
+while [[ $# -gt 0 ]]
+do
+  case $1 in
+    -h|--help)
+        showHelp
+        exit 0
+        ;;
+    *)
+        shift
+        ;;
+  esac
+done
 
 url="https://${BUCKET}.s3.amazonaws.com"
 status_code=$(curl -s -o /dev/null -w "%{http_code}" -I "$url")
@@ -15,6 +38,4 @@ elif [ "$status_code" -eq 200 ] || [ "$status_code" -eq 401 ] || [ "$status_code
     fi
 fi
 
-echo "$bucket_region" > "$cache_file"
-# Print the bucket region
 echo "$bucket_region"

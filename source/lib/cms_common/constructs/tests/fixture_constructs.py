@@ -39,7 +39,7 @@ def fixture_snapshot_json_with_matcher(snapshot: SerializableData) -> Serializab
     return snapshot.use_extension(JSONSnapshotExtension)(matcher=matcher)
 
 
-@pytest.fixture(name="app_unique_id_stack", scope="module")
+@pytest.fixture(name="app_unique_id_stack", scope="session")
 def fixture_app_unique_id_stack() -> assertions.Template:
     stack = Stack()
     AppUniqueId.create_cfn_parameter(
@@ -48,7 +48,7 @@ def fixture_app_unique_id_stack() -> assertions.Template:
     return assertions.Template.from_stack(stack)
 
 
-@pytest.fixture(name="identity_provider_config_stack", scope="module")
+@pytest.fixture(name="identity_provider_config_stack", scope="session")
 def fixture_identity_provider_config_stack() -> assertions.Template:
     stack = Stack()
     IdentityProviderConfig.create_cfn_parameter(
@@ -57,14 +57,14 @@ def fixture_identity_provider_config_stack() -> assertions.Template:
     return assertions.Template.from_stack(stack)
 
 
-@pytest.fixture(name="app_unique_id_cfn_parameter", scope="module")
+@pytest.fixture(name="app_unique_id_cfn_parameter", scope="session")
 def fixture_app_unique_id_cfn_parameter(
     app_unique_id_stack: assertions.Template,
 ) -> Any:
     return dict(app_unique_id_stack.to_json()["Parameters"])["AppUniqueId"]
 
 
-@pytest.fixture(name="empty_lambda_dependencies_stack", scope="module")
+@pytest.fixture(name="empty_lambda_dependencies_stack", scope="session")
 def fixture_empty_lambda_dependencies_stack() -> assertions.Template:
     with tempfile.TemporaryDirectory() as tmpdirname:
         # mock lambda code asset path
@@ -82,7 +82,7 @@ def fixture_empty_lambda_dependencies_stack() -> assertions.Template:
         return assertions.Template.from_stack(stack)
 
 
-@pytest.fixture(name="populated_lambda_dependencies_stack", scope="module")
+@pytest.fixture(name="populated_lambda_dependencies_stack", scope="session")
 def fixture_populated_lambda_dependencies_stack() -> assertions.Template:
     with tempfile.TemporaryDirectory() as tmpdirname:
         # mock lambda code asset path
@@ -103,7 +103,7 @@ def fixture_populated_lambda_dependencies_stack() -> assertions.Template:
         return assertions.Template.from_stack(stack)
 
 
-@pytest.fixture(name="custom_resource_lambda_stack", scope="module")
+@pytest.fixture(name="custom_resource_lambda_stack", scope="session")
 def fixture_custom_resource_lambda_stack() -> assertions.Template:
     with tempfile.TemporaryDirectory() as tmpdirname:
         # mock lambda code asset path
@@ -151,7 +151,7 @@ def fixture_custom_resource_lambda_stack() -> assertions.Template:
         return assertions.Template.from_stack(stack)
 
 
-@pytest.fixture(name="cdk_lambda_vpc_config_construct_stack_template", scope="module")
+@pytest.fixture(name="cdk_lambda_vpc_config_construct_stack_template", scope="session")
 def fixture_cdk_lambda_vpc_config_construct_stack_template() -> assertions.Template:
     stack = Stack()
 
@@ -186,7 +186,7 @@ def fixture_cdk_lambda_vpc_config_construct_stack_template() -> assertions.Templ
     return assertions.Template.from_stack(stack)
 
 
-@pytest.fixture(name="vpc_construct_stack_template", scope="module")
+@pytest.fixture(name="vpc_construct_stack_template", scope="session")
 def fixture_vpc_construct_stack_template() -> assertions.Template:
     with tempfile.TemporaryDirectory():
         stack = Stack()
@@ -212,7 +212,7 @@ def fixture_vpc_construct_stack_template() -> assertions.Template:
         return assertions.Template.from_stack(stack)
 
 
-@pytest.fixture(name="vpc_construct", scope="module")
+@pytest.fixture(name="vpc_construct", scope="session")
 def fixture_vpc_construct_stack() -> VpcConstruct:
     with tempfile.TemporaryDirectory():
         stack = Stack()
@@ -238,7 +238,7 @@ def fixture_vpc_construct_stack() -> VpcConstruct:
         return vpc_construct
 
 
-@pytest.fixture(name="subnet_selections", scope="module")
+@pytest.fixture(name="subnet_selections", scope="session")
 def fixture_vpc_construct_subnet_selections() -> Dict[str, List[str]]:
     return {
         "public_subnets": ["test-vpc-public-subnet-1", "test-vpc-public-subnet-2"],

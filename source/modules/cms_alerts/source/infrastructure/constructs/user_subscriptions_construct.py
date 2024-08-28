@@ -101,7 +101,7 @@ class UserSubscriptionsConstruct(Construct):
                 "DEPLOYMENT_UUID": deployment_uuid,
             },
             handler="app.main.handler",
-            runtime=aws_lambda.Runtime.PYTHON_3_10,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             timeout=Duration.minutes(1),
             role=aws_iam.Role(
                 self,

@@ -28,6 +28,7 @@ from ..fixtures.fixture_vehicle_trigger_alarm import (
 @responses.activate
 def test_vehicle_trigger_alarm_handler_success(
     mock_vehicle_trigger_alarm_environment_valid: None,
+    mock_boto_idp_config_valid: None,
     mock_boto_client_config_valid: None,
     vehicle_trigger_alarm_event: Dict[str, Any],
     context: LambdaContext,
@@ -49,6 +50,7 @@ def test_vehicle_trigger_alarm_handler_success(
 @responses.activate
 def test_vehicle_trigger_alarm_handler_authentication_fail(
     mock_vehicle_trigger_alarm_environment_valid: None,
+    mock_boto_idp_config_valid: None,
     mock_boto_client_config_valid: None,
     vehicle_trigger_alarm_event: Dict[str, Any],
     context: LambdaContext,
@@ -73,6 +75,7 @@ def test_vehicle_trigger_alarm_handler_authentication_fail(
 @responses.activate
 def test_vehicle_trigger_alarm_handler_send_alert_fail(
     mock_vehicle_trigger_alarm_environment_valid: None,
+    mock_boto_idp_config_valid: None,
     mock_boto_client_config_valid: None,
     vehicle_trigger_alarm_event: Dict[str, Any],
     context: LambdaContext,

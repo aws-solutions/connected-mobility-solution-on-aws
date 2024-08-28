@@ -31,7 +31,7 @@ include ${SOLUTION_PATH}/makefiles/global_targets.mk
 include ${SOLUTION_PATH}/makefiles/module_targets.mk
 
 .PHONY: install
-install: pipenv-install ## Installs the resources and dependencies required to build the solution.
+install: pipenv-install cdk-solution-helper-install ## Installs the resources and dependencies required to build the solution.
 	@printf "%bInstall finished.%b\n" "${GREEN}" "${NC}"
 
 .PHONY: deploy
@@ -54,10 +54,13 @@ destroy: destroy-stack ## Teardown deployed stack
 
 .PHONY: verify-environment
 verify-environment: ## Checks for the required environment variables.
+ifneq (, $(wildcard ./cdk.context.json))
+	$(error 'cdk.context.json' cannot exist. Please delete the file and try again)
+endif
 ifndef IDENTITY_PROVIDER_ID
-	$(error IDENTITY_PROVIDER_ID is undefined. Set the variable using `export IDENTITY_PROVIDER_ID=...`, or run `source .cmsrc`)
+	$(error IDENTITY_PROVIDER_ID is undefined. Set the variable using `export IDENTITY_PROVIDER_ID=...`, run `source .cmsrc` if it exists, or run `make create-rc-file` to generate .cmsrc)
 endif
 ifndef VPC_NAME
-	$(error VPC_NAME is undefined. Set the variable using `export VPC_NAME=...`, or run `source .cmsrc`)
+	$(error VPC_NAME is undefined. Set the variable using `export VPC_NAME=...`, run `source .cmsrc` if it exists, or run `make create-rc-file` to generate .cmsrc)
 endif
 	@printf "%bEnvironment variables verified.%b\n" "${GREEN}" "${NC}"

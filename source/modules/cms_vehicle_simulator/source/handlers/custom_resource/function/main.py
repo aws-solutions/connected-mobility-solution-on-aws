@@ -78,7 +78,7 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
         try:
             response["Data"] = resource_map[event["ResourceProperties"]["Resource"]](event)  # type: ignore
             retry = 0
-        except Exception as exception:  # pylint: disable=W0703
+        except Exception as exception:  # pylint: disable=broad-exception-caught
             # Wrap all exceptions so CloudFormation doesn't hang
             logger.error("CustomResource error; retries left %s: %s", retry, exception)
             time.sleep(1 * retry)

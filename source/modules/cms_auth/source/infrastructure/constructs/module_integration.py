@@ -56,7 +56,7 @@ class ModuleOutputsConstruct(Construct):
                 prefix=ssm_prefix,
                 name="authorization-code-flow/authorization-code-exchange-lambda/arn",
             ),
-            simple_name=True,
+            simple_name=False,
         )
 
         aws_ssm.StringParameter(
@@ -67,5 +67,5 @@ class ModuleOutputsConstruct(Construct):
             parameter_name=ResourceName.slash_separated(
                 prefix=ssm_prefix, name="token-validation-lambda/arn"
             ),
-            simple_name=True,
+            simple_name=False,
         )

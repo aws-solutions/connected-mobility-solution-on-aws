@@ -28,7 +28,7 @@ def fixture_mocked_module_env_vars_values() -> Dict[str, str]:
     }
 
 
-@pytest.fixture(scope="module", autouse=True)
+@pytest.fixture(scope="session", autouse=True)
 def fixture_mock_dynamo_env_vars(
     mocked_module_env_vars_values: Dict[str, str]
 ) -> Generator[None, None, None]:

@@ -66,8 +66,8 @@ class AcdpStack(Stack):
             self,
             "module-inputs-construct",
             solution_mapping=solution_mapping,
-            backstage_s3_assets_key_prefix=backstage_s3_assets_key_prefix,
             local_asset_bucket_construct=local_asset_bucket_construct,
+            backstage_s3_assets_key_prefix=backstage_s3_assets_key_prefix,
         )
 
         lambda_dependencies_construct = LambdaDependenciesConstruct(
@@ -162,22 +162,23 @@ class AcdpConstruct(Construct):
             "backstage-assets-construct",
             solution_mapping=solution_mapping,
             solution_config_inputs=solution_config_inputs,
+            regional_asset_bucket_inputs=module_inputs.regional_asset_bucket_inputs,
             local_asset_bucket_inputs=module_inputs.local_asset_bucket_inputs,
             custom_resource_lambda_construct=custom_resource_lambda_construct,
         )
 
-        pipelines = Pipelines(
+        pipelines_construct = Pipelines(
             self,
             "pipelines-construct",
             module_inputs=module_inputs,
             solution_mapping=solution_mapping,
             cloudformation_role_arn=cloudformation_role.role.role_arn,
-            vpc_name=module_inputs.vpc_name,
             vpc=vpc_construct.vpc,
             private_subnet_selection=vpc_construct.private_subnet_selection,
             backstage_source_asset_zip_location=backstage_assets.backstage_source_asset_zip_location,
+            solution_config_inputs=solution_config_inputs,
         )
-        pipelines.node.add_dependency(backstage_assets)
+        pipelines_construct.node.add_dependency(backstage_assets)
 
         module_deploy_construct = ModuleDeployCodeBuildConstruct(
             self,
@@ -193,8 +194,12 @@ class AcdpConstruct(Construct):
             self,
             "module-outputs-construct",
             deployment_uuid=deployment_uuid,
-            backstage_regional_asset_config_inputs=module_inputs.regional_asset_bucket_inputs,
-            backstage_local_asset_bucket_config_inputs=module_inputs.local_asset_bucket_inputs,
+            backstage_ecr_name=pipelines_construct.backstage_ecr.repository_name,
+            backstage_pipeline_name=pipelines_construct.backstage_pipeline.pipeline_name,
             codebuild_project_arn=module_deploy_construct.codebuild_project.project_arn,
             acdp_config_ssm_prefix=module_inputs.acdp_config_ssm_prefix,
+            backstage_general_config_inputs=module_inputs.backstage_general_config_inputs,
+            backstage_auth_config_inputs=module_inputs.backstage_auth_config_inputs,
+            backstage_regional_asset_config_inputs=module_inputs.regional_asset_bucket_inputs,
+            backstage_local_asset_bucket_config_inputs=module_inputs.local_asset_bucket_inputs,
         )

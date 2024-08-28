@@ -35,7 +35,7 @@ class IotCoreCleanup(ICleanup):
         list_things_iterator = self.iot_client().get_paginator("list_things")
 
         for page in list_things_iterator.paginate():
-            for thing in page["things"]:  # pylint: disable=W0621
+            for thing in page["things"]:  # pylint: disable=redefined-outer-name
                 if thing["thingName"].startswith("Vehicle_"):
                     yield thing["thingName"]
 

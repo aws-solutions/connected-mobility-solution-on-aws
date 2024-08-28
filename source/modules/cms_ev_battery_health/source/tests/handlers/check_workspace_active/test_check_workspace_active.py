@@ -42,10 +42,10 @@ class CheckWorkspaceStatusAPICallBooleans:
         return are_all_values_false
 
 
-# pylint: disable=protected-access
-orig = botocore.client.BaseClient._make_api_call  # type: ignore
-# pylint: disable=too-many-return-statements, inconsistent-return-statements
-def mock_make_api_call(
+orig = botocore.client.BaseClient._make_api_call  # type: ignore # pylint: disable=protected-access
+
+
+def mock_make_api_call(  # pylint: disable=too-many-return-statements, inconsistent-return-statements
     self: Any, operation_name: str, kwarg: Any, mock_api_responses: Any
 ) -> Any:
     setattr(CheckWorkspaceStatusAPICallBooleans, operation_name, True)

@@ -61,7 +61,7 @@ def fixture_acdp_stack_template() -> assertions.Template:
             "acdp",
             solution_config_inputs=solution_config_inputs,
             s3_asset_config_inputs=s3_asset_config_inputs,
-            backstage_s3_assets_key_prefix="solution/version/backstage",
+            backstage_s3_assets_key_prefix="test-backstage-s3-assets-key-prefix",
             synthesizer=DefaultStackSynthesizer(generate_bootstrap_version_rule=False),
         )
         template = assertions.Template.from_stack(stack)

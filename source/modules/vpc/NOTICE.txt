@@ -1,7 +1,0 @@
-VPC
-Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-
-**********************
-THIRD PARTY COMPONENTS
-**********************
-This software includes third party software subject to the following copyrights:

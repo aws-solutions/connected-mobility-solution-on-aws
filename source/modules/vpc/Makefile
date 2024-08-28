@@ -21,8 +21,6 @@ export STACK_NAME ?= ${MODULE_NAME}
 export STACK_TEMPLATE_NAME = ${MODULE_NAME}.template
 export STACK_TEMPLATE_PATH ?= deployment/global-s3-assets/${MODULE_NAME}/${STACK_TEMPLATE_NAME}
 
-export VPC_NAME ?= cms-vpc
-
 export CAPABILITY_ID ?= CMS.23
 
 include ${SOLUTION_PATH}/makefiles/common_config.mk
@@ -34,7 +32,7 @@ install: pipenv-install ## Installs the resources and dependencies required to b
 	@printf "%bInstall finished.%b\n" "${GREEN}" "${NC}"
 
 .PHONY: deploy
-deploy: ## Deploy the stack for the module.
+deploy: verify-environment ## Deploy the stack for the module.
 	@printf "%bDeploy the module.%b\n" "${MAGENTA}" "${NC}"
 	aws cloudformation deploy \
 		--stack-name ${STACK_NAME} \
@@ -48,3 +46,15 @@ deploy: ## Deploy the stack for the module.
 .PHONY: destroy
 destroy: destroy-stack ## Teardown deployed stack
 	@printf "%bDestroy finished.%b\n" "${GREEN}" "${NC}"
+
+## ========================================================
+## UTILITY
+## ========================================================
+.PHONY: verify-environment
+verify-environment: ## Checks the cdk environment for the required environment variables, as set via .cmsrc or manual export.
+ifneq (, $(wildcard ./cdk.context.json))
+	$(error 'cdk.context.json' cannot exist. Please delete the file and try again)
+endif
+ifndef VPC_NAME
+	$(error VPC_NAME is undefined. Set the variable using `export VPC_NAME=...`, run `source .cmsrc` if it exists, or run `make create-rc-file` to generate .cmsrc)
+endif

@@ -49,7 +49,7 @@
                     "Resource::arn:<AWS::Partition>:ssm:<AWS::Region>:<AWS::AccountId>:parameter/acdp/config/*",
                     "Resource::arn:<AWS::Partition>:secretsmanager:<AWS::Region>:<AWS::AccountId>:secret:/acdp/config/*",
                     "Resource::arn:<AWS::Partition>:secretsmanager:<AWS::Region>:<AWS::AccountId>:secret:solution/<AcdpUniqueId>/*",
-                    "Resource::arn:<AWS::Partition>:ssm:<AWS::Region>:<AWS::AccountId>:parameter:solution/<AcdpUniqueId>/*"
+                    "Resource::arn:<AWS::Partition>:ssm:<AWS::Region>:<AWS::AccountId>:parameter/solution/<AcdpUniqueId>/*"
                 ],
                 "reason": "Pipeline creates and reads multiple secrets and SSM parameters."
             }
@@ -139,7 +139,7 @@
                     "Resource::arn:<AWS::Partition>:secretsmanager:<AWS::Region>:<AWS::AccountId>:secret:cms/*",
                     "Resource::arn:<AWS::Partition>:ssm:<AWS::Region>:<AWS::AccountId>:parameter:/dev/acdp-stack-dev/*",
                     "Resource::arn:<AWS::Partition>:secretsmanager:<AWS::Region>:<AWS::AccountId>:secret:solution/<AcdpUniqueId>/*",
-                    "Resource::arn:<AWS::Partition>:ssm:<AWS::Region>:<AWS::AccountId>:parameter:solution/<AcdpUniqueId>/*"
+                    "Resource::arn:<AWS::Partition>:ssm:<AWS::Region>:<AWS::AccountId>:parameter/solution/<AcdpUniqueId>/*"
                 ],
                 "reason": "Pipeline creates and reads multiple secrets and SSM parameters."
             }

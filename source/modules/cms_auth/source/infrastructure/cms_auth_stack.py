@@ -30,7 +30,7 @@ from .constructs.module_integration import ModuleInputsConstruct, ModuleOutputsC
 from .constructs.token_validation_lambda import TokenValidationLambdaConstruct
 
 
-class CmsAuthOnAwsStack(Stack):
+class CmsAuthStack(Stack):
     def __init__(
         self,
         scope: Construct,

@@ -14,8 +14,8 @@ from cms_common.config.stack_inputs import S3AssetConfigInputs
 
 # Connected Mobility Solution on AWS
 from .constructs.cognito import CognitoConstruct
-from .constructs.configurations import Configurations
 from .constructs.module_integration import ModuleInputsConstruct, ModuleOutputsConstruct
+from .constructs.oauth2_configurations import OAuth2Configurations
 
 
 class AuthSetupStack(Stack):
@@ -60,9 +60,9 @@ class AuthSetupStack(Stack):
             should_create_resources_condition=should_create_cognito_resources_condition,
         )
 
-        configuration_secrets = Configurations(
+        oauth2_configurations = OAuth2Configurations(
             self,
-            "configuration-secrets",
+            "oauth2-configurations",
             cognito_construct=cognito_construct,
             should_populate_secrets_condition=should_create_cognito_resources_condition,
             module_inputs_construct=module_inputs_construct,
@@ -72,7 +72,7 @@ class AuthSetupStack(Stack):
             self,
             "module-outputs",
             module_inputs_construct=module_inputs_construct,
-            idp_config_secret_arn=configuration_secrets.idp_config_secret.secret_arn,
-            service_client_config_secret_arn=configuration_secrets.service_client_config_secret.secret_arn,
-            authorization_code_exchange_config_secret_arn=configuration_secrets.authorization_code_exchange_config_secret.secret_arn,
+            idp_config_secret_arn=oauth2_configurations.idp_config_secret.secret_arn,
+            service_client_config_secret_arn=oauth2_configurations.service_client_config_secret.secret_arn,
+            user_client_config_secret_arn=oauth2_configurations.user_client_config_secret.secret_arn,
         )

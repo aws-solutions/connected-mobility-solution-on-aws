@@ -242,7 +242,7 @@ def process_schema(vss_schema_raw: str) -> str:
 
 
 if __name__ == "__main__":
-    repository = "https://github.com/COVESA/vehicle_signal_specification"  # pylint: disable=C0103
+    repository = "https://github.com/COVESA/vehicle_signal_specification"  # pylint: disable=invalid-name
 
     opts, args = getopt.getopt(sys.argv[1:], "hr:", ["help", "repository="])
     for opt, arg in opts:

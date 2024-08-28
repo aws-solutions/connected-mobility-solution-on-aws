@@ -19,7 +19,7 @@ from aws_cdk import Stack, assertions, aws_lambda
 from cms_common.config.stack_inputs import S3AssetConfigInputs, SolutionConfigInputs
 
 # Connected Mobility Solution on AWS
-from ....infrastructure.cms_auth_stack import CmsAuthOnAwsStack
+from ....infrastructure.cms_auth_stack import CmsAuthStack
 
 
 @pytest.fixture(name="snapshot_json_with_matcher")
@@ -53,7 +53,7 @@ def fixture_cms_auth_stack_template() -> assertions.Template:
         )
 
         app = Stack()
-        stack = CmsAuthOnAwsStack(
+        stack = CmsAuthStack(
             app,
             "cms-auth",
             solution_config_inputs=solution_config_inputs,

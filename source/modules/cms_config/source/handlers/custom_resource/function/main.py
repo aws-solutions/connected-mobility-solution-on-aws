@@ -43,7 +43,7 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
                     f"No Custom Resource Type: {event['ResourceProperties']['Resource']}"
                 )
 
-    except Exception as exception:  # pylint: disable=W0703
+    except Exception as exception:  # pylint: disable=broad-exception-caught
         # Wrap all exceptions so CloudFormation doesn't hang
         logger.error("CustomResource error: %s", str(exception), exc_info=True)
         response["Status"] = CustomResourceStatusType.FAILED.value

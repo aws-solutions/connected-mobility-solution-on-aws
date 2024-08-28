@@ -6,19 +6,27 @@ showHelp() {
 cat << EOF
 Usage: Call this script from a module's ./deployment/build-s3-dist.sh
 
-stage a module's lambda assets
+Synthesize the CDK stacks and stage module lambda assets.
+Then populate the global and regional asset directories with these assets.
+
 EOF
 }
 
+while [[ $# -gt 0 ]]
+do
+  case $1 in
+    -h|--help)
+        showHelp
+        exit 0
+        ;;
+    *)
+        shift
+        ;;
+  esac
+done
+
 lambda_handlers_base_dir="${LAMBDA_HANDLERS_BASE_DIR:-$MODULE_ROOT_DIR/source/handlers}"
 lambda_zip_output_path="${LAMBDA_ZIP_OUTPUT_PATH:-$MODULE_ROOT_DIR/dist/lambda}"
-
-# rm -rf "$lambda_zip_output_path"
-# mkdir -p "$lambda_zip_output_path"
-
-printf "%b\n[Init] Install dependencies for cdk-solution-helper\n%b" "${GREEN}" "${NC}"
-npm ci --prefix "$DEPLOYMENT_DIR/cdk-solution-helper"
-
 
 printf "%b[Build] Build project specific assets\n%b" "${GREEN}" "${NC}"
 while IFS=  read -r lambda_dir; do

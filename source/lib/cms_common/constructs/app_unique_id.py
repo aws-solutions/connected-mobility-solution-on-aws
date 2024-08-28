@@ -7,6 +7,7 @@ from aws_cdk import CfnParameter, aws_ssm
 from constructs import Construct
 
 # Connected Mobility Solution on AWS
+from ..config.regex import RegexPattern
 from ..config.resource_names import ResourcePrefix, get_application_level_path_prefix
 from ..config.ssm import resolve_ssm_parameter
 
@@ -21,7 +22,7 @@ class AppUniqueId:
             "AppUniqueId",
             type="String",
             description="Application unique identifier used to uniquely name resources within the stack.",
-            allowed_pattern=r"^(?!-)[a-z0-9-]+(?<!-)$",
+            allowed_pattern=RegexPattern.APP_UNIQUE_ID,
             constraint_description="AppUniqueId must contain min 3 and max 10 characters, and contain only lowercase alphanumeric characters and dashes.",
             min_length=3,
             max_length=10,
@@ -37,7 +38,7 @@ class AppUniqueId:
             parameter_name=f"/{get_application_level_path_prefix(app_unique_id)}",
             string_value=app_unique_id,
             description="SSM parameter to register an app unique ID.",
-            simple_name=True,
+            simple_name=False,
         )
 
     @staticmethod
@@ -58,5 +59,5 @@ class AppUniqueId:
                 )
             ),
             description="SSM parameter to register a module with an app unique ID.",
-            simple_name=True,
+            simple_name=False,
         )

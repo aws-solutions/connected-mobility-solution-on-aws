@@ -25,20 +25,20 @@ auth_resource_names = AuthResourceNames.from_identity_provider_id(
             f"/solution/auth/{TEST_IDENTITY_PROVIDER_ID}/idp-config/secret/arn",
         ),
         (
-            "client_config_secret",
-            f"/solution/auth/{TEST_IDENTITY_PROVIDER_ID}/client-config/default",
+            "service_client_config_secret",
+            f"/solution/auth/{TEST_IDENTITY_PROVIDER_ID}/service-client-config/default",
         ),
         (
-            "client_config_secret_arn_ssm_parameter",
-            f"/solution/auth/{TEST_IDENTITY_PROVIDER_ID}/client-config/default/secret/arn",
+            "service_client_config_secret_arn_ssm_parameter",
+            f"/solution/auth/{TEST_IDENTITY_PROVIDER_ID}/service-client-config/default/secret/arn",
         ),
         (
-            "authorization_code_flow_config_secret",
-            f"/solution/auth/{TEST_IDENTITY_PROVIDER_ID}/authorization-code-flow/config",
+            "user_client_config_secret",
+            f"/solution/auth/{TEST_IDENTITY_PROVIDER_ID}/user-client-config/default",
         ),
         (
-            "authorization_code_flow_config_secret_arn_ssm_parameter",
-            f"/solution/auth/{TEST_IDENTITY_PROVIDER_ID}/authorization-code-flow/config/secret/arn",
+            "user_client_config_secret_arn_ssm_parameter",
+            f"/solution/auth/{TEST_IDENTITY_PROVIDER_ID}/user-client-config/default/secret/arn",
         ),
     ],
 )

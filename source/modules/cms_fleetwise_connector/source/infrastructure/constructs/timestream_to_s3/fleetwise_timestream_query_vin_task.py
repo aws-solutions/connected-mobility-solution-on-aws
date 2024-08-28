@@ -64,7 +64,7 @@ class FleetWiseTimestreamQueryVin:
                 "AWS_ACCOUNT_ID": Stack.of(construct).account,
             },
             handler="function.main.handler",
-            runtime=aws_lambda.Runtime.PYTHON_3_10,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             timeout=Duration.minutes(15),
             role=lambda_role,
             log_retention=aws_logs.RetentionDays.THREE_MONTHS,

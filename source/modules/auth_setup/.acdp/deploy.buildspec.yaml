@@ -16,4 +16,4 @@ phases:
           {\"ParameterKey\":\"CallbackUrls\",\"ParameterValue\":\"${CALLBACK_URLS}\"}, \
           {\"ParameterKey\":\"IdPConfigSecretArn\",\"ParameterValue\":\"${IDP_CONFIG_SECRET_ARN}\"}, \
           {\"ParameterKey\":\"ServiceClientConfigSecretArn\",\"ParameterValue\":\"${SERVICE_CLIENT_CONFIG_SECRET_ARN}\"}, \
-          {\"ParameterKey\":\"AuthorizationCodeExchangeConfigSecretArn\",\"ParameterValue\":\"${AUTHORIZATION_CODE_EXCHANGE_CONFIG_SECRET_ARN}\"}]"
+          {\"ParameterKey\":\"UserClientConfigSecretArn\",\"ParameterValue\":\"${USER_CLIENT_CONFIG_SECRET_ARN}\"}]"

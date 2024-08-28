@@ -1,6 +1,128 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
   "Mappings": {
+    "LatestNodeRuntimeMap": {
+      "af-south-1": {
+        "value": "nodejs20.x"
+      },
+      "ap-east-1": {
+        "value": "nodejs20.x"
+      },
+      "ap-northeast-1": {
+        "value": "nodejs20.x"
+      },
+      "ap-northeast-2": {
+        "value": "nodejs20.x"
+      },
+      "ap-northeast-3": {
+        "value": "nodejs20.x"
+      },
+      "ap-south-1": {
+        "value": "nodejs20.x"
+      },
+      "ap-south-2": {
+        "value": "nodejs20.x"
+      },
+      "ap-southeast-1": {
+        "value": "nodejs20.x"
+      },
+      "ap-southeast-2": {
+        "value": "nodejs20.x"
+      },
+      "ap-southeast-3": {
+        "value": "nodejs20.x"
+      },
+      "ap-southeast-4": {
+        "value": "nodejs20.x"
+      },
+      "ap-southeast-5": {
+        "value": "nodejs20.x"
+      },
+      "ap-southeast-7": {
+        "value": "nodejs20.x"
+      },
+      "ca-central-1": {
+        "value": "nodejs20.x"
+      },
+      "ca-west-1": {
+        "value": "nodejs20.x"
+      },
+      "cn-north-1": {
+        "value": "nodejs18.x"
+      },
+      "cn-northwest-1": {
+        "value": "nodejs18.x"
+      },
+      "eu-central-1": {
+        "value": "nodejs20.x"
+      },
+      "eu-central-2": {
+        "value": "nodejs20.x"
+      },
+      "eu-isoe-west-1": {
+        "value": "nodejs18.x"
+      },
+      "eu-north-1": {
+        "value": "nodejs20.x"
+      },
+      "eu-south-1": {
+        "value": "nodejs20.x"
+      },
+      "eu-south-2": {
+        "value": "nodejs20.x"
+      },
+      "eu-west-1": {
+        "value": "nodejs20.x"
+      },
+      "eu-west-2": {
+        "value": "nodejs20.x"
+      },
+      "eu-west-3": {
+        "value": "nodejs20.x"
+      },
+      "il-central-1": {
+        "value": "nodejs20.x"
+      },
+      "me-central-1": {
+        "value": "nodejs20.x"
+      },
+      "me-south-1": {
+        "value": "nodejs20.x"
+      },
+      "mx-central-1": {
+        "value": "nodejs20.x"
+      },
+      "sa-east-1": {
+        "value": "nodejs20.x"
+      },
+      "us-east-1": {
+        "value": "nodejs20.x"
+      },
+      "us-east-2": {
+        "value": "nodejs20.x"
+      },
+      "us-gov-east-1": {
+        "value": "nodejs18.x"
+      },
+      "us-gov-west-1": {
+        "value": "nodejs18.x"
+      },
+      "us-iso-east-1": {
+        "value": "nodejs18.x"
+      },
+      "us-iso-west-1": {
+        "value": "nodejs18.x"
+      },
+      "us-isob-east-1": {
+        "value": "nodejs18.x"
+      },
+      "us-west-1": {
+        "value": "nodejs20.x"
+      },
+      "us-west-2": {
+        "value": "nodejs20.x"
+      }
+    },
     "ServiceprincipalMap": {
       "af-south-1": {
         "states": "states.af-south-1.amazonaws.com"
@@ -35,8 +157,17 @@
       "ap-southeast-4": {
         "states": "states.ap-southeast-4.amazonaws.com"
       },
+      "ap-southeast-5": {
+        "states": "states.ap-southeast-5.amazonaws.com"
+      },
+      "ap-southeast-7": {
+        "states": "states.ap-southeast-7.amazonaws.com"
+      },
       "ca-central-1": {
         "states": "states.ca-central-1.amazonaws.com"
+      },
+      "ca-west-1": {
+        "states": "states.ca-west-1.amazonaws.com"
       },
       "cn-north-1": {
         "states": "states.cn-north-1.amazonaws.com"
@@ -49,6 +180,9 @@
       },
       "eu-central-2": {
         "states": "states.eu-central-2.amazonaws.com"
+      },
+      "eu-isoe-west-1": {
+        "states": "states.eu-isoe-west-1.amazonaws.com"
       },
       "eu-north-1": {
         "states": "states.eu-north-1.amazonaws.com"
@@ -76,6 +210,9 @@
       },
       "me-south-1": {
         "states": "states.me-south-1.amazonaws.com"
+      },
+      "mx-central-1": {
+        "states": "states.mx-central-1.amazonaws.com"
       },
       "sa-east-1": {
         "states": "states.sa-east-1.amazonaws.com"
@@ -240,35 +377,6 @@
   "Resources": {
     "APIHandler": {
       "DependsOn": [
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontDistributionEA34668B",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontOac5BA33F46",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionResponseHeadersPolicyAC559DA5",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3BucketPolicy54189606",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3Bucket4A436FFA",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucketPolicy5232FA4C",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucket2F95631C",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucketPolicy84406AF0",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucket8622DA8D",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdarole0E4889DE",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdaLogRetention1D4F3E64",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambda93C8D739",
-        "cmsvehiclesimulatorsimulatorconstructcustomresourcepolicy91808831",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresourceCustomResourcePolicy496B3DB6",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresource60BD3805",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaroleE9ECED7F",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaLogRetentionE1910856",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambda957E16DB",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup12D3AD742",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup2EE98052B",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup36683A1E6",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaroleC6FC5E08",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaLogRetention5A0969E9",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambda47803FEE",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorstatemachinerole5BAFD074",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorthinggroupA18F209C",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsloggroup5CADC94F",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsCE10CFB1",
-        "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Metadata": {
@@ -340,7 +448,7 @@
             "Arn"
           ]
         },
-        "Runtime": "python3.10",
+        "Runtime": "python3.12",
         "Tags": {
           "Solutions:DeploymentUUID": {
             "Fn::Join": [
@@ -354,7 +462,7 @@
               ]
             ]
           },
-          "aws-chalice": "version=1.31.0:stage=cms-vehicle-simulator-stack/cms-vehicle-simulator/vs-api-construct:app=vs_api"
+          "aws-chalice": "version=1.31.2:stage=cms-vehicle-simulator-stack/cms-vehicle-simulator/vs-api-construct:app=vs_api"
         },
         "Timeout": 60,
         "Tracing": "PassThrough",
@@ -405,35 +513,6 @@
     },
     "APIHandlerInvokePermission": {
       "DependsOn": [
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontDistributionEA34668B",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontOac5BA33F46",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionResponseHeadersPolicyAC559DA5",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3BucketPolicy54189606",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3Bucket4A436FFA",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucketPolicy5232FA4C",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucket2F95631C",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucketPolicy84406AF0",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucket8622DA8D",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdarole0E4889DE",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdaLogRetention1D4F3E64",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambda93C8D739",
-        "cmsvehiclesimulatorsimulatorconstructcustomresourcepolicy91808831",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresourceCustomResourcePolicy496B3DB6",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresource60BD3805",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaroleE9ECED7F",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaLogRetentionE1910856",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambda957E16DB",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup12D3AD742",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup2EE98052B",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup36683A1E6",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaroleC6FC5E08",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaLogRetention5A0969E9",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambda47803FEE",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorstatemachinerole5BAFD074",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorthinggroupA18F209C",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsloggroup5CADC94F",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsCE10CFB1",
-        "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -473,7 +552,15 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": {
+          "Fn::FindInMap": [
+            "LatestNodeRuntimeMap",
+            {
+              "Ref": "AWS::Region"
+            },
+            "value"
+          ]
+        },
         "Timeout": 120,
         "VpcConfig": {
           "SecurityGroupIds": [
@@ -851,7 +938,15 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": {
+          "Fn::FindInMap": [
+            "LatestNodeRuntimeMap",
+            {
+              "Ref": "AWS::Region"
+            },
+            "value"
+          ]
+        },
         "Timeout": 900
       },
       "Type": "AWS::Lambda::Function"
@@ -913,35 +1008,6 @@
     },
     "RestAPI": {
       "DependsOn": [
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontDistributionEA34668B",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontOac5BA33F46",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionResponseHeadersPolicyAC559DA5",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3BucketPolicy54189606",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3Bucket4A436FFA",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucketPolicy5232FA4C",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucket2F95631C",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucketPolicy84406AF0",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucket8622DA8D",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdarole0E4889DE",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdaLogRetention1D4F3E64",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambda93C8D739",
-        "cmsvehiclesimulatorsimulatorconstructcustomresourcepolicy91808831",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresourceCustomResourcePolicy496B3DB6",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresource60BD3805",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaroleE9ECED7F",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaLogRetentionE1910856",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambda957E16DB",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup12D3AD742",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup2EE98052B",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup36683A1E6",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaroleC6FC5E08",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaLogRetention5A0969E9",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambda47803FEE",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorstatemachinerole5BAFD074",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorthinggroupA18F209C",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsloggroup5CADC94F",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsCE10CFB1",
-        "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -2884,15 +2950,6 @@
     "cmsvehiclesimulatorcognitoconstructconsolecognitouser59778E59": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontDistributionEA34668B",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontOac5BA33F46",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionResponseHeadersPolicyAC559DA5",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3BucketPolicy54189606",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3Bucket4A436FFA",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucketPolicy5232FA4C",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucket2F95631C",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucketPolicy84406AF0",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucket8622DA8D",
         "cmsvehiclesimulatorcognitoconstructcustomresourcepolicyB3B28CFC",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
@@ -2932,15 +2989,6 @@
     },
     "cmsvehiclesimulatorcognitoconstructcustomresourcepolicyB3B28CFC": {
       "DependsOn": [
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontDistributionEA34668B",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontOac5BA33F46",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionResponseHeadersPolicyAC559DA5",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3BucketPolicy54189606",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3Bucket4A436FFA",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucketPolicy5232FA4C",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucket2F95631C",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucketPolicy84406AF0",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucket8622DA8D",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -2970,15 +3018,6 @@
     },
     "cmsvehiclesimulatorcognitoconstructidentitypool7554F769": {
       "DependsOn": [
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontDistributionEA34668B",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontOac5BA33F46",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionResponseHeadersPolicyAC559DA5",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3BucketPolicy54189606",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3Bucket4A436FFA",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucketPolicy5232FA4C",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucket2F95631C",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucketPolicy84406AF0",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucket8622DA8D",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -3003,15 +3042,6 @@
     "cmsvehiclesimulatorcognitoconstructuserpoolB9BCF5A6": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontDistributionEA34668B",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontOac5BA33F46",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionResponseHeadersPolicyAC559DA5",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3BucketPolicy54189606",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3Bucket4A436FFA",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucketPolicy5232FA4C",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucket2F95631C",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucketPolicy84406AF0",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucket8622DA8D",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -3106,15 +3136,6 @@
     },
     "cmsvehiclesimulatorcognitoconstructuserpoolclient67539730": {
       "DependsOn": [
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontDistributionEA34668B",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontOac5BA33F46",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionResponseHeadersPolicyAC559DA5",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3BucketPolicy54189606",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3Bucket4A436FFA",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucketPolicy5232FA4C",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucket2F95631C",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucketPolicy84406AF0",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucket8622DA8D",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -3166,37 +3187,6 @@
     },
     "cmsvehiclesimulatorconsoleconstructconsolebucketdeploymentAwsCliLayer0549F181": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdarole0E4889DE",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdaLogRetention1D4F3E64",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambda93C8D739",
-        "cmsvehiclesimulatorsimulatorconstructcustomresourcepolicy91808831",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresourceCustomResourcePolicy496B3DB6",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresource60BD3805",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaroleE9ECED7F",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaLogRetentionE1910856",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambda957E16DB",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup12D3AD742",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup2EE98052B",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup36683A1E6",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaroleC6FC5E08",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaLogRetention5A0969E9",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambda47803FEE",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorstatemachinerole5BAFD074",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorthinggroupA18F209C",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsloggroup5CADC94F",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsCE10CFB1",
-        "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211",
-        "cmsvehiclesimulatorvsapiconstructsecuritygroup8EDFA93D",
-        "APIHandler",
-        "APIHandlerInvokePermission",
-        "RestAPI",
-        "cmsvehiclesimulatorvsapiconstructvsapilambdarole0FA0D8E2",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroupkmskeyC6B79A62",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroup71627D59",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -3213,37 +3203,6 @@
     "cmsvehiclesimulatorconsoleconstructconsolebucketdeploymentCustomResourcec8c0dea6cecbd0731e114013b423c54e1adb1147edB1C22DD3": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdarole0E4889DE",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdaLogRetention1D4F3E64",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambda93C8D739",
-        "cmsvehiclesimulatorsimulatorconstructcustomresourcepolicy91808831",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresourceCustomResourcePolicy496B3DB6",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresource60BD3805",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaroleE9ECED7F",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaLogRetentionE1910856",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambda957E16DB",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup12D3AD742",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup2EE98052B",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup36683A1E6",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaroleC6FC5E08",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaLogRetention5A0969E9",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambda47803FEE",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorstatemachinerole5BAFD074",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorthinggroupA18F209C",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsloggroup5CADC94F",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsCE10CFB1",
-        "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211",
-        "cmsvehiclesimulatorvsapiconstructsecuritygroup8EDFA93D",
-        "APIHandler",
-        "APIHandlerInvokePermission",
-        "RestAPI",
-        "cmsvehiclesimulatorvsapiconstructvsapilambdarole0FA0D8E2",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroupkmskeyC6B79A62",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroup71627D59",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -3302,37 +3261,6 @@
       "DeletionPolicy": "Delete",
       "DependsOn": [
         "cmsvehiclesimulatorconsoleconstructcustomresourcepolicyC5DD1272",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdarole0E4889DE",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdaLogRetention1D4F3E64",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambda93C8D739",
-        "cmsvehiclesimulatorsimulatorconstructcustomresourcepolicy91808831",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresourceCustomResourcePolicy496B3DB6",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresource60BD3805",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaroleE9ECED7F",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaLogRetentionE1910856",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambda957E16DB",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup12D3AD742",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup2EE98052B",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup36683A1E6",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaroleC6FC5E08",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaLogRetention5A0969E9",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambda47803FEE",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorstatemachinerole5BAFD074",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorthinggroupA18F209C",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsloggroup5CADC94F",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsCE10CFB1",
-        "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211",
-        "cmsvehiclesimulatorvsapiconstructsecuritygroup8EDFA93D",
-        "APIHandler",
-        "APIHandlerInvokePermission",
-        "RestAPI",
-        "cmsvehiclesimulatorvsapiconstructvsapilambdarole0FA0D8E2",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroupkmskeyC6B79A62",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroup71627D59",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -3470,37 +3398,6 @@
       "DeletionPolicy": "Delete",
       "DependsOn": [
         "cmsvehiclesimulatorconsoleconstructcustomresourcepolicyC5DD1272",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdarole0E4889DE",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdaLogRetention1D4F3E64",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambda93C8D739",
-        "cmsvehiclesimulatorsimulatorconstructcustomresourcepolicy91808831",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresourceCustomResourcePolicy496B3DB6",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresource60BD3805",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaroleE9ECED7F",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaLogRetentionE1910856",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambda957E16DB",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup12D3AD742",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup2EE98052B",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup36683A1E6",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaroleC6FC5E08",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaLogRetention5A0969E9",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambda47803FEE",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorstatemachinerole5BAFD074",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorthinggroupA18F209C",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsloggroup5CADC94F",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsCE10CFB1",
-        "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211",
-        "cmsvehiclesimulatorvsapiconstructsecuritygroup8EDFA93D",
-        "APIHandler",
-        "APIHandlerInvokePermission",
-        "RestAPI",
-        "cmsvehiclesimulatorvsapiconstructvsapilambdarole0FA0D8E2",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroupkmskeyC6B79A62",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroup71627D59",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -3520,37 +3417,6 @@
     },
     "cmsvehiclesimulatorconsoleconstructcustomresourcepolicyC5DD1272": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdarole0E4889DE",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdaLogRetention1D4F3E64",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambda93C8D739",
-        "cmsvehiclesimulatorsimulatorconstructcustomresourcepolicy91808831",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresourceCustomResourcePolicy496B3DB6",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresource60BD3805",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaroleE9ECED7F",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaLogRetentionE1910856",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambda957E16DB",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup12D3AD742",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup2EE98052B",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup36683A1E6",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaroleC6FC5E08",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaLogRetention5A0969E9",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambda47803FEE",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorstatemachinerole5BAFD074",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorthinggroupA18F209C",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsloggroup5CADC94F",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsCE10CFB1",
-        "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211",
-        "cmsvehiclesimulatorvsapiconstructsecuritygroup8EDFA93D",
-        "APIHandler",
-        "APIHandlerInvokePermission",
-        "RestAPI",
-        "cmsvehiclesimulatorvsapiconstructvsapilambdarole0FA0D8E2",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroupkmskeyC6B79A62",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroup71627D59",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -3652,37 +3518,6 @@
       "DeletionPolicy": "Delete",
       "DependsOn": [
         "cmsvehiclesimulatorconsoleconstructcustomresourcepolicyC5DD1272",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdarole0E4889DE",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdaLogRetention1D4F3E64",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambda93C8D739",
-        "cmsvehiclesimulatorsimulatorconstructcustomresourcepolicy91808831",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresourceCustomResourcePolicy496B3DB6",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresource60BD3805",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaroleE9ECED7F",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaLogRetentionE1910856",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambda957E16DB",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup12D3AD742",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup2EE98052B",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup36683A1E6",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaroleC6FC5E08",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaLogRetention5A0969E9",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambda47803FEE",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorstatemachinerole5BAFD074",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorthinggroupA18F209C",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsloggroup5CADC94F",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsCE10CFB1",
-        "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211",
-        "cmsvehiclesimulatorvsapiconstructsecuritygroup8EDFA93D",
-        "APIHandler",
-        "APIHandlerInvokePermission",
-        "RestAPI",
-        "cmsvehiclesimulatorvsapiconstructvsapilambdarole0FA0D8E2",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroupkmskeyC6B79A62",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroup71627D59",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -3705,37 +3540,6 @@
       "DeletionPolicy": "Delete",
       "DependsOn": [
         "cmsvehiclesimulatorconsoleconstructcustomresourcepolicyC5DD1272",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdarole0E4889DE",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdaLogRetention1D4F3E64",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambda93C8D739",
-        "cmsvehiclesimulatorsimulatorconstructcustomresourcepolicy91808831",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresourceCustomResourcePolicy496B3DB6",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresource60BD3805",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaroleE9ECED7F",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaLogRetentionE1910856",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambda957E16DB",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup12D3AD742",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup2EE98052B",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup36683A1E6",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaroleC6FC5E08",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaLogRetention5A0969E9",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambda47803FEE",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorstatemachinerole5BAFD074",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorthinggroupA18F209C",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsloggroup5CADC94F",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsCE10CFB1",
-        "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211",
-        "cmsvehiclesimulatorvsapiconstructsecuritygroup8EDFA93D",
-        "APIHandler",
-        "APIHandlerInvokePermission",
-        "RestAPI",
-        "cmsvehiclesimulatorvsapiconstructvsapilambdarole0FA0D8E2",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroupkmskeyC6B79A62",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroup71627D59",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -3755,37 +3559,6 @@
     },
     "cmsvehiclesimulatorconsoleconstructidentitypoolauthenticatedrole5976347A": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdarole0E4889DE",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdaLogRetention1D4F3E64",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambda93C8D739",
-        "cmsvehiclesimulatorsimulatorconstructcustomresourcepolicy91808831",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresourceCustomResourcePolicy496B3DB6",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresource60BD3805",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaroleE9ECED7F",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaLogRetentionE1910856",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambda957E16DB",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup12D3AD742",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup2EE98052B",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup36683A1E6",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaroleC6FC5E08",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaLogRetention5A0969E9",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambda47803FEE",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorstatemachinerole5BAFD074",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorthinggroupA18F209C",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsloggroup5CADC94F",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsCE10CFB1",
-        "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211",
-        "cmsvehiclesimulatorvsapiconstructsecuritygroup8EDFA93D",
-        "APIHandler",
-        "APIHandlerInvokePermission",
-        "RestAPI",
-        "cmsvehiclesimulatorvsapiconstructvsapilambdarole0FA0D8E2",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroupkmskeyC6B79A62",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroup71627D59",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -4001,37 +3774,6 @@
     },
     "cmsvehiclesimulatorconsoleconstructidentitypoolroleattachment4B308D51": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdarole0E4889DE",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdaLogRetention1D4F3E64",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambda93C8D739",
-        "cmsvehiclesimulatorsimulatorconstructcustomresourcepolicy91808831",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresourceCustomResourcePolicy496B3DB6",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresource60BD3805",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaroleE9ECED7F",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaLogRetentionE1910856",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambda957E16DB",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup12D3AD742",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup2EE98052B",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup36683A1E6",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaroleC6FC5E08",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaLogRetention5A0969E9",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambda47803FEE",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorstatemachinerole5BAFD074",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorthinggroupA18F209C",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsloggroup5CADC94F",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsCE10CFB1",
-        "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211",
-        "cmsvehiclesimulatorvsapiconstructsecuritygroup8EDFA93D",
-        "APIHandler",
-        "APIHandlerInvokePermission",
-        "RestAPI",
-        "cmsvehiclesimulatorvsapiconstructvsapilambdarole0FA0D8E2",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroupkmskeyC6B79A62",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroup71627D59",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -4051,37 +3793,6 @@
     },
     "cmsvehiclesimulatorconsoleconstructiotdevicesimulatormap44B8FB08": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdarole0E4889DE",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdaLogRetention1D4F3E64",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambda93C8D739",
-        "cmsvehiclesimulatorsimulatorconstructcustomresourcepolicy91808831",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresourceCustomResourcePolicy496B3DB6",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresource60BD3805",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaroleE9ECED7F",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaLogRetentionE1910856",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambda957E16DB",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup12D3AD742",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup2EE98052B",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup36683A1E6",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaroleC6FC5E08",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaLogRetention5A0969E9",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambda47803FEE",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorstatemachinerole5BAFD074",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorthinggroupA18F209C",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsloggroup5CADC94F",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsCE10CFB1",
-        "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211",
-        "cmsvehiclesimulatorvsapiconstructsecuritygroup8EDFA93D",
-        "APIHandler",
-        "APIHandlerInvokePermission",
-        "RestAPI",
-        "cmsvehiclesimulatorvsapiconstructvsapilambdarole0FA0D8E2",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroupkmskeyC6B79A62",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroup71627D59",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -4131,37 +3842,6 @@
     },
     "cmsvehiclesimulatorconsoleconstructiotdevicesimulatorplaceindexDF15A697": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdarole0E4889DE",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdaLogRetention1D4F3E64",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambda93C8D739",
-        "cmsvehiclesimulatorsimulatorconstructcustomresourcepolicy91808831",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresourceCustomResourcePolicy496B3DB6",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresource60BD3805",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaroleE9ECED7F",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaLogRetentionE1910856",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambda957E16DB",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup12D3AD742",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup2EE98052B",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup36683A1E6",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaroleC6FC5E08",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaLogRetention5A0969E9",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambda47803FEE",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorstatemachinerole5BAFD074",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorthinggroupA18F209C",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsloggroup5CADC94F",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsCE10CFB1",
-        "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211",
-        "cmsvehiclesimulatorvsapiconstructsecuritygroup8EDFA93D",
-        "APIHandler",
-        "APIHandlerInvokePermission",
-        "RestAPI",
-        "cmsvehiclesimulatorvsapiconstructvsapilambdarole0FA0D8E2",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroupkmskeyC6B79A62",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroup71627D59",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -4209,37 +3889,6 @@
     },
     "cmsvehiclesimulatorconsoleconstructvsiotpolicy701BC6B2": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdarole0E4889DE",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdaLogRetention1D4F3E64",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambda93C8D739",
-        "cmsvehiclesimulatorsimulatorconstructcustomresourcepolicy91808831",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresourceCustomResourcePolicy496B3DB6",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresource60BD3805",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaroleE9ECED7F",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaLogRetentionE1910856",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambda957E16DB",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup12D3AD742",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup2EE98052B",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup36683A1E6",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaroleC6FC5E08",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaLogRetention5A0969E9",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambda47803FEE",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorstatemachinerole5BAFD074",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorthinggroupA18F209C",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsloggroup5CADC94F",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsCE10CFB1",
-        "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211",
-        "cmsvehiclesimulatorvsapiconstructsecuritygroup8EDFA93D",
-        "APIHandler",
-        "APIHandlerInvokePermission",
-        "RestAPI",
-        "cmsvehiclesimulatorvsapiconstructvsapilambdarole0FA0D8E2",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroupkmskeyC6B79A62",
-        "cmsvehiclesimulatorvsapiconstructvsapiloggroup71627D59",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -4346,14 +3995,6 @@
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
-            }
-          ]
-        },
         "cfn_nag": {
           "rules_to_suppress": [
             {
@@ -4399,7 +4040,7 @@
             "Arn"
           ]
         },
-        "Runtime": "python3.10",
+        "Runtime": "python3.12",
         "Tags": [
           {
             "Key": "Solutions:DeploymentUUID",
@@ -4802,9 +4443,7 @@
           "arm64"
         ],
         "CompatibleRuntimes": [
-          "python3.8",
-          "python3.9",
-          "python3.10"
+          "python3.12"
         ],
         "Content": {
           "S3Bucket": {
@@ -4817,10 +4456,6 @@
     },
     "cmsvehiclesimulatorsimulatorconstructcleanuplambda93C8D739": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
         "cmsvehiclesimulatorsimulatorconstructcleanuplambdarole0E4889DE",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
@@ -4874,7 +4509,7 @@
             "Arn"
           ]
         },
-        "Runtime": "python3.10",
+        "Runtime": "python3.12",
         "Tags": [
           {
             "Key": "Solutions:DeploymentUUID",
@@ -4940,10 +4575,6 @@
     },
     "cmsvehiclesimulatorsimulatorconstructcleanuplambdaLogRetention1D4F3E64": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -4970,10 +4601,6 @@
     },
     "cmsvehiclesimulatorsimulatorconstructcleanuplambdarole0E4889DE": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -5320,10 +4947,6 @@
     },
     "cmsvehiclesimulatorsimulatorconstructcustomresourcepolicy91808831": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -5352,15 +4975,11 @@
     "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresource60BD3805": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
         "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresourceCustomResourcePolicy496B3DB6",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
-        "Create": "{\"action\":\"describeEndpoint\",\"service\":\"Iot\",\"parameters\":{\"endpointType\":\"iot:Data-ATS\"},\"physicalResourceId\":{\"responsePath\":\"endpointAddress\"},\"logApiResponseData\":true}",
+        "Create": "{\"action\":\"describeEndpoint\",\"service\":\"Iot\",\"parameters\":{\"endpointType\":\"iot:Data-ATS\"},\"physicalResourceId\":{\"responsePath\":\"endpointAddress\"}}",
         "InstallLatestAwsSdk": false,
         "ServiceToken": {
           "Fn::GetAtt": [
@@ -5374,10 +4993,6 @@
     },
     "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresourceCustomResourcePolicy496B3DB6": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -5402,10 +5017,6 @@
     },
     "cmsvehiclesimulatorsimulatorconstructprovisioninglambda957E16DB": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
         "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaroleE9ECED7F",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
@@ -5460,7 +5071,7 @@
             "Arn"
           ]
         },
-        "Runtime": "python3.10",
+        "Runtime": "python3.12",
         "Tags": [
           {
             "Key": "Solutions:DeploymentUUID",
@@ -5526,10 +5137,6 @@
     },
     "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaLogRetentionE1910856": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -5556,10 +5163,6 @@
     },
     "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaroleE9ECED7F": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -5940,10 +5543,6 @@
     },
     "cmsvehiclesimulatorsimulatorconstructsecuritygroup12D3AD742": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -5992,10 +5591,6 @@
     },
     "cmsvehiclesimulatorsimulatorconstructsecuritygroup2EE98052B": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -6044,10 +5639,6 @@
     },
     "cmsvehiclesimulatorsimulatorconstructsecuritygroup36683A1E6": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -6096,10 +5687,6 @@
     },
     "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambda47803FEE": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
         "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaroleC6FC5E08",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
@@ -6177,7 +5764,7 @@
             "Arn"
           ]
         },
-        "Runtime": "python3.10",
+        "Runtime": "python3.12",
         "Tags": [
           {
             "Key": "Solutions:DeploymentUUID",
@@ -6243,10 +5830,6 @@
     },
     "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaLogRetention5A0969E9": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -6273,10 +5856,6 @@
     },
     "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaroleC6FC5E08": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -6561,10 +6140,6 @@
     },
     "cmsvehiclesimulatorsimulatorconstructsimulatorstatemachinerole5BAFD074": {
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -6789,10 +6364,6 @@
     "cmsvehiclesimulatorsimulatorconstructsimulatorthinggroupA18F209C": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
         "cmsvehiclesimulatorsimulatorconstructcustomresourcepolicy91808831",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
@@ -6812,10 +6383,6 @@
     "cmsvehiclesimulatorsimulatorconstructstepfunctionsCE10CFB1": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
         "cmsvehiclesimulatorsimulatorconstructsimulatorstatemachinerole5BAFD074",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
@@ -6964,10 +6531,6 @@
     "cmsvehiclesimulatorsimulatorconstructstepfunctionsloggroup5CADC94F": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -7023,10 +6586,6 @@
     "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunctionLogRetentionD7F7CAE6",
-        "cmsvehiclesimulatorcustomresourceconstructlambdafunction0843A969",
-        "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
-        "cmsvehiclesimulatorcustomresourceconstructsecuritygroup7A3C4A3E",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -7243,35 +6802,6 @@
     },
     "cmsvehiclesimulatorvsapiconstructsecuritygroup8EDFA93D": {
       "DependsOn": [
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontDistributionEA34668B",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontOac5BA33F46",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionResponseHeadersPolicyAC559DA5",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3BucketPolicy54189606",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3Bucket4A436FFA",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucketPolicy5232FA4C",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucket2F95631C",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucketPolicy84406AF0",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucket8622DA8D",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdarole0E4889DE",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdaLogRetention1D4F3E64",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambda93C8D739",
-        "cmsvehiclesimulatorsimulatorconstructcustomresourcepolicy91808831",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresourceCustomResourcePolicy496B3DB6",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresource60BD3805",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaroleE9ECED7F",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaLogRetentionE1910856",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambda957E16DB",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup12D3AD742",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup2EE98052B",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup36683A1E6",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaroleC6FC5E08",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaLogRetention5A0969E9",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambda47803FEE",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorstatemachinerole5BAFD074",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorthinggroupA18F209C",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsloggroup5CADC94F",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsCE10CFB1",
-        "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -7320,35 +6850,6 @@
     },
     "cmsvehiclesimulatorvsapiconstructvsapilambdarole0FA0D8E2": {
       "DependsOn": [
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontDistributionEA34668B",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontOac5BA33F46",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionResponseHeadersPolicyAC559DA5",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3BucketPolicy54189606",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3Bucket4A436FFA",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucketPolicy5232FA4C",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucket2F95631C",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucketPolicy84406AF0",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucket8622DA8D",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdarole0E4889DE",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdaLogRetention1D4F3E64",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambda93C8D739",
-        "cmsvehiclesimulatorsimulatorconstructcustomresourcepolicy91808831",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresourceCustomResourcePolicy496B3DB6",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresource60BD3805",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaroleE9ECED7F",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaLogRetentionE1910856",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambda957E16DB",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup12D3AD742",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup2EE98052B",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup36683A1E6",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaroleC6FC5E08",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaLogRetention5A0969E9",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambda47803FEE",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorstatemachinerole5BAFD074",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorthinggroupA18F209C",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsloggroup5CADC94F",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsCE10CFB1",
-        "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -7775,35 +7276,6 @@
     "cmsvehiclesimulatorvsapiconstructvsapiloggroup71627D59": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontDistributionEA34668B",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontOac5BA33F46",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionResponseHeadersPolicyAC559DA5",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3BucketPolicy54189606",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3Bucket4A436FFA",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucketPolicy5232FA4C",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucket2F95631C",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucketPolicy84406AF0",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucket8622DA8D",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdarole0E4889DE",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdaLogRetention1D4F3E64",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambda93C8D739",
-        "cmsvehiclesimulatorsimulatorconstructcustomresourcepolicy91808831",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresourceCustomResourcePolicy496B3DB6",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresource60BD3805",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaroleE9ECED7F",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaLogRetentionE1910856",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambda957E16DB",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup12D3AD742",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup2EE98052B",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup36683A1E6",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaroleC6FC5E08",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaLogRetention5A0969E9",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambda47803FEE",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorstatemachinerole5BAFD074",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorthinggroupA18F209C",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsloggroup5CADC94F",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsCE10CFB1",
-        "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
@@ -7838,35 +7310,6 @@
     "cmsvehiclesimulatorvsapiconstructvsapiloggroupkmskeyC6B79A62": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontDistributionEA34668B",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionCloudFrontOac5BA33F46",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionResponseHeadersPolicyAC559DA5",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3BucketPolicy54189606",
-        "cmsvehiclesimulatorcloudfrontconstructdistributionS3Bucket4A436FFA",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucketPolicy5232FA4C",
-        "cmsvehiclesimulatorcloudfrontconstructlogbucket2F95631C",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucketPolicy84406AF0",
-        "cmsvehiclesimulatorcloudfrontconstructroutesbucket8622DA8D",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdarole0E4889DE",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambdaLogRetention1D4F3E64",
-        "cmsvehiclesimulatorsimulatorconstructcleanuplambda93C8D739",
-        "cmsvehiclesimulatorsimulatorconstructcustomresourcepolicy91808831",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresourceCustomResourcePolicy496B3DB6",
-        "cmsvehiclesimulatorsimulatorconstructiotendpointcustomresource60BD3805",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaroleE9ECED7F",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambdaLogRetentionE1910856",
-        "cmsvehiclesimulatorsimulatorconstructprovisioninglambda957E16DB",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup12D3AD742",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup2EE98052B",
-        "cmsvehiclesimulatorsimulatorconstructsecuritygroup36683A1E6",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaroleC6FC5E08",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambdaLogRetention5A0969E9",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorenginelambda47803FEE",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorstatemachinerole5BAFD074",
-        "cmsvehiclesimulatorsimulatorconstructsimulatorthinggroupA18F209C",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsloggroup5CADC94F",
-        "cmsvehiclesimulatorsimulatorconstructstepfunctionsCE10CFB1",
-        "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {

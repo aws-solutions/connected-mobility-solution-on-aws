@@ -67,7 +67,7 @@ In addition to the AWS Solutions Constructs, the solution uses AWS CDK directly 
 
 ## Prerequisites
 
-- [Python 3.8+](https://www.python.org/downloads/)
+- [Python 3.12+](https://www.python.org/downloads/)
 - [NVM](https://github.com/nvm-sh/nvm)
 - [NPM 8+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [Node 18+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
@@ -79,7 +79,7 @@ Pyenv [Github Repository](https://github.com/pyenv/pyenv)
 
 ```bash
 brew install pyenv
-pyenv install 3.10.9
+pyenv install 3.12
 ```
 
 Pipenv [Github Repository](https://github.com/pypa/pipenv)

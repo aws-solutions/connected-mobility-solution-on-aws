@@ -104,7 +104,7 @@ class InitialConnectionConstruct(Construct):
             code=aws_lambda.Code.from_asset("dist/lambda/provisioning.zip"),
             description="CMS Provisioning initial connection lambda function",
             handler="function.initial_connection.handler",
-            runtime=aws_lambda.Runtime.PYTHON_3_10,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             role=initial_connection_lambda_role,
             layers=[dependency_layer],
             vpc=vpc_construct.vpc,

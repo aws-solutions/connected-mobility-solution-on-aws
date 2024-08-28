@@ -8,11 +8,11 @@ aws_lambda_powertools = {extras=["tracer", "validation"], version=">=2.4.0"}
 cattrs = ">=22.1.0"
 
 [dev-packages]
-aws-cdk-lib = ">=2.63.2"
+aws-cdk-lib = ">=2.139.1"
 boto3 = ">=1.26.0"
 boto3-stubs = {extras = ["essential", "secretsmanager", "ssm"], version = "*"}
 cdk-nag = "*"
-moto = "*"
+moto = {extras = ["all"], version = ">=5.0.6"}
 mypy = "*"
 pipenv-setup = "==3.2.0" # unmaintained, only used in cms_common Makefile target for manually syncing setup.py and Pipfile.lock
 pre-commit = "*"
@@ -22,11 +22,12 @@ pytest = "*"
 pytest-cov = "*"
 pytest-mock = "*"
 requests = "*"
+setuptools = ">=71.0.0"
 syrupy = "*"
 toml = "*"
 types-boto3 = "*"
 types-pyyaml = "*"
-types-requests = ">=2.31.0"
+types-requests = ">=2.32.0"
 types-setuptools = "*"
 types-urllib3 = "*"
 types-toml = "*"
@@ -35,4 +36,4 @@ wheel = "*"
 wrapt = "*"
 
 [requires]
-python_version = "3.10"
+python_version = "3.12"

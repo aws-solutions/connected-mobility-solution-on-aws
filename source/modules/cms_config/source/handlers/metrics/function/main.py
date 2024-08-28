@@ -53,7 +53,7 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> None:
             config, resourcegroupstaggingapi, cloudwatch
         )
 
-    except Exception as err:  # pylint: disable=W0718
+    except Exception as err:  # pylint: disable=broad-exception-caught
         logger.error("Failed to record S3 metrics")
         logger.error(err)
 
@@ -62,7 +62,7 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> None:
             config, resourcegroupstaggingapi, cloudwatch
         )
 
-    except Exception as err:  # pylint: disable=W0718
+    except Exception as err:  # pylint: disable=broad-exception-caught
         logger.error("Failed to record Data Firehose metrics")
         logger.error(err)
 
@@ -84,7 +84,7 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> None:
             metric["SumAllBucketsSizeBytes"] = s3_storage_bytes
 
         metrics_publish.write_metric(config, metric, config["metric_timestamp"])
-    except Exception as err:  # pylint: disable=W0718
+    except Exception as err:  # pylint: disable=broad-exception-caught
         logger.error("Failed to publish metrics", exc_info=True)
 
 

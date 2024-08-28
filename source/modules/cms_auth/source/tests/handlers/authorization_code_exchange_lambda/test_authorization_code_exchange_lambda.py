@@ -22,19 +22,19 @@ from ....handlers.authorization_code_exchange_lambda.function.main import (
     handler,
 )
 from ..fixtures.fixture_authorization_code_exchange_lambda import (
-    TEST_TOKEN_ENDPOINT,
     TEST_USER_CLIENT_SECRET,
 )
-from ..fixtures.fixture_shared_jwt_mocks import TEST_USER_CLIENT_ID
+from ..fixtures.fixture_shared_jwt_mocks import TEST_TOKEN_ENDPOINT, TEST_USER_CLIENT_ID
 
 
 # =============== HANDLER SUCCESS ===============
 def test_handler_valid_tokens(
     mock_authorization_code_exchange_environment_valid: None,
-    mock_authorization_code_exchange_idp_config_valid: None,
+    mock_idp_config_valid: None,
+    mock_user_client_config_valid: None,
     authorization_code_exchange_event_valid: Dict[str, Any],
     context: LambdaContext,
-    mock_tokens_endpoint_valid_tokens: Any,
+    mock_token_endpoint_valid_tokens: Any,
 ) -> None:
     response = handler(authorization_code_exchange_event_valid, context)
     assert response["message"] == "User has been authenticated. Returning user tokens."
@@ -45,7 +45,6 @@ def test_handler_valid_tokens(
 
 # =============== HANDLER FAILURE ===============
 def test_handler_invalid_environment(
-    mock_authorization_code_exchange_environment_valid: None,
     authorization_code_exchange_event_valid: Dict[str, Any],
     context: LambdaContext,
 ) -> None:
@@ -57,6 +56,7 @@ def test_handler_invalid_environment(
 
 
 def test_handler_invalid_event(
+    mock_authorization_code_exchange_environment_valid: None,
     context: LambdaContext,
 ) -> None:
     response = handler({"Invalid Event Key": "Invalid Event Value"}, context)
@@ -68,7 +68,8 @@ def test_handler_invalid_event(
 
 def test_handler_authorization_code_exchange_error(
     mock_authorization_code_exchange_environment_valid: None,
-    mock_authorization_code_exchange_idp_config_valid: None,
+    mock_idp_config_valid: None,
+    mock_user_client_config_valid: None,
     authorization_code_exchange_event_valid: Dict[str, Any],
     context: LambdaContext,
 ) -> None:

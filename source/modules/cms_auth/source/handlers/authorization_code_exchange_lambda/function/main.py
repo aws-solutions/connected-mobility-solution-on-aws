@@ -18,7 +18,9 @@ from aws_lambda_powertools.utilities.typing import LambdaContext
 from cms_common.auth.auth_configs import (
     AuthConfigError,
     CMSClientConfig,
-    get_authorization_code_flow_config,
+    CMSIdPConfig,
+    get_idp_config,
+    get_user_client_config,
 )
 from cms_common.cache.ttl_cache import get_ttl_cache_check
 
@@ -72,15 +74,20 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
             )
             raise e
 
-        idp_config = get_cached_authorization_code_flow_config(
+        client_config = get_cached_user_client_config(
+            user_agent_string=user_agent_string,
+            identity_provider_id=identity_provider_id,
+        )
+
+        idp_config = get_cached_idp_config(
             user_agent_string=user_agent_string,
             identity_provider_id=identity_provider_id,
         )
 
         authorization_code_exchange_response["user_tokens"] = get_user_tokens(
             token_endpoint=idp_config.token_endpoint,
-            client_id=idp_config.client_id,
-            client_secret=idp_config.client_secret,
+            client_id=client_config.client_id,
+            client_secret=client_config.client_secret,
             redirect_uri=redirect_uri,
             code=code,
             code_verifier=code_verifier,
@@ -113,12 +120,25 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
 # ========= GETTERS =========
 @lru_cache(maxsize=MAX_CACHE_SIZE_CONFIG)
 @tracer.capture_method
-def get_cached_authorization_code_flow_config(
+def get_cached_user_client_config(
     user_agent_string: str,
     identity_provider_id: str,
     ttl_cache_check: int = get_ttl_cache_check(),
 ) -> CMSClientConfig:
-    return get_authorization_code_flow_config(
+    return get_user_client_config(
+        user_agent_string=user_agent_string,
+        identity_provider_id=identity_provider_id,
+    )
+
+
+@lru_cache(maxsize=MAX_CACHE_SIZE_CONFIG)
+@tracer.capture_method
+def get_cached_idp_config(
+    user_agent_string: str,
+    identity_provider_id: str,
+    ttl_cache_check: int = get_ttl_cache_check(),
+) -> CMSIdPConfig:
+    return get_idp_config(
         user_agent_string=user_agent_string,
         identity_provider_id=identity_provider_id,
     )

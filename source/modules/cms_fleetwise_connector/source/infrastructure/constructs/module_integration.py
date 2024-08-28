@@ -167,7 +167,7 @@ class ModuleOutputsConstruct(Construct):
                 prefix=module_ssm_prefix_with_leading_slash,
                 name="timestream/database/name",
             ),
-            simple_name=True,
+            simple_name=False,
         )
         self.timestream_database_arn = aws_ssm.StringParameter(
             self,
@@ -178,7 +178,7 @@ class ModuleOutputsConstruct(Construct):
                 prefix=module_ssm_prefix_with_leading_slash,
                 name="timestream/database/arn",
             ),
-            simple_name=True,
+            simple_name=False,
         )
         self.timestream_table_name = aws_ssm.StringParameter(
             self,
@@ -189,7 +189,7 @@ class ModuleOutputsConstruct(Construct):
                 prefix=module_ssm_prefix_with_leading_slash,
                 name="timestream/table/name",
             ),
-            simple_name=True,
+            simple_name=False,
         )
         self.timestream_table_arn = aws_ssm.StringParameter(
             self,
@@ -199,7 +199,7 @@ class ModuleOutputsConstruct(Construct):
             parameter_name=ResourceName.slash_separated(
                 prefix=module_ssm_prefix_with_leading_slash, name="timestream/table/arn"
             ),
-            simple_name=True,
+            simple_name=False,
         )
         self.timestream_database_region = aws_ssm.StringParameter(
             self,
@@ -209,7 +209,7 @@ class ModuleOutputsConstruct(Construct):
             parameter_name=ResourceName.slash_separated(
                 prefix=module_ssm_prefix_with_leading_slash, name="timestream/region"
             ),
-            simple_name=True,
+            simple_name=False,
         )
         self.timestream_kms_key_arn = aws_ssm.StringParameter(
             self,
@@ -220,7 +220,7 @@ class ModuleOutputsConstruct(Construct):
                 prefix=module_ssm_prefix_with_leading_slash,
                 name="timestream/database/key-arn",
             ),
-            simple_name=True,
+            simple_name=False,
         )
 
         self.fleetwise_execution_role_arn = aws_ssm.StringParameter(
@@ -232,7 +232,7 @@ class ModuleOutputsConstruct(Construct):
                 prefix=module_ssm_prefix_with_leading_slash,
                 name="fleetwise/execution-role/arn",
             ),
-            simple_name=True,
+            simple_name=False,
         )
 
         self.fleetwise_vehicle_vin_attribute_name_parameter = aws_ssm.StringParameter(
@@ -244,7 +244,7 @@ class ModuleOutputsConstruct(Construct):
                 prefix=module_ssm_prefix_with_leading_slash,
                 name="fleetwise/vehicle/vin-attribute-name",
             ),
-            simple_name=True,
+            simple_name=False,
         )
 
         # Cfn Outputs

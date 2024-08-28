@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # Standard Library
-import os
 from typing import Any
 
 # AWS Libraries
@@ -11,7 +10,6 @@ from aws_cdk import (
     ArnFormat,
     Aws,
     CfnMapping,
-    Fn,
     RemovalPolicy,
     Stack,
     aws_codebuild,
@@ -21,15 +19,12 @@ from aws_cdk import (
     aws_ecr,
     aws_iam,
     aws_kms,
-    aws_ssm,
 )
 from constructs import Construct
 
 # CMS Common Library
-from cms_common.config.resource_names import (
-    ResourceName,
-    get_application_level_path_prefix,
-)
+from cms_common.config.resource_names import get_application_level_path_prefix
+from cms_common.config.stack_inputs import SolutionConfigInputs
 
 # Connected Mobility Solution on AWS
 from .backstage_assets import BackstageSourceAssetZipLocation
@@ -41,22 +36,22 @@ class Pipelines(Construct):
         self,
         scope: Construct,
         stack_id: str,
-        vpc_name: str,
         module_inputs: ModuleInputsConstruct,
         solution_mapping: CfnMapping,
         cloudformation_role_arn: str,
         vpc: aws_ec2.IVpc,
         private_subnet_selection: aws_ec2.SubnetSelection,
         backstage_source_asset_zip_location: BackstageSourceAssetZipLocation,
+        solution_config_inputs: SolutionConfigInputs,
         **kwargs: Any,
     ) -> None:
         super().__init__(scope, stack_id, **kwargs)
 
-        backstage_config_inputs = module_inputs.backstage_config_inputs
-        backstage_domain_inputs = module_inputs.backstage_domain_inputs
-        acdp_config_ssm_prefix = module_inputs.acdp_config_ssm_prefix
+        backstage_domain_input_parameters = (
+            module_inputs.backstage_domain_input_parameters
+        )
 
-        backstage_ecr = aws_ecr.Repository(
+        self.backstage_ecr = aws_ecr.Repository(
             self,
             "backstage-ecr",
             image_scan_on_push=True,
@@ -64,8 +59,9 @@ class Pipelines(Construct):
             repository_name=f"{module_inputs.acdp_uid}-backstage",
             removal_policy=RemovalPolicy.DESTROY,
         )
+
         backstage_artifact = aws_codepipeline.Artifact(
-            artifact_name=backstage_ecr.repository_name
+            artifact_name=self.backstage_ecr.repository_name
         )
 
         backstage_codebuild_security_group = aws_ec2.SecurityGroup(
@@ -187,7 +183,10 @@ class Pipelines(Construct):
                     statements=[
                         aws_iam.PolicyStatement(
                             effect=aws_iam.Effect.ALLOW,
-                            actions=["ssm:GetParameters", "ssm:GetParameter"],
+                            actions=[
+                                "ssm:GetParameters",
+                                "ssm:GetParameter",
+                            ],
                             resources=[
                                 Stack.of(self).format_arn(
                                     service="ssm",
@@ -236,101 +235,13 @@ class Pipelines(Construct):
             },
         )
 
-        aws_ssm.StringParameter(
-            self,
-            "ssm-admin-email",
-            string_value=module_inputs.backstage_user_email,
-            description="The Cognito admin user",
-            parameter_name=ResourceName.slash_separated(
-                prefix=acdp_config_ssm_prefix,
-                name="backstage/admin-email",
-            ),
-            simple_name=True,
-        )
-        aws_ssm.StringParameter(
-            self,
-            "ssm-admin-username",
-            string_value=Fn.select(
-                0, Fn.split("@", module_inputs.backstage_user_email)
-            ),
-            description="The Cognito admin user",
-            parameter_name=ResourceName.slash_separated(
-                prefix=acdp_config_ssm_prefix,
-                name="backstage/admin-username",
-            ),
-            simple_name=True,
-        )
-
-        aws_ssm.StringParameter(
-            self,
-            "ssm-backstage-name",
-            string_value=backstage_config_inputs.name,
-            description="The name to display on Backstage",
-            parameter_name=ResourceName.slash_separated(
-                prefix=acdp_config_ssm_prefix, name="backstage/name"
-            ),
-            simple_name=True,
-        )
-        aws_ssm.StringParameter(
-            self,
-            "ssm-backstage-org",
-            string_value=backstage_config_inputs.org,
-            description="The organization to display on Backstage",
-            parameter_name=ResourceName.slash_separated(
-                prefix=acdp_config_ssm_prefix,
-                name="backstage/organization",
-            ),
-            simple_name=True,
-        )
-        aws_ssm.StringParameter(
-            self,
-            "ssm-backstage-log-level",
-            string_value=backstage_config_inputs.log_level,
-            description="Level of logs to display (trace, debug, info, warn, error, critical)",
-            parameter_name=ResourceName.slash_separated(
-                prefix=acdp_config_ssm_prefix, name="backstage/log-level"
-            ),
-            simple_name=True,
-        )
-        aws_ssm.StringParameter(
-            self,
-            "ssm-route53-zone-name",
-            string_value=backstage_domain_inputs.route53_zone_name,
-            description="The name of the hosted zone to deploy in",
-            parameter_name=ResourceName.slash_separated(
-                prefix=acdp_config_ssm_prefix, name="route53/zone-name"
-            ),
-            simple_name=True,
-        )
-        aws_ssm.StringParameter(
-            self,
-            "ssm-route53-base-domain",
-            string_value=backstage_domain_inputs.route53_base_domain_name,
-            description="The name of the base domain to deploy in",
-            parameter_name=ResourceName.slash_separated(
-                prefix=acdp_config_ssm_prefix, name="route53/base-domain"
-            ),
-            simple_name=True,
-        )
-        aws_ssm.StringParameter(
-            self,
-            "ssm-backstage-ecr-repository-name",
-            string_value=backstage_ecr.repository_name,
-            description="Backstage ECR Repository Name",
-            parameter_name=ResourceName.slash_separated(
-                prefix=acdp_config_ssm_prefix,
-                name="backstage/ecr-repository/name",
-            ),
-            simple_name=True,
-        )
-
         backstage_pipeline_project = aws_codebuild.PipelineProject(
             self,
             "backstage-build-pipeline-project",
             project_name="backstage-build-image",
             check_secrets_in_plain_text_env_variables=True,
             build_spec=aws_codebuild.BuildSpec.from_source_filename(
-                "./cdk/source/infrastructure/buildspecs/backstage_image_buildspec.json"
+                "./source/modules/backstage/cdk/source/infrastructure/buildspecs/backstage_image_buildspec.json"
             ),
             encryption_key=aws_kms.Key(
                 self, "backstage-build-key", enable_key_rotation=True
@@ -348,27 +259,12 @@ class Pipelines(Construct):
                 aws_codebuild.LocalCacheMode.CUSTOM,
             ),
             environment_variables={
-                "VPC_NAME": aws_codebuild.BuildEnvironmentVariable(
-                    value=vpc_name,
-                ),
-                "BACKSTAGE_NAME": aws_codebuild.BuildEnvironmentVariable(
-                    value=backstage_config_inputs.name,
-                    type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
-                ),
-                "BACKSTAGE_ORG": aws_codebuild.BuildEnvironmentVariable(
-                    value=backstage_config_inputs.org,
-                    type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
-                ),
-                "WEB_HOSTNAME": aws_codebuild.BuildEnvironmentVariable(
-                    value=backstage_domain_inputs.route53_zone_name,
-                    type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
-                ),
                 "DOCKER_BUILDKIT": aws_codebuild.BuildEnvironmentVariable(
                     value=1,
                     type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
                 ),
                 "IMAGE_NAME": aws_codebuild.BuildEnvironmentVariable(
-                    value=backstage_ecr.repository_name,
+                    value=self.backstage_ecr.repository_name,
                     type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
                 ),
                 "IMAGE_TAG": aws_codebuild.BuildEnvironmentVariable(
@@ -416,13 +312,16 @@ class Pipelines(Construct):
                         statements=[
                             aws_iam.PolicyStatement(
                                 effect=aws_iam.Effect.ALLOW,
-                                actions=["ssm:GetParameter", "ssm:GetParameters"],
+                                actions=[
+                                    "ssm:GetParameters",
+                                    "ssm:GetParameter",
+                                ],
                                 resources=[
                                     Stack.of(self).format_arn(
                                         service="ssm",
                                         resource="parameter",
                                         resource_name=f"{get_application_level_path_prefix(app_unique_id=module_inputs.acdp_uid, leading_slash=False)}/*",
-                                        arn_format=ArnFormat.COLON_RESOURCE_NAME,
+                                        arn_format=ArnFormat.SLASH_RESOURCE_NAME,
                                     ),
                                 ],
                             ),
@@ -441,7 +340,7 @@ class Pipelines(Construct):
                 self, "backstage-deploy-key", enable_key_rotation=True
             ),
             build_spec=aws_codebuild.BuildSpec.from_source_filename(
-                "./cdk/source/infrastructure/buildspecs/backstage_deploy_buildspec.json"
+                "./source/modules/backstage/cdk/source/infrastructure/buildspecs/backstage_deploy_buildspec.json"
             ),
             vpc=vpc,
             subnet_selection=private_subnet_selection,
@@ -456,7 +355,11 @@ class Pipelines(Construct):
                     type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
                 ),
                 "VPC_NAME": aws_codebuild.BuildEnvironmentVariable(
-                    value=vpc_name,
+                    value=module_inputs.vpc_name,
+                    type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
+                ),
+                "IDENTITY_PROVIDER_ID": aws_codebuild.BuildEnvironmentVariable(
+                    value=module_inputs.backstage_auth_config_inputs.identity_provider_id,
                     type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
                 ),
                 "AWS_REGION": aws_codebuild.BuildEnvironmentVariable(
@@ -476,19 +379,19 @@ class Pipelines(Construct):
                     type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
                 ),
                 "SOLUTION_ID": aws_codebuild.BuildEnvironmentVariable(
-                    value=os.environ["SOLUTION_ID"],
+                    value=solution_config_inputs.solution_id,
                     type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
                 ),
                 "SOLUTION_VERSION": aws_codebuild.BuildEnvironmentVariable(
-                    value=os.environ["SOLUTION_VERSION"],
+                    value=solution_config_inputs.solution_version,
                     type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
                 ),
                 "SOLUTION_NAME": aws_codebuild.BuildEnvironmentVariable(
-                    value=os.environ["SOLUTION_NAME"],
+                    value=solution_config_inputs.solution_name,
                     type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
                 ),
                 "APPLICATION_TYPE": aws_codebuild.BuildEnvironmentVariable(
-                    value=os.environ["APPLICATION_TYPE"],
+                    value=solution_config_inputs.application_type,
                     type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
                 ),
                 "REGIONAL_ASSET_BUCKET_BASE_NAME": aws_codebuild.BuildEnvironmentVariable(
@@ -505,16 +408,32 @@ class Pipelines(Construct):
                     value="latest",
                     type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
                 ),
+                "ROUTE53_HOSTED_ZONE_ID": aws_codebuild.BuildEnvironmentVariable(
+                    value=backstage_domain_input_parameters.route53_hosted_zone_id_parameter.parameter_name,
+                    type=aws_codebuild.BuildEnvironmentVariableType.PARAMETER_STORE,
+                ),
+                "FULLY_QUALIFIED_DOMAIN_NAME": aws_codebuild.BuildEnvironmentVariable(
+                    value=backstage_domain_input_parameters.fully_qualified_domain_name_parameter.parameter_name,
+                    type=aws_codebuild.BuildEnvironmentVariableType.PARAMETER_STORE,
+                ),
+                "CUSTOM_ACM_CERTIFICATE_ARN": aws_codebuild.BuildEnvironmentVariable(
+                    value=backstage_domain_input_parameters.custom_acm_certificate_arn_parameter.parameter_name,
+                    type=aws_codebuild.BuildEnvironmentVariableType.PARAMETER_STORE,
+                ),
+                "IS_PUBLIC_FACING": aws_codebuild.BuildEnvironmentVariable(
+                    value=backstage_domain_input_parameters.is_public_facing_parameter.parameter_name,
+                    type=aws_codebuild.BuildEnvironmentVariableType.PARAMETER_STORE,
+                ),
             },
         )
 
-        backstage_ecr.grant_pull_push(backstage_pipeline_project)
-        backstage_ecr.grant(backstage_pipeline_project, "ecr:*")
+        self.backstage_ecr.grant_pull_push(backstage_pipeline_project)
+        self.backstage_ecr.grant(backstage_pipeline_project, "ecr:*")
 
-        aws_codepipeline.Pipeline(  # pylint: disable=W0612
+        self.backstage_pipeline = aws_codepipeline.Pipeline(  # pylint: disable=unused-variable
             self,
             "backstage-code-pipeline",
-            pipeline_name="Backstage-Pipeline",
+            pipeline_name=f"{module_inputs.acdp_uid}-backstage-pipeline",
             enable_key_rotation=True,
             restart_execution_on_update=True,
             stages=[
@@ -624,13 +543,14 @@ class Pipelines(Construct):
                                 effect=aws_iam.Effect.ALLOW,
                                 actions=[
                                     "ssm:GetParameter",
+                                    "ssm:GetParameters",
                                 ],
                                 resources=[
                                     Stack.of(self).format_arn(
                                         service="ssm",
                                         resource="parameter",
                                         resource_name=f"{get_application_level_path_prefix(app_unique_id=module_inputs.acdp_uid, leading_slash=False)}/*",
-                                        arn_format=ArnFormat.COLON_RESOURCE_NAME,
+                                        arn_format=ArnFormat.SLASH_RESOURCE_NAME,
                                     ),
                                 ],
                             ),

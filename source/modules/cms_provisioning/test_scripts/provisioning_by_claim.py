@@ -127,14 +127,14 @@ class ProvisioningByClaim:  # pylint: disable=too-many-instance-attributes
 
         for topic, qos in resubscribe_results["topics"]:
             if qos is None:
-                raise Exception(  # pylint: disable=W0719
+                raise Exception(  # pylint: disable=broad-exception-raised
                     f"Server rejected resubscribe to topic: {topic}"
-                )  # pylint: disable=W0718
+                )
 
     def createkeysandcertificate_execution_rejected(
         self, rejected: iotidentity.ErrorResponse
     ) -> None:
-        raise Exception(  # pylint: disable=W0719
+        raise Exception(  # pylint: disable=broad-exception-raised
             f"""
             CreateKeysAndCertificate Request rejected with
             code:'{rejected.error_code}' message:'{rejected.error_message}'
@@ -145,7 +145,7 @@ class ProvisioningByClaim:  # pylint: disable=too-many-instance-attributes
     def registerthing_execution_rejected(
         self, rejected: iotidentity.ErrorResponse
     ) -> None:
-        raise Exception(  # pylint: disable=W0719
+        raise Exception(  # pylint: disable=broad-exception-raised
             f"""
             RegisterThing Request rejected with
             code:'{rejected.error_code}' message:'{rejected.error_message}'
@@ -157,7 +157,7 @@ class ProvisioningByClaim:  # pylint: disable=too-many-instance-attributes
         try:
             future.result()  # raises exception if publish failed
             print("Published CreateKeysAndCertificate request..")
-        except Exception as exception:  # pylint: disable=W0718
+        except Exception as exception:  # pylint: disable=broad-exception-caught
             print(f"Failed to publish CreateKeysAndCertificate request: {exception}")
             raise
 
@@ -165,7 +165,7 @@ class ProvisioningByClaim:  # pylint: disable=too-many-instance-attributes
         try:
             future.result()  # raises exception if publish failed
             print("Published RegisterThing request..")
-        except Exception as exception:  # pylint: disable=W0718
+        except Exception as exception:  # pylint: disable=broad-exception-caught
             print(f"Failed to publish RegisterThing request: {exception}")
             raise
 
@@ -329,7 +329,7 @@ class ProvisioningByClaim:  # pylint: disable=too-many-instance-attributes
             self.wait_for_create_keys_and_certificate_response()
 
             if self.create_keys_and_certificate_response is None:
-                raise Exception(  # pylint: disable=W0719
+                raise Exception(  # pylint: disable=broad-exception-raised
                     "CreateKeysAndCertificate API did not succeed"
                 )
             cert_own_token = (
@@ -358,7 +358,7 @@ class ProvisioningByClaim:  # pylint: disable=too-many-instance-attributes
             print("Disconnected!")
             success = True
 
-        except Exception as exept:  # pylint: disable=W0718
+        except Exception as exept:  # pylint: disable=broad-exception-caught
             print(f"Exit with exception: {exept}")
 
         return success

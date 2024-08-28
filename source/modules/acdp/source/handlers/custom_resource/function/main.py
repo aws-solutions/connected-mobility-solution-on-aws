@@ -26,7 +26,10 @@ from botocore.config import Config
 if TYPE_CHECKING:
     # Third Party Libraries
     from mypy_boto3_s3.client import S3Client
-    from mypy_boto3_s3.type_defs import CopySourceTypeDef
+    from mypy_boto3_s3.type_defs import (
+        CopySourceTypeDef,
+        HeadObjectRequestRequestTypeDef,
+    )
 else:
     CopySourceTypeDef = object
     S3Client = object
@@ -70,7 +73,7 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
                     f"No Custom Resource Type: {event['ResourceProperties']['Resource']}"
                 )
 
-    except Exception as exception:  # pylint: disable=W0703
+    except Exception as exception:  # pylint: disable=broad-exception-caught
         # Wrap all exceptions so CloudFormation doesn't hang
         logger.error("CustomResource error: %s", str(exception), exc_info=True)
         response["Status"] = CustomResourceTypes.StatusTypes.FAILED.value
@@ -136,6 +139,7 @@ def copy_s3_object_from_source_to_destination_bucket(
             "Key": event["ResourceProperties"]["SourceKey"],
         }
         destination_bucket: str = event["ResourceProperties"]["DestinationBucket"]
+
         destination_key: str = event["ResourceProperties"]["DestinationKey"]
 
         get_s3_client().copy(copy_source, destination_bucket, destination_key)

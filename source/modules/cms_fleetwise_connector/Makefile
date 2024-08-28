@@ -31,7 +31,7 @@ include ${SOLUTION_PATH}/makefiles/global_targets.mk
 include ${SOLUTION_PATH}/makefiles/module_targets.mk
 
 .PHONY: install
-install: pipenv-install ## Installs the resources and dependencies required to build the solution.
+install: pipenv-install cdk-solution-helper-install ## Installs the resources and dependencies required to build the solution.
 	@printf "${MAGENTA}Install finished.${NC}\n"
 
 .PHONY: deploy

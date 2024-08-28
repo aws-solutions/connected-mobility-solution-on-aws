@@ -102,7 +102,7 @@ class TokenValidationLambdaConstruct(Construct):
             description="CMS Token Validation Lambda Function",
             handler="function.main.handler",
             function_name=lambda_function_name,
-            runtime=aws_lambda.Runtime.PYTHON_3_10,
+            runtime=aws_lambda.Runtime.PYTHON_3_12,
             code=aws_lambda.Code.from_asset(
                 "deployment/dist/lambda/token_validation_lambda.zip"
             ),

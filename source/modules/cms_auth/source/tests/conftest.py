@@ -13,11 +13,13 @@ from .fixtures.fixture_shared import (
 from .handlers.fixtures.fixture_authorization_code_exchange_lambda import (
     fixture_authorization_code_exchange_clear_lru_caches,
     fixture_authorization_code_exchange_event_valid,
-    fixture_authorization_code_exchange_idp_config_secret_string_valid,
+    fixture_idp_config_secret_string_valid,
     fixture_mock_authorization_code_exchange_environment_valid,
-    fixture_mock_authorization_code_exchange_idp_config_invalid_json,
-    fixture_mock_authorization_code_exchange_idp_config_valid,
-    fixture_mock_tokens_endpoint_valid_tokens,
+    fixture_mock_idp_config_valid,
+    fixture_mock_token_endpoint_valid_tokens,
+    fixture_mock_user_client_config_invalid_json,
+    fixture_mock_user_client_config_valid,
+    fixture_user_client_config_secret_string_valid,
 )
 from .handlers.fixtures.fixture_shared import fixture_context
 from .handlers.fixtures.fixture_token_validation_lambda import (

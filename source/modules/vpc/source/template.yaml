@@ -1,7 +1,7 @@
 
 
 AWSTemplateFormatVersion: "2010-09-09"
-Description: (SO0241-CMS.23) connected-mobility-solution-on-aws - vpc. Version v1.1.8
+Description: (SO0241-CMS.23) connected-mobility-solution-on-aws - vpc. Version v1.2.0
   This template deploys a VPC, with a pair of public and private subnets spread
   across two Availability Zones. It deploys an internet gateway, with a default
   route on the public subnets. It deploys a pair of NAT gateways (one in each AZ),
@@ -61,14 +61,49 @@ Parameters:
     ConstraintDescription: Must be a valid CIDR range in the form x.x.x.x/xx
 
   VpcFlowLogsEnabled:
+    Description: Specify if the VPC should write flow logs for all inbound/outbound traffic.
     Type: String
     Default: "true"
     AllowedValues:
       - "true"
       - "false"
 
+  AllowInternetAccess:
+    Description: Specify if the VPC should create Internet/NAT Gateways to allow inbound and outbound internet access.
+    Type: String
+    Default: "true"
+    AllowedValues:
+      - "true"
+      - "false"
+
+  EnableVpcEndpoints:
+    Description: "Specify if PrivateLink Endpoints to AWS Services should be created for use with this VPC."
+    Type: String
+    Default: "true"
+    AllowedValues:
+      - "true"
+      - "false"
+
+  TransitGatewayId:
+    Description: "Optional: Enter the Transit Gateway Id to attach to."
+    Type: String
+    Default: ""
+    AllowedPattern: "^$|tgw-[0-9a-f]{8,17}"
+    ConstraintDescription: "The Transit Gateway Id must start with 'tgw-' followed by 8 to 17 lowercase letters or numbers."
+
+  TransitGatewayTrafficCIDR:
+    Description: "Optional: If deploying this VPC for use with a transit gateway, specify the CIDR range to route traffic targeting the TGW to."
+    Type: String
+    Default: "10.0.0.0/8"
+    AllowedPattern: "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
+    ConstraintDescription: Must be a valid CIDR range in the form x.x.x.x/xx
+
 Conditions:
   IsVpcFlowLogEnabled: !Equals [!Ref VpcFlowLogsEnabled, "true"]
+  IsPublicAccessAllowed: !Equals [!Ref AllowInternetAccess, "true"]
+  IsPublicAccessNotAllowed: !Not [!Condition IsPublicAccessAllowed]
+  IsTransitGatewayInUse: !Not [!Equals [!Ref TransitGatewayId, ""]]
+  IsVpcEndpointEnabled: !Equals [!Ref EnableVpcEndpoints, "true"]
 
 Resources:
   VPC:
@@ -118,6 +153,7 @@ Resources:
 
   InternetGateway:
     Type: AWS::EC2::InternetGateway
+    Condition: IsPublicAccessAllowed
     Properties:
       Tags:
         - Key: Name
@@ -125,6 +161,7 @@ Resources:
 
   InternetGatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
+    Condition: IsPublicAccessAllowed
     Properties:
       InternetGatewayId: !Ref InternetGateway
       VpcId: !Ref VPC
@@ -135,7 +172,7 @@ Resources:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [ 0, !GetAZs '' ]
       CidrBlock: !Ref PublicSubnet1CIDR
-      MapPublicIpOnLaunch: true
+      MapPublicIpOnLaunch: !Ref AllowInternetAccess
       Tags:
         - Key: Name
           Value: !Sub ${VpcName} Public Subnet (AZ1)
@@ -146,7 +183,7 @@ Resources:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [ 1, !GetAZs  '' ]
       CidrBlock: !Ref PublicSubnet2CIDR
-      MapPublicIpOnLaunch: true
+      MapPublicIpOnLaunch: !Ref AllowInternetAccess
       Tags:
         - Key: Name
           Value: !Sub ${VpcName} Public Subnet (AZ2)
@@ -197,24 +234,28 @@ Resources:
 
   NatGateway1EIP:
     Type: AWS::EC2::EIP
+    Condition: IsPublicAccessAllowed
     DependsOn: InternetGatewayAttachment
     Properties:
       Domain: vpc
 
   NatGateway2EIP:
     Type: AWS::EC2::EIP
+    Condition: IsPublicAccessAllowed
     DependsOn: InternetGatewayAttachment
     Properties:
       Domain: vpc
 
   NatGateway1:
     Type: AWS::EC2::NatGateway
+    Condition: IsPublicAccessAllowed
     Properties:
       AllocationId: !GetAtt NatGateway1EIP.AllocationId
       SubnetId: !Ref PublicSubnet1
 
   NatGateway2:
     Type: AWS::EC2::NatGateway
+    Condition: IsPublicAccessAllowed
     Properties:
       AllocationId: !GetAtt NatGateway2EIP.AllocationId
       SubnetId: !Ref PublicSubnet2
@@ -229,6 +270,7 @@ Resources:
 
   DefaultPublicRoute:
     Type: AWS::EC2::Route
+    Condition: IsPublicAccessAllowed
     DependsOn: InternetGatewayAttachment
     Properties:
       RouteTableId: !Ref PublicRouteTable
@@ -258,6 +300,7 @@ Resources:
 
   DefaultPrivateRoute1:
     Type: AWS::EC2::Route
+    Condition: IsPublicAccessAllowed
     Properties:
       RouteTableId: !Ref PrivateRouteTable1
       DestinationCidrBlock: 0.0.0.0/0
@@ -279,6 +322,7 @@ Resources:
 
   DefaultPrivateRoute2:
     Type: AWS::EC2::Route
+    Condition: IsPublicAccessAllowed
     Properties:
       RouteTableId: !Ref PrivateRouteTable2
       DestinationCidrBlock: 0.0.0.0/0
@@ -319,6 +363,51 @@ Resources:
       RouteTableId: !Ref IsolatedRouteTable2
       SubnetId: !Ref IsolatedSubnet2
 
+
+  #### Transit Gateway Configuration ################################################################
+
+  TransitGatewayAttachment:
+    Type: "AWS::EC2::TransitGatewayAttachment"
+    Condition: IsTransitGatewayInUse
+    Properties:
+      SubnetIds:
+        - !Ref PrivateSubnet1
+        - !Ref PrivateSubnet2
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcName} Transit Gateway Attachment
+      TransitGatewayId: !Ref TransitGatewayId
+      VpcId: !Ref VPC
+
+  VpcTransitGatewayPublicRoute:
+    Type: AWS::EC2::Route
+    Condition: IsTransitGatewayInUse
+    DependsOn: TransitGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: !Ref TransitGatewayTrafficCIDR
+      TransitGatewayId: !Ref TransitGatewayId
+
+  VpcTransitGatewayPrivate1Route:
+    Type: AWS::EC2::Route
+    Condition: IsTransitGatewayInUse
+    DependsOn: TransitGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable1
+      DestinationCidrBlock: !Ref TransitGatewayTrafficCIDR
+      TransitGatewayId: !Ref TransitGatewayId
+
+  VpcTransitGatewayPrivate2Route:
+    Type: AWS::EC2::Route
+    Condition: IsTransitGatewayInUse
+    DependsOn: TransitGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable2
+      DestinationCidrBlock: !Ref TransitGatewayTrafficCIDR
+      TransitGatewayId: !Ref TransitGatewayId
+
+#### SSM Parameters for VPC Configuration Info ################################################################
+
   VpcIdSSMParameter:
     Type: AWS::SSM::Parameter
     Properties:
@@ -335,12 +424,20 @@ Resources:
       Name: !Sub /solution/vpc/${VpcName}/name
       Value: !Ref VpcName
 
-  AZSSMParameter:
+  VpcCidrBlockSSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Description: VPC CIDR Block
+      Name: !Sub /solution/vpc/${VpcName}/cidr
+      Value: !Ref VpcCIDR
+
+  AvailabilityZonesSSMParameter:
     Type: AWS::SSM::Parameter
     Properties:
       Type: String
       Description: Public Subnet Ids
-      Name: !Sub /solution/vpc/${VpcName}/AZs
+      Name: !Sub /solution/vpc/${VpcName}/azs
       Value: !Join [",", [!Select [0, !GetAZs ""], !Select [1, !GetAZs ""]]]
 
   PublicSubnetsSSMParameter:
@@ -484,8 +581,42 @@ Resources:
 # To add additional endpoints, refer to the following documentation on service availability
 # https://docs.aws.amazon.com/vpc/latest/privatelink/aws-services-privatelink-support.html
 
+  VpcEndpointSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Condition: IsVpcEndpointEnabled
+    Properties:
+      GroupDescription: Allow inbound traffic from the VPC to VPC Endpoints
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - Description: "Ingress rule for allowing traffic on all ports for the VPC CIDR range specified."
+          IpProtocol: -1
+          CidrIp: !Ref VpcCIDR
+        - !If
+          - IsTransitGatewayInUse
+          - Description: "Ingress rule for allowing traffic on all ports for the Transit Gateway Traffic CIDR range specified."
+            IpProtocol: -1
+            CidrIp: !Ref TransitGatewayTrafficCIDR
+          - !Ref "AWS::NoValue"
+      SecurityGroupEgress:
+        - Description: "Egress rule for allowing traffic on all ports for the VPC CIDR range specified."
+          IpProtocol: -1
+          CidrIp: !Ref VpcCIDR
+      Tags:
+        - Key: Name
+          Value: !Ref VpcName
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: "W40"
+            reason: "A protocol of -1 is necessary to allow all ports for the various AWS services accessed by
+              interface endpoints associated with this security group."
+          - id: "W42"
+            reason: "A protocol of -1 is necessary to allow all ports for the various AWS services accessed by
+              interface endpoints associated with this security group."
+
   DynamoDBEndpoint:
     Type: AWS::EC2::VPCEndpoint
+    # Condition: IsVpcEndpointEnabled
     Properties:
       PolicyDocument:
         Version: "2012-10-17"
@@ -497,11 +628,16 @@ Resources:
       RouteTableIds:
         - !Ref PrivateRouteTable1
         - !Ref PrivateRouteTable2
+        - !If
+            - IsPublicAccessNotAllowed
+            - !Ref PublicRouteTable
+            - !Ref "AWS::NoValue"
       ServiceName: !Sub "com.amazonaws.${AWS::Region}.dynamodb"
       VpcId: !Ref VPC
 
   S3Endpoint:
     Type: AWS::EC2::VPCEndpoint
+    # Condition: IsVpcEndpointEnabled
     Properties:
       PolicyDocument:
         Version: "2012-10-17"
@@ -513,27 +649,16 @@ Resources:
       RouteTableIds:
         - !Ref PrivateRouteTable1
         - !Ref PrivateRouteTable2
+        - !If
+            - IsPublicAccessNotAllowed
+            - !Ref PublicRouteTable
+            - !Ref "AWS::NoValue"
       ServiceName: !Sub "com.amazonaws.${AWS::Region}.s3"
       VpcId: !Ref VPC
 
-  VpcEndpointSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupName: vpc-endpoints-security-group
-      GroupDescription: Allow inbound traffic from the VPC to VPC Endpoints
-      VpcId: !Ref VPC
-      SecurityGroupIngress:
-        - IpProtocol: -1
-          CidrIp: !Ref VpcCIDR
-      SecurityGroupEgress:
-        - IpProtocol: -1
-          CidrIp: !Ref VpcCIDR
-      Tags:
-        - Key: Name
-          Value: !Ref VpcName
-
   ApiGatewayEndpoint:
     Type: AWS::EC2::VPCEndpoint
+    Condition: IsVpcEndpointEnabled
     Properties:
       PrivateDnsEnabled: True
       VpcEndpointType: Interface
@@ -547,6 +672,7 @@ Resources:
 
   AthenaEndpoint:
     Type: AWS::EC2::VPCEndpoint
+    Condition: IsVpcEndpointEnabled
     Properties:
       PrivateDnsEnabled: True
       VpcEndpointType: Interface
@@ -560,6 +686,7 @@ Resources:
 
   CloudFormationEndpoint:
     Type: AWS::EC2::VPCEndpoint
+    Condition: IsVpcEndpointEnabled
     Properties:
       PrivateDnsEnabled: True
       VpcEndpointType: Interface
@@ -573,6 +700,7 @@ Resources:
 
   CloudWatchLogsEndpoint:
     Type: AWS::EC2::VPCEndpoint
+    Condition: IsVpcEndpointEnabled
     Properties:
       PrivateDnsEnabled: True
       VpcEndpointType: Interface
@@ -586,6 +714,7 @@ Resources:
 
   CloudTrailEndpoint:
     Type: AWS::EC2::VPCEndpoint
+    Condition: IsVpcEndpointEnabled
     Properties:
       PrivateDnsEnabled: True
       VpcEndpointType: Interface
@@ -599,6 +728,7 @@ Resources:
 
   CodeBuildEndpoint:
     Type: AWS::EC2::VPCEndpoint
+    Condition: IsVpcEndpointEnabled
     Properties:
       PrivateDnsEnabled: True
       VpcEndpointType: Interface
@@ -612,6 +742,7 @@ Resources:
 
   CodePipelineEndpoint:
     Type: AWS::EC2::VPCEndpoint
+    Condition: IsVpcEndpointEnabled
     Properties:
       PrivateDnsEnabled: True
       VpcEndpointType: Interface
@@ -625,6 +756,7 @@ Resources:
 
   ECRApiEndpoint:
     Type: AWS::EC2::VPCEndpoint
+    Condition: IsVpcEndpointEnabled
     Properties:
       PrivateDnsEnabled: True
       VpcEndpointType: Interface
@@ -638,6 +770,7 @@ Resources:
 
   ECRDKREndpoint:
     Type: AWS::EC2::VPCEndpoint
+    Condition: IsVpcEndpointEnabled
     Properties:
       PrivateDnsEnabled: True
       VpcEndpointType: Interface
@@ -651,6 +784,7 @@ Resources:
 
   ECSEndpoint:
     Type: AWS::EC2::VPCEndpoint
+    Condition: IsVpcEndpointEnabled
     Properties:
       PrivateDnsEnabled: True
       VpcEndpointType: Interface
@@ -664,6 +798,7 @@ Resources:
 
   KMSEndpoint:
     Type: AWS::EC2::VPCEndpoint
+    Condition: IsVpcEndpointEnabled
     Properties:
       PrivateDnsEnabled: True
       VpcEndpointType: Interface
@@ -677,6 +812,7 @@ Resources:
 
   LambdaEndpoint:
     Type: AWS::EC2::VPCEndpoint
+    Condition: IsVpcEndpointEnabled
     Properties:
       PrivateDnsEnabled: True
       VpcEndpointType: Interface
@@ -690,6 +826,7 @@ Resources:
 
   RDSEndpoint:
     Type: AWS::EC2::VPCEndpoint
+    Condition: IsVpcEndpointEnabled
     Properties:
       PrivateDnsEnabled: True
       VpcEndpointType: Interface
@@ -703,6 +840,7 @@ Resources:
 
   RDSDataEndpoint:
     Type: AWS::EC2::VPCEndpoint
+    Condition: IsVpcEndpointEnabled
     Properties:
       PrivateDnsEnabled: True
       VpcEndpointType: Interface
@@ -716,10 +854,25 @@ Resources:
 
   SecretsManagerEndpoint:
     Type: AWS::EC2::VPCEndpoint
+    Condition: IsVpcEndpointEnabled
     Properties:
       PrivateDnsEnabled: True
       VpcEndpointType: Interface
       ServiceName: !Sub "com.amazonaws.${AWS::Region}.secretsmanager"
+      VpcId: !Ref VPC
+      SecurityGroupIds:
+        - !GetAtt VpcEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+
+  Ec2Endpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Condition: IsVpcEndpointEnabled
+    Properties:
+      PrivateDnsEnabled: True
+      VpcEndpointType: Interface
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.ec2"
       VpcId: !Ref VPC
       SecurityGroupIds:
         - !GetAtt VpcEndpointSecurityGroup.GroupId
@@ -763,3 +916,8 @@ Outputs:
   IsolatedSubnet2:
     Description: A reference to the isolated subnet in the 2nd Availability Zone
     Value: !Ref IsolatedSubnet2
+
+  TransitGatewayAttachment:
+    Condition: IsTransitGatewayInUse
+    Description: TransitGatewayAttachment Id
+    Value: !Ref TransitGatewayAttachment
