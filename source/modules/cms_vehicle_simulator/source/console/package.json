@@ -50,7 +50,8 @@
     "typescript": "5.1.6",
     "@babel/traverse": "^7.23.2",
     "braces": "^3.0.3",
-    "ws": "^8.17.1"
+    "ws": "^8.17.1",
+    "path-to-regexp": "^0.1.10"
   },
   "scripts": {
     "start": "react-scripts start",
