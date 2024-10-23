@@ -42,10 +42,7 @@ printf "%b[Synth] Synthesize Stack\n%b" "${GREEN}" "${NC}"
 cd "$MODULE_ROOT_DIR"
 
 # Run cdk synth to generate CloudFormation template
-# JSII_RUNTIME_PACKAGE_CACHE_ROOT is defined so lock collisions don't occur when modules are running concurrently
-# - RuntimeError: EEXIST: file already exists, open '<default>/.cache/<path>/aws-cdk-lib/2.130.0/<hash>.lock'
-# - https://github.com/aws/jsii/blob/main/packages/%40jsii/kernel/src/tar-cache/default-cache-root.ts
-JSII_RUNTIME_PACKAGE_CACHE_ROOT="$MODULE_ROOT_DIR/.cdk_cache" cdk synth --output="$STAGING_DIST_DIR" >> /dev/null
+cdk synth --output="$STAGING_DIST_DIR" >> /dev/null
 
 printf "%b[Packing] Template artifacts\n%b" "${GREEN}" "${NC}"
 rm -f "$STAGING_DIST_DIR/tree.json"

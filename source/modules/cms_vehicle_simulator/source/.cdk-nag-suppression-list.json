@@ -173,14 +173,6 @@
             }
         ]
     },
-    "/cms-vehicle-simulator/cms-vehicle-simulator/simulator-construct/cleanup-lambda/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
-            }
-        ]
-    },
     "/cms-vehicle-simulator/cms-vehicle-simulator/simulator-construct/iot-endpoint-custom-resource/CustomResourcePolicy/Resource": {
         "rules_to_suppress": [
             {
@@ -253,14 +245,6 @@
             }
         ]
     },
-    "/cms-vehicle-simulator/cms-vehicle-simulator/simulator-construct/provisioning-lambda/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
-            }
-        ]
-    },
     "/cms-vehicle-simulator/cms-vehicle-simulator/simulator-construct/simulator-engine-lambda-role/Resource": {
         "rules_to_suppress": [
             {
@@ -291,14 +275,6 @@
                 ],
                 "id": "AwsSolutions-IAM5",
                 "reason": "GetObject action requires resource wildcard to access all objects in bucket"
-            }
-        ]
-    },
-    "/cms-vehicle-simulator/cms-vehicle-simulator/simulator-construct/simulator-engine-lambda/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
             }
         ]
     },
@@ -375,6 +351,14 @@
             }
         ]
     },
+    "/cms-vehicle-simulator/AWS679f53fac002430cb0da5b7982bd2287/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Lambda created by CDK constructs cannot use a different runtime"
+            }
+        ]
+    },
     "/cms-vehicle-simulator/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource": {
         "rules_to_suppress": [
             {
@@ -384,14 +368,6 @@
                     "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
                 ],
                 "reason": "Lambda created by CDK constructs uses managed policies"
-            }
-        ]
-    },
-    "/cms-vehicle-simulator/AWS679f53fac002430cb0da5b7982bd2287/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
             }
         ]
     },

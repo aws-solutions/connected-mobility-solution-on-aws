@@ -30,7 +30,7 @@ from .fixture_shared_jwt_mocks import (
     INVALID_KID_ID_TOKEN_KID,
     INVALID_SCOPE_SERVICE_ACCESS_TOKEN_KID,
     TEST_ALTERNATE_AUD_KEY,
-    TEST_AUTH_RESOURCE_NAMES_CLASS,
+    TEST_AUTH_SETUP_RESOURCE_NAMES_CLASS,
     TEST_AUTHORIZATION_ENDPOINT,
     TEST_IDENTITY_PROVIDER_ID,
     TEST_ISSUER,
@@ -323,13 +323,13 @@ def fixture_mock_token_validation_idp_config_valid(
     with mock_aws():
         secretsmanager_client = boto3.client("secretsmanager")
         secret_arn = secretsmanager_client.create_secret(
-            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.idp_config_secret,
+            Name=TEST_AUTH_SETUP_RESOURCE_NAMES_CLASS.idp_config_secret,
             SecretString=token_validation_idp_config_secret_string_valid,
         )["ARN"]
 
         ssm_client = boto3.client("ssm")
         ssm_client.put_parameter(
-            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.idp_config_secret_arn_ssm_parameter,
+            Name=TEST_AUTH_SETUP_RESOURCE_NAMES_CLASS.idp_config_secret_arn_ssm_parameter,
             Value=secret_arn,
             Type="String",
         )

@@ -1,0 +1,234 @@
+{
+    "/cms-predictive-maintenance/cms-predictive-maintenance/chatbot-construct/vector-db-security-construct/custom-resource-policy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Wildcard permissions required for aoss:ListVpcEndpoints action."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/chatbot-construct/bedrock-knowledge-base-construct/bedrock-policy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Wildcard permissions required for bedrock KnowledgeBase actions."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/chatbot-construct/bedrock-data-source-construct/custom-resource-policy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Wildcard permissions required for bedrock DataSource actions."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Log retention lambda is created by AWS CDK L2 constructs which use wildcard permissions."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W11",
+                "reason": "Log retention lambda is created by AWS CDK L2 constructs which use wildcard permissions."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W58",
+                "reason": "Automatically created lambda by Lambda Function construct, does not need log permissions."
+            },
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/chatbot-construct/bedrock-role-construct/iam-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W28",
+                "reason": "Explicit name is required for the Bedrock knowledge base role."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/chatbot-construct/bedrock-agent-construct/role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W28",
+                "reason": "Explicit name is required for the Bedrock agent role."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/agent-action-group-construct/lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W11",
+                "reason": "Wildcard permissions required to write to log streams and to attach VPC to Lambda."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/agent-action-group-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/agent-action-group-construct/security-group/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W40",
+                "reason": "Lambdas need outbound communication to contact other resources in VPC"
+            },
+            {
+                "id": "W5",
+                "reason": "Lambdas are inside Private Subnets and may need to communicate to services over internet. So the CIDR is wide open on egress for now"
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predictor-construct/sagemaker-studio/role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W11",
+                "reason": "Wildcard permissions required for SageMaker Studio."
+            },
+            {
+                "id": "F3",
+                "reason": "The SageMaker Studio role should be able to pass a SageMaker admin role to the SageMaker service principal to be able to view resources in the Studio console."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/sagemaker-assets-bucket-construct/log-bucket/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W35",
+                "reason": "A log bucket does not need S3 bucket for access logs"
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predictor-construct/sagemaker-studio/custom-resource-policy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Wildcard permissions required to delete EFS Security Groups."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predictor-construct/sagemaker-pipeline/role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "F3",
+                "reason": "Wildcard action permissions are required to be passed to the SageMaker service."
+            },
+            {
+                "id": "W11",
+                "reason": "Wildcard resources are required in the policy assumed by the SageMaker service."
+            },
+            {
+                "id": "W28",
+                "reason": "Role requires an explicit name so that iam:PassRole action can be restricted."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predictor-construct/sagemaker-pipeline/deploy-pipeline-model-lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W11",
+                "reason": "Wildcard resources are required in the policy for SageMaker service actions."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predictor-construct/sagemaker-pipeline/deploy-pipeline-model-lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predictor-construct/sagemaker-pipeline/security-group/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W40",
+                "reason": "Lambdas need outbound communication to contact other resources in VPC"
+            },
+            {
+                "id": "W5",
+                "reason": "Lambdas are inside Private Subnets and may need to communicate to services over internet. So the CIDR is wide open on egress for now"
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/authorization-lambda-construct/lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W11",
+                "reason": "Wildcard permissions required to write to log streams and to attach VPC to Lambda."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predict-api-construct/lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W11",
+                "reason": "Wildcard permissions required to write to log streams and to attach VPC to Lambda."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/authorization-lambda-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predict-api-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W92",
+                "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/authorization-lambda-construct/security-group/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W40",
+                "reason": "Lambdas need outbound communication to contact other resources in VPC"
+            },
+            {
+                "id": "W5",
+                "reason": "Lambdas are inside Private Subnets and may need to communicate to services over internet. So the CIDR is wide open on egress for now"
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predict-api-construct/security-group/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W40",
+                "reason": "Lambdas need outbound communication to contact other resources in VPC"
+            },
+            {
+                "id": "W5",
+                "reason": "Lambdas are inside Private Subnets and may need to communicate to services over internet. So the CIDR is wide open on egress for now"
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predict-api-construct/lambda-role/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "W12",
+                "reason": "Wildcard permissions required to list SageMaker models."
+            }
+        ]
+    }
+}

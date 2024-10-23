@@ -3,11 +3,13 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # Standard Library
+import os
 from enum import Enum
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 # AWS Libraries
 import boto3
+from botocore.config import Config
 
 if TYPE_CHECKING:
     # Third Party Libraries
@@ -93,7 +95,12 @@ def _build_measure_value_types_query_sql(
 def _query_timestream(
     query: str, next_token: Optional[str] = None
 ) -> QueryResponseTypeDef:
-    timestream_client = boto3.client("timestream-query")
+    timestream_client = boto3.client(
+        "timestream-query",
+        config=Config(
+            user_agent_extra=os.environ["USER_AGENT_STRING"],
+        ),
+    )
 
     response: QueryResponseTypeDef
     if next_token:

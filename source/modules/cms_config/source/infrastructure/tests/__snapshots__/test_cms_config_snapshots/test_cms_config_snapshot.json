@@ -200,6 +200,17 @@
             "value"
           ]
         },
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          }
+        ],
         "Timeout": 900
       },
       "Type": "AWS::Lambda::Function"
@@ -231,6 +242,17 @@
               ]
             ]
           }
+        ],
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          }
         ]
       },
       "Type": "AWS::IAM::Role"
@@ -259,25 +281,7 @@
       },
       "Type": "AWS::IAM::Policy"
     },
-    "appregistryapplicationstackassociation": {
-      "Properties": {
-        "Application": {
-          "Fn::GetAtt": [
-            "cmsconfigappregistryconstructappregistryapplication1C068A66",
-            "Id"
-          ]
-        },
-        "Resource": {
-          "Ref": "AWS::StackId"
-        },
-        "ResourceType": "CFN_STACK"
-      },
-      "Type": "AWS::ServiceCatalogAppRegistry::ResourceAssociation"
-    },
-    "cmsconfigappregistryconstructappregistryapplication1C068A66": {
-      "DependsOn": [
-        "ssmappuniqueidD1DCE51D"
-      ],
+    "appregistryconstructappregistryapplicationAC1A319B": {
       "Properties": {
         "Name": {
           "Fn::Join": [
@@ -300,30 +304,24 @@
       },
       "Type": "AWS::ServiceCatalogAppRegistry::Application"
     },
-    "cmsconfigappregistryconstructappregistryapplicationattributeassociationE2EF9C80": {
-      "DependsOn": [
-        "ssmappuniqueidD1DCE51D"
-      ],
+    "appregistryconstructappregistryapplicationattributeassociation802A10B5": {
       "Properties": {
         "Application": {
           "Fn::GetAtt": [
-            "cmsconfigappregistryconstructappregistryapplication1C068A66",
+            "appregistryconstructappregistryapplicationAC1A319B",
             "Id"
           ]
         },
         "AttributeGroup": {
           "Fn::GetAtt": [
-            "cmsconfigappregistryconstructdefaultapplicationattributes92C5EB4E",
+            "appregistryconstructdefaultapplicationattributes8FF6B3DB",
             "Id"
           ]
         }
       },
       "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroupAssociation"
     },
-    "cmsconfigappregistryconstructdefaultapplicationattributes92C5EB4E": {
-      "DependsOn": [
-        "ssmappuniqueidD1DCE51D"
-      ],
+    "appregistryconstructdefaultapplicationattributes8FF6B3DB": {
       "Properties": {
         "Attributes": {
           "ApplicationType": "test-application-type",
@@ -349,6 +347,14 @@
               }
             ]
           ]
+        },
+        "Tags": {
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "appregistryconstructappregistryapplicationAC1A319B",
+              "ApplicationTagValue"
+            ]
+          }
         }
       },
       "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroup"
@@ -405,6 +411,17 @@
           ]
         },
         "Runtime": "python3.12",
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          }
+        ],
         "Timeout": 300,
         "VpcConfig": {
           "SecurityGroupIds": [
@@ -685,6 +702,17 @@
             },
             "PolicyName": "ec2-policy"
           }
+        ],
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          }
         ]
       },
       "Type": "AWS::IAM::Role"
@@ -714,6 +742,17 @@
             "CidrIp": "0.0.0.0/0",
             "Description": "Allow all outbound traffic by default",
             "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
           }
         ],
         "VpcId": {
@@ -756,6 +795,17 @@
             "CidrIp": "0.0.0.0/0",
             "Description": "Allow all outbound traffic by default",
             "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
           }
         ],
         "VpcId": {
@@ -825,6 +875,17 @@
           ]
         },
         "Runtime": "python3.12",
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          }
+        ],
         "Timeout": 300,
         "VpcConfig": {
           "SecurityGroupIds": [
@@ -1105,6 +1166,17 @@
             },
             "PolicyName": "ec2-policy"
           }
+        ],
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          }
         ]
       },
       "Type": "AWS::IAM::Role"
@@ -1134,6 +1206,17 @@
             "CidrIp": "0.0.0.0/0",
             "Description": "Allow all outbound traffic by default",
             "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
           }
         ],
         "VpcId": {
@@ -1288,6 +1371,17 @@
           ]
         },
         "Runtime": "python3.12",
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          }
+        ],
         "Timeout": 300,
         "VpcConfig": {
           "SecurityGroupIds": [
@@ -1570,6 +1664,17 @@
             },
             "PolicyName": "ec2-policy"
           }
+        ],
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          }
         ]
       },
       "Type": "AWS::IAM::Role"
@@ -1586,6 +1691,17 @@
             "CidrIp": "0.0.0.0/0",
             "Description": "Allow all outbound traffic by default",
             "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
           }
         ],
         "VpcId": {
@@ -1620,6 +1736,14 @@
               "/config/aws-resource-lookup-lambda/arn"
             ]
           ]
+        },
+        "Tags": {
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "appregistryconstructappregistryapplicationAC1A319B",
+              "ApplicationTagValue"
+            ]
+          }
         },
         "Type": "String",
         "Value": {
@@ -1659,6 +1783,14 @@
             ]
           ]
         },
+        "Tags": {
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "appregistryconstructappregistryapplicationAC1A319B",
+              "ApplicationTagValue"
+            ]
+          }
+        },
         "Type": "String",
         "Value": {
           "Ref": "IdentityProviderId"
@@ -1693,6 +1825,14 @@
               "/config/metrics/enabled"
             ]
           ]
+        },
+        "Tags": {
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "appregistryconstructappregistryapplicationAC1A319B",
+              "ApplicationTagValue"
+            ]
+          }
         },
         "Type": "String",
         "Value": {
@@ -1734,6 +1874,14 @@
             ]
           ]
         },
+        "Tags": {
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "appregistryconstructappregistryapplicationAC1A319B",
+              "ApplicationTagValue"
+            ]
+          }
+        },
         "Type": "String",
         "Value": "https://metrics.awssolutionsbuilder.com/generic"
       },
@@ -1767,6 +1915,14 @@
             ]
           ]
         },
+        "Tags": {
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "appregistryconstructappregistryapplicationAC1A319B",
+              "ApplicationTagValue"
+            ]
+          }
+        },
         "Type": "String",
         "Value": {
           "Fn::GetAtt": [
@@ -1794,6 +1950,14 @@
               "/config/vpc/name"
             ]
           ]
+        },
+        "Tags": {
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "appregistryconstructappregistryapplicationAC1A319B",
+              "ApplicationTagValue"
+            ]
+          }
         },
         "Type": "String",
         "Value": {
@@ -1862,6 +2026,14 @@
               }
             ]
           ]
+        },
+        "Tags": {
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "appregistryconstructappregistryapplicationAC1A319B",
+              "ApplicationTagValue"
+            ]
+          }
         },
         "Type": "String",
         "Value": {

@@ -1,9 +1,9 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-export * from "./service/router";
-export * from "./api/acdp-build-api";
+export * from "./router";
+export * from "./api";
 export * from "./actions";
-export * from "./service/acdp-build-service";
+export * from "./service";
 export * from "./modules";
 export { acdpPlugin as default } from "./plugin";

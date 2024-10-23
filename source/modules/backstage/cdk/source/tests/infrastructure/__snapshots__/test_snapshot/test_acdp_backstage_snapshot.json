@@ -1,5 +1,17 @@
 {
   "Conditions": {
+    "acdpbackstagecognitouserconstructshouldcreatecognitodefaultusercondition5E568285": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "DefaultUserEmail"
+            },
+            ""
+          ]
+        }
+      ]
+    },
     "shouldcreateroute53recordscondition": {
       "Fn::Not": [
         {
@@ -109,6 +121,13 @@
       "Description": "Optional when using a Public Hosted Zone with Route53. Required when HostedZoneId is Private or not provided. Provide a custom ACM Certificate ARN to use for TLS.",
       "Type": "String"
     },
+    "DefaultUserEmail": {
+      "AllowedPattern": "(^$)|^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$",
+      "ConstraintDescription": "User E-Mail must be a valid E-Mail address",
+      "Default": "",
+      "Description": "The user to create default user for cognito",
+      "Type": "String"
+    },
     "FullyQualifiedDomainName": {
       "AllowedPattern": "^([A-Za-z0-9][A-Za-z0-9-]*\\.)+[A-Za-z]+$",
       "ConstraintDescription": "Fully Qualified Domain Name must be a valid domain name",
@@ -186,6 +205,15 @@
         },
         "StorageEncrypted": true,
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "backstageappregistryappregistryapplication76DC0D11",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -289,6 +317,12 @@
                 "/config/deployment-uuid}}"
               ]
             ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "backstageappregistryappregistryapplication76DC0D11",
+              "ApplicationTagValue"
+            ]
           }
         }
       },
@@ -328,6 +362,15 @@
           }
         ],
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "backstageappregistryappregistryapplication76DC0D11",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -383,6 +426,15 @@
           ]
         },
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "backstageappregistryappregistryapplication76DC0D11",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -480,6 +532,15 @@
       "Properties": {
         "GroupDescription": "backstage/acdp-backstage/aurora-database-construct/database-security-group",
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "backstageappregistryappregistryapplication76DC0D11",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -627,6 +688,15 @@
         ],
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "backstageappregistryappregistryapplication76DC0D11",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::Join": [
@@ -679,6 +749,15 @@
         },
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "backstageappregistryappregistryapplication76DC0D11",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::Join": [
@@ -712,6 +791,15 @@
         },
         "RetentionInDays": 90,
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "backstageappregistryappregistryapplication76DC0D11",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -777,6 +865,15 @@
         },
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "backstageappregistryappregistryapplication76DC0D11",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::Join": [
@@ -808,6 +905,15 @@
           }
         ],
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "backstageappregistryappregistryapplication76DC0D11",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -841,6 +947,15 @@
           }
         ],
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "backstageappregistryappregistryapplication76DC0D11",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -1017,6 +1132,15 @@
         },
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "backstageappregistryappregistryapplication76DC0D11",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::Join": [
@@ -1052,7 +1176,7 @@
               },
               {
                 "Name": "SOLUTION_VERSION",
-                "Value": "v1.2.2"
+                "Value": "v2.0.0"
               },
               {
                 "Name": "WEB_HOSTNAME",
@@ -1621,7 +1745,7 @@
                       },
                       ":ssm:us-west-2:test-account-id:parameter",
                       {
-                        "Ref": "moduleinputsconstructssmacdpbuildssmprefix22C8087D"
+                        "Ref": "moduleinputsconstructssmacdpbuildconfigssmprefixF424F2F4"
                       }
                     ]
                   ]
@@ -1686,6 +1810,15 @@
         ],
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "backstageappregistryappregistryapplication76DC0D11",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::Join": [
@@ -1740,6 +1873,12 @@
                 "/config/deployment-uuid}}"
               ]
             ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "backstageappregistryappregistryapplication76DC0D11",
+              "ApplicationTagValue"
+            ]
           }
         },
         "Type": "String",
@@ -1776,6 +1915,12 @@
                 },
                 "/config/deployment-uuid}}"
               ]
+            ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "backstageappregistryappregistryapplication76DC0D11",
+              "ApplicationTagValue"
             ]
           }
         },
@@ -2040,6 +2185,43 @@
               "Version": "2012-10-17"
             },
             "PolicyName": "codebuild-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "servicecatalog:GetApplication",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":servicecatalog:us-west-2:test-account-id:/applications/*"
+                      ]
+                    ]
+                  }
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "servicecatalog-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "ce:GetCostAndUsage",
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "costexplorer-policy"
           }
         ],
         "RoleName": {
@@ -2054,6 +2236,15 @@
           ]
         },
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "backstageappregistryappregistryapplication76DC0D11",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -2648,7 +2839,7 @@
                     },
                     ":ssm:us-west-2:test-account-id:parameter",
                     {
-                      "Ref": "moduleinputsconstructssmacdpbuildssmprefix22C8087D"
+                      "Ref": "moduleinputsconstructssmacdpbuildconfigssmprefixF424F2F4"
                     }
                   ]
                 ]
@@ -2743,6 +2934,15 @@
         ],
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "backstageappregistryappregistryapplication76DC0D11",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::Join": [
@@ -2773,6 +2973,56 @@
       },
       "Type": "AWS::EC2::SecurityGroup"
     },
+    "acdpbackstagecognitouserconstructuserpooluser22A8E947": {
+      "Condition": "acdpbackstagecognitouserconstructshouldcreatecognitodefaultusercondition5E568285",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "DesiredDeliveryMediums": [
+          "EMAIL"
+        ],
+        "ForceAliasCreation": true,
+        "UserAttributes": [
+          {
+            "Name": "email",
+            "Value": {
+              "Ref": "DefaultUserEmail"
+            }
+          },
+          {
+            "Name": "email_verified",
+            "Value": "True"
+          }
+        ],
+        "UserPoolId": {
+          "Fn::Join": [
+            "",
+            [
+              "{{resolve:ssm:/solution/auth/",
+              {
+                "Ref": "IdentityProviderId"
+              },
+              "/user-pool/id}}"
+            ]
+          ]
+        },
+        "Username": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::Split": [
+                "@",
+                {
+                  "Ref": "DefaultUserEmail"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "Type": "AWS::Cognito::UserPoolUser"
+    },
     "acdpbackstageloadbalancerconstructalbaccesslogsbucket46F5BBD7": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
@@ -2795,6 +3045,15 @@
           "RestrictPublicBuckets": true
         },
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "backstageappregistryappregistryapplication76DC0D11",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -3017,6 +3276,15 @@
         ],
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "backstageappregistryappregistryapplication76DC0D11",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::Join": [
@@ -3081,6 +3349,15 @@
         "Port": 443,
         "Protocol": "HTTP",
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "backstageappregistryappregistryapplication76DC0D11",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -3155,6 +3432,15 @@
           }
         ],
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "backstageappregistryappregistryapplication76DC0D11",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -3251,7 +3537,71 @@
       },
       "Type": "AWS::Route53::RecordSet"
     },
-    "moduleinputsconstructssmacdpbuildssmprefix22C8087D": {
+    "backstageappregistryappregistryapplication76DC0D11": {
+      "Properties": {
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-us-west-2-test-account-id"
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::Application"
+    },
+    "backstageappregistryappregistryapplicationattributeassociation8E3E14B0": {
+      "Properties": {
+        "Application": {
+          "Fn::GetAtt": [
+            "backstageappregistryappregistryapplication76DC0D11",
+            "Id"
+          ]
+        },
+        "AttributeGroup": {
+          "Fn::GetAtt": [
+            "backstageappregistrydefaultapplicationattributes08B65766",
+            "Id"
+          ]
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroupAssociation"
+    },
+    "backstageappregistrydefaultapplicationattributes08B65766": {
+      "Properties": {
+        "Attributes": {
+          "ApplicationType": "test-application-type",
+          "SolutionID": "test-solution-id",
+          "SolutionName": "test-solution-name",
+          "Version": "test-solution-version"
+        },
+        "Description": "Attribute group for solution information",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-us-west-2-test-account-id"
+            ]
+          ]
+        },
+        "Tags": {
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "backstageappregistryappregistryapplication76DC0D11",
+              "ApplicationTagValue"
+            ]
+          }
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroup"
+    },
+    "moduleinputsconstructssmacdpbuildconfigssmprefixF424F2F4": {
       "Properties": {
         "Description": "Description for acdp build config path root parameter",
         "Name": {
@@ -3262,9 +3612,17 @@
               {
                 "Ref": "AcdpUniqueId"
               },
-              "/acdp-build/build-parameters"
+              "/acdp-build/build-config-ssm-prefix"
             ]
           ]
+        },
+        "Tags": {
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "backstageappregistryappregistryapplication76DC0D11",
+              "ApplicationTagValue"
+            ]
+          }
         },
         "Type": "String",
         "Value": {
@@ -3296,6 +3654,14 @@
               "/test-module-short-name"
             ]
           ]
+        },
+        "Tags": {
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "backstageappregistryappregistryapplication76DC0D11",
+              "ApplicationTagValue"
+            ]
+          }
         },
         "Type": "String",
         "Value": {

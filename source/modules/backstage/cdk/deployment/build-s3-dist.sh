@@ -8,6 +8,7 @@ deployment_dir="$root_dir/deployment"
 staging_dist_dir="$deployment_dir/staging"
 template_dist_dir="$deployment_dir/global-s3-assets"
 build_dist_dir="$deployment_dir/regional-s3-assets"
+lambda_zip_output_path="$root_dir/dist/lambda"
 
 printf "%b[VirtualEnv] Activating venv found in %s\n%b" "${GREEN}" "${root_dir}" "${NC}"
 source "$root_dir/.venv/bin/activate"
@@ -16,6 +17,7 @@ printf "%b[Init] Remove old dist files from previous runs\n%b" "${GREEN}" "${NC}
 rm -rf "$template_dist_dir"
 rm -rf "$build_dist_dir"
 rm -rf "$staging_dist_dir"
+rm -rf "$lambda_zip_output_path"
 
 mkdir -p "$template_dist_dir"
 mkdir -p "$build_dist_dir"

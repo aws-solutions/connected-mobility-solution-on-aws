@@ -97,6 +97,10 @@ catalog:
           frequency:
             minutes: ${LOCAL_ASSET_BUCKET_DISCOVERY_REFRESH_FREQ}
           timeout: { minutes: 3 }
-
+  locations:
+    - type: url
+      target: "https://github.com/aws-solutions/connected-mobility-solution-on-aws-public-assets/blob/release/v1/backstage-assets/all.yaml"
+      rules:
+        - allow: [Location, PartnerOffering]
   rules:
-    - allow: [Component, System, API, Group, User, Resource, Location, Template]
+    - allow: [Component, System, API, Group, User, Resource, Location, Template, PartnerOffering]

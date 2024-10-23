@@ -1,17 +1,14 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import {
-  IdentityApi,
-  ConfigApi,
-  createApiRef,
-} from "@backstage/core-plugin-api";
-import { ResponseError } from "@backstage/errors";
+import { createApiRef } from "@backstage/core-plugin-api";
 import {
   AcdpBuildAction,
   AcdpBuildProject,
   AcdpBuildProjectBuild,
 } from "backstage-plugin-acdp-common";
+
+import { AcdpBaseApi, AcdpBaseApiInput } from "./AcdpBaseApi";
 
 export const acdpBuildApiRef = createApiRef<AcdpBuildApi>({
   id: "plugin.acdpbuild.service",
@@ -22,16 +19,9 @@ export interface StartBuildInput {
   action: AcdpBuildAction;
 }
 
-export class AcdpBuildApi {
-  private readonly configApi: ConfigApi;
-  private readonly identityApi: IdentityApi;
-
-  public constructor(options: {
-    configApi: ConfigApi;
-    identityApi: IdentityApi;
-  }) {
-    this.configApi = options.configApi;
-    this.identityApi = options.identityApi;
+export class AcdpBuildApi extends AcdpBaseApi {
+  public constructor(options: AcdpBaseApiInput) {
+    super(options);
   }
 
   async getProject({
@@ -44,7 +34,7 @@ export class AcdpBuildApi {
     });
     const urlSegment = `/project?${searchParams}`;
 
-    return await this.fetch<AcdpBuildProject>(urlSegment);
+    return await this._fetch<AcdpBuildProject>(urlSegment);
   }
 
   async listBuilds({
@@ -57,45 +47,14 @@ export class AcdpBuildApi {
     });
     const urlSegment = `/builds?${searchParams}`;
 
-    return await this.fetch<AcdpBuildProjectBuild[]>(urlSegment);
+    return await this._fetch<AcdpBuildProjectBuild[]>(urlSegment);
   }
 
   async startBuild(input: StartBuildInput): Promise<AcdpBuildProjectBuild> {
-    return await this.fetch<AcdpBuildProjectBuild>("/startBuild", {
+    return await this._fetch<AcdpBuildProjectBuild>("/start-build", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(input),
-    });
-  }
-
-  private async fetch<T = any>(input: string, init?: RequestInit): Promise<T> {
-    const baseUrl = `${this.configApi.getString(
-      "backend.baseUrl",
-    )}/api/acdp-backend`;
-
-    const { token: idToken } = await this.identityApi.getCredentials();
-
-    const headers: HeadersInit = new Headers(init?.headers);
-    if (idToken && !headers.has("authorization")) {
-      headers.set("authorization", `Bearer ${idToken}`);
-    }
-
-    const request = new Request(`${baseUrl}${input}`, {
-      ...init,
-      headers,
-    });
-
-    return fetch(request).then(async (response) => {
-      if (!response.ok) {
-        throw await ResponseError.fromResponse(response);
-      }
-
-      const text = await response.text();
-      if (text != undefined && text.length > 0) {
-        return JSON.parse(text);
-      } else {
-        return undefined;
-      }
     });
   }
 }

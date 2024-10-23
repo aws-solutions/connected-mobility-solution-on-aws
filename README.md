@@ -32,8 +32,9 @@ navigate to the [AWS Solution Page](https://aws.amazon.com/solutions/implementat
       - [AWS CLI](#aws-cli)
       - [AWS CDK Toolkit](#aws-cdk-toolkit)
       - [Verify Required Tool Installations](#verify-required-tool-installations)
+    - [Manual Steps](#manual-steps)
+      - [Create an Amazon Route 53 Hosted Zone](#create-an-amazon-route-53-hosted-zone)
     - [Install Solution Dependencies](#install-solution-dependencies)
-    - [Create an Amazon Route 53 Hosted Zone](#create-an-amazon-route-53-hosted-zone)
     - [Setup Environment Variables](#setup-environment-variables)
   - [Deploy](#deploy)
     - [Prerequisites](#prerequisites)
@@ -104,7 +105,7 @@ For detailed information visit the modules' README
 - [Connect & Store](./source/modules/cms_connect_store/README.md)
 - [Config](./source/modules/cms_config/README.md)
 - [EV Battery Health](./source/modules/cms_ev_battery_health/README.md)
-- [Fleetwise Connector](./source/modules/cms_fleetwise_connector/README.md)
+- [FleetWise Connector](./source/modules/cms_fleetwise_connector/README.md)
 - [Provisioning](./source/modules/cms_provisioning/README.md)
 - [Vehicle Simulator](./source/modules/cms_vehicle_simulator/README.md)
 - [VPC](./source/modules/vpc/README.md)
@@ -148,7 +149,7 @@ For tools not listed here, stable versions should work appropriately.
 
 | Dependency | Version  |
 |------------|----------|
-| [NodeJS](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)   | 18.17.*    |
+| [NodeJS](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)   | 18.20.*    |
 | [Python](https://www.python.org)                                              | 3.12.*     |
 
 ### Install Required Tools (OSX/Linux)
@@ -251,6 +252,25 @@ any errors are displayed, attempt to reinstall that tool.
 make verify-required-tools
 ```
 
+### Manual Steps
+
+Some of the modules may need certain manual steps. Here is the list of modules which requires manual steps.
+Please refer to module READMEs for instructions.
+
+- [ACDP](#create-an-amazon-route-53-hosted-zone)
+- [CMS EV Battery Health](./source/modules/cms_ev_battery_health/README.md/#manual-steps)
+- [CMS Predictive Maintenance](./source/modules/cms_predictive_maintenance/README.md/#manual-steps)
+
+#### Create an Amazon Route 53 Hosted Zone
+
+To deploy ACDP, either an Amazon Route53 Hosted Zone or external DNS provider is required to be setup in your account.
+When using Route53, you can either use a Public or Private Hosted Zone, but if you use private,
+you must manually configure a TLS Certificate in ACM.
+You will provide the Route53 Hosted Zone ID and a fully qualified domain name for this
+deployment in the following step when you setup your environment variables.
+Creating a hosted zone is a manual step. For more details, see
+[Working with hosted zones](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-working-with.html).
+
 ### Install Solution Dependencies
 
 Now that you have the correct tools, you can install the dependencies used by the solution using `make install`.
@@ -259,16 +279,6 @@ After installing, activate the environment which contains the dependencies.
 ```bash
 make install
 ```
-
-### Create an Amazon Route 53 Hosted Zone
-
-To deploy the solution, either an Amazon Route53 Hosted Zone or external DNS provider is required to be setup in your account.
-When using Route53, you can either use a Public or Private Hosted Zone, but if you use private,
-you must manually configure a TLS Certificate in ACM.
-You will provide the Route53 Hosted Zone ID and a fully qualified domain name for this
-deployment in the following step when you setup your environment variables.
-Creating a hosted zone is a manual step. For more details, see
-[Working with hosted zones](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-working-with.html).
 
 ### Setup Environment Variables
 

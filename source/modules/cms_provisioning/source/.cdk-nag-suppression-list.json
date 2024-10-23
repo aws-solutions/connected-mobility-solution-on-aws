@@ -170,37 +170,5 @@
                 "reason": "Wildcard permissions are required by the log retention lambda."
             }
         ]
-    },
-    "/cms-provisioning/cms-provisioning/pre-provisioning-construct/lambda-function/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
-            }
-        ]
-    },
-    "/cms-provisioning/cms-provisioning/iot-credentials-construct/rotate-secret-lambda-function/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
-            }
-        ]
-    },
-    "/cms-provisioning/cms-provisioning/post-provisioning-construct/lambda-function/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
-            }
-        ]
-    },
-    "/cms-provisioning/cms-provisioning/initial-connection-construct/lambda-function/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
-            }
-        ]
     }
 }

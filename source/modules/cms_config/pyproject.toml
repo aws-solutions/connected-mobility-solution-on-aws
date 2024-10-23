@@ -11,7 +11,7 @@ omit = [
     "**/tests/*",
     "source/app.py",
     "**/*_dependency_layer/**/*",
-    "conftest.py",
+    "source/conftest.py",
 ]
 
 [tool.isort]

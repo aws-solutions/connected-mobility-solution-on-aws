@@ -99,5 +99,5 @@ spec:
         value: UNSET
       - name: APP_UNIQUE_ID
         value: ${{ parameters.appUniqueId }}
-      - name: USER_EMAIL
+      - name: DEFAULT_USER_EMAIL
         value: ${{ parameters.userEmail }}

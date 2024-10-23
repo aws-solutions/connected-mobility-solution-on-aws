@@ -2,14 +2,15 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from "react";
+import { formatDistanceStrict } from "date-fns";
+
 import { Link } from "@material-ui/core";
 
 import { Table, TableColumn } from "@backstage/core-components";
 
-import { formatDistanceStrict } from "date-fns";
-
-import { BuildStatus } from "../BuildStatus";
 import { AcdpBuildProjectBuild } from "backstage-plugin-acdp-common";
+
+import { BuildStatus } from "./BuildStatus";
 
 interface BuildHistoryTableProps {
   region: string;

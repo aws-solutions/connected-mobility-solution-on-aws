@@ -9,9 +9,7 @@ from constructs import Construct
 # CMS Common Library
 from cms_common.config.resource_names import ResourceName, ResourcePrefix
 from cms_common.config.stack_inputs import SolutionConfigInputs
-
-# Connected Mobility Solution on AWS
-from ..lib.policy_generators import generate_kms_policy_statement
+from cms_common.policy_generators.kms import generate_kms_policy_statement_from_key_id
 
 
 class IoTCoreToS3JsonConstruct(Construct):
@@ -49,7 +47,7 @@ class IoTCoreToS3JsonConstruct(Construct):
                                 root_s3_bucket.bucket_arn + "/*",
                             ],
                         ),
-                        generate_kms_policy_statement(
+                        generate_kms_policy_statement_from_key_id(
                             self,
                             kms_encryption_key_id=root_s3_bucket.encryption_key.key_id,  # type: ignore[union-attr]
                             allow_encrypt=True,

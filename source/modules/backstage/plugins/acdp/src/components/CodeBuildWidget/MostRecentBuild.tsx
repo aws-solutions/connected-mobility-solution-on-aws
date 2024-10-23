@@ -2,20 +2,26 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from "react";
-import { Box, Grid, Link } from "@material-ui/core";
-
 import { formatDistanceStrict } from "date-fns";
 
-import { AboutField } from "../AboutField";
-import { BuildStatus } from "../BuildStatus";
+import { Box, Grid, Link } from "@material-ui/core";
 
-import { parseCodeBuildArn } from "../../utils";
 import {
   AcdpBuildProject,
   AcdpBuildProjectBuild,
 } from "backstage-plugin-acdp-common";
 
-const projectMostRecentBuildStatus = (builds: AcdpBuildProjectBuild[]) => {
+import { parseCodeBuildArn } from "../../utils";
+import { AboutField } from "./AboutField";
+import { BuildStatus } from "./BuildStatus";
+
+interface ProjectMostRecentBuildProps {
+  builds: AcdpBuildProjectBuild[];
+}
+
+const ProjectMostRecentBuildStatus = ({
+  builds,
+}: ProjectMostRecentBuildProps) => {
   return builds.length > 0 ? (
     <BuildStatus status={builds[0].buildStatus} />
   ) : (
@@ -23,14 +29,18 @@ const projectMostRecentBuildStatus = (builds: AcdpBuildProjectBuild[]) => {
   );
 };
 
-const projectMostRecentBuildExecuted = (builds: AcdpBuildProjectBuild[]) => {
+const ProjectMostRecentBuildExecuted = ({
+  builds,
+}: ProjectMostRecentBuildProps) => {
   const build = builds.find((b) => b.startTime);
   return build
     ? `${formatDistanceStrict(new Date(build.startTime!), new Date())} ago`
     : "";
 };
 
-const projectMostRecentBuildDuration = (builds: AcdpBuildProjectBuild[]) => {
+const ProjectMostRecentBuildDuration = ({
+  builds,
+}: ProjectMostRecentBuildProps) => {
   const build = builds.find((b) => b.startTime && b.endTime);
   return build
     ? formatDistanceStrict(new Date(build.startTime!), new Date(build.endTime!))
@@ -61,13 +71,13 @@ export const MostRecentBuild = (props: MostRecentBuildProps) => {
           label="Most recent build"
           gridSizes={{ xs: 12, sm: 6, lg: 4 }}
         >
-          {projectMostRecentBuildStatus(builds)}
+          <ProjectMostRecentBuildStatus builds={builds} />
         </AboutField>
         <AboutField label="Last executed" gridSizes={{ xs: 12, sm: 6, lg: 4 }}>
-          {projectMostRecentBuildExecuted(builds)}
+          <ProjectMostRecentBuildExecuted builds={builds} />
         </AboutField>
         <AboutField label="Duration" gridSizes={{ xs: 12, sm: 6, lg: 4 }}>
-          {projectMostRecentBuildDuration(builds)}
+          <ProjectMostRecentBuildDuration builds={builds} />
         </AboutField>
       </Grid>
     </Box>

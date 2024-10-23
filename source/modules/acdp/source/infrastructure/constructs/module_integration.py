@@ -15,12 +15,10 @@ from constructs import Construct
 # CMS Common Library
 from cms_common.config.regex import RegexPattern
 from cms_common.config.resource_names import ResourceName, ResourcePrefix
+from cms_common.constructs.cmk_encrypted_s3 import CMKEncryptedS3Construct
 from cms_common.constructs.identity_provider_config import IdentityProviderConfig
 from cms_common.constructs.vpc_construct import create_vpc_config
 from cms_common.resource_names.module_short_names import CMSModuleShortNames
-
-# Connected Mobility Solution on AWS
-from .cmk_encrypted_s3 import CMKEncryptedS3Construct
 
 MINUTES_IN_A_DAY = 1440
 
@@ -105,6 +103,16 @@ class ModuleInputsConstruct(Construct):
             module_name=CMSModuleShortNames.CONFIG,
             leading_slash=True,
         )
+
+        self.default_user_email = CfnParameter(
+            Stack.of(self),
+            "DefaultUserEmail",
+            type="String",
+            description="The user E-Mail to access backstage UI",
+            allowed_pattern=RegexPattern.OPTIONAL_EMAIL,
+            default="",
+            constraint_description="User E-Mail must be a valid E-Mail address",
+        ).value_as_string
 
         # Backstage Domain Inputs
         # Rather than creating SSM parameters in ModuleOutputsConstruct similar to other config,

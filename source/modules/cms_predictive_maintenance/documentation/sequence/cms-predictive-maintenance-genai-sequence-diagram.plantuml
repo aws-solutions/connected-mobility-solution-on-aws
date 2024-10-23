@@ -1,0 +1,65 @@
+@startuml cms-predictive-maintenance-genai-sequence-diagram
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/MachineLearning/SageMaker.puml
+!include AWSPuml/Storage/SimpleStorageService.puml
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/MachineLearning/Bedrock.puml
+
+!define GREEN #3F8624
+!define YELLOW #D86613
+!define RED #E3242B
+!define PINK #CF2465
+!define TEAL #008080
+!define ORANGE #f37b05
+
+'Comment out to use default PlantUML sequence formatting
+skinparam participant {
+    BackgroundColor AWS_BG_COLOR
+    BorderColor AWS_BORDER_COLOR
+}
+skinparam sequence {
+    ArrowThickness 2
+    LifeLineBorderColor AWS_COLOR
+    LifeLineBackgroundColor AWS_BORDER_COLOR
+    BoxBorderColor AWS_COLOR
+}
+
+actor User as user
+box CMS Predictive Maintenance Usage - GenAI Agent
+participant "$BedrockIMG()\nBedrock\n Agent" as bedrock_agent << Bedrock >>
+participant "$BedrockIMG()\nBedrock\n Knowledge Base" as bedrock_kb << Bedrock >>
+participant "$LambdaIMG()\nAgent Action\n Group Lambda" as lambda << Lambda >>
+participant "$SimpleStorageServiceIMG()\nRAG\n Bucket" as s3_rag << S3 >>
+participant "$SimpleStorageServiceIMG()\nSagemaker Assets\n Bucket" as s3_assets << S3 >>
+endbox
+
+user -> s3_rag++ GREEN: Upload documents such as maintenance catalogs and repair guides that are to be indexed as part of a Bedrock Knowledge Base.
+user <- s3_rag
+deactivate s3_rag
+
+|||
+
+user -> bedrock_agent++ TEAL: Ask a question such as "What is the part number that needs to be replaced for a brake pad replacement fault?".
+bedrock_agent -> bedrock_kb++ TEAL: Query the knowledge base.
+bedrock_agent <- bedrock_kb
+deactivate bedrock_kb
+user <- bedrock_agent: Return the response
+deactivate bedrock_agent
+
+|||
+
+user -> bedrock_agent++ TEAL: Ask a question such as "Does the vehicle with VIN VIN01234 need maintenance?".
+bedrock_agent -> lambda++ ORANGE: Invoke the agent action group lambda function.
+lambda -> s3_assets++ GREEN: Read the results of batch inference and determine if vehicle with the given VIN needs maintenance.
+lambda <- s3_assets
+deactivate s3_assets
+bedrock_agent <- lambda: Return whether the vehicle needs maintenance.
+deactivate lambda
+user <- bedrock_agent: Return the response
+deactivate bedrock_agent
+
+@enduml

@@ -77,22 +77,6 @@
             }
         ]
     },
-    "/cms-fleetwise-connector/cms-fleetwise-connector/fleetwise-timestream-to-s3/timestream-unload-to-s3-lambda/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Active choice to use specific runtime."
-            }
-        ]
-    },
-    "/cms-fleetwise-connector/cms-fleetwise-connector/fleetwise-timestream-to-s3/timestream-query-vins-lambda/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Active choice to use specific runtime."
-            }
-        ]
-    },
     "/cms-fleetwise-connector/cms-fleetwise-connector/fleetwise-timestream-to-s3/state-machine-role/Resource": {
         "rules_to_suppress": [
             {
@@ -102,6 +86,14 @@
                     "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:*"
                 ],
                 "reason": "Log group unknown at deploy time"
+            }
+        ]
+    },
+    "/cms-fleetwise-connector/AWS679f53fac002430cb0da5b7982bd2287/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Lambda created by CDK constructs cannot use a different runtime"
             }
         ]
     },
@@ -149,14 +141,6 @@
                     "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*"
                 ],
                 "reason": "Timestream endpoint and cloudwatch log resources must be a wildcard"
-            }
-        ]
-    },
-    "/cms-fleetwise-connector/cms-fleetwise-connector/fleetwise-timestream-to-s3/time-range-handler-lambda/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Lambda runtime would be upgraded in next release in all modules"
             }
         ]
     },

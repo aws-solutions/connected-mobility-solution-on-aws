@@ -37,9 +37,6 @@ include ${SOLUTION_PATH}/makefiles/common_config.mk
 include ${SOLUTION_PATH}/makefiles/global_targets.mk
 include ${SOLUTION_PATH}/makefiles/module_targets.mk
 
-## ========================================================
-## BUILD AND DEPLOY
-## ========================================================
 
 .PHONY: install
 install: pipenv-install cdk-solution-helper-install ## Installs the resources and dependencies required to build the solution.
@@ -59,6 +56,7 @@ deploy: verify-environment ## Deploy the stack for the module.
 			"AcdpUniqueId"="${ACDP_UNIQUE_ID}" \
 			"VpcName"="${VPC_NAME}" \
 			"IdentityProviderId"="${IDENTITY_PROVIDER_ID}" \
+			"DefaultUserEmail"="${DEFAULT_USER_EMAIL}" \
 			"UseBackstageAuthRedirectFlow"="${USE_BACKSTAGE_AUTH_REDIRECT_FLOW}" \
 			"BackstageAdditionalScopes"="${BACKSTAGE_ADDITIONAL_SCOPES}" \
 			"FullyQualifiedDomainName"="${FULLY_QUALIFIED_DOMAIN_NAME}" \
@@ -71,17 +69,16 @@ deploy: verify-environment ## Deploy the stack for the module.
 			"BackstageLocalAssetDiscoveryRefreshMins"="${BACKSTAGE_S3_DISCOVERY_REFRESH_MINS}" \
 
 
-.PHONY: destroy-ecr
-destroy-ecr: ## Destroy the ECR images since CloudFormation cannot.
-	@printf "%bDelete the ECR repository.%b\n" "${MAGENTA}" "${NC}"
-	aws ecr delete-repository --repository-name "${ACDP_UNIQUE_ID}-backstage" --force || true
+.PHONY: destroy-backstage
+destroy-backstage: ## Delete the backstage stack and ecr repository
+	@printf "%bCalling Backstage destroy target.%b\n" "${MAGENTA}" "${NC}"
+	@cd ../backstage && make destroy
+	@cd ../acdp
+	@printf "%bBackstage destroy finished.%b\n" "${MAGENTA}" "${NC}"
 
 .PHONY: destroy
-destroy: destroy-ecr destroy-stack ## Delete the stack for the module.
-	@printf "%bDelete the module deployment.%b\n" "${MAGENTA}" "${NC}"
-	aws ecr delete-repository --repository-name "${ACDP_UNIQUE_ID}-backstage" --force || true
-	aws cloudformation delete-stack \
-		--stack-name ${STACK_NAME} \
+destroy: destroy-backstage destroy-stack ## Delete the stack for the module.
+	@printf "%bDestroy finished.%b\n" "${GREEN}" "${NC}"
 
 ## ========================================================
 ## UTILITY

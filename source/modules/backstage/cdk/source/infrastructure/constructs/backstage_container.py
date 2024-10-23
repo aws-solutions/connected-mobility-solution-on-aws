@@ -204,6 +204,31 @@ class BackstageContainerConstruct(Construct):
                         ),
                     ]
                 ),
+                "servicecatalog-policy": aws_iam.PolicyDocument(
+                    statements=[
+                        aws_iam.PolicyStatement(
+                            effect=aws_iam.Effect.ALLOW,
+                            actions=["servicecatalog:GetApplication"],
+                            resources=[
+                                Stack.of(self).format_arn(
+                                    service="servicecatalog",
+                                    resource="",
+                                    resource_name="applications/*",
+                                    arn_format=ArnFormat.SLASH_RESOURCE_NAME,
+                                ),
+                            ],
+                        ),
+                    ]
+                ),
+                "costexplorer-policy": aws_iam.PolicyDocument(
+                    statements=[
+                        aws_iam.PolicyStatement(
+                            effect=aws_iam.Effect.ALLOW,
+                            actions=["ce:GetCostAndUsage"],
+                            resources=["*"],
+                        ),
+                    ]
+                ),
             },
         )
 

@@ -68,6 +68,7 @@ deploy: ## Deploy the stack for the module.
 		--parameter-overrides \
 			"AcdpUniqueId"="${ACDP_UNIQUE_ID}" \
 			"VpcName"="${VPC_NAME}" \
+			"DefaultUserEmail"="${DEFAULT_USER_EMAIL}" \
 			"IdentityProviderId"="${IDENTITY_PROVIDER_ID}" \
 			"Route53HostedZoneId"="${ROUTE53_HOSTED_ZONE_ID}" \
 			"FullyQualifiedDomainName"="${FULLY_QUALIFIED_DOMAIN_NAME}" \

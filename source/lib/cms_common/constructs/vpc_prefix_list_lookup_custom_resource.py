@@ -129,18 +129,6 @@ class VpcPrefixListLookupCustomResourceConstruct(Construct):
             "SecurityGroup"
         ).node.default_child
         NagSuppression.add_inline_suppression(
-            lambda_function,
-            suppression={
-                "rules_to_suppress": [
-                    {
-                        "id": "AwsSolutions-L1",
-                        "reason": "Log retention lambda uses policies that require wildcard permissions",
-                    },
-                ]
-            },
-            nag_type=NagType.CDK_NAG,
-        )
-        NagSuppression.add_inline_suppression(
             node=lambda_function,
             suppression={
                 "rules_to_suppress": [

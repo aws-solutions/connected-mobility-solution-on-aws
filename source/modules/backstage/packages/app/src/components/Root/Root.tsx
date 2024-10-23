@@ -2,14 +2,17 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { PropsWithChildren } from "react";
+
 import { makeStyles } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
 import ExtensionIcon from "@material-ui/icons/Extension";
 import CategoryIcon from "@material-ui/icons/Category";
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
+import ShoppingCart from "@material-ui/icons/ShoppingCart";
 import CreateComponentIcon from "@material-ui/icons/AddCircleOutline";
-import LogoFull from "./LogoFull";
-import LogoIcon from "./LogoIcon";
+import MenuIcon from "@material-ui/icons/Menu";
+import SearchIcon from "@material-ui/icons/Search";
+
 import {
   Settings as SidebarSettings,
   UserSettingsSignInAvatar,
@@ -26,8 +29,9 @@ import {
   useSidebarOpenState,
   Link,
 } from "@backstage/core-components";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
+
+import { LogoFull } from "./LogoFull";
+import { LogoIcon } from "./LogoIcon";
 
 const useSidebarLogoStyles = makeStyles({
   root: {
@@ -72,6 +76,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarItem icon={ExtensionIcon} to="api-docs" text="APIs" />
         <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
         <SidebarItem icon={CreateComponentIcon} to="create" text="Create..." />
+        <SidebarItem icon={ShoppingCart} to="partners" text="Partners..." />
         {/* End global nav */}
         <SidebarDivider />
       </SidebarGroup>

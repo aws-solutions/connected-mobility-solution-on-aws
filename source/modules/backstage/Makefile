@@ -24,9 +24,6 @@ include ${SOLUTION_PATH}/makefiles/common_config.mk
 include ${SOLUTION_PATH}/makefiles/global_targets.mk
 include ${SOLUTION_PATH}/makefiles/module_targets.mk
 
-## ========================================================
-## INSTALL
-## ========================================================
 .PHONY: yarn-install
 yarn-install: ## Using yarn, installs node dependencies for all modules.
 	@printf "%bInstalling node dependencies using yarn.%b\n" "${MAGENTA}" "${NC}"
@@ -37,19 +34,31 @@ install: pipenv-install yarn-install ## Installs the resources and dependencies 
 	@cd cdk; make install
 	@printf "%bInstall finished.%b\n" "${GREEN}" "${NC}"
 
-## ========================================================
-## BUILD AND DEPLOY
-## ========================================================
 .PHONY: deploy
 deploy: ## Deploy the stack for the module.
-	export ACDP_ASSET_BUCKET=$$(aws ssm get-parameter --name /solution/${ACDP_UNIQUE_ID}/config/acdp-asset-config/local/asset-bucket/name --with-decryption --query "Parameter.Value" --output text 2> /dev/null); \
-	export S3_PATH="s3://$${ACDP_ASSET_BUCKET}/${S3_ASSET_KEY_PREFIX}"; \
+	@printf "%bCopying ACDP assets to S3.\n%b" "${MAGENTA}" "${NC}"
+	@ACDP_ASSET_BUCKET=$$(aws ssm get-parameter --name /solution/${ACDP_UNIQUE_ID}/config/acdp-asset-config/local/asset-bucket/name --with-decryption --query "Parameter.Value" --output text 2> /dev/null); \
+	S3_PATH="s3://$${ACDP_ASSET_BUCKET}/${S3_ASSET_KEY_PREFIX}"; \
 	aws s3 cp --recursive ${MODULE_PATH}/deployment/regional-s3-assets/${MODULE_NAME}/ $${S3_PATH}; \
-	echo "Copied assets to $${S3_PATH}"
+	printf "%bCopied assets to %s\n%b" "${GREEN}" "$${S3_PATH}" "${NC}"
 
-	export ACDP_BACKSTAGE_PIPELINE_NAME=$$(aws ssm get-parameter --name /solution/${ACDP_UNIQUE_ID}/config/codepipeline-project/name --with-decryption --query "Parameter.Value" --output text 2> /dev/null); \
+	@printf "%bBeginning Backstage pipeline execution.\n%b" "${MAGENTA}" "${NC}"
+	@ACDP_BACKSTAGE_PIPELINE_NAME=$$(aws ssm get-parameter --name /solution/${ACDP_UNIQUE_ID}/config/codepipeline-project/name --with-decryption --query "Parameter.Value" --output text 2> /dev/null); \
 	aws codepipeline start-pipeline-execution --name $${ACDP_BACKSTAGE_PIPELINE_NAME}; \
-	echo "Started Pipeline: $${ACDP_BACKSTAGE_PIPELINE_NAME}"
+	printf "%bStarted Pipeline: %s\n%b" "${GREEN}" "$${ACDP_BACKSTAGE_PIPELINE_NAME}" "${NC}"
+
+.PHONY: destroy-ecr
+destroy-ecr: ## Destroy the ECR images since CloudFormation cannot.
+	@printf "%bDeleting the ECR repository.%b\n" "${MAGENTA}" "${NC}"
+	aws ecr delete-repository --repository-name "${ACDP_UNIQUE_ID}-backstage" --force || true
+	@printf "%bECR repository deleted.%b\n" "${GREEN}" "${NC}"
+
+.PHONY: destroy
+destroy: destroy-ecr ## Delete the backstage stack.
+	@printf "%bDeleting the backstage deployment.%b\n" "${MAGENTA}" "${NC}"
+	aws cloudformation delete-stack --stack-name "${ACDP_UNIQUE_ID}--acdp-backstage"
+	aws cloudformation wait stack-delete-complete --stack-name "${ACDP_UNIQUE_ID}--acdp-backstage" || true
+	@printf "%bDestroy finished.%b\n" "${GREEN}" "${NC}"
 
 ## ========================================================
 ## LOCAL UTILITY
@@ -81,7 +90,6 @@ run-postgres-local: ## Start a local instance of postgres for use with Backstage
 			echo "Error: Container 'backstage-local-db' is not running or does not exist after $$RETRIES attempts." &&	exit 1; \
 		fi; \
 	done
-
 
 .PHONY: stop-backstage-local
 stop-backstage-local:

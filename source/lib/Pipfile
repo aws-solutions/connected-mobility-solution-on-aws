@@ -32,6 +32,7 @@ types-setuptools = "*"
 types-urllib3 = "*"
 types-toml = "*"
 vistir = "==0.6.1" # Necessary for resolving a `vistir` version conflict with `pipenv-setup`
+urllib3 = ">=2.2.2"
 wheel = "*"
 wrapt = "*"
 

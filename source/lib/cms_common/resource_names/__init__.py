@@ -3,6 +3,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # Connected Mobility Solution on AWS
-from .auth import AuthResourceNames
+from .auth import AuthResourceNames, AuthSetupResourceNames
 from .config import ConfigResourceNames
 from .module_short_names import CMSModuleShortNames

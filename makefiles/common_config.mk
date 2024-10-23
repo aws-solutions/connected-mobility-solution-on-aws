@@ -15,7 +15,7 @@ export AWS_REGION ?= ${DEFAULTS.AWS_REGION}
 # ========================================================
 export SOLUTION_NAME ?= connected-mobility-solution-on-aws
 export SOLUTION_DESCRIPTION ?= Accelerate development and deployment of connected vehicle assets with purpose-built, deployment-ready accelerators, and an Automotive Cloud Developer Portal
-export SOLUTION_VERSION ?= v1.2.2
+export SOLUTION_VERSION ?= v2.0.0
 export SOLUTION_AUTHOR = AWS Industrial Solutions Team
 export SOLUTION_ID = SO0241
 # Path is relative to this file's location, moving this file requires updating this path.
@@ -41,6 +41,8 @@ export LANG = en_US.UTF-8
 # ========================================================
 export REGIONAL_ASSET_BUCKET_BASE_NAME ?= acdp-assets-${AWS_ACCOUNT_ID}
 export REGIONAL_ASSET_BUCKET_NAME ?= ${REGIONAL_ASSET_BUCKET_BASE_NAME}-${AWS_REGION}
+export REGIONAL_PUBLIC_ASSET_BUCKET_BASE_NAME ?= acdp-public-assets-${AWS_ACCOUNT_ID}
+export REGIONAL_PUBLIC_ASSET_BUCKET_NAME ?= ${REGIONAL_PUBLIC_ASSET_BUCKET_BASE_NAME}-${AWS_REGION}
 export GLOBAL_ASSET_BUCKET_NAME ?= ${REGIONAL_ASSET_BUCKET_NAME}
 export GLOBAL_ASSET_BUCKET_REGION = $(shell BUCKET=${GLOBAL_ASSET_BUCKET_NAME} ${SOLUTION_PATH}/deployment/determine-bucket-region.sh)
 export REGIONAL_ASSET_BUCKET_REGION = $(shell BUCKET=${REGIONAL_ASSET_BUCKET_NAME} ${SOLUTION_PATH}/deployment/determine-bucket-region.sh)

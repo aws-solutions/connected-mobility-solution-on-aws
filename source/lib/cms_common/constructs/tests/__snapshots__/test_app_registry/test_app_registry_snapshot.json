@@ -7,21 +7,6 @@
     }
   },
   "Resources": {
-    "appregistryapplicationstackassociation": {
-      "Properties": {
-        "Application": {
-          "Fn::GetAtt": [
-            "testappregistryappregistryapplication2A74C8E2",
-            "Id"
-          ]
-        },
-        "Resource": {
-          "Ref": "AWS::StackId"
-        },
-        "ResourceType": "CFN_STACK"
-      },
-      "Type": "AWS::ServiceCatalogAppRegistry::ResourceAssociation"
-    },
     "testappregistryappregistryapplication2A74C8E2": {
       "Properties": {
         "Name": {
@@ -82,6 +67,14 @@
               }
             ]
           ]
+        },
+        "Tags": {
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "testappregistryappregistryapplication2A74C8E2",
+              "ApplicationTagValue"
+            ]
+          }
         }
       },
       "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroup"

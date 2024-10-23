@@ -21,6 +21,7 @@ types-pyyaml = "*"
 types-python-dateutil = "*"
 types-requests = ">=2.32.0"
 types-setuptools = "*"
+urllib3 = ">=2.2.2"
 wheel = "*"
 
 [requires]

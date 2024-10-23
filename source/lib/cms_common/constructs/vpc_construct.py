@@ -45,6 +45,7 @@ def get_vpc_name(scope: Construct, app_unique_id: str) -> str:
 class VpcConfig:
     vpc_name: str
     vpc_id: str
+    vpc_cidr_block: str
     public_subnets: List[str]
     private_subnets: List[str]
     isolated_subnets: List[str]
@@ -58,6 +59,11 @@ def create_vpc_config(vpc_name: str) -> VpcConfig:
         vpc_id=resolve_ssm_parameter(
             parameter_name=ResourceName.slash_separated(
                 prefix=vpc_ssm_prefix, name="vpcid"
+            )
+        ),
+        vpc_cidr_block=resolve_ssm_parameter(
+            parameter_name=ResourceName.slash_separated(
+                prefix=vpc_ssm_prefix, name="cidr"
             )
         ),
         public_subnets=[
@@ -123,6 +129,7 @@ class UnsafeDynamicVpc(Construct):
         construct_id: str,
         vpc_id: str,
         vpc_name: str,
+        vpc_cidr_block: str,
         public_subnets: List[aws_ec2.ISubnet],
         private_subnets: List[aws_ec2.ISubnet],
         isolated_subnets: List[aws_ec2.ISubnet],
@@ -131,6 +138,7 @@ class UnsafeDynamicVpc(Construct):
         super().__init__(scope, construct_id)
         self._vpc_id = vpc_id
         self._vpc_name = vpc_name
+        self._vpc_cidr_block = vpc_cidr_block
         self._vpc_arn = Stack.of(self).format_arn(
             service="ec2", resource="vpc", resource_name=self.vpc_id
         )
@@ -163,6 +171,10 @@ class UnsafeDynamicVpc(Construct):
     @property
     def vpc_arn(self) -> str:
         return self._vpc_arn
+
+    @property
+    def vpc_cidr_block(self) -> str:
+        return self._vpc_cidr_block
 
     def select_subnets(self, selection: aws_ec2.SubnetSelection) -> Dict[str, Any]:
         ### As of now this function only supports selection of subnet by types
@@ -275,6 +287,7 @@ class VpcConstruct(Construct):
             "cms-vpc",
             vpc_id=vpc_config.vpc_id,
             vpc_name=vpc_config.vpc_name,
+            vpc_cidr_block=vpc_config.vpc_cidr_block,
             public_subnets=self.public_subnets,
             private_subnets=self.private_subnets,
             isolated_subnets=self.isolated_subnets,

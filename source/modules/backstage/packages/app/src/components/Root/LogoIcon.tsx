@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from "react";
+
 import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles({
@@ -14,7 +15,7 @@ const useStyles = makeStyles({
   },
 });
 
-const LogoIcon = () => {
+export const LogoIcon = () => {
   const classes = useStyles();
 
   return (
@@ -30,5 +31,3 @@ const LogoIcon = () => {
     </svg>
   );
 };
-
-export default LogoIcon;

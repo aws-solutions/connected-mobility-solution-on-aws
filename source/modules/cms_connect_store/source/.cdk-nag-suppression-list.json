@@ -40,14 +40,6 @@
             }
         ]
     },
-    "/cms-connect-store/connect-store/alerts-construct/lambda-function/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Lambda runtime would be upgraded in next release in all modules"
-            }
-        ]
-    },
     "/cms-connect-store/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": {
         "rules_to_suppress": [
             {

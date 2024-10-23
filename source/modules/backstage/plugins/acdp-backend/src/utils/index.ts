@@ -4,3 +4,4 @@
 export * from "./validators";
 export * from "./aws-s3-helper";
 export * from "./location-helper";
+export * from "./error-handling-helper";

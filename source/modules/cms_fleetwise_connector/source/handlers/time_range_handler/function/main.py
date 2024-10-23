@@ -10,6 +10,7 @@ from typing import Any, Dict, Optional
 # AWS Libraries
 import boto3
 from aws_lambda_powertools import Logger, Tracer
+from botocore.config import Config
 
 # Connected Mobility Solution on AWS
 from .request_type import RequestType
@@ -109,7 +110,12 @@ def set_last_unload_end_time(event: Dict[str, Any]) -> Dict[str, Any]:
     # Validate that the provided string is a valid timestream timestamp
     _timestream_iso_string_to_datetime(unload_end_time_str)
 
-    ssm = boto3.client("ssm")
+    ssm = boto3.client(
+        "ssm",
+        config=Config(
+            user_agent_extra=os.environ["USER_AGENT_STRING"],
+        ),
+    )
 
     ssm.put_parameter(
         Name=ConfigConstants.UNLOAD_END_TIME_PARAMETER_NAME,
@@ -148,7 +154,12 @@ def _timestamp_is_valid_format_for_timestream(timestamp_str: str | None) -> bool
 
 
 def _get_timestream_current_time() -> str:
-    timestream_client = boto3.client("timestream-query")
+    timestream_client = boto3.client(
+        "timestream-query",
+        config=Config(
+            user_agent_extra=os.environ["USER_AGENT_STRING"],
+        ),
+    )
 
     timestream_timestamp_query = "SELECT current_timestamp"
 
@@ -164,7 +175,12 @@ def _get_timestream_current_time() -> str:
 
 def _get_last_unload_end_time_from_ssm() -> Optional[str]:
 
-    ssm = boto3.client("ssm")
+    ssm = boto3.client(
+        "ssm",
+        config=Config(
+            user_agent_extra=os.environ["USER_AGENT_STRING"],
+        ),
+    )
 
     try:
         last_query_end_time_response = ssm.get_parameter(

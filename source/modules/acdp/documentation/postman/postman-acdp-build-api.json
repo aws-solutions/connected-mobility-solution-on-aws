@@ -78,14 +78,14 @@
 					"raw": "{\n    \"entityRef\":\"{{Entity_Ref}}\",\n    \"action\": \"deploy\"\n}"
 				},
 				"url": {
-					"raw": "{{Base_URL}}/api/acdp-backend/startBuild",
+					"raw": "{{Base_URL}}/api/acdp-backend/start-build",
 					"host": [
 						"{{Base_URL}}"
 					],
 					"path": [
 						"api",
 						"acdp-backend",
-						"startBuild"
+						"start-build"
 					]
 				}
 			},
@@ -106,14 +106,14 @@
 					"raw": "{\n    \"entityRef\":\"{{Entity_Ref}}\",\n    \"action\": \"update\"\n}"
 				},
 				"url": {
-					"raw": "{{Base_URL}}/api/acdp-backend/startBuild",
+					"raw": "{{Base_URL}}/api/acdp-backend/start-build",
 					"host": [
 						"{{Base_URL}}"
 					],
 					"path": [
 						"api",
 						"acdp-backend",
-						"startBuild"
+						"start-build"
 					]
 				}
 			},
@@ -134,14 +134,14 @@
 					"raw": "{\n    \"entityRef\":\"{{Entity_Ref}}\",\n    \"action\": \"teardown\"\n}"
 				},
 				"url": {
-					"raw": "{{Base_URL}}/api/acdp-backend/startBuild",
+					"raw": "{{Base_URL}}/api/acdp-backend/start-build",
 					"host": [
 						"{{Base_URL}}"
 					],
 					"path": [
 						"api",
 						"acdp-backend",
-						"startBuild"
+						"start-build"
 					]
 				}
 			},

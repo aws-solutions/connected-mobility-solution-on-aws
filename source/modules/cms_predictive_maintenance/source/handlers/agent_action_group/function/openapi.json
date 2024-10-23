@@ -1,0 +1,45 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Powertools API",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/"
+        }
+    ],
+    "paths": {
+        "/vehicle_maintenance_status": {
+            "get": {
+                "summary": "GET /vehicle_maintenance_status",
+                "description": "Gets the maintenance status of a vehicle with a given VIN.",
+                "operationId": "get_vehicle_maintenance_status_vehicle_maintenance_status_get",
+                "parameters": [
+                    {
+                        "description": "Vehicle VIN number.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "name": "vin",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "boolean",
+                                    "title": "Return"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

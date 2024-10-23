@@ -1,0 +1,36 @@
+predictor:
+  inference:
+    batch:
+      data_s3_key_prefix: inference
+      instance_type: ml.m5.xlarge
+      instance_count: 1
+chatbot:
+  data_source:
+    s3:
+      bucket_name: test-bucket-us-east-1
+      object_key_prefix: predictive-maintenance/docs
+    chunking_configuration:
+      strategy: FIXED_SIZE
+      max_tokens: 512
+      overlap_percentage: 20
+  embedding:
+    model_name: cohere.embed-english-v3
+  vector_index:
+    name: default-index
+    vector:
+      name: default-vector
+      metadata_field: AMAZON_BEDROCK_METADATA
+      text_field: AMAZON_BEDROCK_TEXT_CHUNK
+      type: knn_vector
+      dimension: 1024
+      method:
+        name: hnsw
+        space_type: l2
+        engine: faiss
+        ef_construction: 512
+        m: 16
+
+  agent:
+    model_id: "anthropic.claude-3-sonnet-20240229-v1:0"
+    session_retention_time_seconds: 300
+    instruction: "You are a friendly and useful agent that answers questions about vehicles, vehicle maintenance, vehicle repair, and related topics. Use the knowledge bases and functions to answer the queries when needed but do not reveal any internal details about the knowledge bases and functions."

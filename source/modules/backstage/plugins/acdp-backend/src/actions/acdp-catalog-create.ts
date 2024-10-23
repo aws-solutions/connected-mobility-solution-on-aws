@@ -1,34 +1,8 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { Config } from "@backstage/config";
-import { JsonObject } from "@backstage/types";
-import {
-  createTemplateAction,
-  fetchContents,
-  ActionContext,
-} from "@backstage/plugin-scaffolder-node";
-import {
-  UrlReader,
-  resolveSafeChildPath,
-  PluginEndpointDiscovery,
-} from "@backstage/backend-common";
-import { DefaultAwsCredentialsManager } from "@backstage/integration-aws-node";
-import { CatalogClient, Location } from "@backstage/catalog-client";
-import {
-  CompoundEntityRef,
-  DEFAULT_NAMESPACE,
-  ANNOTATION_SOURCE_LOCATION,
-  Entity,
-  parseLocationRef,
-} from "@backstage/catalog-model";
-import { Publisher, PublisherBase } from "@backstage/plugin-techdocs-node";
-import { ScmIntegrations } from "@backstage/integration";
-import { InputError } from "@backstage/errors";
-import { AwsS3Helper } from "../utils/aws-s3-helper";
 import * as path from "path";
-import { getLocationForEntity } from "../utils/location-helper";
-
+import { Logger } from "winston";
 import * as yaml from "yaml";
 import { z } from "zod";
 
@@ -37,9 +11,41 @@ import {
   PutObjectCommandInput,
   S3Client,
 } from "@aws-sdk/client-s3";
-import { constants } from "backstage-plugin-acdp-common";
-import { Logger } from "winston";
+
+import {
+  UrlReader,
+  resolveSafeChildPath,
+  PluginEndpointDiscovery,
+} from "@backstage/backend-common";
 import { AuthService } from "@backstage/backend-plugin-api";
+import { CatalogClient, Location } from "@backstage/catalog-client";
+import {
+  CompoundEntityRef,
+  DEFAULT_NAMESPACE,
+  ANNOTATION_SOURCE_LOCATION,
+  Entity,
+  parseLocationRef,
+} from "@backstage/catalog-model";
+import { Config } from "@backstage/config";
+import { InputError } from "@backstage/errors";
+import { ScmIntegrations } from "@backstage/integration";
+import { DefaultAwsCredentialsManager } from "@backstage/integration-aws-node";
+
+import {
+  createTemplateAction,
+  fetchContents,
+  ActionContext,
+} from "@backstage/plugin-scaffolder-node";
+import { Publisher, PublisherBase } from "@backstage/plugin-techdocs-node";
+import { JsonObject } from "@backstage/types";
+
+import { constants } from "backstage-plugin-acdp-common";
+
+import {
+  AwsS3Helper,
+  getLocationForEntity,
+  awsApiCallWithErrorHandling,
+} from "../utils";
 
 interface CatalogConfig {
   bucketName: string;
@@ -65,6 +71,200 @@ interface AcdpCatalogCreateActionInput {
   auth: AuthService;
   logger: Logger;
 }
+
+const copyDocsAssetsToCatalog = async (options: {
+  techdocsPublisher: PublisherBase;
+  catalogConfig: CatalogConfig;
+  catalogCreateInput: AcdpCatalogCreateActionInput;
+  ctx: ActionContext<CtxInput, JsonObject>;
+  entity: Entity;
+}) => {
+  const { techdocsPublisher, catalogConfig, catalogCreateInput, ctx, entity } =
+    options;
+
+  const docsTargetPath = "./techdocs";
+  const docsTmpPath = resolveSafeChildPath(ctx.workspacePath, docsTargetPath);
+
+  const templateBaseUrl = ctx.templateInfo!.baseUrl!;
+  let fetchBaseUrl = templateBaseUrl;
+  if (
+    catalogConfig.allowUnsafeAccess &&
+    templateBaseUrl.startsWith("file://")
+  ) {
+    fetchBaseUrl = "file:///"; // allow access to full local filesystem for local development
+  }
+
+  ctx.logger.info("Starting: Fetching docs from source location");
+
+  const location = parseLocationRef(ctx.input.docsSiteSourcePath!) as Location;
+
+  const resolvedLocation = getLocationForEntity(
+    location,
+    templateBaseUrl,
+    catalogCreateInput.integrations,
+    catalogConfig.allowUnsafeAccess,
+  );
+
+  await fetchContents({
+    reader: catalogCreateInput.reader,
+    integrations: catalogCreateInput.integrations,
+    baseUrl: fetchBaseUrl,
+    fetchUrl: resolvedLocation.target,
+    outputPath: docsTmpPath,
+    // token: ctx.input.token, #This is added in next patch version of the fetchContents func...uncomment this on next lib bump
+  });
+  ctx.logger.info("Finished: Fetching docs from source location");
+  ctx.logger.info("Starting: Publishing docs to techdocs asset location");
+  await techdocsPublisher.publish({
+    entity: entity,
+    directory: docsTmpPath,
+  });
+  ctx.logger.info("Finished: Publishing docs to techdocs asset location");
+};
+
+const copyAssetsToCatalog = async (options: {
+  s3Client: S3Client;
+  catalogConfig: CatalogConfig;
+  catalogCreateInput: AcdpCatalogCreateActionInput;
+  ctx: ActionContext<CtxInput, JsonObject>;
+  catalogEntityPathPrefix: string;
+  entity: Entity;
+}) => {
+  const {
+    s3Client,
+    catalogConfig,
+    catalogCreateInput,
+    ctx,
+    catalogEntityPathPrefix,
+    entity,
+  } = options;
+
+  const s3Helper = new AwsS3Helper({
+    s3Client: s3Client,
+    bucketName: catalogConfig.bucketName,
+    logger: ctx.logger,
+  });
+
+  const assetsTargetPath = "./assets";
+
+  const assetsTmpPath = resolveSafeChildPath(
+    ctx.workspacePath,
+    assetsTargetPath,
+  );
+
+  const templateBaseUrl = ctx.templateInfo!.baseUrl!;
+
+  let fetchBaseUrl = templateBaseUrl;
+  if (
+    catalogConfig.allowUnsafeAccess &&
+    templateBaseUrl.startsWith("file://")
+  ) {
+    fetchBaseUrl = "file:///"; // allow access to full local filesystem for local development
+  }
+
+  const location = parseLocationRef(ctx.input.assetsSourcePath!) as Location;
+  const resolvedLocation = getLocationForEntity(
+    location,
+    templateBaseUrl,
+    catalogCreateInput.integrations,
+    catalogConfig.allowUnsafeAccess,
+  );
+  await fetchContents({
+    reader: catalogCreateInput.reader,
+    integrations: catalogCreateInput.integrations,
+    baseUrl: fetchBaseUrl,
+    fetchUrl: resolvedLocation.target,
+    outputPath: assetsTmpPath,
+    // token: ctx.input.token, #This is added in next patch version of the fetchContents func...uncomment this on next lib bump
+  });
+
+  const assetsUploadPathPrefix = path.join(
+    catalogEntityPathPrefix,
+    catalogConfig.catalogItemAssetsPath,
+  );
+
+  ctx.logger.debug(`Uploading assets to: ${assetsUploadPathPrefix}`);
+  ctx.logger.info(`Finding and deleting existing assets from catalog`);
+  const existingCatalogObjects = await s3Helper.getAllObjectsFromBucket(
+    assetsUploadPathPrefix,
+  );
+  s3Helper.deleteObjectsFromBucket(existingCatalogObjects);
+
+  ctx.logger.info(`Uploading assets to catalog`);
+  s3Helper.uploadFilesToBucket(entity, assetsTmpPath, assetsUploadPathPrefix);
+};
+
+const writeCatalogItemToS3 = async (options: {
+  s3Client: S3Client;
+  catalogConfig: CatalogConfig;
+  catalogEntityPathPrefix: string;
+  ctx: ActionContext<CtxInput, JsonObject>;
+}) => {
+  const {
+    s3Client,
+    catalogConfig,
+    catalogEntityPathPrefix: catalogEntityS3KeyPrefix,
+    ctx,
+  } = options;
+
+  const catalogInfoS3Key = `${catalogEntityS3KeyPrefix}/catalog-info.yaml`;
+  const assetsS3Key = `${catalogEntityS3KeyPrefix}/${catalogConfig.catalogItemAssetsPath}`;
+  const catalogAssetsPathUrl = `https://${catalogConfig.bucketName}.s3.${catalogConfig.region}.amazonaws.com/${assetsS3Key}`;
+  const catalogInfoUrl = `https://${catalogConfig.bucketName}.s3.${catalogConfig.region}.amazonaws.com/${catalogInfoS3Key}`;
+  ctx.logger.info(
+    `Writing catalog-info to ${catalogConfig.bucketName}/${catalogInfoS3Key}`,
+  );
+
+  // Inject required annotations into catalog-info.yaml
+
+  // For now, we only support 1 deployment target. in the future, this should come from inputs
+  ctx.input.entity.metadata.annotations[
+    constants.ACDP_DEPLOYMENT_TARGET_ANNOTATION
+  ] = constants.ACDP_DEFAULT_DEPLOYMENT_TARGET;
+
+  if (ctx.input.docsSiteSourcePath !== undefined) {
+    ctx.input.entity.metadata.annotations["aws.amazon.com/techdocs-builder"] =
+      "external";
+    ctx.input.entity.metadata.annotations["backstage.io/techdocs-ref"] =
+      "dir:.";
+  }
+
+  ctx.input.entity.metadata.annotations["aws.amazon.com/template-entity-ref"] =
+    ctx.templateInfo?.entityRef;
+
+  ctx.input.entity.metadata.annotations[constants.ACDP_ASSETS_REF] =
+    `dir:${path.join(".", catalogConfig.catalogItemAssetsPath)}`;
+
+  ctx.input.entity.metadata.annotations[constants.ACDP_ASSETS_STORED] = (
+    ctx.input.assetsSourcePath !== undefined
+  ).toString();
+
+  ctx.input.entity.metadata.annotations[ANNOTATION_SOURCE_LOCATION] =
+    `url:${catalogAssetsPathUrl}`;
+
+  const putCatalogEntityInput: PutObjectCommandInput = {
+    Body: yaml.stringify(ctx.input.entity),
+    Bucket: catalogConfig.bucketName,
+    Key: catalogInfoS3Key,
+  };
+  const putCatalogEntityResp = await awsApiCallWithErrorHandling(
+    () => s3Client.send(new PutObjectCommand(putCatalogEntityInput)),
+    `Could not put catalog item in s3 bucket with bucket name: ${catalogConfig.bucketName} and key: ${catalogInfoS3Key}`,
+    ctx.logger,
+  );
+
+  if (putCatalogEntityResp.ETag !== undefined) {
+    ctx.logger.info("Successfully created catalog item");
+    ctx.logger.debug(
+      `Successfully created s3 object for catalog item: s3://${putCatalogEntityInput.Bucket}/${putCatalogEntityInput.Key}`,
+    );
+    ctx.output("catalogItemS3Url", catalogInfoUrl);
+    ctx.output(
+      "catalogItemS3Uri",
+      `s3://${catalogConfig.bucketName}/${catalogInfoS3Key}`,
+    );
+  }
+};
 
 export const createAcdpCatalogCreateAction = async (
   options: AcdpCatalogCreateActionInput,
@@ -133,11 +333,11 @@ export const createAcdpCatalogCreateAction = async (
         type: "object",
         properties: {
           s3Url: {
-            title: "S3 URL Path file was upload to",
+            title: "S3 URL Path file was uploaded to",
             type: "string",
           },
           s3Uri: {
-            title: "S3 URI Path file was upload to",
+            title: "S3 URI Path file was uploaded to",
             type: "string",
           },
         },
@@ -145,17 +345,17 @@ export const createAcdpCatalogCreateAction = async (
     },
 
     async handler(ctx) {
-      const { token } = await auth.getPluginRequestToken({
-        onBehalfOf: await auth.getOwnServiceCredentials(),
-        targetPluginId: "catalog",
-      });
-
       if (
         ctx.templateInfo === undefined ||
         ctx.templateInfo.baseUrl === undefined
       ) {
         throw new InputError("Unable to read template info");
       }
+
+      const { token } = await auth.getPluginRequestToken({
+        onBehalfOf: await auth.getOwnServiceCredentials(),
+        targetPluginId: "catalog",
+      });
 
       const compoundEntity: CompoundEntityRef = {
         kind: ctx.input.entity.kind.toLowerCase(),
@@ -181,7 +381,7 @@ export const createAcdpCatalogCreateAction = async (
       );
       if (existingEntity)
         throw new Error(
-          `An entity the ref ${existingEntity.metadata.namespace}/${existingEntity.kind}/${existingEntity.metadata.name} already exists`,
+          `The entity ref ${existingEntity.metadata.namespace}/${existingEntity.kind}/${existingEntity.metadata.name} already exists`,
         );
 
       const catalogEntityPathPrefix = `${catalogConfig.catalogPrefix}/${compoundEntity.namespace}/${compoundEntity.kind}/${compoundEntity.name}`;
@@ -193,7 +393,7 @@ export const createAcdpCatalogCreateAction = async (
           credentialProvider.sdkCredentialProvider,
       });
 
-      if (ctx.input.docsSiteSourcePath != undefined) {
+      if (ctx.input.docsSiteSourcePath !== undefined) {
         await copyDocsAssetsToCatalog({
           techdocsPublisher: techdocsPublisher,
           catalogConfig: catalogConfig,
@@ -207,7 +407,7 @@ export const createAcdpCatalogCreateAction = async (
         );
       }
 
-      if (ctx.input.assetsSourcePath != undefined) {
+      if (ctx.input.assetsSourcePath !== undefined) {
         await copyAssetsToCatalog({
           s3Client: s3Client,
           catalogConfig: catalogConfig,
@@ -228,196 +428,4 @@ export const createAcdpCatalogCreateAction = async (
       });
     },
   });
-};
-
-const copyDocsAssetsToCatalog = async (options: {
-  techdocsPublisher: PublisherBase;
-  catalogConfig: CatalogConfig;
-  catalogCreateInput: AcdpCatalogCreateActionInput;
-  ctx: ActionContext<CtxInput, JsonObject>;
-  entity: Entity;
-}) => {
-  const { techdocsPublisher, catalogConfig, catalogCreateInput, ctx, entity } =
-    options;
-
-  const docsTargetPath = "./techdocs";
-  const docsTmpPath = resolveSafeChildPath(ctx.workspacePath, docsTargetPath);
-
-  const templateBaseUrl = ctx.templateInfo!.baseUrl!;
-  let fetchBaseUrl = templateBaseUrl;
-  if (
-    catalogConfig.allowUnsafeAccess &&
-    templateBaseUrl.startsWith("file://")
-  ) {
-    fetchBaseUrl = "file:///"; //allow access to full local filesystem for local development
-  }
-
-  ctx.logger.info("Starting: Fetching docs from source location");
-
-  const location = parseLocationRef(ctx.input.docsSiteSourcePath!) as Location;
-
-  const resolvedLocation = getLocationForEntity(
-    location,
-    templateBaseUrl,
-    catalogCreateInput.integrations,
-    catalogConfig.allowUnsafeAccess,
-  );
-
-  await fetchContents({
-    reader: catalogCreateInput.reader,
-    integrations: catalogCreateInput.integrations,
-    baseUrl: fetchBaseUrl,
-    fetchUrl: resolvedLocation.target,
-    outputPath: docsTmpPath,
-    // token: ctx.input.token, #This is added in next patch version of the fetchContents func...uncomment this on next lib bump
-  });
-  ctx.logger.info("Finished: Fetching docs from source location");
-  ctx.logger.info("Starting: Publishing docs to techdocs asset location");
-  await techdocsPublisher.publish({
-    entity: entity,
-    directory: docsTmpPath,
-  });
-  ctx.logger.info("Finished: Publishing docs to techdocs asset location");
-};
-
-const copyAssetsToCatalog = async (options: {
-  s3Client: S3Client;
-  catalogConfig: CatalogConfig;
-  catalogCreateInput: AcdpCatalogCreateActionInput;
-  ctx: ActionContext<CtxInput, JsonObject>;
-  catalogEntityPathPrefix: string;
-  entity: Entity;
-}) => {
-  const {
-    s3Client,
-    catalogConfig,
-    catalogCreateInput,
-    ctx,
-    catalogEntityPathPrefix,
-    entity,
-  } = options;
-
-  const s3Helper = new AwsS3Helper({
-    s3Client: s3Client,
-    bucketName: catalogConfig.bucketName,
-    logger: ctx.logger,
-  });
-
-  const assetsTargetPath = "./assets";
-
-  const assetsTmpPath = resolveSafeChildPath(
-    ctx.workspacePath,
-    assetsTargetPath,
-  );
-
-  const templateBaseUrl = ctx.templateInfo!.baseUrl!;
-
-  let fetchBaseUrl = templateBaseUrl;
-  if (
-    catalogConfig.allowUnsafeAccess &&
-    templateBaseUrl.startsWith("file://")
-  ) {
-    fetchBaseUrl = "file:///"; //allow access to full local filesystem for local development
-  }
-
-  const location = parseLocationRef(ctx.input.assetsSourcePath!) as Location;
-  const resolvedLocation = getLocationForEntity(
-    location,
-    templateBaseUrl,
-    catalogCreateInput.integrations,
-    catalogConfig.allowUnsafeAccess,
-  );
-  await fetchContents({
-    reader: catalogCreateInput.reader,
-    integrations: catalogCreateInput.integrations,
-    baseUrl: fetchBaseUrl,
-    fetchUrl: resolvedLocation.target,
-    outputPath: assetsTmpPath,
-    // token: ctx.input.token, #This is added in next patch version of the fetchContents func...uncomment this on next lib bump
-  });
-
-  const assetsUploadPathPrefix = path.join(
-    catalogEntityPathPrefix,
-    catalogConfig.catalogItemAssetsPath,
-  );
-
-  ctx.logger.debug(`Uploading assets to: ${assetsUploadPathPrefix}`);
-  ctx.logger.info(`Finding and deleting existing assets from catalog`);
-  const existingCatalogObjects = await s3Helper.getAllObjectsFromBucket(
-    assetsUploadPathPrefix,
-  );
-  s3Helper.deleteObjectsFromBucket(existingCatalogObjects);
-
-  ctx.logger.info(`Uploading assets to catalog`);
-  s3Helper.uploadFilesToBucket(entity, assetsTmpPath, assetsUploadPathPrefix);
-};
-
-const writeCatalogItemToS3 = async (options: {
-  s3Client: S3Client;
-  catalogConfig: CatalogConfig;
-  catalogEntityPathPrefix: string;
-  ctx: ActionContext<CtxInput, JsonObject>;
-}) => {
-  const {
-    s3Client,
-    catalogConfig,
-    catalogEntityPathPrefix: catalogEntityS3KeyPrefix,
-    ctx,
-  } = options;
-
-  const catalogInfoS3Key = `${catalogEntityS3KeyPrefix}/catalog-info.yaml`;
-  const assetsS3Key = `${catalogEntityS3KeyPrefix}/${catalogConfig.catalogItemAssetsPath}`;
-  const catalogAssetsPathUrl = `https://${catalogConfig.bucketName}.s3.${catalogConfig.region}.amazonaws.com/${assetsS3Key}`;
-  const catalogInfoUrl = `https://${catalogConfig.bucketName}.s3.${catalogConfig.region}.amazonaws.com/${catalogInfoS3Key}`;
-  ctx.logger.info(
-    `Writing catalog-info to ${catalogConfig.bucketName}/${catalogInfoS3Key}`,
-  );
-
-  // Inject required annotations into catalog-info.yaml
-
-  //For now, we only support 1 deployment target. in the future, this should come from inputs
-  ctx.input.entity.metadata.annotations[
-    constants.ACDP_DEPLOYMENT_TARGET_ANNOTATION
-  ] = constants.ACDP_DEFAULT_DEPLOYMENT_TARGET;
-
-  if (ctx.input.docsSiteSourcePath != undefined) {
-    ctx.input.entity.metadata.annotations["aws.amazon.com/techdocs-builder"] =
-      "external";
-    ctx.input.entity.metadata.annotations["backstage.io/techdocs-ref"] =
-      "dir:.";
-  }
-
-  ctx.input.entity.metadata.annotations["aws.amazon.com/template-entity-ref"] =
-    ctx.templateInfo?.entityRef;
-
-  ctx.input.entity.metadata.annotations[constants.ACDP_ASSETS_REF] =
-    `dir:${path.join(".", catalogConfig.catalogItemAssetsPath)}`;
-
-  ctx.input.entity.metadata.annotations[constants.ACDP_ASSETS_STORED] = (
-    ctx.input.assetsSourcePath != undefined
-  ).toString();
-
-  ctx.input.entity.metadata.annotations[ANNOTATION_SOURCE_LOCATION] =
-    `url:${catalogAssetsPathUrl}`;
-
-  const putCatalogEntityInput: PutObjectCommandInput = {
-    Body: yaml.stringify(ctx.input.entity),
-    Bucket: catalogConfig.bucketName,
-    Key: catalogInfoS3Key,
-  };
-  const putCatalogEntityResp = await s3Client.send(
-    new PutObjectCommand(putCatalogEntityInput),
-  );
-
-  if (putCatalogEntityResp.ETag !== undefined) {
-    ctx.logger.info("Successfully created catalog item");
-    ctx.logger.debug(
-      `Successfully created s3 object for catalog item: s3://${putCatalogEntityInput.Bucket}/${putCatalogEntityInput.Key}`,
-    );
-    ctx.output("catalogItemS3Url", catalogInfoUrl);
-    ctx.output(
-      "catalogItemS3Uri",
-      `s3://${catalogConfig.bucketName}/${catalogInfoS3Key}`,
-    );
-  }
 };

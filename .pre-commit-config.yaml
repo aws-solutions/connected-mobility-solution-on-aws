@@ -111,7 +111,7 @@ repos:
       - id: pip-audit
         name: (ROOT) Pip audit
         exclude: ^(source/|.nightswatch/)
-  - repo: https://github.com/pre-commit/mirrors-prettier
+  - repo: https://github.com/pre-commit/mirrors-prettier # Archived, look to replace eventually
     rev: v3.1.0
     hooks:
       - id: prettier
@@ -277,6 +277,14 @@ repos:
         args: ["--module-path", "source/modules/vpc", "--files-list"]
         entry: ./deployment/script_run_module_hooks.py
         files: ^source/modules/vpc
+        verbose: true
+        require_serial: true
+      - id: cms-predictive-maintenance
+        name: (Predictive Maintenance)
+        language: script
+        args: ["--module-path", "source/modules/cms_predictive_maintenance", "--files-list"]
+        entry: ./deployment/script_run_module_hooks.py
+        files: ^source/modules/cms_predictive_maintenance
         verbose: true
         require_serial: true
       - id: nightswatch

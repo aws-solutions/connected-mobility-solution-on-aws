@@ -24,12 +24,12 @@ from cms_common.config.resource_names import (
 from cms_common.config.ssm import resolve_ssm_parameter
 from cms_common.config.stack_inputs import SolutionConfigInputs
 from cms_common.constructs.vpc_construct import VpcConstruct
+from cms_common.policy_generators.cloudwatch import (
+    generate_lambda_cloudwatch_logs_policy_document,
+)
 from cms_common.policy_generators.ec2_vpc import generate_ec2_vpc_policy
-from cms_common.resource_names.auth import AuthResourceNames
+from cms_common.resource_names.auth import AuthSetupResourceNames
 from cms_common.resource_names.module_short_names import CMSModuleShortNames
-
-# Connected Mobility Solution on AWS
-from ..lib.policy_generators import generate_lambda_cloudwatch_logs_policy_document
 
 
 class AlertsConstruct(Construct):
@@ -47,7 +47,7 @@ class AlertsConstruct(Construct):
     ) -> None:
         super().__init__(scope, construct_id)
 
-        auth_resource_names = AuthResourceNames.from_identity_provider_id(
+        auth_setup_resource_names = AuthSetupResourceNames.from_identity_provider_id(
             identity_provider_id
         )
 
@@ -77,10 +77,10 @@ class AlertsConstruct(Construct):
                             ],
                             resources=[
                                 resolve_ssm_parameter(
-                                    auth_resource_names.service_client_config_secret_arn_ssm_parameter
+                                    auth_setup_resource_names.service_client_config_secret_arn_ssm_parameter
                                 ),
                                 resolve_ssm_parameter(
-                                    auth_resource_names.idp_config_secret_arn_ssm_parameter
+                                    auth_setup_resource_names.idp_config_secret_arn_ssm_parameter
                                 ),
                             ],
                         )
@@ -108,14 +108,14 @@ class AlertsConstruct(Construct):
                                     service="ssm",
                                     resource="parameter",
                                     resource_name=remove_leading_slash(
-                                        auth_resource_names.service_client_config_secret_arn_ssm_parameter
+                                        auth_setup_resource_names.service_client_config_secret_arn_ssm_parameter
                                     ),  # Leading slash must not be present on SSM IAM permissions
                                 ),
                                 Stack.of(self).format_arn(
                                     service="ssm",
                                     resource="parameter",
                                     resource_name=remove_leading_slash(
-                                        auth_resource_names.idp_config_secret_arn_ssm_parameter
+                                        auth_setup_resource_names.idp_config_secret_arn_ssm_parameter
                                     ),  # Leading slash must not be present on SSM IAM permissions
                                 ),
                             ],

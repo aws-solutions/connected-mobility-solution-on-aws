@@ -18,14 +18,14 @@ import boto3
 
 # CMS Common Library
 from cms_common.auth.auth_configs import CMSClientConfig, CMSIdPConfig
-from cms_common.resource_names.auth import AuthResourceNames
+from cms_common.resource_names.auth import AuthSetupResourceNames
 
 # Connected Mobility Solution on AWS
 from ...handlers.process_alerts.function import main
 
 MOCKED_TOKEN_ENDPOINT = "https://test-token-endpoint.com"  # nosec
 TEST_IDENTITY_PROVIDER_ID = "test-identity-provider-id"
-TEST_AUTH_RESOURCE_NAMES_CLASS = AuthResourceNames.from_identity_provider_id(
+TEST_AUTH_SETUP_RESOURCE_NAMES_CLASS = AuthSetupResourceNames.from_identity_provider_id(
     TEST_IDENTITY_PROVIDER_ID
 )
 
@@ -104,13 +104,13 @@ def fixture_mock_boto_client_config_valid(
     with mock_aws():
         secretsmanager_client = boto3.client("secretsmanager")
         secret_arn = secretsmanager_client.create_secret(
-            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.service_client_config_secret,
+            Name=TEST_AUTH_SETUP_RESOURCE_NAMES_CLASS.service_client_config_secret,
             SecretString=auth_client_config_secret_string_valid,
         )["ARN"]
 
         ssm_client = boto3.client("ssm")
         ssm_client.put_parameter(
-            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.service_client_config_secret_arn_ssm_parameter,
+            Name=TEST_AUTH_SETUP_RESOURCE_NAMES_CLASS.service_client_config_secret_arn_ssm_parameter,
             Value=secret_arn,
             Type="String",
         )
@@ -138,13 +138,13 @@ def fixture_mock_boto_idp_config_valid(
     with mock_aws():
         secretsmanager_client = boto3.client("secretsmanager")
         secret_arn = secretsmanager_client.create_secret(
-            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.idp_config_secret,
+            Name=TEST_AUTH_SETUP_RESOURCE_NAMES_CLASS.idp_config_secret,
             SecretString=auth_idp_config_secret_string_valid,
         )["ARN"]
 
         ssm_client = boto3.client("ssm")
         ssm_client.put_parameter(
-            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.idp_config_secret_arn_ssm_parameter,
+            Name=TEST_AUTH_SETUP_RESOURCE_NAMES_CLASS.idp_config_secret_arn_ssm_parameter,
             Value=secret_arn,
             Type="String",
         )

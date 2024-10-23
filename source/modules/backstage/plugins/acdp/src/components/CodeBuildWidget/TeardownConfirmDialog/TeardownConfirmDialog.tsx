@@ -15,8 +15,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import React, { useCallback, useState } from "react";
 
-import { Entity } from "@backstage/catalog-model";
 import {
   Box,
   Button,
@@ -28,12 +28,13 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
-import React, { useCallback, useState } from "react";
-import { useTeardownConfirmDialogState } from "./useTeardownConfirmDialogState";
 
+import { Entity } from "@backstage/catalog-model";
 import { alertApiRef, useApi } from "@backstage/core-plugin-api";
 import { Progress, ResponseErrorPanel } from "@backstage/core-components";
 import { assertError } from "@backstage/errors";
+
+import { useTeardownConfirmDialogState } from "./useTeardownConfirmDialogState";
 
 const useStyles = makeStyles({
   advancedButton: {
@@ -44,7 +45,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Contents = ({
+export const TeardownConfirmDialogContent = ({
   entity,
   onConfirm,
   onClose,
@@ -76,15 +77,6 @@ const Contents = ({
     [alertApi, onConfirm, state],
   );
 
-  //NOSONAR
-  const DialogActionsPanel = () => (
-    <DialogActions className={classes.dialogActions}>
-      <Button onClick={onClose} color="primary">
-        Cancel
-      </Button>
-    </DialogActions>
-  );
-
   if (state.type === "loading") {
     return <Progress />;
   }
@@ -114,7 +106,11 @@ const Contents = ({
           >
             Confirm
           </Button>
-          <DialogActionsPanel />
+          <DialogActions className={classes.dialogActions}>
+            <Button onClick={onClose} color="primary">
+              Cancel
+            </Button>
+          </DialogActions>
         </Box>
       </>
     );
@@ -138,7 +134,11 @@ export const TeardownConfirmDialog = (props: TeardownConfirmDialogProps) => {
         Are you sure you want to teardown resources for this entity?
       </DialogTitle>
       <DialogContent>
-        <Contents entity={entity} onConfirm={onConfirm} onClose={onClose} />
+        <TeardownConfirmDialogContent
+          entity={entity}
+          onConfirm={onConfirm}
+          onClose={onClose}
+        />
       </DialogContent>
     </Dialog>
   );

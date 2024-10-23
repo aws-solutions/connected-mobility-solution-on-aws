@@ -941,6 +941,28 @@
       },
       "Type": "AWS::Cognito::UserPoolResourceServer"
     },
+    "moduleoutputsssmcognitouserpoolid8A5E259C": {
+      "Properties": {
+        "Description": "User pool id for Cognito user pool",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/auth/",
+              {
+                "Ref": "IdentityProviderId"
+              },
+              "/user-pool/id"
+            ]
+          ]
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "cognitousersuserpool51A5F544"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
     "moduleoutputsssmidpconfigsecretarnCF8D6D64": {
       "Properties": {
         "Description": "Secret Arn for IdP configurations needed to facilitate authentication and authorization via OAuth 2.0 identity providers.",

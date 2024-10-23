@@ -17,7 +17,7 @@ from botocore.config import Config
 from botocore.exceptions import ClientError
 
 # Connected Mobility Solution on AWS
-from ..resource_names.auth import AuthResourceNames
+from ..resource_names.auth import AuthSetupResourceNames
 
 if TYPE_CHECKING:
     # Third Party Libraries
@@ -81,8 +81,8 @@ def _get_ssm_client(user_agent_string: str) -> SSMClient:
 
 
 @lru_cache(maxsize=MAX_CACHE_SIZE_AUTH_CONFIG)
-def _get_auth_resource_names(identity_provider_id: str) -> AuthResourceNames:
-    return AuthResourceNames.from_identity_provider_id(identity_provider_id)
+def _get_auth_setup_resource_names(identity_provider_id: str) -> AuthSetupResourceNames:
+    return AuthSetupResourceNames.from_identity_provider_id(identity_provider_id)
 
 
 # Config getter functions
@@ -90,8 +90,8 @@ def get_idp_config(
     user_agent_string: str,
     identity_provider_id: str,
 ) -> CMSIdPConfig:
-    auth_resource_names = _get_auth_resource_names(identity_provider_id)
-    idp_config_ssm_name = auth_resource_names.idp_config_secret_arn_ssm_parameter
+    auth_setup_resource_names = _get_auth_setup_resource_names(identity_provider_id)
+    idp_config_ssm_name = auth_setup_resource_names.idp_config_secret_arn_ssm_parameter
     return _get_config(
         user_agent_string=user_agent_string,
         ssm_name=idp_config_ssm_name,
@@ -103,9 +103,9 @@ def get_service_client_config(
     user_agent_string: str,
     identity_provider_id: str,
 ) -> CMSClientConfig:
-    auth_resource_names = _get_auth_resource_names(identity_provider_id)
+    auth_setup_resource_names = _get_auth_setup_resource_names(identity_provider_id)
     client_config_ssm_name = (
-        auth_resource_names.service_client_config_secret_arn_ssm_parameter
+        auth_setup_resource_names.service_client_config_secret_arn_ssm_parameter
     )
     return _get_config(
         user_agent_string=user_agent_string,
@@ -118,9 +118,9 @@ def get_user_client_config(
     user_agent_string: str,
     identity_provider_id: str,
 ) -> CMSClientConfig:
-    auth_resource_names = _get_auth_resource_names(identity_provider_id)
+    auth_setup_resource_names = _get_auth_setup_resource_names(identity_provider_id)
     user_client_config_ssm_name = (
-        auth_resource_names.user_client_config_secret_arn_ssm_parameter
+        auth_setup_resource_names.user_client_config_secret_arn_ssm_parameter
     )
     return _get_config(
         user_agent_string=user_agent_string,

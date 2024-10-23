@@ -1,6 +1,12 @@
 
 SHELL := /bin/bash
 
+DEFAULTS.NODE_VERSION := $(shell cat ${MODULE_PATH}/.nvmrc 2> /dev/null)
+DEFAULTS.PYTHON_VERSION := $(shell cat ${MODULE_PATH}/.python-version)
+
+export NODE_VERSION ?= ${DEFAULTS.NODE_VERSION}
+export PYTHON_VERSION ?= ${DEFAULTS.PYTHON_VERSION}
+
 # Custom location for library installation. OS level file restrictions causes issues.
 export MODULE_LIB_DIST_PATH = ${MODULE_PATH}/dist-lib
 
@@ -13,13 +19,13 @@ export JSII_RUNTIME_PACKAGE_CACHE_ROOT = ${MODULE_PATH}/.cdk_cache
 ## COMMON TARGETS
 ## ========================================================
 .PHONY: pipenv-install
-pipenv-install: ## Using pipenv, installs pip dependencies.
+pipenv-install: verify-required-tools ## Using pipenv, installs pip dependencies.
 	@printf "%bInstalling pip dependencies: %s%b\n" "${MAGENTA}" "${MODULE_NAME}" "${NC}"
 	@pipenv install --dev --python ${PYTHON_VERSION}
 	@pipenv clean --python ${PYTHON_VERSION}
 
 .PHONY: cdk-solution-helper-install
-cdk-solution-helper-install: ## Using npm, installs node modules for cdk-solution-helper.
+cdk-solution-helper-install: verify-required-tools ## Using npm, installs node modules for cdk-solution-helper.
 	@printf "%bInstalling cdk-solution-helper node dependencies: %s%b\n" "${MAGENTA}" "${MODULE_NAME}" "${NC}"
 	@npm i --prefix deployment/cdk-solution-helper
 
@@ -35,7 +41,7 @@ upload: create-upload-bucket ## Upload templates and build assets for the module
 
 .PHONY: destroy-stack
 destroy-stack: ## Delete the stack for the module.
-	@printf "%bDelete the module deployment.%b\n" "${MAGENTA}" "${NC}"
+	@printf "%bDeleting the module deployment.%b\n" "${MAGENTA}" "${NC}"
 	@aws cloudformation delete-stack --stack-name "${STACK_NAME}"
 	@aws cloudformation wait stack-delete-complete --stack-name "${STACK_NAME}"
 
@@ -72,31 +78,6 @@ unit-tests: ## Run unit-tests for the module.
 update-snapshots: ## Update snapshot files for the module.
 	@printf "%bUpdating unit test snapshots.%b\n" "${MAGENTA}" "${NC}"
 	pipenv run ${MODULE_PATH}/deployment/run-unit-tests.sh -r -s
-
-.PHONY: verify-required-tools
-verify-required-tools: ## Checks the environment for the required dependencies.
-ifneq (v${NODE_VERSION}, $(shell node --version | cut -d "." -f 1-2))
-	$(error Node version "v${NODE_VERSION}" is required, as specified in .nvmrc. "$(shell node --version | cut -d "." -f 1-2)" was found instead. Please install the correct version by running `nvm install`.)
-endif
-ifeq (, $(shell which npm))
-	$(error Npm is required and should be automatically installed with node. Please check your node installation.`)
-endif
-ifeq (, $(shell which yarn))
-	$(error Yarn is required, as specified in the README. Please see the following link for installation (OS specific): https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable)
-endif
-ifneq (Python ${PYTHON_VERSION}, $(shell python --version | cut -d "." -f 1-2))
-	$(error Python version "Python ${PYTHON_VERSION}" is required, as specified in .python-version. "$(shell python --version | cut -d "." -f 1-2)" was found instead. Please install the correct version by running `pyenv install -s`)
-endif
-ifeq (, $(shell which pipenv))
-	$(error pipenv is required, as specified in the README. Please see the following link for installation: https://pipenv.pypa.io/en/latest/installation.html)
-endif
-ifeq (, $(shell which aws))
-	$(error The aws CLI is required, as specified in the README. Please see the following link for installation: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)
-endif
-ifeq (, $(shell which cdk))
-	$(error The aws-cdk CLI is required, as specified in the README. Please see the following link for installation: https://docs.aws.amazon.com/cdk/v2/guide/cli.html)
-endif
-	@printf "%bDependencies verified.%b\n" "${GREEN}" "${NC}"
 
 ## ========================================================
 ## HELP COMMANDS

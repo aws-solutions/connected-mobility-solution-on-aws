@@ -11,12 +11,12 @@ from constructs import Construct
 
 # CMS Common Library
 from cms_common.constructs.custom_resource_lambda import CustomResourceLambdaConstruct
+from cms_common.policy_generators.kms import generate_kms_policy_statement_from_key_arn
 
 # Connected Mobility Solution on AWS
 from ...handlers.custom_resource.function.lib.custom_resource_type_enum import (
     CustomResourceType,
 )
-from ..lib.policy_generators import generate_kms_policy_statement
 
 
 class GrafanaDashboardConstruct(Construct):
@@ -46,7 +46,7 @@ class GrafanaDashboardConstruct(Construct):
                         f"{grafana_s3_bucket_arn}/{dashboard_s3_object_key_prefix}*",
                     ],
                 ),
-                generate_kms_policy_statement(
+                generate_kms_policy_statement_from_key_arn(
                     kms_encryption_key_arn=grafana_s3_bucket_key_arn,
                     allow_encrypt=True,
                 ),

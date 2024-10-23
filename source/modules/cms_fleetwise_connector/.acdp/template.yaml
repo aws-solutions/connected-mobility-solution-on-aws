@@ -8,7 +8,7 @@ metadata:
   - fleetwise
   - connect
   - ingest
-  title: CMS Fleetwise Connector Module
+  title: CMS FleetWise Connector Module
   annotations:
     backstage.io/techdocs-ref: dir:../docs/components/cms-fleetwise-connector/
 spec:

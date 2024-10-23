@@ -54,6 +54,18 @@ class CmsConfigStack(Stack):
             },
         )
 
+        AppRegistryConstruct(
+            self,
+            "app-registry-construct",
+            app_registry_inputs=AppRegistryInputs(
+                application_name=Aws.STACK_NAME,
+                application_type=solution_config_inputs.application_type,
+                solution_id=solution_config_inputs.solution_id,
+                solution_name=solution_config_inputs.solution_name,
+                solution_version=solution_config_inputs.solution_version,
+            ),
+        )
+
         module_inputs_construct = ModuleInputsConstruct(self, "module-inputs-construct")
 
         # SSM Parameter to register an app unique ID. This is done before initializing
@@ -86,18 +98,6 @@ class CmsConfigConstruct(Construct):
         super().__init__(scope, construct_id, **kwargs)
 
         metrics_url = "https://metrics.awssolutionsbuilder.com/generic"
-
-        AppRegistryConstruct(
-            self,
-            "app-registry-construct",
-            app_registry_inputs=AppRegistryInputs(
-                application_name=Aws.STACK_NAME,
-                application_type=solution_config_inputs.application_type,
-                solution_id=solution_config_inputs.solution_id,
-                solution_name=solution_config_inputs.solution_name,
-                solution_version=solution_config_inputs.solution_version,
-            ),
-        )
 
         vpc_construct = VpcConstruct(
             self, "vpc-construct", vpc_config=module_inputs_construct.vpc_config

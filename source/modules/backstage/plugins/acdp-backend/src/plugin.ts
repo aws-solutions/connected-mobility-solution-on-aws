@@ -7,9 +7,12 @@ import {
 } from "@backstage/backend-plugin-api";
 import { DefaultAwsCredentialsManager } from "@backstage/integration-aws-node";
 import {
-  createRouter,
+  createAcdpBuildRouter,
+  createAcdpMetricsRouter,
   AcdpBuildApi,
   AcdpBuildService,
+  AcdpMetricsService,
+  AcdpMetricsApi,
 } from "backstage-plugin-acdp-backend";
 import { loggerToWinstonLogger } from "@backstage/backend-common";
 import { CatalogClient } from "@backstage/catalog-client";
@@ -45,6 +48,7 @@ export const acdpPlugin = createBackendPlugin({
 
         const integrations = ScmIntegrations.fromConfig(config);
 
+        // ACDP Build
         const acdpBuildService = new AcdpBuildService({
           config: config,
           reader: reader,
@@ -54,13 +58,30 @@ export const acdpPlugin = createBackendPlugin({
         });
         const acdpBuildApi = new AcdpBuildApi(catalogClient, acdpBuildService);
         httpRouter.use(
-          await createRouter({
+          await createAcdpBuildRouter({
             logger: winstonLogger,
-            config: config,
             acdpBuildApi: acdpBuildApi,
             auth: auth,
             httpAuth: httpAuth,
-            catalogClient: catalogClient,
+          }),
+        );
+
+        // ACDP Metrics
+        const acdpMetricsService = new AcdpMetricsService({
+          config: config,
+          awsCredentialsProvider: await credsManager.getCredentialProvider(),
+          logger: winstonLogger,
+        });
+        const acdpMetricsApi = new AcdpMetricsApi(
+          catalogClient,
+          acdpMetricsService,
+        );
+        httpRouter.use(
+          await createAcdpMetricsRouter({
+            logger: winstonLogger,
+            acdpMetricsApi: acdpMetricsApi,
+            auth: auth,
+            httpAuth: httpAuth,
           }),
         );
         httpRouter.addAuthPolicy({

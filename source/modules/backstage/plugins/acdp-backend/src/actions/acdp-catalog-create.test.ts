@@ -10,13 +10,15 @@ import { fetchContents } from "@backstage/plugin-scaffolder-node";
 import { createAcdpCatalogCreateAction } from ".";
 import {
   mockDiscovery,
+  mockTemplateCatalogCreateInput,
+  mockedTemplateEntity,
+} from "./mocks";
+import {
   mockUrlReader,
   mockConfig,
   mockIntegrations,
-  mockedTemplateEntity,
-  mockTemplateCatalogCreateInput,
   mockedCatalogEntity,
-} from "../__mocks__/common-mocks";
+} from "../mocks";
 import { stringifyEntityRef } from "@backstage/catalog-model";
 import { Publisher, PublisherBase } from "@backstage/plugin-techdocs-node";
 import { createMockDirectory } from "@backstage/backend-test-utils";
@@ -58,7 +60,7 @@ beforeEach(() => {
 describe("createAcdpCatalogCreateAction", () => {
   const workspacePath = createMockDirectory().resolve("/tmp");
 
-  it("", async () => {
+  it("creates ACDP catalog action", async () => {
     mockedS3Client.on(PutObjectCommand).resolves({
       ETag: "test",
     });
@@ -107,7 +109,7 @@ describe("createAcdpCatalogCreateAction", () => {
       })
     ).handler(mockContext);
 
-    expect(catalogClient.getEntityByRef.mock.calls.length === 2);
+    expect(catalogClient.getEntityByRef.mock.calls.length).toBe(1);
     expect(fetchContents).toHaveBeenCalledTimes(2);
     expect(mockedS3Client.calls()).toHaveLength(1);
     expect(mockContext.output).toHaveBeenCalledTimes(2);

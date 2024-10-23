@@ -62,7 +62,7 @@ def generate_ec2_vpc_policy(
                     "ec2:DeleteNetworkInterface",
                 ],
                 effect=aws_iam.Effect.ALLOW,
-                resources=["*"],
+                resources=["*"],  # NOSONAR
             ),
         ]
     )

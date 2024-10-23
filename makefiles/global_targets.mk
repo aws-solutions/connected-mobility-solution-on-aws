@@ -20,3 +20,14 @@ build-python-package: ## Wraps normal setup.py commands to leverage the environm
 .PHONY: install-python-package
 install-python-package: ## Wraps normal setup.py commands to leverage the environment variables defined in Makefiles
 	@pipenv run python setup.py install
+
+.PHONY: verify-required-tools
+verify-required-tools: ## Checks the environment for the required dependencies.
+	@[ "v${NODE_VERSION}" = "$$(node --version | cut -d "." -f 1-2)" ] || ( printf "%bNode version %s is required, as specified in .nvmrc. %s was found instead. Please install the correct version by running 'nvm install'.%b\n" "${RED}" "v${NODE_VERSION}" "$(shell node --version | cut -d "." -f 1-2)" "${NC}"; sh -c 'exit 1' )
+	@[ $$(which npm) ] || ( printf "%bNpm is required and should be automatically installed with node. Please check your node installation. (https://www.npmjs.com/) %b\n" "${RED}" "${NC}"; sh -c 'exit 1' )
+	@[ $$(which yarn) ] || ( printf "%bYarn is required, as specified in the README. Please see the following link for installation (OS specific): https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable%b\n" "${RED}" "${NC}"; sh -c 'exit 1' )
+	@[ "Python ${PYTHON_VERSION}" = "$$(python --version | cut -d "." -f 1-2)" ] || ( printf "%bPython version %s is required, as specified in .python-version. %s was found instead. Please install the correct version by running 'pyenv install -s'%b\n" "${RED}" "Python ${PYTHON_VERSION}" "$(shell python --version | cut -d "." -f 1-2)" "${NC}"; sh -c 'exit 1' )
+	@[ $$(which pipenv) ] || ( printf "%bpipenv is required, as specified in the README. Please see the following link for installation: https://pipenv.pypa.io/en/latest/installation.html%b\n" "${RED}" "${NC}"; sh -c 'exit 1' )
+	@[ $$(which aws) ] || ( printf "%bThe aws CLI is required, as specified in the README. Please see the following link for installation: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html%b\n" "${RED}" "${NC}"; sh -c 'exit 1' )
+	@[ $$(which cdk) ] || ( printf "%bThe aws-cdk CLI is required, as specified in the README. Please see the following link for installation: https://docs.aws.amazon.com/cdk/v2/guide/cli.html%b\n" "${RED}" "${NC}"; sh -c 'exit 1' )
+	@printf "%bDependencies verified.%b\n" "${GREEN}" "${NC}"

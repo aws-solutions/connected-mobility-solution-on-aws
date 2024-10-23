@@ -362,6 +362,10 @@ class Pipelines(Construct):
                     value=module_inputs.backstage_auth_config_inputs.identity_provider_id,
                     type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
                 ),
+                "DEFAULT_USER_EMAIL": aws_codebuild.BuildEnvironmentVariable(
+                    value=module_inputs.default_user_email,
+                    type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
+                ),
                 "AWS_REGION": aws_codebuild.BuildEnvironmentVariable(
                     value=Stack.of(self).region,
                     type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,

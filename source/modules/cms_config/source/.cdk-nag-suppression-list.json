@@ -29,14 +29,6 @@
             }
         ]
     },
-    "/cms-config/cms-config/metrics-construct/lambda-function/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
-            }
-        ]
-    },
     "/cms-config/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": {
         "rules_to_suppress": [
             {

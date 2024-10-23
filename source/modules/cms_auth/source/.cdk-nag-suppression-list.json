@@ -58,14 +58,6 @@
             }
         ]
     },
-    "/cms-auth/cms-auth/authorization-code-exchange-lambda/lambda-function/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
-            }
-        ]
-    },
     "/cms-auth/cms-auth/token-validation-lambda/lambda-role/Resource": {
         "rules_to_suppress": [
             {
@@ -89,22 +81,6 @@
                     "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*",
                     "Resource::*"
                 ]
-            }
-        ]
-    },
-    "/cms-auth/cms-auth/token-validation-lambda/lambda-function/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
-            }
-        ]
-    },
-    "/cms-auth/AWS679f53fac002430cb0da5b7982bd2287/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
             }
         ]
     }

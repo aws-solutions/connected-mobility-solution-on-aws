@@ -1,0 +1,53 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+"cms_common" = {path = "./../../lib", editable = true}
+aws_lambda_powertools = {extras=["tracer", "validation"], version=">=2.4.0"}
+requests = ">=2.31.0"
+opensearch-py = ">=2.5.0"
+pydantic = ">=2.7.1"
+pydantic-core = ">=2.18.2"
+sagemaker = "==2.230.0"
+setuptools = ">=70.0.0"
+tenacity = ">=8.4.0"
+
+[dev-packages]
+aws-cdk-lib = ">=2.140.0"
+"aws_solutions_constructs.aws_apigateway_lambda" = "*"
+boto3 = ">=1.26.0"
+boto3-stubs = {extras = ["essential", "opensearchserverless", "bedrock-agent", "dynamodb", "sagemaker", "efs", "ec2", "lambda", "sagemaker-runtime"], version = "*"}
+cdk-nag = "*"
+dill = "*"
+jinja2 = "*"
+markdown-to-json = "*"
+mkdocs-techdocs-core = "*"
+mypy = "*"
+pandas = "*"
+pandas-stubs = "*"
+pre-commit = "*"
+pycln = "*"
+pylint = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+pyyaml = "*"
+requests = "*"
+syrupy = "*"
+toml = "*"
+torch = ">=2.2.1"
+types-boto3 = "*"
+types-python-dateutil = "*"
+types-pyyaml = "*"
+types-requests = "*"
+types-setuptools = "*"
+types-urllib3 = "*"
+types-toml = "*"
+urllib3 = ">=2.2.2"
+wrapt = "*"
+freezegun="*"
+
+[requires]
+python_version = "3.12"

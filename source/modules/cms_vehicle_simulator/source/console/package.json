@@ -16,7 +16,7 @@
     "@aws-amplify/interactions": "^5.2.19",
     "@aws-amplify/storage": "^5.9.14",
     "@aws-amplify/ui-react": "^4.6.0",
-    "@maplibre/maplibre-gl-geocoder": "^1.5.0",
+    "@maplibre/maplibre-gl-geocoder": "1.5.0",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
@@ -43,7 +43,8 @@
   },
   "resolutions": {
     "follow-redirects": "^1.15.4",
-    "axios": "^1.7.4"
+    "axios": "^1.7.4",
+    "rollup": "^4.22.4"
   },
   "overrides": {
     "nth-check": "^2.0.1",
@@ -51,8 +52,7 @@
     "@babel/traverse": "^7.23.2",
     "braces": "^3.0.3",
     "ws": "^8.17.1",
-    "path-to-regexp": "^0.1.10",
-    "rollup": "^4.22.4"
+    "path-to-regexp": "^0.1.10"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -90,7 +90,7 @@
       }
     },
     "moduleNameMapper": {
-      "^[^\\S]+(.*?)\\.css$": "<rootDir>/src/__mocks__/styleMock.ts"
+      "^[^\\S]+(.*?)\\.css$": "<rootDir>/src/mocks/styleMock.ts"
     },
     "collectCoverageFrom": [
       "src/**/*.{ts,tsx}",

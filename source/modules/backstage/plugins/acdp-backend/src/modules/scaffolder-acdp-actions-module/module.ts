@@ -25,7 +25,6 @@ export const scaffolderModuleAcdpActions = createBackendModule({
     env.registerInit({
       deps: {
         scaffolder: scaffolderActionsExtensionPoint,
-        // config: coreServices.rootConfig,
         reader: coreServices.urlReader,
         discovery: coreServices.discovery,
         auth: coreServices.auth,

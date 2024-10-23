@@ -9,7 +9,7 @@
 #
 # Once the commands have been run, you can build the image using `yarn build-image`
 
-FROM public.ecr.aws/docker/library/node:18.17.1-bullseye-slim
+FROM public.ecr.aws/docker/library/node:18.20-bullseye-slim
 
 # Install sqlite3 dependencies. You can skip this if you don't use sqlite3 in the image,
 # in which case you should also move better-sqlite3 to "devDependencies" in package.json.

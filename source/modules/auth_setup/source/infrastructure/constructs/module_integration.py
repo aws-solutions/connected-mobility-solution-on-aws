@@ -15,7 +15,7 @@ from constructs import Construct
 # CMS Common Library
 from cms_common.config.regex import RegexPattern
 from cms_common.constructs.identity_provider_config import IdentityProviderConfig
-from cms_common.resource_names.auth import AuthResourceNames
+from cms_common.resource_names.auth import AuthSetupResourceNames
 
 
 @define(auto_attribs=True, frozen=True)
@@ -105,13 +105,14 @@ class ModuleOutputsConstruct(Construct):
         scope: Construct,
         construct_id: str,
         module_inputs_construct: ModuleInputsConstruct,
+        user_pool_id: str,
         idp_config_secret_arn: str,
         service_client_config_secret_arn: str,
         user_client_config_secret_arn: str,
     ) -> None:
         super().__init__(scope, construct_id)
 
-        auth_resource_names = AuthResourceNames.from_identity_provider_id(
+        auth_setup_resource_names = AuthSetupResourceNames.from_identity_provider_id(
             module_inputs_construct.stack_config.identity_provider_id
         )
 
@@ -120,7 +121,7 @@ class ModuleOutputsConstruct(Construct):
             "ssm-idp-config-secret-arn",
             string_value=idp_config_secret_arn,
             description="Secret Arn for IdP configurations needed to facilitate authentication and authorization via OAuth 2.0 identity providers.",
-            parameter_name=auth_resource_names.idp_config_secret_arn_ssm_parameter,
+            parameter_name=auth_setup_resource_names.idp_config_secret_arn_ssm_parameter,
             simple_name=False,
         )
 
@@ -129,7 +130,7 @@ class ModuleOutputsConstruct(Construct):
             "ssm-service-client-config-secret-arn",
             string_value=service_client_config_secret_arn,
             description="Secret Arn for service client configuration needed for OAuth 2.0 operations.",
-            parameter_name=auth_resource_names.service_client_config_secret_arn_ssm_parameter,
+            parameter_name=auth_setup_resource_names.service_client_config_secret_arn_ssm_parameter,
             simple_name=False,
         )
 
@@ -138,6 +139,15 @@ class ModuleOutputsConstruct(Construct):
             "ssm-user-client-config-secret-arn",
             string_value=user_client_config_secret_arn,
             description="Secret Arn for user client configuration needed for OAuth 2.0 operations.",
-            parameter_name=auth_resource_names.user_client_config_secret_arn_ssm_parameter,
+            parameter_name=auth_setup_resource_names.user_client_config_secret_arn_ssm_parameter,
+            simple_name=False,
+        )
+
+        aws_ssm.StringParameter(
+            self,
+            "ssm-cognito-user-pool-id",
+            string_value=user_pool_id,
+            description="User pool id for Cognito user pool",
+            parameter_name=auth_setup_resource_names.user_pool_id,
             simple_name=False,
         )

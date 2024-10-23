@@ -15,7 +15,7 @@ from cms_common.config.ssm import resolve_ssm_parameter
 from cms_common.config.stack_inputs import SolutionConfigInputs
 from cms_common.constructs.app_unique_id import AppUniqueId
 from cms_common.constructs.vpc_construct import create_vpc_config, get_vpc_name
-from cms_common.resource_names.module_short_names import CMSModuleShortNames
+from cms_common.resource_names.auth import AuthResourceNames
 
 
 class ModuleInputsConstruct(Construct):
@@ -38,16 +38,10 @@ class ModuleInputsConstruct(Construct):
             vpc_name=get_vpc_name(self, app_unique_id=self.app_unique_id)
         )
 
-        auth_module_ssm_prefix_with_leading_slash = ResourcePrefix.slash_separated(
-            app_unique_id=self.app_unique_id,
-            module_name=CMSModuleShortNames.AUTH,
-            leading_slash=True,
-        )
         self.token_validation_lambda_arn = resolve_ssm_parameter(
-            parameter_name=ResourceName.slash_separated(
-                prefix=auth_module_ssm_prefix_with_leading_slash,
-                name="token-validation-lambda/arn",
-            )
+            parameter_name=AuthResourceNames.from_app_unique_id(
+                app_unique_id=self.app_unique_id
+            ).token_validation_lambda_arn,
         )
 
 

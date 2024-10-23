@@ -25,7 +25,10 @@ from cms_common.constructs.vpc_construct import VpcConstruct
 
 # Connected Mobility Solution on AWS
 from .constructs.appsync_api import AppSyncAPIConstruct
-from .constructs.athena_data_source import AppSyncAthenaDataSourceConstruct
+from .constructs.athena_data_source import (
+    AppSyncAthenaDataSourceConstruct,
+    AppSyncAthenaDataSourceConstructInputs,
+)
 from .constructs.authorization_lambda import AuthorizationLambdaConstruct
 from .constructs.module_integration import ModuleInputsConstruct, ModuleOutputsConstruct
 
@@ -50,6 +53,18 @@ class CmsAPIStack(Stack):
                     "S3AssetKeyPrefix": s3_asset_config_inputs.object_key_prefix,
                 },
             },
+        )
+
+        AppRegistryConstruct(
+            self,
+            "app-registry-construct",
+            app_registry_inputs=AppRegistryInputs(
+                application_name=Aws.STACK_NAME,
+                application_type=solution_config_inputs.application_type,
+                solution_id=solution_config_inputs.solution_id,
+                solution_name=solution_config_inputs.solution_name,
+                solution_version=solution_config_inputs.solution_version,
+            ),
         )
 
         module_inputs_construct = ModuleInputsConstruct(self, "module-inputs-construct")
@@ -89,17 +104,6 @@ class CmsAPIConstruct(Construct):
         **kwargs: Any,
     ) -> None:
         super().__init__(scope, construct_id)
-        AppRegistryConstruct(
-            self,
-            "app-registry",
-            app_registry_inputs=AppRegistryInputs(
-                application_name=Aws.STACK_NAME,
-                application_type=solution_config_inputs.application_type,
-                solution_id=solution_config_inputs.solution_id,
-                solution_name=solution_config_inputs.solution_name,
-                solution_version=solution_config_inputs.solution_version,
-            ),
-        )
 
         vpc_construct = VpcConstruct(
             self, "vpc-construct", vpc_config=module_inputs_construct.vpc_config
@@ -152,21 +156,28 @@ class CmsAPIConstruct(Construct):
             authorization_lambda=authorization_lambda_construct.authorization_lambda,
         )
 
+        app_sync_api_inputs = AppSyncAthenaDataSourceConstructInputs(
+            appsync_api=appsync_api.graphql_api,
+            bucket_arn=module_inputs_construct.root_bucket.bucket_arn,
+            bucket_key_arn=module_inputs_construct.root_bucket.bucket_key_arn,
+            glue_registry_name=module_inputs_construct.glue.registry_name,
+            glue_schema_arn=module_inputs_construct.glue.schema_arn,
+            glue_database_name=module_inputs_construct.glue.database_name,
+            glue_table_name=module_inputs_construct.glue.table_name,
+            dependency_layer=dependency_layer_construct.dependency_layer,
+            metrics_url=module_inputs_construct.operational_metrics.metrics_url,
+            report_metrics_enabled=module_inputs_construct.operational_metrics.report_metrics_enabled,
+            deployment_uuid=module_inputs_construct.operational_metrics.deployment_uuid,
+            vpc_construct=vpc_construct,
+        )
+
         # Athena Data Source
         appsync_athena_data_source = AppSyncAthenaDataSourceConstruct(
             self,
             "appsync-athena-data-source",
             app_unique_id=module_inputs_construct.app_unique_id,
             solution_config_inputs=solution_config_inputs,
-            appsync_api=appsync_api.graphql_api,
-            bucket_arn=module_inputs_construct.root_bucket.bucket_arn,
-            bucket_key_arn=module_inputs_construct.root_bucket.bucket_key_arn,
-            glue_inputs=module_inputs_construct.glue,
-            dependency_layer=dependency_layer_construct.dependency_layer,
-            metrics_url=module_inputs_construct.operational_metrics.metrics_url,
-            report_metrics_enabled=module_inputs_construct.operational_metrics.report_metrics_enabled,
-            deployment_uuid=module_inputs_construct.operational_metrics.deployment_uuid,
-            vpc_construct=vpc_construct,
+            app_sync_athena_data_source_construct_inputs=app_sync_api_inputs,
         )
 
         ModuleOutputsConstruct(

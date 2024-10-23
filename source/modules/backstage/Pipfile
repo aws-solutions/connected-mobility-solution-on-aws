@@ -8,6 +8,8 @@ name = "pypi"
 [dev-packages]
 cms_common = {path = "../../lib", editable = true}
 attrs = ">=22.1.0"
+moto = {extras = ["all"], version = ">=5.0.6"}
+boto3-stubs = {extras = ["essential", "cognito-idp", "ssm"], version = "*"}
 cdk-nag = "*"
 exceptiongroup = "*"
 jinja2 = "*"
@@ -29,6 +31,7 @@ types-requests = ">=2.32.0"
 types-setuptools = "*"
 types-urllib3 = "*"
 types-toml = "*"
+urllib3 = ">=2.2.2"
 wheel = "*"
 wrapt = "*"
 freezegun="*"

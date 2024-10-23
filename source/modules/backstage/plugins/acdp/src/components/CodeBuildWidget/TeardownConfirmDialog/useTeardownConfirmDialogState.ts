@@ -16,9 +16,10 @@
  * limitations under the License.
  */
 
-import { Entity, stringifyEntityRef } from "@backstage/catalog-model";
 import { useCallback } from "react";
 import useAsync from "react-use/lib/useAsync";
+
+import { Entity, stringifyEntityRef } from "@backstage/catalog-model";
 
 /**
  * Each distinct state that the dialog can be in at any given time.
@@ -45,18 +46,14 @@ export function useTeardownConfirmDialogState(
 ): UseTeardownConfirmDialogState {
   const entityRef = stringifyEntityRef(entity);
 
-  // Load the prerequisite data: what entities that are colocated with us, and
-  // what location that spawned us
+  // Load the prerequisite data: what entities that are colocated with us, and what location that spawned us
   const prerequisites = useAsync(async () => {
-    //future: fetch CFN template status here.
+    // future: fetch CFN template status here.
   }, [entity]);
 
-  const teardownEntity = useCallback(
-    function teardownEntityConfirm() {
-      return true;
-    },
-    [prerequisites],
-  );
+  const teardownEntity = useCallback(function teardownEntityConfirm() {
+    return true;
+  }, []);
 
   // Return early if prerequisites still loading or failing
   const { loading, error } = prerequisites;

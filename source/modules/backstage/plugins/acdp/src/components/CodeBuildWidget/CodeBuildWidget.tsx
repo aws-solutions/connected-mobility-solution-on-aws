@@ -2,9 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from "react";
-import { IconButton } from "@material-ui/core";
-import { Cached } from "@material-ui/icons";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+import { IconButton } from "@material-ui/core";
+import Cached from "@material-ui/icons/Cached";
 
 import { InfoCard } from "@backstage/core-components";
 import {
@@ -12,9 +13,10 @@ import {
   MissingAnnotationEmptyState,
 } from "@backstage/plugin-catalog-react";
 
-import { WidgetContent } from "./WidgetContent";
+import { isDeploymentTargetAvailable } from "../../utils";
+import { CodeBuildWidgetContent } from "./CodeBuildWidgetContent";
+
 import { constants } from "backstage-plugin-acdp-common";
-import { isAcdpBuildProjectAvailable } from "../Flags";
 
 export interface AcdpBuildWidgetProps {
   buildHistoryLength?: number;
@@ -28,7 +30,7 @@ export const AcdpBuildWidget = (props: AcdpBuildWidgetProps) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {!isAcdpBuildProjectAvailable(entity) ? (
+      {!isDeploymentTargetAvailable(entity) ? (
         <MissingAnnotationEmptyState
           annotation={constants.ACDP_DEPLOYMENT_TARGET_ANNOTATION}
         />
@@ -49,7 +51,7 @@ export const AcdpBuildWidget = (props: AcdpBuildWidgetProps) => {
             </IconButton>
           }
         >
-          <WidgetContent buildHistoryLength={buildHistoryLength} />
+          <CodeBuildWidgetContent buildHistoryLength={buildHistoryLength} />
         </InfoCard>
       )}
     </QueryClientProvider>
