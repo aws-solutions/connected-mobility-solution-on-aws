@@ -219,6 +219,13 @@
       "Description": "Optional when using a Public Hosted Zone with Route53. Required when HostedZoneId is Private or not provided. Provide a custom ACM Certificate ARN to use for TLS.",
       "Type": "String"
     },
+    "DefaultUserEmail": {
+      "AllowedPattern": "(^$)|^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$",
+      "ConstraintDescription": "User E-Mail must be a valid E-Mail address",
+      "Default": "",
+      "Description": "The user E-Mail to access backstage UI",
+      "Type": "String"
+    },
     "FullyQualifiedDomainName": {
       "AllowedPattern": "^([A-Za-z0-9][A-Za-z0-9-]*\\.)+[A-Za-z]+$",
       "ConstraintDescription": "Fully Qualified Domain Name must be a valid domain name",
@@ -293,6 +300,17 @@
             "value"
           ]
         },
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          }
+        ],
         "Timeout": 900
       },
       "Type": "AWS::Lambda::Function"
@@ -324,6 +342,17 @@
               ]
             ]
           }
+        ],
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          }
         ]
       },
       "Type": "AWS::IAM::Role"
@@ -352,10 +381,7 @@
       },
       "Type": "AWS::IAM::Policy"
     },
-    "acdpacdpappregistryappregistryapplicationF3E7BCE9": {
-      "DependsOn": [
-        "ssmappuniqueidD1DCE51D"
-      ],
+    "acdpappregistryappregistryapplication0BC5FAC5": {
       "Properties": {
         "Name": {
           "Fn::Join": [
@@ -374,42 +400,28 @@
               }
             ]
           ]
-        },
-        "Tags": {
-          "Solutions:DeploymentUUID": {
-            "Fn::GetAtt": [
-              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
-              "SolutionUUID"
-            ]
-          }
         }
       },
       "Type": "AWS::ServiceCatalogAppRegistry::Application"
     },
-    "acdpacdpappregistryappregistryapplicationattributeassociationD25D643C": {
-      "DependsOn": [
-        "ssmappuniqueidD1DCE51D"
-      ],
+    "acdpappregistryappregistryapplicationattributeassociation3418E518": {
       "Properties": {
         "Application": {
           "Fn::GetAtt": [
-            "acdpacdpappregistryappregistryapplicationF3E7BCE9",
+            "acdpappregistryappregistryapplication0BC5FAC5",
             "Id"
           ]
         },
         "AttributeGroup": {
           "Fn::GetAtt": [
-            "acdpacdpappregistrydefaultapplicationattributesF28A0104",
+            "acdpappregistrydefaultapplicationattributes4DDA2479",
             "Id"
           ]
         }
       },
       "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroupAssociation"
     },
-    "acdpacdpappregistrydefaultapplicationattributesF28A0104": {
-      "DependsOn": [
-        "ssmappuniqueidD1DCE51D"
-      ],
+    "acdpappregistrydefaultapplicationattributes4DDA2479": {
       "Properties": {
         "Attributes": {
           "ApplicationType": "test-application-type",
@@ -437,10 +449,10 @@
           ]
         },
         "Tags": {
-          "Solutions:DeploymentUUID": {
+          "awsApplication": {
             "Fn::GetAtt": [
-              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
-              "SolutionUUID"
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
             ]
           }
         }
@@ -696,6 +708,15 @@
         ],
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::GetAtt": [
@@ -762,6 +783,15 @@
           "Version": "2012-10-17"
         },
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -835,6 +865,15 @@
           "Type": "NO_SOURCE"
         },
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -1127,6 +1166,15 @@
         ],
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::GetAtt": [
@@ -1358,6 +1406,15 @@
         ],
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::GetAtt": [
@@ -1406,6 +1463,12 @@
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
             ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
           }
         },
         "Type": "String",
@@ -1441,6 +1504,12 @@
             "Fn::GetAtt": [
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
+            ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
             ]
           }
         },
@@ -1481,6 +1550,12 @@
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
             ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
           }
         },
         "Type": "String",
@@ -1513,6 +1588,12 @@
             "Fn::GetAtt": [
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
+            ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
             ]
           }
         },
@@ -1547,6 +1628,12 @@
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
             ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
           }
         },
         "Type": "String",
@@ -1579,6 +1666,12 @@
             "Fn::GetAtt": [
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
+            ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
             ]
           }
         },
@@ -1613,6 +1706,12 @@
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
             ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
           }
         },
         "Type": "String",
@@ -1645,6 +1744,12 @@
             "Fn::GetAtt": [
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
+            ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
             ]
           }
         },
@@ -1682,6 +1787,12 @@
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
             ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
           }
         },
         "Type": "String",
@@ -1715,6 +1826,12 @@
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
             ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
           }
         },
         "Type": "String",
@@ -1745,6 +1862,12 @@
             "Fn::GetAtt": [
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
+            ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
             ]
           }
         },
@@ -1777,6 +1900,12 @@
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
             ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
           }
         },
         "Type": "String",
@@ -1807,6 +1936,12 @@
             "Fn::GetAtt": [
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
+            ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
             ]
           }
         },
@@ -1839,6 +1974,12 @@
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
             ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
           }
         },
         "Type": "String",
@@ -1870,6 +2011,12 @@
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
             ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
           }
         },
         "Type": "String",
@@ -1900,6 +2047,12 @@
             "Fn::GetAtt": [
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
+            ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
             ]
           }
         },
@@ -1933,6 +2086,12 @@
             "Fn::GetAtt": [
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
+            ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
             ]
           }
         },
@@ -1970,6 +2129,12 @@
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
             ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
           }
         },
         "Type": "String",
@@ -2002,6 +2167,12 @@
             "Fn::GetAtt": [
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
+            ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
             ]
           }
         },
@@ -2036,6 +2207,12 @@
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
             ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
           }
         },
         "Type": "String",
@@ -2066,6 +2243,12 @@
             "Fn::GetAtt": [
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
+            ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
             ]
           }
         },
@@ -2098,6 +2281,12 @@
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
             ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
           }
         },
         "Type": "String",
@@ -2128,6 +2317,12 @@
             "Fn::GetAtt": [
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
+            ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
             ]
           }
         },
@@ -2177,6 +2372,12 @@
               "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
               "SolutionUUID"
             ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
           }
         },
         "Type": "String",
@@ -2225,6 +2426,15 @@
           "Version": "2012-10-17"
         },
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -2321,6 +2531,15 @@
           "Type": "CODEPIPELINE"
         },
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -2516,6 +2735,15 @@
           }
         ],
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -2830,6 +3058,15 @@
         ],
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::GetAtt": [
@@ -3010,6 +3247,15 @@
         ],
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::GetAtt": [
@@ -3053,6 +3299,15 @@
           "RestrictPublicBuckets": true
         },
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -3126,6 +3381,15 @@
           "Version": "2012-10-17"
         },
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -3230,6 +3494,15 @@
         },
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::GetAtt": [
@@ -3315,6 +3588,15 @@
         },
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::GetAtt": [
@@ -3399,6 +3681,15 @@
           "Version": "2012-10-17"
         },
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -3572,6 +3863,15 @@
         },
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::GetAtt": [
@@ -3628,6 +3928,13 @@
               "Type": "PLAINTEXT",
               "Value": {
                 "Ref": "IdentityProviderId"
+              }
+            },
+            {
+              "Name": "DEFAULT_USER_EMAIL",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "DefaultUserEmail"
               }
             },
             {
@@ -3748,6 +4055,15 @@
           "Type": "CODEPIPELINE"
         },
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -4170,6 +4486,15 @@
         ],
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::GetAtt": [
@@ -4556,6 +4881,15 @@
         },
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::GetAtt": [
@@ -4748,6 +5082,15 @@
         },
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::GetAtt": [
@@ -4865,21 +5208,6 @@
       },
       "Type": "AWS::IAM::Policy"
     },
-    "appregistryapplicationstackassociation": {
-      "Properties": {
-        "Application": {
-          "Fn::GetAtt": [
-            "acdpacdpappregistryappregistryapplicationF3E7BCE9",
-            "Id"
-          ]
-        },
-        "Resource": {
-          "Ref": "AWS::StackId"
-        },
-        "ResourceType": "CFN_STACK"
-      },
-      "Type": "AWS::ServiceCatalogAppRegistry::ResourceAssociation"
-    },
     "backstageassetbucketconstructcmkencryptedbucketE8CD3782": {
       "DeletionPolicy": "Retain",
       "Properties": {
@@ -4909,6 +5237,17 @@
           "IgnorePublicAcls": true,
           "RestrictPublicBuckets": true
         },
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          }
+        ],
         "VersioningConfiguration": {
           "Status": "Enabled"
         }
@@ -4991,10 +5330,34 @@
                 }
               },
               "Resource": "*"
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:Encrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "logging.s3.amazonaws.com"
+              },
+              "Resource": "*"
             }
           ],
           "Version": "2012-10-17"
-        }
+        },
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          }
+        ]
       },
       "Type": "AWS::KMS::Key",
       "UpdateReplacePolicy": "Retain"
@@ -5007,7 +5370,13 @@
           "ServerSideEncryptionConfiguration": [
             {
               "ServerSideEncryptionByDefault": {
-                "SSEAlgorithm": "AES256"
+                "KMSMasterKeyID": {
+                  "Fn::GetAtt": [
+                    "backstageassetbucketconstructcmkkeyDD56344B",
+                    "Arn"
+                  ]
+                },
+                "SSEAlgorithm": "aws:kms"
               }
             }
           ]
@@ -5025,6 +5394,17 @@
           "IgnorePublicAcls": true,
           "RestrictPublicBuckets": true
         },
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          }
+        ],
         "VersioningConfiguration": {
           "Status": "Enabled"
         }
@@ -5103,6 +5483,17 @@
             "IpProtocol": "-1"
           }
         ],
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          }
+        ],
         "VpcId": {
           "Fn::Join": [
             "",
@@ -5169,6 +5560,17 @@
           ]
         },
         "Runtime": "python3.12",
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          }
+        ],
         "Timeout": 300,
         "VpcConfig": {
           "SecurityGroupIds": [
@@ -5443,6 +5845,17 @@
             },
             "PolicyName": "ec2-policy"
           }
+        ],
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
+          }
         ]
       },
       "Type": "AWS::IAM::Role"
@@ -5469,6 +5882,17 @@
             "CidrIp": "0.0.0.0/0",
             "Description": "Allow all outbound traffic by default",
             "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "acdpappregistryappregistryapplication0BC5FAC5",
+                "ApplicationTagValue"
+              ]
+            }
           }
         ],
         "VpcId": {
@@ -5515,6 +5939,14 @@
             ]
           ]
         },
+        "Tags": {
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
+          }
+        },
         "Type": "String",
         "Value": {
           "Fn::If": [
@@ -5543,6 +5975,14 @@
             ]
           ]
         },
+        "Tags": {
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
+          }
+        },
         "Type": "String",
         "Value": {
           "Ref": "FullyQualifiedDomainName"
@@ -5565,6 +6005,14 @@
             ]
           ]
         },
+        "Tags": {
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
+          }
+        },
         "Type": "String",
         "Value": {
           "Ref": "IsPublicFacing"
@@ -5586,6 +6034,14 @@
               "/config/dns/route53-hosted-zone-id"
             ]
           ]
+        },
+        "Tags": {
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
+          }
         },
         "Type": "String",
         "Value": {
@@ -5613,6 +6069,14 @@
               }
             ]
           ]
+        },
+        "Tags": {
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
+          }
         },
         "Type": "String",
         "Value": {

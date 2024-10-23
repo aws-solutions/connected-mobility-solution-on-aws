@@ -38,6 +38,7 @@ types-python-dateutil = "*"
 types-pyyaml = "*"
 types-toml = ">=0.10.2"
 types-urllib3 = "*"
+urllib3 = ">=2.2.2"
 wheel = "*"
 zipp = "*"
 

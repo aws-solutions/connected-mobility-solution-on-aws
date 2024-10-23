@@ -25,8 +25,8 @@ class CloudFormationRoleConstruct(Construct):
                     statements=[
                         aws_iam.PolicyStatement(
                             effect=aws_iam.Effect.ALLOW,
-                            resources=["*"],
-                            actions=["*"],
+                            resources=["*"],  # NOSONAR
+                            actions=["*"],  # NOSONAR
                         ),
                     ]
                 )

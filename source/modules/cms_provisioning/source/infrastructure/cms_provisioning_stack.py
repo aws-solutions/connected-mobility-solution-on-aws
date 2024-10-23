@@ -57,6 +57,18 @@ class CmsProvisioningStack(Stack):
             },
         )
 
+        AppRegistryConstruct(
+            self,
+            "app-registry-construct",
+            app_registry_inputs=AppRegistryInputs(
+                application_name=Aws.STACK_NAME,
+                application_type=solution_config_inputs.application_type,
+                solution_id=solution_config_inputs.solution_id,
+                solution_name=solution_config_inputs.solution_name,
+                solution_version=solution_config_inputs.solution_version,
+            ),
+        )
+
         module_inputs_construct = ModuleInputsConstruct(self, "module-inputs-construct")
         app_unique_id = module_inputs_construct.app_unique_id
 
@@ -99,18 +111,6 @@ class CmsProvisioningConstruct(Construct):
         module_inputs_construct: ModuleInputsConstruct,
     ) -> None:
         super().__init__(scope, stack_id)
-
-        AppRegistryConstruct(
-            self,
-            "app-registry-construct",
-            app_registry_inputs=AppRegistryInputs(
-                application_name=Aws.STACK_NAME,
-                application_type=solution_config_inputs.application_type,
-                solution_id=solution_config_inputs.solution_id,
-                solution_name=solution_config_inputs.solution_name,
-                solution_version=solution_config_inputs.solution_version,
-            ),
-        )
 
         vpc_construct = VpcConstruct(
             self, "vpc-construct", vpc_config=module_inputs_construct.vpc_config

@@ -2,5 +2,3 @@
 // SPDX-License-Identifier: Apache-2.0
 
 export * from "./plugin";
-export * from "./components/Flags";
-export * from "./api";

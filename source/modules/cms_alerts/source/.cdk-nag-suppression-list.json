@@ -1,12 +1,4 @@
 {
-    "/cms-alerts/cms-alerts/auth-construct/authorization-lambda/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Lambda runtime would be upgraded in next release in all modules"
-            }
-        ]
-    },
     "/cms-alerts/cms-alerts/auth-construct/authorization-lambda-role/Resource": {
         "rules_to_suppress": [
             {
@@ -23,14 +15,6 @@
                     "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*",
                     "Resource::*"
                 ]
-            }
-        ]
-    },
-    "/cms-alerts/cms-alerts/user-subscriptions-construct/user-subscriptions-lambda/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Lambda runtime would be upgraded in next release in all modules"
             }
         ]
     },
@@ -53,14 +37,6 @@
                     "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*",
                     "Resource::*"
                 ]
-            }
-        ]
-    },
-    "/cms-alerts/cms-alerts/notification-construct/send-notifications-lambda/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Lambda runtime would be upgraded in next release in all modules"
             }
         ]
     },
@@ -117,22 +93,6 @@
                     "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*",
                     "Resource::*"
                 ]
-            }
-        ]
-    },
-    "/cms-alerts/cms-alerts/publish-api-construct/publish-lambda/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Lambda runtime would be upgraded in next release in all modules"
-            }
-        ]
-    },
-    "/cms-alerts/cms-alerts/incoming-alerts-construct/create-alerts-lambda/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Lambda runtime would be upgraded in next release in all modules"
             }
         ]
     },

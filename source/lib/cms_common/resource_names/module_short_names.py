@@ -20,6 +20,7 @@ class CMSModuleShortNames:
     PROVISIONING: str = "provisioning"
     SAMPLE: str = "sample"
     VEHICLE_SIMULATOR: str = "vehicle-simulator"
+    PREDICTIVE_MAINTENANCE: str = "predictive-maintenance"
 
 
 # pylint: enable=invalid-name

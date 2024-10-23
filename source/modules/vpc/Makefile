@@ -17,7 +17,7 @@ MODULE_PATH := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 # ========================================================
 # VARIABLES
 # ========================================================
-export STACK_NAME ?= ${MODULE_NAME}
+export STACK_NAME ?= ${VPC_NAME}-${MODULE_NAME}
 export STACK_TEMPLATE_NAME = ${MODULE_NAME}.template
 export STACK_TEMPLATE_PATH ?= deployment/global-s3-assets/${MODULE_NAME}/${STACK_TEMPLATE_NAME}
 

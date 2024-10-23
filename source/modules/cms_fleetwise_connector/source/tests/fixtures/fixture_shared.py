@@ -54,6 +54,7 @@ def fixture_mock_module_env_vars() -> Dict[str, str]:
         "S3_ASSET_BUCKET_BASE_NAME": "test-bucket-name",
         "S3_ASSET_KEY_PREFIX": "test-key-prefix",
         "UNLOAD_END_TIME_PARAMETER_NAME": "parameter-name",
+        "USER_AGENT_STRING": "test-user-agent-string",
     }
 
 

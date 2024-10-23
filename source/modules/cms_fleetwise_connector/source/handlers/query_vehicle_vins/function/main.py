@@ -2,10 +2,12 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 # Standard Library
+import os
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 # AWS Libraries
 import boto3
+from botocore.config import Config
 
 if TYPE_CHECKING:
     # Third Party Libraries
@@ -19,7 +21,12 @@ DEFAULT_BATCH_SIZE = 100  # 100 is Timestream unload partition limit per query
 def _query_timestream(
     query: str, next_token: Optional[str] = None
 ) -> QueryResponseTypeDef:
-    timestream_client = boto3.client("timestream-query")
+    timestream_client = boto3.client(
+        "timestream-query",
+        config=Config(
+            user_agent_extra=os.environ["USER_AGENT_STRING"],
+        ),
+    )
 
     response: QueryResponseTypeDef
     if next_token:

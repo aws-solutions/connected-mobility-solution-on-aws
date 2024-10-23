@@ -74,8 +74,6 @@ and an auto-generated public certificate.
 
 ### Scenario 2: Fully Public with an External DNS + Custom Certificate
 
-![Public Deployment w/ External DNS + Custom Certificate](acdp-public-ext-dns.svg)
-
 #### Description
 
 The network topology is the following:
@@ -92,7 +90,7 @@ Note that in this scenario, the Route53HostedZoneId parameter is not set.
 
 #### Diagram
 
-![Public Deployment](acdp-public.svg)
+![Public Deployment w/ External DNS + Custom Certificate](acdp-public-ext-dns.svg)
 
 #### Steps
 

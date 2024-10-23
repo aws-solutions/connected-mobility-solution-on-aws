@@ -24,13 +24,11 @@ from constructs import Construct
 from cms_common.config.resource_names import ResourceName, ResourcePrefix
 from cms_common.config.stack_inputs import SolutionConfigInputs
 from cms_common.constructs.vpc_construct import VpcConstruct
-from cms_common.policy_generators.ec2_vpc import generate_ec2_vpc_policy
-
-# Connected Mobility Solution on AWS
-from ..lib.policy_generators import (
-    generate_kms_policy_document,
+from cms_common.policy_generators.cloudwatch import (
     generate_lambda_cloudwatch_logs_policy_document,
 )
+from cms_common.policy_generators.ec2_vpc import generate_ec2_vpc_policy
+from cms_common.policy_generators.kms import generate_kms_policy_statement_from_key_id
 
 
 class NotificationConstruct(Construct):
@@ -108,7 +106,10 @@ class NotificationConstruct(Construct):
                                     resource=f"{sns_topic_prefix}-*",
                                 )
                             ],
-                        )
+                        ),
+                        generate_kms_policy_statement_from_key_id(
+                            self, user_subscription_topic_general_key_id, True
+                        ),
                     ]
                 ),
                 "cloudwatch-policy": generate_lambda_cloudwatch_logs_policy_document(
@@ -126,17 +127,11 @@ class NotificationConstruct(Construct):
                             resources=[
                                 self.notifications_table.table_stream_arn  # type: ignore[list-item]
                             ],
-                        )
+                        ),
+                        generate_kms_policy_statement_from_key_id(
+                            self, self.notifications_table_key.key_id, False
+                        ),
                     ]
-                ),
-                "kms-notifications-table-key-policy": generate_kms_policy_document(
-                    self, self.notifications_table_key.key_id, False
-                ),
-                "kms-dlq-key-policy": generate_kms_policy_document(
-                    self, dead_letter_queue_key.key_id, False
-                ),
-                "kms-subs-topic-key-policy": generate_kms_policy_document(
-                    self, user_subscription_topic_general_key_id, True
                 ),
                 "sqs-policy": aws_iam.PolicyDocument(
                     statements=[
@@ -148,7 +143,10 @@ class NotificationConstruct(Construct):
                                 "sqs:SendMessage",
                             ],
                             resources=[dead_letter_queue.queue_arn],
-                        )
+                        ),
+                        generate_kms_policy_statement_from_key_id(
+                            self, dead_letter_queue_key.key_id, False
+                        ),
                     ]
                 ),
                 "ec2-policy": generate_ec2_vpc_policy(

@@ -7,12 +7,13 @@ import os
 from typing import Any, List
 
 # AWS Libraries
-from aws_cdk import CfnMapping, Duration, Stack, Tags, aws_rds, aws_ssm
+from aws_cdk import Aws, CfnMapping, Duration, Stack, Tags, aws_rds, aws_ssm
 from constructs import Construct
 
 # CMS Common Library
 from cms_common.config.resource_names import ResourceName
 from cms_common.config.stack_inputs import S3AssetConfigInputs, SolutionConfigInputs
+from cms_common.constructs.app_registry import AppRegistryConstruct, AppRegistryInputs
 from cms_common.constructs.app_unique_id import AppUniqueId
 from cms_common.constructs.cdk_lambda_vpc_config_construct import (
     CDKLambdasVpcConfigConstruct,
@@ -22,6 +23,7 @@ from cms_common.constructs.vpc_construct import VpcConstruct
 # Connected Mobility Solution on AWS
 from .constructs.aurora_database import AuroraDatabaseConstruct
 from .constructs.backstage_container import BackstageContainerConstruct
+from .constructs.cognito_user import CognitoUserConstruct
 from .constructs.load_balancer import LoadBalancerConstruct
 from .constructs.module_integration import ModuleInputsConstruct
 
@@ -48,6 +50,18 @@ class AcdpBackstageStack(Stack):
                     "S3AssetKeyPrefix": s3_asset_config_inputs.object_key_prefix,
                 },
             },
+        )
+
+        AppRegistryConstruct(
+            self,
+            "backstage-app-registry",
+            app_registry_inputs=AppRegistryInputs(
+                application_name=Aws.STACK_NAME,
+                application_type=solution_config_inputs.application_type,
+                solution_id=solution_config_inputs.solution_id,
+                solution_name=solution_config_inputs.solution_name,
+                solution_version=solution_config_inputs.solution_version,
+            ),
         )
 
         module_inputs = ModuleInputsConstruct(
@@ -104,6 +118,12 @@ class AcdpBackstageConstruct(Construct):
             "cdk-lambdas-vpc-construct",
             vpc_construct=vpc_construct,
             subnets=module_inputs.vpc_config.private_subnets,
+        )
+
+        CognitoUserConstruct(
+            self,
+            "cognito-user-construct",
+            module_inputs=module_inputs,
         )
 
         aurora_database_construct = AuroraDatabaseConstruct(

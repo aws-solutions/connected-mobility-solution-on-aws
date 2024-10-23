@@ -13,7 +13,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import rsa
 
 # CMS Common Library
-from cms_common.resource_names.auth import AuthResourceNames
+from cms_common.resource_names.auth import AuthSetupResourceNames
 
 # AUTH CONFIGURATION CONSTANTS
 TEST_ALTERNATE_AUD_KEY = "client_id"
@@ -27,7 +27,7 @@ TEST_ISSUER = "https://cognito-idp.test-user-pool-id.amazonaws.com/test-region"
 TEST_TOKEN_ENDPOINT = "https://cms-test-domain-prefix.auth.test-region-1.amazoncognito.com/oauth2/token"  # nosec
 TEST_AUTHORIZATION_ENDPOINT = "https://cms-test-domain-prefix.auth.test-region-1.amazoncognito.com/oauth2/authorize"
 TEST_IDENTITY_PROVIDER_ID = "test-idp"
-TEST_AUTH_RESOURCE_NAMES_CLASS = AuthResourceNames.from_identity_provider_id(
+TEST_AUTH_SETUP_RESOURCE_NAMES_CLASS = AuthSetupResourceNames.from_identity_provider_id(
     TEST_IDENTITY_PROVIDER_ID
 )
 

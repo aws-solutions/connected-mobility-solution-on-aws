@@ -1,8 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { mockClient } from "aws-sdk-client-mock";
-import { AcdpBuildApi } from ".";
 import {
   BatchGetProjectsCommand,
   CodeBuildClient,
@@ -10,21 +8,29 @@ import {
   BatchGetBuildsCommand,
   StartBuildCommand,
 } from "@aws-sdk/client-codebuild";
+import { GetParameterCommand, SSMClient } from "@aws-sdk/client-ssm";
+import { mockClient } from "aws-sdk-client-mock";
+
+import { AcdpBuildAction, constants } from "backstage-plugin-acdp-common";
+
+import { AcdpBuildApi } from ".";
+import { getSsmParameterNameForEntitySourceConfig } from "../service/utils";
+import { MockedAcdpBuildService } from "../service/mocks/acdp-build-service.mock";
 import {
+  mockSsmClientGetBuildParameters,
   mockUrlReader,
   mockedConfigData,
   mockedCatalogEntity,
-  resetMocks,
+  resetUrlReaderMocks,
   mockCatalogClient,
-} from "../__mocks__/common-mocks";
-import { AcdpBuildAction, constants } from "backstage-plugin-acdp-common";
-import { GetParameterCommand, SSMClient } from "@aws-sdk/client-ssm";
-import { MockedAcdpBuildService } from "../service/__mocks__/acdp-build-service.mock";
+} from "../mocks";
 
 const mockedCodeBuildClient = mockClient(CodeBuildClient);
 const mockedSsmClient = mockClient(SSMClient);
+
 let mockedAcdpBuildService: MockedAcdpBuildService;
 let acdpBuildApi: AcdpBuildApi;
+
 beforeAll(async () => {
   mockedAcdpBuildService = new MockedAcdpBuildService();
   acdpBuildApi = new AcdpBuildApi(
@@ -36,35 +42,18 @@ beforeAll(async () => {
 beforeEach(() => {
   mockedCodeBuildClient.reset();
   mockedSsmClient.reset();
-  resetMocks();
+  resetUrlReaderMocks();
 });
 
 function setupCommonBuildMocks() {
   mockedCodeBuildClient.on(StartBuildCommand).resolves({});
 
-  mockedSsmClient
-    .on(GetParameterCommand, {
-      Name: mockedAcdpBuildService.getSsmParameterNameForEntityBuildParameters(
-        mockedCatalogEntity,
-      ),
-    })
-    .resolves({
-      Parameter: {
-        Value: JSON.stringify([
-          { name: "MODULE_STACK_NAME", value: "acdp-cms-sample" },
-          {
-            name: "CFN_TEMPLATE_URL",
-            value:
-              "https://acdp-assets.s3.us-west-2.amazonaws.com/connected-mobility-solution-on-aws/vX.X.X/cms-sample/cms-sample.template",
-          },
-          { name: "APP_UNIQUE_ID", value: "cms" },
-        ]),
-      },
-    });
+  mockSsmClientGetBuildParameters(mockedSsmClient);
 
   mockedSsmClient
     .on(GetParameterCommand, {
-      Name: mockedAcdpBuildService.getSsmParameterNameForEntitySourceConfig(
+      Name: getSsmParameterNameForEntitySourceConfig(
+        mockedConfigData.acdp.buildConfig.buildConfigStoreSsmPrefix,
         mockedCatalogEntity,
       ),
     })

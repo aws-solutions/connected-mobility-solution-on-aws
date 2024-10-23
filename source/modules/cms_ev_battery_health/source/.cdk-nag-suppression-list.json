@@ -84,8 +84,8 @@
             {
                 "id": "AwsSolutions-IAM5",
                 "appliesTo": [
-                    "Resource::<cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F.Arn>/cms/alerts/*",
-                    "Resource::<cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F.Arn>/cms/dashboards/*",
+                    "Resource::<cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucket3DABAE5B.Arn>/cms/alerts/*",
+                    "Resource::<cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucket3DABAE5B.Arn>/cms/dashboards/*",
                     "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-ev-battery-health-s3-to-grafana:log-stream:*"
                 ],
                 "reason": "Wildcard permissions required to read all objects with a certain prefix and to write to log streams."
@@ -127,7 +127,7 @@
             {
                 "id": "AwsSolutions-IAM5",
                 "appliesTo": [
-                    "Resource::<cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F.Arn>/cms/dashboards/*"
+                    "Resource::<cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucket3DABAE5B.Arn>/cms/dashboards/*"
                 ],
                 "reason": "Wildcard permissions required to write objects to bucket with a given prefix."
             }
@@ -156,7 +156,7 @@
         "rules_to_suppress": [
             {
                 "id": "AwsSolutions-L1",
-                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+                "reason": "Lambda created by CDK constructs cannot use a different runtime"
             }
         ]
     },
@@ -194,7 +194,7 @@
         "rules_to_suppress": [
             {
                 "id": "AwsSolutions-L1",
-                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+                "reason": "Lambda created by CDK constructs cannot use a different runtime"
             }
         ]
     },
@@ -232,7 +232,7 @@
         "rules_to_suppress": [
             {
                 "id": "AwsSolutions-L1",
-                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
+                "reason": "Lambda created by CDK constructs cannot use a different runtime"
             }
         ]
     },
@@ -315,41 +315,9 @@
             {
                 "id": "AwsSolutions-IAM5",
                 "appliesTo": [
-                    "Resource::<cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F.Arn>/cms/alerts/*"
+                    "Resource::<cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucket3DABAE5B.Arn>/cms/alerts/*"
                 ],
                 "reason": "Wildcard permissions required to write objects to bucket with a given prefix."
-            }
-        ]
-    },
-    "/cms-ev-battery-health/cms-ev-battery-health/cms-ev-grafana-api-key-construct/rotate-secret-lambda-function/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
-            }
-        ]
-    },
-    "/cms-ev-battery-health/cms-ev-battery-health/cms-ev-s3-to-grafana-construct/lambda-function/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
-            }
-        ]
-    },
-    "/cms-ev-battery-health/cms-ev-battery-health/cms-ev-provision-alerts-construct/check-workspace-active-lambda-function/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
-            }
-        ]
-    },
-    "/cms-ev-battery-health/cms-ev-battery-health/cms-ev-process-alerts-construct/lambda-function/Resource": {
-        "rules_to_suppress": [
-            {
-                "id": "AwsSolutions-L1",
-                "reason": "Some libraries used throughout the solution are not yet supported in Python 3.11. For consistency, all lambdas are currently kept at Python 3.10. Future refactoring of unsupported libraries will enable the use of 3.11 throughout the solution."
             }
         ]
     }

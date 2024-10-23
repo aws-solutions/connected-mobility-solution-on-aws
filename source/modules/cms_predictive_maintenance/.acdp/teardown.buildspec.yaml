@@ -1,0 +1,10 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      # Build and deploy
+      - |
+        aws cloudformation delete-stack \
+        --stack-name "${MODULE_STACK_NAME}" \
+        --role-arn "${CLOUDFORMATION_ROLE_ARN}"

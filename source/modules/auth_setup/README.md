@@ -33,6 +33,7 @@
       - [IdP Config](#idp-config)
       - [User Client Config](#user-client-config)
       - [Service Client Config](#service-client-config)
+    - [SSM Parameter](#ssm-parameter)
   - [Cost Scaling](#cost-scaling)
   - [Collection of Operational Metrics](#collection-of-operational-metrics)
   - [License](#license)
@@ -180,12 +181,13 @@ are detailed below.
 If using the optional Cognito infrastructure deployment which is provided by this module, deploy the module with
 the CloudFormation parameter `ShouldCreateCognitoResources` set to "True". This will deploy a basic Cognito infrastructure
 including a user pool, service app client, and user app client, to your account. It will also populate the three configuration
-secrets with values specific to the Cognito deployment.
+secrets and one SSM Parameter with values specific to the Cognito deployment.
 
 #### 2. Empty Config Deploy
 
 If using your own identity provider, and you do not have existing configuration secrets from a previous deployment,
-the Auth Setup module will deploy the three configuration secrets in the expected JSON format with empty values. These
+the Auth Setup module will deploy the three configuration secrets in the expected JSON format as well as one
+SSM Parameter with empty values. These
 values can be populated after the deployment with values specific to your identity provider. To execute this deployment,
 deploy the module with the CloudFormation parameter `ShouldCreateCognitoResources` set to "False", and do not provide
 values for the existing secret arn parameters.
@@ -249,6 +251,10 @@ source code if desired.
   - Client ID of Service client
 - client_secret
   - Client Secret of Service client
+
+### SSM Parameter
+
+- Cognito user pool Id
 
 ## Cost Scaling
 

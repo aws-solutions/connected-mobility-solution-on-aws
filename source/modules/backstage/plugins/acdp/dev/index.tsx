@@ -3,13 +3,22 @@
 
 import React from "react";
 import { createDevApp } from "@backstage/dev-utils";
-import { acdpPlugin, EntityAcdpBuildProjectOverviewCard } from "../src/plugin";
+import {
+  acdpPlugin,
+  EntityAcdpBuildProjectOverviewCard,
+  EntityApplicationsDashboardLinkCard,
+} from "../src/plugin";
 
 createDevApp()
   .registerPlugin(acdpPlugin)
   .addPage({
     element: <EntityAcdpBuildProjectOverviewCard />,
-    title: "Root Page",
-    path: "/acdp",
+    title: "ACDP Build Project Overview Card",
+    path: "/acdp-build-project",
+  })
+  .addPage({
+    element: <EntityApplicationsDashboardLinkCard />,
+    title: "Applications Dashboard Link Card",
+    path: "/acdp-applications-dashboard",
   })
   .render();

@@ -34,6 +34,7 @@ from .cms_common.constructs.tests.fixture_constructs import (
     fixture_app_unique_id_cfn_parameter,
     fixture_app_unique_id_stack,
     fixture_cdk_lambda_vpc_config_construct_stack_template,
+    fixture_cmk_encrpyted_s3_stack,
     fixture_custom_resource_lambda_stack,
     fixture_identity_provider_config_stack,
     fixture_empty_lambda_dependencies_stack,

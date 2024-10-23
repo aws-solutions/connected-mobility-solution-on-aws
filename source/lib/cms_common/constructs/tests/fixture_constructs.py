@@ -20,6 +20,7 @@ from aws_cdk import Stack, assertions, aws_lambda
 # Connected Mobility Solution on AWS
 from ..app_unique_id import AppUniqueId
 from ..cdk_lambda_vpc_config_construct import CDKLambdasVpcConfigConstruct
+from ..cmk_encrypted_s3 import CMKEncryptedS3Construct
 from ..custom_resource_lambda import CustomResourceLambdaConstruct
 from ..identity_provider_config import IdentityProviderConfig
 from ..lambda_dependencies import LambdaDependenciesConstruct, LambdaDependencyError
@@ -62,6 +63,16 @@ def fixture_app_unique_id_cfn_parameter(
     app_unique_id_stack: assertions.Template,
 ) -> Any:
     return dict(app_unique_id_stack.to_json()["Parameters"])["AppUniqueId"]
+
+
+@pytest.fixture(name="cmk_encrpyted_s3_stack", scope="session")
+def fixture_cmk_encrpyted_s3_stack() -> assertions.Template:
+    stack = Stack()
+    CMKEncryptedS3Construct(
+        stack,
+        "test-cmk-encrypted-s3",
+    )
+    return assertions.Template.from_stack(stack)
 
 
 @pytest.fixture(name="empty_lambda_dependencies_stack", scope="session")
@@ -119,6 +130,7 @@ def fixture_custom_resource_lambda_stack() -> assertions.Template:
             vpc_config=VpcConfig(
                 vpc_name="test-vpc-name",
                 vpc_id="test-vpc-id",
+                vpc_cidr_block="test-cidr-block",
                 public_subnets=["test-vpc-public-subnet-1", "test-vpc-public-subnet-2"],
                 private_subnets=[
                     "test-vpc-private-subnet-1",
@@ -161,6 +173,7 @@ def fixture_cdk_lambda_vpc_config_construct_stack_template() -> assertions.Templ
         vpc_config=VpcConfig(
             vpc_name="test-vpc-name",
             vpc_id="test-vpc-id",
+            vpc_cidr_block="test-cidr-block",
             public_subnets=["test-vpc-public-subnet-1", "test-vpc-public-subnet-2"],
             private_subnets=[
                 "test-vpc-private-subnet-1",
@@ -196,6 +209,7 @@ def fixture_vpc_construct_stack_template() -> assertions.Template:
             vpc_config=VpcConfig(
                 vpc_name="test-vpc-name",
                 vpc_id="test-vpc-id",
+                vpc_cidr_block="test-cidr-block",
                 public_subnets=["test-vpc-public-subnet-1", "test-vpc-public-subnet-2"],
                 private_subnets=[
                     "test-vpc-private-subnet-1",
@@ -222,6 +236,7 @@ def fixture_vpc_construct_stack() -> VpcConstruct:
             vpc_config=VpcConfig(
                 vpc_name="test-vpc-name",
                 vpc_id="test-vpc-id",
+                vpc_cidr_block="test-cidr-block",
                 public_subnets=["test-vpc-public-subnet-1", "test-vpc-public-subnet-2"],
                 private_subnets=[
                     "test-vpc-private-subnet-1",

@@ -5,6 +5,7 @@
 
 class RegexPattern:
     EMAIL = r"^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"
+    OPTIONAL_EMAIL = r"(^$)|^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"
     DOMAIN_NAME = r"^([A-Za-z0-9][A-Za-z0-9-]*\.)+[A-Za-z]+$"
     CALLBACK_URLS = (
         r"^[a-zA_Z]{1}[a-zA-Z0-9+-.]*:\/\/(www\.)?[a-zA-Z0-9\/@%._\+~=-]*\b\/?$"

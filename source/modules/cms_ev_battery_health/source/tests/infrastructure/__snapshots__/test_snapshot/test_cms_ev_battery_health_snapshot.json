@@ -304,6 +304,17 @@
           ]
         },
         "Runtime": "python3.11",
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          }
+        ],
         "Timeout": 300
       },
       "Type": "AWS::Lambda::Function"
@@ -334,6 +345,17 @@
                 ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
               ]
             ]
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
           }
         ]
       },
@@ -377,7 +399,7 @@
             [
               "Lambda function for auto-deleting objects in ",
               {
-                "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F"
+                "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucket3DABAE5B"
               },
               " S3 bucket."
             ]
@@ -454,6 +476,17 @@
             "value"
           ]
         },
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          }
+        ],
         "Timeout": 900
       },
       "Type": "AWS::Lambda::Function"
@@ -485,6 +518,17 @@
               ]
             ]
           }
+        ],
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          }
         ]
       },
       "Type": "AWS::IAM::Role"
@@ -513,20 +557,83 @@
       },
       "Type": "AWS::IAM::Policy"
     },
-    "appregistryapplicationstackassociation": {
+    "appregistryconstructappregistryapplicationAC1A319B": {
+      "Properties": {
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::Application"
+    },
+    "appregistryconstructappregistryapplicationattributeassociation802A10B5": {
       "Properties": {
         "Application": {
           "Fn::GetAtt": [
-            "cmsevbatteryhealthcmsevappregistryconstructappregistryapplication020F4257",
+            "appregistryconstructappregistryapplicationAC1A319B",
             "Id"
           ]
         },
-        "Resource": {
-          "Ref": "AWS::StackId"
-        },
-        "ResourceType": "CFN_STACK"
+        "AttributeGroup": {
+          "Fn::GetAtt": [
+            "appregistryconstructdefaultapplicationattributes8FF6B3DB",
+            "Id"
+          ]
+        }
       },
-      "Type": "AWS::ServiceCatalogAppRegistry::ResourceAssociation"
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroupAssociation"
+    },
+    "appregistryconstructdefaultapplicationattributes8FF6B3DB": {
+      "Properties": {
+        "Attributes": {
+          "ApplicationType": "test-application-type",
+          "SolutionID": "test-solution-id",
+          "SolutionName": "test-solution-name",
+          "Version": "test-solution-version"
+        },
+        "Description": "Attribute group for solution information",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-",
+              {
+                "Ref": "AWS::AccountId"
+              }
+            ]
+          ]
+        },
+        "Tags": {
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "appregistryconstructappregistryapplicationAC1A319B",
+              "ApplicationTagValue"
+            ]
+          }
+        }
+      },
+      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroup"
     },
     "cmsevbatteryhealthcdklambdasvpcconstructsecuritygroupC1BF4103": {
       "DependsOn": [
@@ -556,6 +663,15 @@
           }
         ],
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -589,113 +705,6 @@
         }
       },
       "Type": "AWS::EC2::SecurityGroup"
-    },
-    "cmsevbatteryhealthcmsevappregistryconstructappregistryapplication020F4257": {
-      "DependsOn": [
-        "ssmappuniqueidregistermodule9C5C2C5D"
-      ],
-      "Properties": {
-        "Name": {
-          "Fn::Join": [
-            "",
-            [
-              {
-                "Ref": "AWS::StackName"
-              },
-              "-",
-              {
-                "Ref": "AWS::Region"
-              },
-              "-",
-              {
-                "Ref": "AWS::AccountId"
-              }
-            ]
-          ]
-        },
-        "Tags": {
-          "Solutions:DeploymentUUID": {
-            "Fn::Join": [
-              "",
-              [
-                "{{resolve:ssm:/solution/",
-                {
-                  "Ref": "AppUniqueId"
-                },
-                "/config/deployment-uuid}}"
-              ]
-            ]
-          }
-        }
-      },
-      "Type": "AWS::ServiceCatalogAppRegistry::Application"
-    },
-    "cmsevbatteryhealthcmsevappregistryconstructappregistryapplicationattributeassociation22F8279F": {
-      "DependsOn": [
-        "ssmappuniqueidregistermodule9C5C2C5D"
-      ],
-      "Properties": {
-        "Application": {
-          "Fn::GetAtt": [
-            "cmsevbatteryhealthcmsevappregistryconstructappregistryapplication020F4257",
-            "Id"
-          ]
-        },
-        "AttributeGroup": {
-          "Fn::GetAtt": [
-            "cmsevbatteryhealthcmsevappregistryconstructdefaultapplicationattributes1A52E366",
-            "Id"
-          ]
-        }
-      },
-      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroupAssociation"
-    },
-    "cmsevbatteryhealthcmsevappregistryconstructdefaultapplicationattributes1A52E366": {
-      "DependsOn": [
-        "ssmappuniqueidregistermodule9C5C2C5D"
-      ],
-      "Properties": {
-        "Attributes": {
-          "ApplicationType": "test-application-type",
-          "SolutionID": "test-solution-id",
-          "SolutionName": "test-solution-name",
-          "Version": "test-solution-version"
-        },
-        "Description": "Attribute group for solution information",
-        "Name": {
-          "Fn::Join": [
-            "",
-            [
-              {
-                "Ref": "AWS::StackName"
-              },
-              "-",
-              {
-                "Ref": "AWS::Region"
-              },
-              "-",
-              {
-                "Ref": "AWS::AccountId"
-              }
-            ]
-          ]
-        },
-        "Tags": {
-          "Solutions:DeploymentUUID": {
-            "Fn::Join": [
-              "",
-              [
-                "{{resolve:ssm:/solution/",
-                {
-                  "Ref": "AppUniqueId"
-                },
-                "/config/deployment-uuid}}"
-              ]
-            ]
-          }
-        }
-      },
-      "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroup"
     },
     "cmsevbatteryhealthcmsevathenadatasourceconstructcreategrafanaathenadatasourcecustomresourceD9DE0F82": {
       "DeletionPolicy": "Delete",
@@ -1127,7 +1136,10 @@
               ]
             },
             {
-              "Action": "kms:Decrypt",
+              "Action": [
+                "kms:Decrypt",
+                "kms:DescribeKey"
+              ],
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
@@ -1145,6 +1157,7 @@
             {
               "Action": [
                 "kms:Decrypt",
+                "kms:DescribeKey",
                 "kms:Encrypt",
                 "kms:GenerateDataKey"
               ],
@@ -1227,6 +1240,15 @@
         },
         "Runtime": "python3.12",
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -1538,6 +1560,15 @@
         ],
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::Join": [
@@ -1584,6 +1615,15 @@
           }
         ],
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -1696,7 +1736,7 @@
           }
         },
         "GrafanaS3Bucket": {
-          "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F"
+          "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucket3DABAE5B"
         },
         "Resource": "CreateGrafanaAlertsAndUploadToS3",
         "ServiceToken": {
@@ -1751,7 +1791,7 @@
                   [
                     {
                       "Fn::GetAtt": [
-                        "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F",
+                        "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucket3DABAE5B",
                         "Arn"
                       ]
                     },
@@ -1763,13 +1803,14 @@
             {
               "Action": [
                 "kms:Decrypt",
+                "kms:DescribeKey",
                 "kms:Encrypt",
                 "kms:GenerateDataKey"
               ],
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "cmsevbatteryhealthcmsevs3tografanaconstructassetss3key66D99BF0",
+                  "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkkeyB50E8A76",
                   "Arn"
                 ]
               }
@@ -1943,6 +1984,15 @@
         },
         "Runtime": "python3.12",
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -2337,6 +2387,15 @@
         ],
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::Join": [
@@ -2412,6 +2471,15 @@
         },
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::Join": [
@@ -2485,6 +2553,15 @@
         ],
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::Join": [
@@ -2552,7 +2629,7 @@
           }
         },
         "GrafanaS3Bucket": {
-          "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F"
+          "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucket3DABAE5B"
         },
         "Resource": "CreateGrafanaDashboardAndUploadToS3",
         "ServiceToken": {
@@ -2584,7 +2661,7 @@
                   [
                     {
                       "Fn::GetAtt": [
-                        "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F",
+                        "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucket3DABAE5B",
                         "Arn"
                       ]
                     },
@@ -2596,13 +2673,14 @@
             {
               "Action": [
                 "kms:Decrypt",
+                "kms:DescribeKey",
                 "kms:Encrypt",
                 "kms:GenerateDataKey"
               ],
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "cmsevbatteryhealthcmsevs3tografanaconstructassetss3key66D99BF0",
+                  "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkkeyB50E8A76",
                   "Arn"
                 ]
               }
@@ -2633,6 +2711,15 @@
           }
         ],
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -2767,6 +2854,15 @@
         },
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::Join": [
@@ -2880,6 +2976,12 @@
                 "/config/deployment-uuid}}"
               ]
             ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "appregistryconstructappregistryapplicationAC1A319B",
+              "ApplicationTagValue"
+            ]
           }
         },
         "Type": "String",
@@ -2927,6 +3029,15 @@
           ]
         },
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -3016,6 +3127,15 @@
           "Version": "2012-10-17"
         },
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -3298,6 +3418,15 @@
         },
         "Runtime": "python3.12",
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -3777,6 +3906,15 @@
         ],
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::Join": [
@@ -3832,6 +3970,15 @@
           }
         ],
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -3968,6 +4115,15 @@
         },
         "Runtime": "python3.12",
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -4283,6 +4439,15 @@
         ],
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::Join": [
@@ -4397,6 +4562,15 @@
           ]
         },
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -4529,6 +4703,15 @@
           }
         ],
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -4681,6 +4864,15 @@
         },
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::Join": [
@@ -4812,6 +5004,15 @@
           }
         ],
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -4957,6 +5158,15 @@
         },
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::Join": [
@@ -5088,6 +5298,15 @@
           }
         ],
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -5231,6 +5450,15 @@
         },
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::Join": [
@@ -5269,6 +5497,15 @@
         },
         "RetentionInDays": 731,
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -5315,6 +5552,15 @@
           "Version": "2012-10-17"
         },
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -5460,6 +5706,15 @@
         ],
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::Join": [
@@ -5508,6 +5763,15 @@
         ],
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::Join": [
@@ -5541,7 +5805,7 @@
       },
       "Type": "AWS::EC2::SecurityGroup"
     },
-    "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F": {
+    "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucket3DABAE5B": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
         "ssmappuniqueidregistermodule9C5C2C5D"
@@ -5553,7 +5817,7 @@
               "ServerSideEncryptionByDefault": {
                 "KMSMasterKeyID": {
                   "Fn::GetAtt": [
-                    "cmsevbatteryhealthcmsevs3tografanaconstructassetss3key66D99BF0",
+                    "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkkeyB50E8A76",
                     "Arn"
                   ]
                 },
@@ -5564,7 +5828,7 @@
         },
         "LoggingConfiguration": {
           "DestinationBucketName": {
-            "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructassetsserveraccesslogsbucketBDCF1868"
+            "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetslogbucketA56D339D"
           }
         },
         "PublicAccessBlockConfiguration": {
@@ -5577,6 +5841,15 @@
           {
             "Key": "aws-cdk:auto-delete-objects",
             "Value": "true"
+          },
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
           },
           {
             "Key": "Solutions:DeploymentUUID",
@@ -5601,7 +5874,7 @@
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Delete"
     },
-    "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucketAllowBucketNotificationsTocmsevbatteryhealthstackcmsevbatteryhealthcmsevs3tografanaconstructlambdafunctionC849613CF0E385A8": {
+    "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucketAllowBucketNotificationsTocmsevbatteryhealthstackcmsevbatteryhealthcmsevs3tografanaconstructlambdafunctionC849613C6F2D1C36": {
       "DependsOn": [
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
@@ -5619,22 +5892,22 @@
         },
         "SourceArn": {
           "Fn::GetAtt": [
-            "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F",
+            "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucket3DABAE5B",
             "Arn"
           ]
         }
       },
       "Type": "AWS::Lambda::Permission"
     },
-    "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucketAutoDeleteObjectsCustomResource91D4C99C": {
+    "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucketAutoDeleteObjectsCustomResourceB0DB326F": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
-        "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucketPolicyF73877F7",
+        "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucketPolicyFE9387F7",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
         "BucketName": {
-          "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F"
+          "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucket3DABAE5B"
         },
         "ServiceToken": {
           "Fn::GetAtt": [
@@ -5646,15 +5919,15 @@
       "Type": "Custom::S3AutoDeleteObjects",
       "UpdateReplacePolicy": "Delete"
     },
-    "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucketNotifications20A2DFE0": {
+    "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucketNotifications38F86C70": {
       "DependsOn": [
-        "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucketAllowBucketNotificationsTocmsevbatteryhealthstackcmsevbatteryhealthcmsevs3tografanaconstructlambdafunctionC849613CF0E385A8",
-        "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucketPolicyF73877F7",
+        "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucketAllowBucketNotificationsTocmsevbatteryhealthstackcmsevbatteryhealthcmsevs3tografanaconstructlambdafunctionC849613C6F2D1C36",
+        "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucketPolicyFE9387F7",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
         "BucketName": {
-          "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F"
+          "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucket3DABAE5B"
         },
         "Managed": true,
         "NotificationConfiguration": {
@@ -5712,13 +5985,13 @@
       },
       "Type": "Custom::S3BucketNotifications"
     },
-    "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucketPolicyF73877F7": {
+    "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucketPolicyFE9387F7": {
       "DependsOn": [
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
         "Bucket": {
-          "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F"
+          "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucket3DABAE5B"
         },
         "PolicyDocument": {
           "Statement": [
@@ -5736,7 +6009,7 @@
               "Resource": [
                 {
                   "Fn::GetAtt": [
-                    "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F",
+                    "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucket3DABAE5B",
                     "Arn"
                   ]
                 },
@@ -5746,7 +6019,7 @@
                     [
                       {
                         "Fn::GetAtt": [
-                          "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F",
+                          "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucket3DABAE5B",
                           "Arn"
                         ]
                       },
@@ -5775,7 +6048,7 @@
               "Resource": [
                 {
                   "Fn::GetAtt": [
-                    "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F",
+                    "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucket3DABAE5B",
                     "Arn"
                   ]
                 },
@@ -5785,7 +6058,7 @@
                     [
                       {
                         "Fn::GetAtt": [
-                          "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F",
+                          "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucket3DABAE5B",
                           "Arn"
                         ]
                       },
@@ -5801,173 +6074,8 @@
       },
       "Type": "AWS::S3::BucketPolicy"
     },
-    "cmsevbatteryhealthcmsevs3tografanaconstructassetss3key66D99BF0": {
-      "DeletionPolicy": "Delete",
-      "DependsOn": [
-        "ssmappuniqueidregistermodule9C5C2C5D"
-      ],
-      "Properties": {
-        "EnableKeyRotation": true,
-        "KeyPolicy": {
-          "Statement": [
-            {
-              "Action": "kms:*",
-              "Effect": "Allow",
-              "Principal": {
-                "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":root"
-                    ]
-                  ]
-                }
-              },
-              "Resource": "*"
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "Tags": [
-          {
-            "Key": "Solutions:DeploymentUUID",
-            "Value": {
-              "Fn::Join": [
-                "",
-                [
-                  "{{resolve:ssm:/solution/",
-                  {
-                    "Ref": "AppUniqueId"
-                  },
-                  "/config/deployment-uuid}}"
-                ]
-              ]
-            }
-          }
-        ]
-      },
-      "Type": "AWS::KMS::Key",
-      "UpdateReplacePolicy": "Delete"
-    },
-    "cmsevbatteryhealthcmsevs3tografanaconstructassetsserveraccesslogsbucketBDCF1868": {
+    "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkkeyB50E8A76": {
       "DeletionPolicy": "Retain",
-      "DependsOn": [
-        "ssmappuniqueidregistermodule9C5C2C5D"
-      ],
-      "Properties": {
-        "AccessControl": "LogDeliveryWrite",
-        "BucketEncryption": {
-          "ServerSideEncryptionConfiguration": [
-            {
-              "ServerSideEncryptionByDefault": {
-                "KMSMasterKeyID": {
-                  "Fn::GetAtt": [
-                    "cmsevbatteryhealthcmsevs3tografanaconstructassetsserveraccesslogss3key2950DCA1",
-                    "Arn"
-                  ]
-                },
-                "SSEAlgorithm": "aws:kms"
-              }
-            }
-          ]
-        },
-        "OwnershipControls": {
-          "Rules": [
-            {
-              "ObjectOwnership": "ObjectWriter"
-            }
-          ]
-        },
-        "PublicAccessBlockConfiguration": {
-          "BlockPublicAcls": true,
-          "BlockPublicPolicy": true,
-          "IgnorePublicAcls": true,
-          "RestrictPublicBuckets": true
-        },
-        "Tags": [
-          {
-            "Key": "Solutions:DeploymentUUID",
-            "Value": {
-              "Fn::Join": [
-                "",
-                [
-                  "{{resolve:ssm:/solution/",
-                  {
-                    "Ref": "AppUniqueId"
-                  },
-                  "/config/deployment-uuid}}"
-                ]
-              ]
-            }
-          }
-        ],
-        "VersioningConfiguration": {
-          "Status": "Enabled"
-        }
-      },
-      "Type": "AWS::S3::Bucket",
-      "UpdateReplacePolicy": "Retain"
-    },
-    "cmsevbatteryhealthcmsevs3tografanaconstructassetsserveraccesslogsbucketPolicy0C298153": {
-      "DependsOn": [
-        "ssmappuniqueidregistermodule9C5C2C5D"
-      ],
-      "Properties": {
-        "Bucket": {
-          "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructassetsserveraccesslogsbucketBDCF1868"
-        },
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "s3:*",
-              "Condition": {
-                "Bool": {
-                  "aws:SecureTransport": "false"
-                }
-              },
-              "Effect": "Deny",
-              "Principal": {
-                "AWS": "*"
-              },
-              "Resource": [
-                {
-                  "Fn::GetAtt": [
-                    "cmsevbatteryhealthcmsevs3tografanaconstructassetsserveraccesslogsbucketBDCF1868",
-                    "Arn"
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "cmsevbatteryhealthcmsevs3tografanaconstructassetsserveraccesslogsbucketBDCF1868",
-                          "Arn"
-                        ]
-                      },
-                      "/*"
-                    ]
-                  ]
-                }
-              ]
-            }
-          ],
-          "Version": "2012-10-17"
-        }
-      },
-      "Type": "AWS::S3::BucketPolicy"
-    },
-    "cmsevbatteryhealthcmsevs3tografanaconstructassetsserveraccesslogss3key2950DCA1": {
-      "DeletionPolicy": "Delete",
       "DependsOn": [
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
@@ -6016,6 +6124,15 @@
         },
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::Join": [
@@ -6033,7 +6150,125 @@
         ]
       },
       "Type": "AWS::KMS::Key",
-      "UpdateReplacePolicy": "Delete"
+      "UpdateReplacePolicy": "Retain"
+    },
+    "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetslogbucketA56D339D": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "AccessControl": "LogDeliveryWrite",
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "KMSMasterKeyID": {
+                  "Fn::GetAtt": [
+                    "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkkeyB50E8A76",
+                    "Arn"
+                  ]
+                },
+                "SSEAlgorithm": "aws:kms"
+              }
+            }
+          ]
+        },
+        "OwnershipControls": {
+          "Rules": [
+            {
+              "ObjectOwnership": "ObjectWriter"
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        },
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AppUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ],
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetslogbucketPolicy5230E110": {
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "Bucket": {
+          "Ref": "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetslogbucketA56D339D"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*"
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetslogbucketA56D339D",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetslogbucketA56D339D",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Type": "AWS::S3::BucketPolicy"
     },
     "cmsevbatteryhealthcmsevs3tografanaconstructlambdafunction9C211D30": {
       "DependsOn": [
@@ -6089,6 +6324,15 @@
         },
         "Runtime": "python3.12",
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -6223,7 +6467,7 @@
                         [
                           {
                             "Fn::GetAtt": [
-                              "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F",
+                              "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucket3DABAE5B",
                               "Arn"
                             ]
                           },
@@ -6237,7 +6481,7 @@
                         [
                           {
                             "Fn::GetAtt": [
-                              "cmsevbatteryhealthcmsevs3tografanaconstructassetss3bucket95D3379F",
+                              "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkencryptedbucket3DABAE5B",
                               "Arn"
                             ]
                           },
@@ -6248,11 +6492,14 @@
                   ]
                 },
                 {
-                  "Action": "kms:Decrypt",
+                  "Action": [
+                    "kms:Decrypt",
+                    "kms:DescribeKey"
+                  ],
                   "Effect": "Allow",
                   "Resource": {
                     "Fn::GetAtt": [
-                      "cmsevbatteryhealthcmsevs3tografanaconstructassetss3key66D99BF0",
+                      "cmsevbatteryhealthcmsevs3tografanaconstructgrafanaassetscmkkeyB50E8A76",
                       "Arn"
                     ]
                   }
@@ -6433,6 +6680,15 @@
         ],
         "Tags": [
           {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
               "Fn::Join": [
@@ -6465,6 +6721,15 @@
           }
         ],
         "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
           {
             "Key": "Solutions:DeploymentUUID",
             "Value": {
@@ -6577,6 +6842,14 @@
               "/test-module-short-name"
             ]
           ]
+        },
+        "Tags": {
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "appregistryconstructappregistryapplicationAC1A319B",
+              "ApplicationTagValue"
+            ]
+          }
         },
         "Type": "String",
         "Value": {

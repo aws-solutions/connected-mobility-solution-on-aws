@@ -1,25 +1,25 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { AcdpBuildService } from "../service/acdp-build-service";
 import { CatalogClient } from "@backstage/catalog-client";
 import { Entity } from "@backstage/catalog-model";
-import { NotFoundError } from "@backstage/errors";
 import {
   AcdpBuildAction,
   AcdpBuildProject,
   AcdpBuildProjectBuild,
 } from "backstage-plugin-acdp-common";
 
-export class AcdpBuildApi {
-  private catalogClient: CatalogClient;
+import { AcdpBaseApi } from "./acdp-base-api";
+import { AcdpBuildService } from "../service/acdp-build-service";
+
+export class AcdpBuildApi extends AcdpBaseApi {
   private acdpBuildService: AcdpBuildService;
 
   public constructor(
     catalogClient: CatalogClient,
     acdpBuildService: AcdpBuildService,
   ) {
-    this.catalogClient = catalogClient;
+    super(catalogClient, acdpBuildService._logger);
     this.acdpBuildService = acdpBuildService;
   }
 
@@ -28,12 +28,12 @@ export class AcdpBuildApi {
   ): Promise<AcdpBuildProject | undefined> {
     const codeBuildProject = await this.acdpBuildService.getProject(entity);
 
-    if (codeBuildProject === undefined) return undefined;
-
-    return {
-      name: codeBuildProject.name,
-      arn: codeBuildProject.arn,
-    };
+    return codeBuildProject
+      ? {
+          name: codeBuildProject.name,
+          arn: codeBuildProject.arn,
+        }
+      : undefined;
   }
 
   public async getBuilds(entity: Entity): Promise<AcdpBuildProjectBuild[]> {
@@ -65,29 +65,15 @@ export class AcdpBuildApi {
 
     const build = startBuildResponse.build;
 
-    if (build === undefined) return {};
-
-    return {
-      id: build.id,
-      arn: build.arn,
-      buildNumber: build.buildNumber,
-      startTime: build.startTime,
-      endTime: build.endTime,
-      projectName: build.currentPhase,
-    };
-  }
-
-  public async getEntity(
-    entityRef: string,
-    backstageApiToken: string | undefined,
-  ): Promise<Entity> {
-    const entity = await this.catalogClient.getEntityByRef(entityRef, {
-      token: backstageApiToken,
-    });
-
-    if (entity === undefined)
-      throw new NotFoundError(`Could not find Entity for ref: '${entityRef}'`);
-
-    return entity;
+    return build
+      ? {
+          id: build.id,
+          arn: build.arn,
+          buildNumber: build.buildNumber,
+          startTime: build.startTime,
+          endTime: build.endTime,
+          projectName: build.currentPhase,
+        }
+      : {};
   }
 }

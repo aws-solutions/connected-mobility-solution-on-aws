@@ -1,6 +1,12 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
+import { Logger } from "winston";
+import createLimiter from "p-limit";
+import recursiveReadDir from "recursive-readdir";
+import path from "path";
+import fs from "fs";
+
 import {
   PutObjectCommandInput,
   DeleteObjectCommand,
@@ -8,15 +14,21 @@ import {
   ListObjectsV2CommandOutput,
   S3Client,
 } from "@aws-sdk/client-s3";
-
 import { Upload } from "@aws-sdk/lib-storage";
 
-import { Logger } from "winston";
-import createLimiter from "p-limit";
-import recursiveReadDir from "recursive-readdir";
-import path from "path";
-import fs from "fs";
 import { Entity, DEFAULT_NAMESPACE } from "@backstage/catalog-model";
+
+import { awsApiCallWithErrorHandling } from "./error-handling-helper";
+
+// Perform rate limited generic operations by passing a function and a list of arguments
+const bulkStorageOperation = async <T>(
+  operation: (arg: T) => Promise<unknown>,
+  args: T[],
+  { concurrencyLimit } = { concurrencyLimit: 25 },
+) => {
+  const limiter = createLimiter(concurrencyLimit);
+  await Promise.all(args.map((arg) => limiter(operation, arg)));
+};
 
 export class AwsS3Helper {
   private readonly s3Client: S3Client;
@@ -42,12 +54,15 @@ export class AwsS3Helper {
     let allObjects: ListObjectsV2CommandOutput;
     // Iterate through every file in the root of the publisher.
     do {
-      allObjects = await this.s3Client.send(
-        new ListObjectsV2Command({
-          Bucket: this.bucketName,
-          ContinuationToken: nextContinuation,
-          ...(keyPrefix ? { Prefix: keyPrefix } : {}),
-        }),
+      const command = new ListObjectsV2Command({
+        Bucket: this.bucketName,
+        ContinuationToken: nextContinuation,
+        ...(keyPrefix ? { Prefix: keyPrefix } : {}),
+      });
+      allObjects = await awsApiCallWithErrorHandling(
+        () => this.s3Client.send(command),
+        `Could not list objects from bucket name: ${this.bucketName}`,
+        this.logger,
       );
       objects.push(
         ...(allObjects.Contents || [])
@@ -63,11 +78,16 @@ export class AwsS3Helper {
   async deleteObjectsFromBucket(objectsToDelete: string[]) {
     await bulkStorageOperation(
       async (relativeFilePath) => {
-        return await this.s3Client.send(
-          new DeleteObjectCommand({
-            Bucket: this.bucketName,
-            Key: relativeFilePath,
-          }),
+        return await awsApiCallWithErrorHandling(
+          () =>
+            this.s3Client.send(
+              new DeleteObjectCommand({
+                Bucket: this.bucketName,
+                Key: relativeFilePath,
+              }),
+            ),
+          `Could not delete object from bucket name: ${this.bucketName} with key: ${relativeFilePath}`,
+          this.logger,
         );
       },
       objectsToDelete,
@@ -117,22 +137,30 @@ export class AwsS3Helper {
       this.logger.info(
         `Successfully uploaded all the generated files for Entity ${entity.metadata.name}. Total number of files: ${fileList.length}`,
       );
-    } catch (e) {
-      const errorMessage = `Unable to upload file(s) to AWS S3. ${e}`;
-      this.logger.error(errorMessage);
+    } catch (error: any) {
+      const errorMessage = "Unable to upload file(s) to AWS S3.";
+      this.logger.error(`${errorMessage} Error: ${error}`);
       throw new Error(errorMessage);
     }
   }
 }
 
-// Perform rate limited generic operations by passing a function and a list of arguments
-const bulkStorageOperation = async <T>(
-  operation: (arg: T) => Promise<unknown>,
-  args: T[],
-  { concurrencyLimit } = { concurrencyLimit: 25 },
-) => {
-  const limiter = createLimiter(concurrencyLimit);
-  await Promise.all(args.map((arg) => limiter(operation, arg)));
+/**
+ * Takes a posix path and returns a lower-cased version of entity's triplet
+ * with the remaining path in posix.
+ *
+ * Path must not include a starting slash.
+ *
+ * @example
+ * lowerCaseEntityTriplet('default/Component/backstage')
+ * // return default/component/backstage
+ */
+const lowerCaseEntityTriplet = (posixPath: string): string => {
+  const [namespace, kind, name, ...rest] = posixPath.split(path.posix.sep);
+  const lowerNamespace = namespace.toLowerCase();
+  const lowerKind = kind.toLowerCase();
+  const lowerName = name.toLowerCase();
+  return [lowerNamespace, lowerKind, lowerName, ...rest].join(path.posix.sep);
 };
 
 export const getCloudPathForLocalPath = (
@@ -156,22 +184,4 @@ export const getCloudPathForLocalPath = (
   ].join("/");
 
   return destinationWithRoot;
-};
-
-/**
- * Takes a posix path and returns a lower-cased version of entity's triplet
- * with the remaining path in posix.
- *
- * Path must not include a starting slash.
- *
- * @example
- * lowerCaseEntityTriplet('default/Component/backstage')
- * // return default/component/backstage
- */
-const lowerCaseEntityTriplet = (posixPath: string): string => {
-  const [namespace, kind, name, ...rest] = posixPath.split(path.posix.sep);
-  const lowerNamespace = namespace.toLowerCase();
-  const lowerKind = kind.toLowerCase();
-  const lowerName = name.toLowerCase();
-  return [lowerNamespace, lowerKind, lowerName, ...rest].join(path.posix.sep);
 };

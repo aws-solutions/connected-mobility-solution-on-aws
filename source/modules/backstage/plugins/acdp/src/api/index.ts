@@ -2,3 +2,5 @@
 // SPDX-License-Identifier: Apache-2.0
 
 export * from "./AcdpBuildApi";
+export * from "./AcdpBaseApi";
+export * from "./AcdpMetricsApi";

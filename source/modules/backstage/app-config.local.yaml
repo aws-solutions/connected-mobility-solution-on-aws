@@ -82,70 +82,77 @@ auth:
   config:
     additionalScopes: ${BACKSTAGE_ADDITIONAL_SCOPES}
 
-
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
   concurrentTasksLimit: 10
 
 catalog:
   rules:
-    - allow: [Component, System, API, Group, User, Resource, Location, Template]
+    - allow: [Component, System, API, Group, User, Resource, Location, Template, PartnerOffering]
   orphanStrategy: delete
   processingInterval: { minutes: 1 }
   locations:
-    - type: file
-      target: ../../modules/cms_api/deployment/regional-s3-assets/backstage/templates/cms-api.template.yaml
+    - type: url
+      target: "https://${REGIONAL_PUBLIC_ASSET_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${SOLUTION_NAME}/v1/backstage-assets/partner-offerings.yaml"
       rules:
-        - allow: [Template]
+        - allow: [Location, PartnerOffering]
     - type: file
-      target: ../../modules/cms_alerts/deployment/regional-s3-assets/backstage/templates/cms-alerts.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/cms_api/deployment/regional-s3-assets/backstage/templates/cms-api.template.yaml
       rules:
-        - allow: [Template]
+        - allow: [Location, Template]
     - type: file
-      target: ../../modules/cms_provisioning/deployment/regional-s3-assets/backstage/templates/cms-provisioning.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/cms_alerts/deployment/regional-s3-assets/backstage/templates/cms-alerts.template.yaml
       rules:
-        - allow: [Template]
+        - allow: [Location, Template]
     - type: file
-      target: ../../modules/cms_connect_store/deployment/regional-s3-assets/backstage/templates/cms-connect-store.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/cms_provisioning/deployment/regional-s3-assets/backstage/templates/cms-provisioning.template.yaml
       rules:
-        - allow: [Template]
+        - allow: [Location, Template]
     - type: file
-      target: ../../modules/cms_ev_battery_health/deployment/regional-s3-assets/backstage/templates/cms-ev-battery-health.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/cms_connect_store/deployment/regional-s3-assets/backstage/templates/cms-connect-store.template.yaml
       rules:
-        - allow: [Template]
+        - allow: [Location, Template]
     - type: file
-      target: ../../modules/cms_vehicle_simulator/deployment/regional-s3-assets/backstage/templates/cms-vehicle-simulator.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/cms_ev_battery_health/deployment/regional-s3-assets/backstage/templates/cms-ev-battery-health.template.yaml
       rules:
-        - allow: [Template]
+        - allow: [Location, Template]
     - type: file
-      target: ../../modules/cms_auth/deployment/regional-s3-assets/backstage/templates/cms-auth.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/cms_vehicle_simulator/deployment/regional-s3-assets/backstage/templates/cms-vehicle-simulator.template.yaml
       rules:
-        - allow: [Template]
+        - allow: [Location, Template]
     - type: file
-      target: ../../modules/cms_fleetwise_connector/deployment/regional-s3-assets/backstage/templates/cms-fleetwise-connector.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/cms_auth/deployment/regional-s3-assets/backstage/templates/cms-auth.template.yaml
       rules:
-        - allow: [Template]
+        - allow: [Location, Template]
     - type: file
-      target: ../../modules/vpc/deployment/regional-s3-assets/backstage/templates/vpc.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/cms_fleetwise_connector/deployment/regional-s3-assets/backstage/templates/cms-fleetwise-connector.template.yaml
       rules:
-        - allow: [Template]
+        - allow: [Location, Template]
     - type: file
-      target: ../../modules/auth_setup/deployment/regional-s3-assets/backstage/templates/auth-setup.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/vpc/deployment/regional-s3-assets/backstage/templates/vpc.template.yaml
       rules:
-        - allow: [Template]
+        - allow: [Location, Template]
     - type: file
-      target: ../../modules/cms_sample/deployment/regional-s3-assets/backstage/templates/cms-sample.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/auth_setup/deployment/regional-s3-assets/backstage/templates/auth-setup.template.yaml
       rules:
-        - allow: [Template]
+        - allow: [Location, Template]
     - type: file
-      target: ../../modules/cms_config/deployment/regional-s3-assets/backstage/templates/cms-config.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/cms_sample/deployment/regional-s3-assets/backstage/templates/cms-sample.template.yaml
       rules:
-        - allow: [Template]
+        - allow: [Location, Template]
+    - type: file
+      target: ${SOLUTION_PATH}/source/modules/cms_config/deployment/regional-s3-assets/backstage/templates/cms-config.template.yaml
+      rules:
+        - allow: [Location, Template]
+    - type: file
+      target: ${SOLUTION_PATH}/source/modules/cms_predictive_maintenance/deployment/regional-s3-assets/backstage/templates/cms_predictive_maintenance.template.yaml
+      rules:
+        - allow: [Location, Template]
 
   # For local testing of AWS integration, uncomment this and fill in <PlACEHOLDER>
   # providers:
   #   rules:
-  #   - allow: [Component, System, API, Group, User, Resource, Location, Template]
+  #   - allow: [Component, System, API, Group, User, Resource, Location, Template, PartnerOffering]
   #   awsS3:
   #     acdpTemplateResourceBucket:
   #       bucketName: ${REGIONAL_ASSET_BUCKET_NAME}

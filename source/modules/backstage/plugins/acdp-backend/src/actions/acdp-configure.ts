@@ -1,20 +1,24 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { Config } from "@backstage/config";
-import { createTemplateAction } from "@backstage/plugin-scaffolder-node";
-import { z } from "zod";
-import { DefaultAwsCredentialsManager } from "@backstage/integration-aws-node";
-import { AcdpBuildService } from "../service/acdp-build-service";
-import { UrlReader } from "@backstage/backend-common";
-import { CatalogClient } from "@backstage/catalog-client";
-import { ScmIntegrations } from "@backstage/integration";
 import { Logger } from "winston";
-import { AcdpBuildAction, constants } from "backstage-plugin-acdp-common";
-import { Entity, parseEntityRef } from "@backstage/catalog-model";
-import { JsonObject } from "@backstage/types";
+import { z } from "zod";
+
 import { SourceType } from "@aws-sdk/client-codebuild";
+
+import { UrlReader } from "@backstage/backend-common";
 import { AuthService } from "@backstage/backend-plugin-api";
+import { CatalogClient } from "@backstage/catalog-client";
+import { Entity, parseEntityRef } from "@backstage/catalog-model";
+import { Config } from "@backstage/config";
+import { ScmIntegrations } from "@backstage/integration";
+import { DefaultAwsCredentialsManager } from "@backstage/integration-aws-node";
+import { createTemplateAction } from "@backstage/plugin-scaffolder-node";
+import { JsonObject } from "@backstage/types";
+
+import { AcdpBuildAction, constants } from "backstage-plugin-acdp-common";
+
+import { AcdpBuildService } from "../service/acdp-build-service";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -117,7 +121,7 @@ export const createAcdpConfigureAction = async (options: {
 
       const environmentVariables = [
         {
-          name: "MODULE_STACK_NAME",
+          name: constants.MODULE_STACK_NAME_ENVIRONMENT_VARIABLE,
           value: `${entity?.metadata.namespace}-${entity?.metadata.name}`,
         },
       ];
@@ -150,7 +154,7 @@ export const createAcdpConfigureAction = async (options: {
           constants.ACDP_DEPLOY_ON_CREATE_ANNOTATION
         ];
 
-      if (shouldDeployAnnotation == "true") {
+      if (shouldDeployAnnotation === "true") {
         await acdpBuildService.startBuild({
           entity: entity,
           action: AcdpBuildAction.DEPLOY,

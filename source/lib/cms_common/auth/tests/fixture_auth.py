@@ -15,11 +15,11 @@ from moto import mock_aws
 import boto3
 
 # Connected Mobility Solution on AWS
-from ...resource_names.auth import AuthResourceNames
+from ...resource_names.auth import AuthSetupResourceNames
 
 TEST_USER_AGENT_STRING = "test-user-agent-string"
 TEST_IDENTITY_PROVIDER_ID = "test_idp"
-TEST_AUTH_RESOURCE_NAMES_CLASS = AuthResourceNames.from_identity_provider_id(
+TEST_AUTH_SETUP_RESOURCE_NAMES_CLASS = AuthSetupResourceNames.from_identity_provider_id(
     TEST_IDENTITY_PROVIDER_ID
 )
 
@@ -56,13 +56,13 @@ def fixture_mock_idp_config_valid(
     def moto_boto() -> None:
         secretsmanager_client: SecretsManagerClient = boto3.client("secretsmanager")
         secret_arn = secretsmanager_client.create_secret(
-            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.idp_config_secret,
+            Name=TEST_AUTH_SETUP_RESOURCE_NAMES_CLASS.idp_config_secret,
             SecretString=json.dumps(idp_config_secret_string_valid),
         )["ARN"]
 
         ssm_client: SSMClient = boto3.client("ssm")
         ssm_client.put_parameter(
-            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.idp_config_secret_arn_ssm_parameter,
+            Name=TEST_AUTH_SETUP_RESOURCE_NAMES_CLASS.idp_config_secret_arn_ssm_parameter,
             Value=secret_arn,
             Type="String",
         )
@@ -76,13 +76,13 @@ def fixture_mock_idp_config_invalid_json() -> Callable[[], None]:
     def moto_boto() -> None:
         secretsmanager_client: SecretsManagerClient = boto3.client("secretsmanager")
         secret_arn = secretsmanager_client.create_secret(
-            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.idp_config_secret,
+            Name=TEST_AUTH_SETUP_RESOURCE_NAMES_CLASS.idp_config_secret,
             SecretString="Not a valid json string",
         )["ARN"]
 
         ssm_client: SSMClient = boto3.client("ssm")
         ssm_client.put_parameter(
-            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.idp_config_secret_arn_ssm_parameter,
+            Name=TEST_AUTH_SETUP_RESOURCE_NAMES_CLASS.idp_config_secret_arn_ssm_parameter,
             Value=secret_arn,
             Type="String",
         )
@@ -96,13 +96,13 @@ def fixture_mock_idp_config_invalid_data_format() -> Callable[[], None]:
     def moto_boto() -> None:
         secretsmanager_client: SecretsManagerClient = boto3.client("secretsmanager")
         secret_arn = secretsmanager_client.create_secret(
-            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.idp_config_secret,
+            Name=TEST_AUTH_SETUP_RESOURCE_NAMES_CLASS.idp_config_secret,
             SecretString=json.dumps({"incorrect_key": "value"}),
         )["ARN"]
 
         ssm_client: SSMClient = boto3.client("ssm")
         ssm_client.put_parameter(
-            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.idp_config_secret_arn_ssm_parameter,
+            Name=TEST_AUTH_SETUP_RESOURCE_NAMES_CLASS.idp_config_secret_arn_ssm_parameter,
             Value=secret_arn,
             Type="String",
         )
@@ -129,13 +129,13 @@ def fixture_mock_service_client_config_valid(
     def moto_boto() -> None:
         secretsmanager_client: SecretsManagerClient = boto3.client("secretsmanager")
         secret_arn = secretsmanager_client.create_secret(
-            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.service_client_config_secret,
+            Name=TEST_AUTH_SETUP_RESOURCE_NAMES_CLASS.service_client_config_secret,
             SecretString=json.dumps(service_client_config_secret_string_valid),
         )["ARN"]
 
         ssm_client: SSMClient = boto3.client("ssm")
         ssm_client.put_parameter(
-            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.service_client_config_secret_arn_ssm_parameter,
+            Name=TEST_AUTH_SETUP_RESOURCE_NAMES_CLASS.service_client_config_secret_arn_ssm_parameter,
             Value=secret_arn,
             Type="String",
         )
@@ -161,13 +161,13 @@ def fixture_mock_user_client_config_valid(
     def moto_boto() -> None:
         secretsmanager_client: SecretsManagerClient = boto3.client("secretsmanager")
         secret_arn = secretsmanager_client.create_secret(
-            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.user_client_config_secret,
+            Name=TEST_AUTH_SETUP_RESOURCE_NAMES_CLASS.user_client_config_secret,
             SecretString=json.dumps(user_client_config_secret_string_valid),
         )["ARN"]
 
         ssm_client: SSMClient = boto3.client("ssm")
         ssm_client.put_parameter(
-            Name=TEST_AUTH_RESOURCE_NAMES_CLASS.user_client_config_secret_arn_ssm_parameter,
+            Name=TEST_AUTH_SETUP_RESOURCE_NAMES_CLASS.user_client_config_secret_arn_ssm_parameter,
             Value=secret_arn,
             Type="String",
         )

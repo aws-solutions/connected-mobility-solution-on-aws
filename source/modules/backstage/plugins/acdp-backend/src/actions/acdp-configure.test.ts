@@ -12,7 +12,7 @@ import {
   mockConfig,
   mockedCatalogEntity,
   mockIntegrations,
-} from "../__mocks__/common-mocks";
+} from "../mocks";
 import { stringifyEntityRef } from "@backstage/catalog-model";
 import { createMockDirectory } from "@backstage/backend-test-utils";
 import { createMockActionContext } from "@backstage/plugin-scaffolder-node-test-utils";
@@ -28,7 +28,7 @@ beforeEach(() => {
 describe("createAcdpConfigureAction", () => {
   const workspacePath = createMockDirectory().resolve("/tmp");
 
-  it("", async () => {
+  it("creates ACDP configure action", async () => {
     const mockContext = createMockActionContext({
       templateInfo: {
         entityRef: stringifyEntityRef(mockedCatalogEntity),
@@ -46,6 +46,7 @@ describe("createAcdpConfigureAction", () => {
         id: "test",
       },
     });
+
     await (
       await createAcdpConfigureAction({
         config: mockConfig,
@@ -56,5 +57,7 @@ describe("createAcdpConfigureAction", () => {
         logger: getVoidLogger(),
       })
     ).handler(mockContext);
+
+    expect(mockedCodeBuildClient.commandCalls).toHaveLength(3);
   });
 });

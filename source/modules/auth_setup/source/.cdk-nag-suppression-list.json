@@ -22,7 +22,7 @@
         "rules_to_suppress": [
             {
                 "id": "AwsSolutions-L1",
-                "reason": "The lambda resource is defined by the L2/L3 constructs and cannot be modified."
+                "reason": "Lambda created by CDK constructs cannot use a different runtime"
             }
         ]
     },

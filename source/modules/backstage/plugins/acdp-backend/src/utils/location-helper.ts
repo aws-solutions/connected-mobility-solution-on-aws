@@ -10,25 +10,17 @@ import { InputError } from "@backstage/errors";
 
 import * as path from "path";
 
-export const getLocationForEntity = (
-  location: Location,
+const resolvePath = (
   baseUrl: string,
-  scmIntegration: ScmIntegrationRegistry,
+  assetPath: string,
   allowUnsafeAccess: boolean,
-): Location => {
-  switch (location.type) {
-    case "url":
-      return location;
-    case "dir":
-      return transformDirLocation(
-        baseUrl,
-        location,
-        scmIntegration,
-        allowUnsafeAccess,
-      );
-    default:
-      throw new Error(`Invalid reference location ${location.type}`);
+) => {
+  if (allowUnsafeAccess) {
+    // skips relative path check for local filesystem access
+    return path.resolve(baseUrl, assetPath);
   }
+
+  return resolveSafeChildPath(baseUrl, assetPath);
 };
 
 const transformDirLocation = (
@@ -74,15 +66,23 @@ const transformDirLocation = (
   }
 };
 
-const resolvePath = (
+export const getLocationForEntity = (
+  location: Location,
   baseUrl: string,
-  assetPath: string,
+  scmIntegration: ScmIntegrationRegistry,
   allowUnsafeAccess: boolean,
-) => {
-  if (allowUnsafeAccess) {
-    //skips relative path check for local filesystem access
-    return path.resolve(baseUrl, assetPath);
-  } else {
-    return resolveSafeChildPath(baseUrl, assetPath);
+): Location => {
+  switch (location.type) {
+    case "url":
+      return location;
+    case "dir":
+      return transformDirLocation(
+        baseUrl,
+        location,
+        scmIntegration,
+        allowUnsafeAccess,
+      );
+    default:
+      throw new Error(`Invalid reference location ${location.type}`);
   }
 };

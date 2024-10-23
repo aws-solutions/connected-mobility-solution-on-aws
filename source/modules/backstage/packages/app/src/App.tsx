@@ -3,6 +3,7 @@
 
 import React from "react";
 import { Route } from "react-router-dom";
+
 import { apiDocsPlugin, ApiExplorerPage } from "@backstage/plugin-api-docs";
 import {
   CatalogEntityPage,
@@ -25,11 +26,6 @@ import { TechDocsAddons } from "@backstage/plugin-techdocs-react";
 import { ReportIssue } from "@backstage/plugin-techdocs-module-addons-contrib";
 import { UserSettingsPage } from "@backstage/plugin-user-settings";
 import { HomepageCompositionRoot } from "@backstage/plugin-home";
-import { apis } from "./apis";
-import { entityPage } from "./components/catalog/EntityPage";
-import { searchPage } from "./components/search/SearchPage";
-import { Root } from "./components/Root";
-
 import {
   AlertDisplay,
   OAuthRequestDialog,
@@ -40,11 +36,16 @@ import { AppRouter, FlatRoutes } from "@backstage/core-app-api";
 import { CatalogGraphPage } from "@backstage/plugin-catalog-graph";
 import { RequirePermission } from "@backstage/plugin-permission-react";
 import { catalogEntityCreatePermission } from "@backstage/plugin-catalog-common/alpha";
-
-import { oauth2ApiRef } from "./apis/oauth2Api";
 import { useApi, configApiRef } from "@backstage/core-plugin-api";
 
-import { HomePage } from "./components/home/HomePage";
+import { apis } from "./apis/apis";
+import { oauth2ApiRef } from "./apis/oauth2Api";
+import { Root } from "./components/Root";
+import { entityPage } from "./components/EntityPage";
+import { searchPage } from "./components/SearchPage";
+import { homePage } from "./components/HomePage";
+
+import { AcdpPartnerOfferingPage } from "backstage-plugin-acdp-partner-offering";
 
 const app = createApp({
   apis,
@@ -56,7 +57,6 @@ const app = createApp({
           {configApi.getString("auth.environment") === "development" ? (
             <SignInPage
               {...props}
-              auto
               providers={[
                 "guest",
                 {
@@ -71,14 +71,12 @@ const app = createApp({
             <SignInPage
               {...props}
               auto
-              providers={[
-                {
-                  id: "oauth2",
-                  title: "OAuth 2.0 Provider",
-                  message: "Sign in using your OAuth 2.0 Provider",
-                  apiRef: oauth2ApiRef,
-                },
-              ]}
+              provider={{
+                id: "oauth2",
+                title: "OAuth 2.0 Provider",
+                message: "Sign in using your OAuth 2.0 Provider",
+                apiRef: oauth2ApiRef,
+              }}
             />
           )}
         </>
@@ -102,10 +100,13 @@ const app = createApp({
   },
 });
 
+// Backstage requires all extenensions to be part of a single React element tree, for this reason, we opt to use React.JSX.Element types directly
+// rather than functional components (e.g. {homePage} vs <HomePage />). Naming conventions are used appropriately to match this style.
+// See documentation: https://backstage.io/docs/plugins/composability/#using-extensions-in-an-app
 const routes = (
   <FlatRoutes>
     <Route path="/" element={<HomepageCompositionRoot />}>
-      <HomePage />
+      {homePage}
     </Route>
     <Route path="/catalog" element={<CatalogIndexPage />} />
     <Route
@@ -124,6 +125,7 @@ const routes = (
       </TechDocsAddons>
     </Route>
     <Route path="/create" element={<ScaffolderPage />} />
+    <Route path="/partners" element={<AcdpPartnerOfferingPage />} />
     <Route path="/api-docs" element={<ApiExplorerPage />} />
     <Route
       path="/catalog-import"

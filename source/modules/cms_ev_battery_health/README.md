@@ -16,6 +16,7 @@
   - [AWS CDK and Solutions Constructs](#aws-cdk-and-solutions-constructs)
   - [Prerequisites](#prerequisites)
     - [MacOS Installation Instructions](#macos-installation-instructions)
+    - [Manual Steps](#manual-steps)
     - [Clone the Repository](#clone-the-repository)
     - [Install required Dependencies](#install-required-dependencies)
     - [Unit Test](#unit-test)
@@ -111,6 +112,10 @@ NPM/Node [Official Documentation](https://docs.npmjs.com/downloading-and-install
 nvm install 18
 nvm use 18
 ```
+
+### Manual Steps
+
+- Enable AWS IAM Identity Center in the AWS account by following the [documentation](https://docs.aws.amazon.com/singlesignon/latest/userguide/get-set-up-for-idc.html).
 
 ### Clone the Repository
 

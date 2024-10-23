@@ -9,13 +9,13 @@ from constructs import Construct
 
 # CMS Common Library
 from cms_common.constructs.custom_resource_lambda import CustomResourceLambdaConstruct
+from cms_common.policy_generators.kms import generate_kms_policy_statement_from_key_arn
 
 # Connected Mobility Solution on AWS
 from ...handlers.custom_resource.function.lib.custom_resource_type_enum import (
     CustomResourceType,
 )
 from ...handlers.custom_resource.function.lib.data_sources import GrafanaDataSourceType
-from ..lib.policy_generators import generate_kms_policy_statement
 from .grafana_api_key import GrafanaApiKeyConstruct
 from .grafana_workspace import GrafanaWorkspaceConstruct
 from .module_integration import AthenaDataSourceProperties
@@ -163,11 +163,11 @@ class AthenaDataSourceConstruct(Construct):
                             f"{athena_data_source_properties.athena_data_storage_bucket_arn}*",
                         ],
                     ),
-                    generate_kms_policy_statement(
+                    generate_kms_policy_statement_from_key_arn(
                         kms_encryption_key_arn=athena_data_source_properties.athena_data_storage_bucket_key_arn,
                         allow_encrypt=False,
                     ),
-                    generate_kms_policy_statement(
+                    generate_kms_policy_statement_from_key_arn(
                         kms_encryption_key_arn=athena_data_source_properties.athena_results_bucket_key_arn,
                         allow_encrypt=True,
                     ),

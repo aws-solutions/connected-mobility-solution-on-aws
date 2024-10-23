@@ -15,7 +15,6 @@ do
   esac
 done
 
-# CD into one level above the deployment dir where this script is located
 cd "$(dirname "$0")"/..
 
 # Get reference for all important folders

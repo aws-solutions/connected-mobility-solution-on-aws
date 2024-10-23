@@ -55,6 +55,18 @@ class CmsFleetWiseConnectorStack(Stack):
             },
         )
 
+        AppRegistryConstruct(
+            self,
+            "app-registry-construct",
+            app_registry_inputs=AppRegistryInputs(
+                application_name=Aws.STACK_NAME,
+                application_type=solution_config_inputs.application_type,
+                solution_id=solution_config_inputs.solution_id,
+                solution_name=solution_config_inputs.solution_name,
+                solution_version=solution_config_inputs.solution_version,
+            ),
+        )
+
         module_inputs = ModuleInputsConstruct(
             self, "module-inputs", solution_config_inputs=solution_config_inputs
         )
@@ -114,18 +126,6 @@ class CmsFleetWiseConnectorConstruct(Construct):
 
         # The App Unique ID should be used as a prefix to all resources created by this deployment
         app_unique_id = module_inputs.module_config_inputs.app_unique_id
-
-        app_registry_inputs = AppRegistryInputs(
-            application_name=Aws.STACK_NAME,
-            application_type=solution_config_inputs.application_type,
-            solution_id=solution_config_inputs.solution_id,
-            solution_name=solution_config_inputs.solution_name,
-            solution_version=solution_config_inputs.solution_version,
-        )
-
-        AppRegistryConstruct(
-            self, "app-registry", app_registry_inputs=app_registry_inputs
-        )
 
         # Timestream DB/Table
         timestream = TimestreamConstruct(

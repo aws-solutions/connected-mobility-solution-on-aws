@@ -52,6 +52,18 @@ class CmsAuthStack(Stack):
             },
         )
 
+        AppRegistryConstruct(
+            self,
+            "app-registry-construct",
+            app_registry_inputs=AppRegistryInputs(
+                application_name=Aws.STACK_NAME,
+                application_type=solution_config_inputs.application_type,
+                solution_id=solution_config_inputs.solution_id,
+                solution_name=solution_config_inputs.solution_name,
+                solution_version=solution_config_inputs.solution_version,
+            ),
+        )
+
         module_inputs_construct = ModuleInputsConstruct(self, "module-inputs-construct")
         app_unique_id = module_inputs_construct.app_unique_id
 
@@ -88,18 +100,6 @@ class CmsAuthConstruct(Construct):
         module_inputs_construct: ModuleInputsConstruct,
     ) -> None:
         super().__init__(scope, construct_id)
-
-        AppRegistryConstruct(
-            self,
-            "app-registry",
-            app_registry_inputs=AppRegistryInputs(
-                application_name=Aws.STACK_NAME,
-                application_type=solution_config_inputs.application_type,
-                solution_id=solution_config_inputs.solution_id,
-                solution_name=solution_config_inputs.solution_name,
-                solution_version=solution_config_inputs.solution_version,
-            ),
-        )
 
         vpc_construct = VpcConstruct(
             self, "vpc-construct", vpc_config=module_inputs_construct.vpc_config
@@ -145,7 +145,6 @@ class CmsAuthConstruct(Construct):
             self,
             "module-outputs",
             app_unique_id=module_inputs_construct.app_unique_id,
-            solution_config_inputs=solution_config_inputs,
             authorization_code_exchange_lambda_arn=authorization_code_exchange_lambda_construct.lambda_function.function_arn,
             token_validation_lambda_arn=token_validation_lambda_construct.lambda_function.function_arn,
         )

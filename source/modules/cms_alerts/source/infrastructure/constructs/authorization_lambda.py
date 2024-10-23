@@ -13,10 +13,10 @@ from constructs import Construct
 from cms_common.config.resource_names import ResourceName, ResourcePrefix
 from cms_common.config.stack_inputs import SolutionConfigInputs
 from cms_common.constructs.vpc_construct import VpcConstruct
+from cms_common.policy_generators.cloudwatch import (
+    generate_lambda_cloudwatch_logs_policy_document,
+)
 from cms_common.policy_generators.ec2_vpc import generate_ec2_vpc_policy
-
-# Connected Mobility Solution on AWS
-from ..lib.policy_generators import generate_lambda_cloudwatch_logs_policy_document
 
 
 class AuthorizationLambdaConstruct(Construct):

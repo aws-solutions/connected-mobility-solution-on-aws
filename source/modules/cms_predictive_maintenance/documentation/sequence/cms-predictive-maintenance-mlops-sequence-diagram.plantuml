@@ -1,0 +1,98 @@
+@startuml cms-predictive-maintenance-mlops-sequence-diagram
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/ManagementGovernance/CloudFormation.puml
+!include AWSPuml/MachineLearning/SageMaker.puml
+!include AWSPuml/Storage/SimpleStorageService.puml
+!include AWSPuml/MachineLearning/ElasticInference.puml
+!include AWSPuml/ApplicationIntegration/APIGatewayEndpoint.puml
+!include AWSPuml/Compute/Lambda.puml
+
+!include AWSPuml/ManagementGovernance/SystemsManagerParameterStore.puml
+
+!define GREEN #3F8624
+!define YELLOW #D86613
+!define RED #E3242B
+!define PINK #CF2465
+!define TEAL #008080
+!define ORANGE #f37b05
+
+'Comment out to use default PlantUML sequence formatting
+skinparam participant {
+    BackgroundColor AWS_BG_COLOR
+    BorderColor AWS_BORDER_COLOR
+}
+skinparam sequence {
+    ArrowThickness 2
+    LifeLineBorderColor AWS_COLOR
+    LifeLineBackgroundColor AWS_BORDER_COLOR
+    BoxBorderColor AWS_COLOR
+}
+
+actor User as user
+box CMS Predictive Maintenance Usage - Prediction
+participant "$APIGatewayEndpointIMG()\n/predict Endpoint" as predict_endpoint << APIGatewayEndpoint >>
+participant "$APIGatewayEndpointIMG()\n/batch-predict Endpoint" as batch_predict_endpoint << APIGatewayEndpoint >>
+participant "$LambdaIMG()\nPredict API\n Lambda" as lambda << Lambda >>
+participant "$SageMakerIMG()\nSagemaker\n Pipeline" as sm << SageMaker >>
+participant "$ElasticInferenceIMG()\nSagemaker\n Serverless Inference" as inference << ElasticInference >>
+participant "$ElasticInferenceIMG()\nSagemaker\n Batch Transform" as batch_inference << ElasticInference >>
+participant "$SimpleStorageServiceIMG()\nSagemaker Assets\n Bucket" as s3 << S3 >>
+endbox
+
+user -> s3++ GREEN: Upload training data for the predictive model with the data format as csv and file name as dataset.csv
+user <- s3
+deactivate s3
+
+|||
+
+user -> sm++ TEAL: Start pipeline execution
+sm -> s3++ GREEN: Get data for training the predictive model
+sm <- s3
+deactivate s3
+sm -> s3++ GREEN: Store pipeline execution metadata, processed data and model checkpoint
+sm <- s3
+deactivate s3
+sm -> inference++ TEAL: Deploy the model to a SageMaker serverless inference endpoint
+sm <- inference
+deactivate inference
+user <- sm
+deactivate sm
+
+|||
+
+user -> predict_endpoint++ PINK: Call /predict endpoint with model input
+predict_endpoint -> lambda++ ORANGE: Service the API request using a Lambda function
+lambda -> inference++ TEAL: Call the model endpoint with the provided API input
+lambda <- inference
+deactivate inference
+predict_endpoint <- lambda
+deactivate lambda
+user <- predict_endpoint: Return the model's predicion as API output
+deactivate predict_endpoint
+
+|||
+
+user -> s3++ GREEN: Upload inference data for batch prediction
+user <- s3
+deactivate s3
+
+|||
+
+user -> batch_predict_endpoint++ PINK: Call /batch-predict endpoint with the inference dataset in S3
+batch_predict_endpoint -> lambda++ ORANGE: Service the API request using a Lambda function
+lambda -> batch_inference++ TEAL: Create a batch transform job
+lambda <- batch_inference
+batch_predict_endpoint <- lambda
+deactivate lambda
+user <- batch_predict_endpoint: Return the name of the batch transform job's name in the API output
+deactivate batch_predict_endpoint
+batch_inference -> s3++ GREEN: Write the output predictions from the batch transform job to an S3 object.
+batch_inference <- s3
+deactivate s3
+deactivate batch_inference
+
+@enduml

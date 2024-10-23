@@ -18,6 +18,7 @@ from cms_common.constructs.app_unique_id import AppUniqueId
 from cms_common.constructs.cdk_lambda_vpc_config_construct import (
     CDKLambdasVpcConfigConstruct,
 )
+from cms_common.constructs.cmk_encrypted_s3 import CMKEncryptedS3Construct
 from cms_common.constructs.custom_resource_lambda import CustomResourceLambdaConstruct
 from cms_common.constructs.lambda_dependencies import LambdaDependenciesConstruct
 from cms_common.constructs.vpc_construct import VpcConstruct
@@ -25,7 +26,6 @@ from cms_common.constructs.vpc_construct import VpcConstruct
 # Connected Mobility Solution on AWS
 from .constructs.backstage_assets import BackstageAssetsConstruct
 from .constructs.cloudformation_role import CloudFormationRoleConstruct
-from .constructs.cmk_encrypted_s3 import CMKEncryptedS3Construct
 from .constructs.deployment_uuid_construct import DeploymentUUIDConstruct
 from .constructs.module_deploy import ModuleDeployCodeBuildConstruct
 from .constructs.module_integration import ModuleInputsConstruct, ModuleOutputsConstruct
@@ -56,6 +56,18 @@ class AcdpStack(Stack):
                     "SendAnonymousUsage": "Yes",
                 },
             },
+        )
+
+        AppRegistryConstruct(
+            self,
+            "acdp-app-registry",
+            app_registry_inputs=AppRegistryInputs(
+                application_name=Aws.STACK_NAME,
+                application_type=solution_config_inputs.application_type,
+                solution_id=solution_config_inputs.solution_id,
+                solution_name=solution_config_inputs.solution_name,
+                solution_version=solution_config_inputs.solution_version,
+            ),
         )
 
         local_asset_bucket_construct = CMKEncryptedS3Construct(
@@ -142,18 +154,6 @@ class AcdpConstruct(Construct):
         custom_resource_lambda_construct: CustomResourceLambdaConstruct,
     ) -> None:
         super().__init__(scope, construct_id)
-
-        AppRegistryConstruct(
-            self,
-            "acdp-app-registry",
-            app_registry_inputs=AppRegistryInputs(
-                application_name=Aws.STACK_NAME,
-                application_type=solution_config_inputs.application_type,
-                solution_id=solution_config_inputs.solution_id,
-                solution_name=solution_config_inputs.solution_name,
-                solution_version=solution_config_inputs.solution_version,
-            ),
-        )
 
         cloudformation_role = CloudFormationRoleConstruct(self, "cloudformation-role")
 

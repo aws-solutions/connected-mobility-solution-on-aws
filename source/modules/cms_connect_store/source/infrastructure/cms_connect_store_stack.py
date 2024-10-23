@@ -20,12 +20,12 @@ from cms_common.constructs.app_unique_id import AppUniqueId
 from cms_common.constructs.cdk_lambda_vpc_config_construct import (
     CDKLambdasVpcConfigConstruct,
 )
+from cms_common.constructs.cmk_encrypted_s3 import CMKEncryptedS3Construct
 from cms_common.constructs.lambda_dependencies import LambdaDependenciesConstruct
 from cms_common.constructs.vpc_construct import VpcConstruct
 
 # Connected Mobility Solution on AWS
 from .constructs.alerts_construct import AlertsConstruct
-from .constructs.cmk_encrypted_s3 import CMKEncryptedS3Construct
 from .constructs.iot_core_to_s3_json import IoTCoreToS3JsonConstruct
 from .constructs.iot_core_to_s3_parquet import IoTCoreToS3ParquetConstruct
 from .constructs.module_integration import ModuleInputsConstruct, ModuleOutputsConstruct
@@ -52,6 +52,18 @@ class CmsConnectStoreStack(Stack):
                     "S3AssetKeyPrefix": s3_asset_config_inputs.object_key_prefix,
                 },
             },
+        )
+
+        AppRegistryConstruct(
+            self,
+            "app-registry-construct",
+            app_registry_inputs=AppRegistryInputs(
+                application_name=Aws.STACK_NAME,
+                application_type=solution_config_inputs.application_type,
+                solution_id=solution_config_inputs.solution_id,
+                solution_name=solution_config_inputs.solution_name,
+                solution_version=solution_config_inputs.solution_version,
+            ),
         )
 
         self.module_inputs_construct = ModuleInputsConstruct(
@@ -101,18 +113,6 @@ class CmsConnectStoreConstruct(Construct):
         module_inputs_construct: ModuleInputsConstruct,
     ) -> None:
         super().__init__(scope, construct_id)
-
-        AppRegistryConstruct(
-            self,
-            "app-registry-construct",
-            app_registry_inputs=AppRegistryInputs(
-                application_name=Aws.STACK_NAME,
-                application_type=solution_config_inputs.application_type,
-                solution_id=solution_config_inputs.solution_id,
-                solution_name=solution_config_inputs.solution_name,
-                solution_version=solution_config_inputs.solution_version,
-            ),
-        )
 
         vpc_construct = VpcConstruct(
             self, "vpc-construct", vpc_config=module_inputs_construct.vpc_config

@@ -1,11 +1,14 @@
 {
   "name": "acdp-backstage",
-  "version": "1.2.2",
+  "version": "2.0.0",
   "private": true,
   "license": "Apache-2.0",
   "description": "Backstage implementation preconfigured to work with CMS",
   "engines": {
     "node": "18 || 20"
+  },
+  "backstage": {
+    "role": "cli"
   },
   "scripts": {
     "dev": "concurrently \"yarn start\" \"yarn start-backend\"",
@@ -31,7 +34,7 @@
     ]
   },
   "devDependencies": {
-    "@backstage/cli": "^0.26.10",
+    "@backstage/cli": "^0.26.11",
     "@types/supertest": "^2.0.14",
     "concurrently": "^8.0.1",
     "lerna": "^7.1.5",
@@ -44,22 +47,9 @@
   "resolutions": {
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "mysql2": "^3.9.8",
     "formidable": "^3.2.4",
-    "braces": "^3.0.3",
     "ws": "^8.17.1",
-    "inline-style-prefixer": "^7.0.1",
-    "fast-xml-parser": "^4.4.1",
     "axios": "^1.7.4",
-    "rollup": "^4.22.4"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,mjs,cjs}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.{json,md}": [
-      "prettier --write"
-    ]
+    "jsonpath-plus": "^10.0.7"
   }
 }

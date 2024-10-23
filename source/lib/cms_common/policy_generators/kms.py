@@ -8,10 +8,10 @@ from aws_cdk import ArnFormat, Stack, aws_iam
 from constructs import Construct
 
 
-def generate_kms_policy_statement(
+def generate_kms_policy_statement_from_key_id(
     self: Construct, kms_encryption_key_id: str, allow_encrypt: bool
 ) -> aws_iam.PolicyStatement:
-    policy_permissions = ["kms:Decrypt"]
+    policy_permissions = ["kms:Decrypt", "kms:DescribeKey"]
     encrypt_permissions = ["kms:Encrypt", "kms:GenerateDataKey"]
     if allow_encrypt:
         policy_permissions.extend(encrypt_permissions)
@@ -25,5 +25,21 @@ def generate_kms_policy_statement(
                 resource_name=f"{kms_encryption_key_id}",
                 arn_format=ArnFormat.SLASH_RESOURCE_NAME,
             ),
+        ],
+    )
+
+
+def generate_kms_policy_statement_from_key_arn(
+    kms_encryption_key_arn: str, allow_encrypt: bool
+) -> aws_iam.PolicyStatement:
+    policy_permissions = ["kms:Decrypt", "kms:DescribeKey"]
+    encrypt_permissions = ["kms:Encrypt", "kms:GenerateDataKey"]
+    if allow_encrypt:
+        policy_permissions.extend(encrypt_permissions)
+    return aws_iam.PolicyStatement(
+        effect=aws_iam.Effect.ALLOW,
+        actions=policy_permissions,
+        resources=[
+            kms_encryption_key_arn,
         ],
     )

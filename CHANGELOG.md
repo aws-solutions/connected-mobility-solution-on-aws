@@ -5,11 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2024-10-23
+
+### Added
+
+#### All
+
+- Add AWS MyApplications support to CloudFormation deployments via the awsApplication tag
+
+#### Automotive Cloud Developer Portal
+
+- Upgrade Backstage to v1.29.
+- Add metrics tab to ACDP scaffolded components with monthly cost and a link to the deployment's MyApplications page.
+- Add partner offerings page.
+
+#### CMS
+
+- Add CMS Predictive Maintenance module.
+
 ## [1.2.2] - 2024-09-26
 
 ### Fixed
 
-- Update rollup package to resolve CVE
+- Update rollup package to resolve CVE.
 
 ## [1.2.1] - 2024-09-18
 

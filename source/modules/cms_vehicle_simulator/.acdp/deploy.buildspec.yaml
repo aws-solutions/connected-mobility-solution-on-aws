@@ -11,5 +11,5 @@ phases:
         --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
         --role-arn "${CLOUDFORMATION_ROLE_ARN}" \
         --parameters \
-        ParameterKey="UserEmail",ParameterValue="${USER_EMAIL}" \
+        ParameterKey="DefaultUserEmail",ParameterValue="${DEFAULT_USER_EMAIL}" \
         ParameterKey="AppUniqueId",ParameterValue="${APP_UNIQUE_ID}"

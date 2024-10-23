@@ -18,9 +18,9 @@ from cms_common.constructs.vpc_prefix_list_lookup_custom_resource import (
     VpcPrefixListLookupCustomResourceConstruct,
 )
 from cms_common.policy_generators.ec2_vpc import generate_ec2_vpc_policy
+from cms_common.policy_generators.kms import generate_kms_policy_statement_from_key_arn
 
 # Connected Mobility Solution on AWS
-from ..lib.policy_generators import generate_kms_policy_statement
 from .module_integration import ModuleConfigInputs, TelemetryBucketInputs
 
 
@@ -117,8 +117,7 @@ class S3GlueAthenaConstruct(Construct):
                                 f"{telemetry_bucket.bucket_arn}/{module_config.timestream_unload_s3_prefix_path}/*",
                             ],
                         ),
-                        generate_kms_policy_statement(
-                            self,
+                        generate_kms_policy_statement_from_key_arn(
                             kms_encryption_key_arn=telemetry_bucket.bucket_key_arn,
                             allow_encrypt=True,
                         ),
@@ -133,7 +132,7 @@ class S3GlueAthenaConstruct(Construct):
                                 "glue:GetConnection",
                                 "glue:GetConnections",
                             ],
-                            resources=["*"],
+                            resources=["*"],  # NOSONAR
                         )
                     ]
                 ),
@@ -209,7 +208,7 @@ class S3GlueAthenaConstruct(Construct):
                                 "ec2:DescribeSecurityGroups",
                                 "ec2:CreateTags",
                             ],
-                            resources=["*"],
+                            resources=["*"],  # NOSONAR
                             conditions={
                                 "StringEquals": {"ec2:Region": [Stack.of(self).region]}
                             },
@@ -247,8 +246,7 @@ class S3GlueAthenaConstruct(Construct):
                                 ),
                             ],
                         ),
-                        generate_kms_policy_statement(
-                            self,
+                        generate_kms_policy_statement_from_key_arn(
                             kms_encryption_key_arn=glue_crawler_log_kms_key.key_arn,
                             allow_encrypt=True,
                         ),

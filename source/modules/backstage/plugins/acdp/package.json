@@ -1,7 +1,7 @@
 {
   "name": "backstage-plugin-acdp",
   "description": "ACDP plugin for Backstage",
-  "version": "1.2.2",
+  "version": "2.0.0",
   "main": "src/index.ts",
   "types": "src/index.ts",
   "license": "Apache-2.0",
@@ -26,33 +26,38 @@
   },
   "dependencies": {
     "@aws-sdk/client-codebuild": "^3.621.0",
-    "@aws-sdk/util-arn-parser": "^3.568.0",
+    "@aws-sdk/client-service-catalog-appregistry": "^3.621.0",
+    "@aws-sdk/util-arn-parser": "^3.495.0",
     "@backstage/catalog-model": "^1.5.0",
-    "@backstage/core-components": "^0.14.8",
+    "@backstage/core-components": "^0.14.9",
     "@backstage/core-plugin-api": "^1.9.3",
     "@backstage/errors": "^1.2.4",
-    "@backstage/plugin-catalog-react": "^1.12.1",
+    "@backstage/plugin-catalog-react": "^1.12.2",
+    "@backstage/test-utils": "^1.5.9",
     "@backstage/theme": "^0.5.6",
     "@material-ui/core": "^4.12.2",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.60",
     "@tanstack/react-query": "^4.36.1",
-    "date-fns": "^2.30.0",
     "backstage-plugin-acdp-common": "*",
-    "react": "^18.0.2"
+    "classnames": "^2.5.1",
+    "date-fns": "^2.30.0",
+    "react-use": "^17.5.1"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.26.10",
-    "@backstage/core-app-api": "^1.13.0",
-    "@backstage/dev-utils": "^1.0.34",
-    "@backstage/test-utils": "^1.5.7",
+    "@backstage/cli": "^0.26.11",
+    "@backstage/core-app-api": "^1.14.1",
+    "@backstage/dev-utils": "^1.0.36",
     "@testing-library/jest-dom": "^6.0.0",
-    "@types/react": "*",
-    "@types/react-dom": "*",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.0.0",
+    "@types/react": "*",
+    "@types/react-dom": "*",
     "msw": "^1.0.0",
     "prettier": "^3.1.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.2"
   },
   "files": [
     "dist"

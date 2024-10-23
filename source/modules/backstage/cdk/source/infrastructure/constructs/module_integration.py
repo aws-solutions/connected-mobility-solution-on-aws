@@ -15,7 +15,7 @@ from cms_common.config.resource_names import ResourceName, ResourcePrefix
 from cms_common.config.stack_inputs import SolutionConfigInputs
 from cms_common.constructs.identity_provider_config import IdentityProviderConfig
 from cms_common.constructs.vpc_construct import create_vpc_config
-from cms_common.resource_names.auth import AuthResourceNames
+from cms_common.resource_names.auth import AuthSetupResourceNames
 
 
 @dataclass(frozen=True)
@@ -97,6 +97,16 @@ class ModuleInputsConstruct(Construct):
             type="String",
         ).value_as_string
 
+        self.default_user_email = CfnParameter(
+            Stack.of(self),
+            "DefaultUserEmail",
+            type="String",
+            description="The user to create default user for cognito",
+            allowed_pattern=RegexPattern.OPTIONAL_EMAIL,
+            constraint_description="User E-Mail must be a valid E-Mail address",
+            default="",
+        ).value_as_string
+
         self.acdp_config_ssm_prefix_with_slash_prefix = ResourcePrefix.slash_separated(
             app_unique_id=self.acdp_uid, module_name="config", leading_slash=True
         )
@@ -144,24 +154,30 @@ class ModuleInputsConstruct(Construct):
             Stack.of(self)
         )
 
-        auth_resource_names = AuthResourceNames.from_identity_provider_id(
-            identity_provider_id
+        self.auth_setup_resource_names = (
+            AuthSetupResourceNames.from_identity_provider_id(identity_provider_id)
         )
 
-        idp_config_secret_arn = (
-            aws_ssm.StringParameter.from_string_parameter_attributes(
-                self,
-                "ssm-idp-config-secret-arn-parameter",
-                parameter_name=auth_resource_names.idp_config_secret_arn_ssm_parameter,
-                simple_name=False,
-                force_dynamic_reference=True,
-            )
+        self.user_pool_id = aws_ssm.StringParameter.from_string_parameter_attributes(
+            self,
+            "deployment-uuid",
+            parameter_name=self.auth_setup_resource_names.user_pool_id,
+            simple_name=False,
+            force_dynamic_reference=True,
+        ).string_value
+
+        idp_config_secret_arn = aws_ssm.StringParameter.from_string_parameter_attributes(
+            self,
+            "ssm-idp-config-secret-arn-parameter",
+            parameter_name=self.auth_setup_resource_names.idp_config_secret_arn_ssm_parameter,
+            simple_name=False,
+            force_dynamic_reference=True,
         )
 
         user_client_config_secret_arn = aws_ssm.StringParameter.from_string_parameter_attributes(
             self,
             "ssm-user-client-config-secret-arn-parameter",
-            parameter_name=auth_resource_names.user_client_config_secret_arn_ssm_parameter,
+            parameter_name=self.auth_setup_resource_names.user_client_config_secret_arn_ssm_parameter,
             simple_name=False,
             force_dynamic_reference=True,
         )
@@ -528,12 +544,12 @@ class ModuleInputsConstruct(Construct):
 
         acdp_build_config_path_root_parameter = aws_ssm.StringParameter(
             self,
-            "ssm-acdp-build-ssm-prefix",
+            "ssm-acdp-build-config-ssm-prefix",
             string_value=self.acdp_build_ssm_prefix_with_slash_prefix,
             description="Description for acdp build config path root parameter",
             parameter_name=ResourceName.slash_separated(
                 prefix=self.acdp_build_ssm_prefix_with_slash_prefix,
-                name="build-parameters",
+                name="build-config-ssm-prefix",
             ),
             simple_name=False,
         )

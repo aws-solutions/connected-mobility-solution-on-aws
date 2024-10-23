@@ -1,7 +1,7 @@
 
 
 AWSTemplateFormatVersion: "2010-09-09"
-Description: (SO0241-CMS.23) connected-mobility-solution-on-aws - vpc. Version v1.2.0
+Description: (SO0241-CMS.23) connected-mobility-solution-on-aws - vpc. Version v2.0.0
   This template deploys a VPC, with a pair of public and private subnets spread
   across two Availability Zones. It deploys an internet gateway, with a default
   route on the public subnets. It deploys a pair of NAT gateways (one in each AZ),
@@ -622,8 +622,8 @@ Resources:
         Version: "2012-10-17"
         Statement:
           - Effect: Allow
-            Action: "*"
-            Principal: "*"
+            Action: "*"  # NOSONAR
+            Principal: "*"  # NOSONAR
             Resource: "*"
       RouteTableIds:
         - !Ref PrivateRouteTable1
@@ -643,8 +643,8 @@ Resources:
         Version: "2012-10-17"
         Statement:
           - Effect: Allow
-            Action: "*"
-            Principal: "*"
+            Action: "*"  # NOSONAR
+            Principal: "*"  # NOSONAR
             Resource: "*"
       RouteTableIds:
         - !Ref PrivateRouteTable1
@@ -879,6 +879,23 @@ Resources:
       SubnetIds:
         - !Ref PublicSubnet1
         - !Ref PublicSubnet2
+
+  OpenSearchServerlessEndpoint:
+    Type: AWS::OpenSearchServerless::VpcEndpoint
+    Condition: IsVpcEndpointEnabled
+    Properties:
+      Name: !Join ["-", ["aoss", !Ref VPC]]
+      SecurityGroupIds:
+        - !GetAtt VpcEndpointSecurityGroup.GroupId
+      SubnetIds:
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+      VpcId: !Ref VPC
+    # Immediately creating OpenSearchServerlessEndpoint after creating the VPC
+    # leads to race conditions that prevent deployment of the endpoint. Hence,
+    # adding an indirect delay in creating this endpoint by waiting for creation
+    # of another endpoint.
+    DependsOn: CloudFormationEndpoint
 
 Outputs:
   VPC:

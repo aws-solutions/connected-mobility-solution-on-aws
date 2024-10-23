@@ -1,0 +1,96 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  description: A CDK Python app for analyzing vehicle telemetry data and predicting occurrences of vehicle faults for maintenance
+  name: cms-predictive-maintenance
+  tags:
+  - cms
+  - guide
+  - predictive-maintenance
+  title: CMS Predictive Maintenance Module
+  annotations:
+    backstage.io/techdocs-ref: dir:../docs/components/cms-predictive-maintenance/
+spec:
+  type: service
+  output:
+    links:
+    - entityRef: ${{ steps.catalogRegister.output.entityRef }}
+      icon: catalog
+      title: Open in catalog
+  owner: aws solutions
+  parameters:
+  - properties:
+      componentId:
+        default: cms-predictive-maintenance
+        description: Unique name of the component
+        pattern: '[a-zA-Z][-a-zA-Z0-9]*[a-zA-Z]'
+        title: Name
+        type: string
+        ui:field: EntityNamePicker
+      description:
+        default: A CDK Python app for analyzing vehicle telemetry data and predicting occurrences of vehicle faults for maintenance
+        description: Help others understand what this component is for.
+        title: Description
+        type: string
+      owner:
+        description: Owner of the component
+        title: Owner
+        type: string
+        ui:field: OwnerPicker
+        ui:options:
+          catalogFilter:
+            kind:
+            - Group
+            - User
+    required:
+    - componentId
+    - owner
+    title: Provide the required information
+  - properties:
+      appUniqueId:
+        default: cms
+        description: Application unique identifier used to uniquely name resources within the stack
+        title: App Unique ID
+        type: string
+        ui:disabled: true
+    required:
+    - appUniqueId
+    title: Provide the Module Configuration
+  steps:
+  - action: aws:acdp:catalog:create
+    id: acdpCatalogCreate
+    name: ACDP S3 Catalog Create
+    input:
+      componentId: ${{ parameters.componentId }}
+      assetsSourcePath: dir:../acdp/cms-predictive-maintenance/
+      docsSiteSourcePath: dir:../docs/components/cms-predictive-maintenance/site/
+      entity:
+        apiVersion: backstage.io/v1alpha1
+        kind: Component
+        metadata:
+          annotations:
+            aws.amazon.com/acdp-deploy-on-create: "true"
+          description: ${{parameters.description}}
+          name: ${{parameters.componentId}}
+          namespace: acdp
+        spec:
+          lifecycle: experimental
+          owner: ${{parameters.owner}}
+          type: service
+
+  - action: catalog:register
+    id: catalogRegister
+    name: Backstage Catalog Register
+    input:
+      catalogInfoUrl: ${{ steps.acdpCatalogCreate.output.catalogItemS3Url }}
+
+  - action: aws:acdp:configure
+    id: acdpConfigureDeploy
+    name: ACDP Configure Deploy
+    input:
+      entityRef: ${{ steps.catalogRegister.output.entityRef }}
+      buildParameters:
+      - name: CFN_TEMPLATE_URL
+        value: UNSET
+      - name: APP_UNIQUE_ID
+        value: ${{ parameters.appUniqueId }}

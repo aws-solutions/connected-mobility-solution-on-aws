@@ -34,6 +34,7 @@ types-requests = ">=2.32.0"
 types-setuptools = "*"
 types-urllib3 = "*"
 types-toml = "*"
+urllib3 = ">=2.2.2"
 wrapt = "*"
 
 [requires]

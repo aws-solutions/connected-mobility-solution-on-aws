@@ -22,7 +22,7 @@ export const techdocsModuleCustomBuildStrategy = createBackendModule({
       async init({ config, techdocs }) {
         const docsBuildStrategy: DocsBuildStrategy = {
           shouldBuild: async (params) => {
-            let shouldBuildAnnotation =
+            const shouldBuildAnnotation =
               params.entity.metadata?.annotations?.[
                 "aws.amazon.com/techdocs-builder"
               ];

@@ -4,6 +4,12 @@
 .DEFAULT_GOAL := help
 SHELL := /bin/bash
 
+DEFAULTS.NODE_VERSION := $(shell cat .nvmrc 2> /dev/null)
+DEFAULTS.PYTHON_VERSION := $(shell cat .python-version)
+
+NODE_VERSION ?= ${DEFAULTS.NODE_VERSION}
+PYTHON_VERSION ?= ${DEFAULTS.PYTHON_VERSION}
+
 include makefiles/common_config.mk
 include makefiles/global_targets.mk
 
@@ -114,11 +120,6 @@ verify-module: ## Run all verifications for CMS. CAUTION: Takes a long time.
 	@$(call run-module-target,verify-module,${SubMakeDirs})
 	@printf "%bFinished verify-module.%b\n" "${GREEN}" "${NC}"
 
-.PHONY: verify-required-tools
-verify-required-tools: ## Checks the environment for the required dependencies.
-	@$(call run-module-target,verify-required-tools,${SubMakeDirs})
-	@printf "%bFinished verify-required-tools.%b\n" "${GREEN}" "${NC}"
-
 .PHONY: cfn-nag
 cfn-nag: ## Run cfn-nag for the entire solution.
 	@$(call run-module-target,cfn-nag,${SubMakeDirs})
@@ -149,7 +150,7 @@ version: root-version ## Display solution name and current version and each modu
 ## INSTALL
 ## ========================================================
 .PHONY: root-install
-root-install: ## Using pipenv, installs pip dependencies for root.
+root-install: verify-required-tools ## Using pipenv, installs pip dependencies for root.
 	@printf "%bInstalling root pip dependencies.%b\n" "${MAGENTA}" "${NC}"
 	@pipenv install --dev --python ${PYTHON_VERSION}
 	@pipenv clean --python ${PYTHON_VERSION}
@@ -217,13 +218,13 @@ clean-build-artifacts-all: ## Cleans up existing build files, including venvs, d
 .PHONY: create-rc-file
 create-rc-file: ## Create rc file for environment variables which are likely to be customized. Default values provided where able for default CMS deployment.
 	@[[ -f .cmsrc ]] || printf "%bInstead of using this target, you can run the following command.\n%b" "${MAGENTA}" "${NC}"
-	@[[ -f .cmsrc ]] || printf "%bcat > .cmsrc <<EOL\nexport USER_EMAIL=\"\"\nexport VPC_NAME=\"cms-vpc\"\nexport IDENTITY_PROVIDER_ID=\"cms\"\nexport FULLY_QUALIFIED_DOMAIN_NAME=\"\"\nexport ROUTE53_HOSTED_ZONE_ID=\"\"\nexport CUSTOM_ACM_CERTIFICATE_ARN=\"\"\nexport IS_PUBLIC_FACING=\"true\"\nexport USE_BACKSTAGE_AUTH_REDIRECT_FLOW=\"true\"\nexport BACKSTAGE_ADDITIONAL_SCOPES=\"\"\nexport SHOULD_CREATE_COGNITO_RESOURCES=\"true\"\nexport BACKSTAGE_NAME=\"Default Name\"\nexport BACKSTAGE_ORG=\"Default Org\"\nEOL\n%b" "${YELLOW}" "${NC}"
+	@[[ -f .cmsrc ]] || printf "%bcat > .cmsrc <<EOL\nexport DEFAULT_USER_EMAIL=\"\"\nexport VPC_NAME=\"cms\"\nexport IDENTITY_PROVIDER_ID=\"cms\"\nexport FULLY_QUALIFIED_DOMAIN_NAME=\"\"\nexport ROUTE53_HOSTED_ZONE_ID=\"\"\nexport CUSTOM_ACM_CERTIFICATE_ARN=\"\"\nexport IS_PUBLIC_FACING=\"true\"\nexport USE_BACKSTAGE_AUTH_REDIRECT_FLOW=\"true\"\nexport BACKSTAGE_ADDITIONAL_SCOPES=\"\"\nexport SHOULD_CREATE_COGNITO_RESOURCES=\"true\"\nexport BACKSTAGE_NAME=\"Default Name\"\nexport BACKSTAGE_ORG=\"Default Org\"\nEOL\n%b" "${YELLOW}" "${NC}"
 	@[[ -f .cmsrc ]] || printf "%bTo do so, exit this script now (CTRL+C). Otherwise, continue.\n\n%b" "${MAGENTA}" "${NC}"
 	@[[ -f .cmsrc ]] && printf "%bFound existing .cmsrc file. Getting user input before updating file...\n%b" "${MAGENTA}" "${NC}" || printf "%bNo .cmsrc file found. Getting user input before creating file...\n%b" "${MAGENTA}" "${NC}"
 	@printf "%bInput the required fields. Defaults are available for some values. Existing environment variables in the session will be used automatically.\n%b" "${MAGENTA}" "${NC}"
 	@[[ -f .cmsrc ]] && source .cmsrc; \
-	[[ -n "$$USER_EMAIL" ]] && printf "%bFound existing value for USER_EMAIL: %s\n%b" "${GREEN}" "${USER_EMAIL}" "${NC}" || while [[ -z "$$USER_EMAIL" ]]; do read -p "Enter User Email: " USER_EMAIL; done; \
-	[[ -n "$$VPC_NAME" ]] && printf "%bFound existing value for VPC_NAME: %s\n%b" "${GREEN}" "${VPC_NAME}" "${NC}" || while [[ -z "$$VPC_NAME" ]]; do read -p "Enter VPC_NAME [cms-vpc]: " VPC_NAME; VPC_NAME=$${VPC_NAME:-cms-vpc}; done; \
+	[[ -n "$$DEFAULT_USER_EMAIL" ]] && printf "%bFound existing value for DEFAULT_USER_EMAIL: %s\n%b" "${GREEN}" "${DEFAULT_USER_EMAIL}" "${NC}" || while [[ -z "$$DEFAULT_USER_EMAIL" ]]; do read -p "Enter User Email: " DEFAULT_USER_EMAIL; done; \
+	[[ -n "$$VPC_NAME" ]] && printf "%bFound existing value for VPC_NAME: %s\n%b" "${GREEN}" "${VPC_NAME}" "${NC}" || while [[ -z "$$VPC_NAME" ]]; do read -p "Enter VPC_NAME [cms]: " VPC_NAME; VPC_NAME=$${VPC_NAME:-cms}; done; \
 	[[ -n "$$IDENTITY_PROVIDER_ID" ]] && printf "%bFound existing value for IDENTITY_PROVIDER_ID: %s\n%b" "${GREEN}" "${IDENTITY_PROVIDER_ID}" "${NC}" || while [[ -z "$$IDENTITY_PROVIDER_ID" ]]; do read -p "Enter IDENTITY_PROVIDER_ID [cms]: " IDENTITY_PROVIDER_ID; IDENTITY_PROVIDER_ID=$${IDENTITY_PROVIDER_ID:-cms}; done; \
 	[[ -n "$$FULLY_QUALIFIED_DOMAIN_NAME" ]] && printf "%bFound existing value for FULLY_QUALIFIED_DOMAIN_NAME: %s\n%b" "${GREEN}" "${FULLY_QUALIFIED_DOMAIN_NAME}" "${NC}" || while [[ -z "$$FULLY_QUALIFIED_DOMAIN_NAME" ]]; do read -p "Enter FULLY_QUALIFIED_DOMAIN_NAME: " FULLY_QUALIFIED_DOMAIN_NAME; done; \
 	[[ -n "$$ROUTE53_HOSTED_ZONE_ID" ]] && printf "%bFound existing value for ROUTE53_HOSTED_ZONE_ID: %s\n%b" "${GREEN}" "${ROUTE53_HOSTED_ZONE_ID}" "${NC}" || read -p "Enter ROUTE53_HOSTED_ZONE_ID (Optional, if providing CUSTOM_ACM_CERTIFICATE_ARN): " ROUTE53_HOSTED_ZONE_ID; ROUTE53_HOSTED_ZONE_ID=$${ROUTE53_HOSTED_ZONE_ID:-}; \
@@ -234,14 +235,14 @@ create-rc-file: ## Create rc file for environment variables which are likely to 
 	[[ -n "$$SHOULD_CREATE_COGNITO_RESOURCES" ]] && printf "%bFound existing value for SHOULD_CREATE_COGNITO_RESOURCES: %s\n%b" "${GREEN}" "${SHOULD_CREATE_COGNITO_RESOURCES}" "${NC}" || while [[ -z "$$SHOULD_CREATE_COGNITO_RESOURCES" ]]; do read -p "Enter SHOULD_CREATE_COGNITO_RESOURCES [true]: " SHOULD_CREATE_COGNITO_RESOURCES; SHOULD_CREATE_COGNITO_RESOURCES=$${SHOULD_CREATE_COGNITO_RESOURCES:-true}; done; \
 	[[ -n "$$BACKSTAGE_NAME" ]] && printf "%bFound existing value for BACKSTAGE_NAME: %s\n%b" "${GREEN}" "${BACKSTAGE_NAME}" "${NC}" || while [[ -z "$$BACKSTAGE_NAME" ]]; do read -p "Enter BACKSTAGE_NAME [Default Name]:" BACKSTAGE_NAME; BACKSTAGE_NAME=$${BACKSTAGE_NAME:-Default Name}; done; \
 	[[ -n "$$BACKSTAGE_ORG" ]] && printf "%bFound existing value for BACKSTAGE_ORG: %s\n%b" "${GREEN}" "${BACKSTAGE_ORG}" "${NC}" || while [[ -z "$$BACKSTAGE_ORG" ]]; do read -p "Enter BACKSTAGE_ORG [Default Org]:" BACKSTAGE_ORG; BACKSTAGE_ORG=$${BACKSTAGE_ORG:-Default Org}; done; \
-	printf "#!/bin/bash\nexport USER_EMAIL=\"%s\"\nexport VPC_NAME=\"%s\"\nexport IDENTITY_PROVIDER_ID=\"%s\"\nexport FULLY_QUALIFIED_DOMAIN_NAME=\"%s\"\nexport ROUTE53_HOSTED_ZONE_ID=\"%s\"\nexport CUSTOM_ACM_CERTIFICATE_ARN=\"%s\"\nexport IS_PUBLIC_FACING=\"%s\"\nexport USE_BACKSTAGE_AUTH_REDIRECT_FLOW=\"%s\"\nexport BACKSTAGE_ADDITIONAL_SCOPES=\"%s\"\nexport SHOULD_CREATE_COGNITO_RESOURCES=\"%s\"\nexport BACKSTAGE_NAME=\"%s\"\nexport BACKSTAGE_ORG=\"%s\"\n" "$$USER_EMAIL" "$$VPC_NAME" "$$IDENTITY_PROVIDER_ID" "$$FULLY_QUALIFIED_DOMAIN_NAME" "$$ROUTE53_HOSTED_ZONE_ID" "$$CUSTOM_ACM_CERTIFICATE_ARN" "$$IS_PUBLIC_FACING" "$$USE_BACKSTAGE_AUTH_REDIRECT_FLOW" "$$BACKSTAGE_ADDITIONAL_SCOPES" "$$SHOULD_CREATE_COGNITO_RESOURCES" "$$BACKSTAGE_NAME" "$$BACKSTAGE_ORG" > .cmsrc; \
+	printf "#!/bin/bash\nexport DEFAULT_USER_EMAIL=\"%s\"\nexport VPC_NAME=\"%s\"\nexport IDENTITY_PROVIDER_ID=\"%s\"\nexport FULLY_QUALIFIED_DOMAIN_NAME=\"%s\"\nexport ROUTE53_HOSTED_ZONE_ID=\"%s\"\nexport CUSTOM_ACM_CERTIFICATE_ARN=\"%s\"\nexport IS_PUBLIC_FACING=\"%s\"\nexport USE_BACKSTAGE_AUTH_REDIRECT_FLOW=\"%s\"\nexport BACKSTAGE_ADDITIONAL_SCOPES=\"%s\"\nexport SHOULD_CREATE_COGNITO_RESOURCES=\"%s\"\nexport BACKSTAGE_NAME=\"%s\"\nexport BACKSTAGE_ORG=\"%s\"\n" "$$DEFAULT_USER_EMAIL" "$$VPC_NAME" "$$IDENTITY_PROVIDER_ID" "$$FULLY_QUALIFIED_DOMAIN_NAME" "$$ROUTE53_HOSTED_ZONE_ID" "$$CUSTOM_ACM_CERTIFICATE_ARN" "$$IS_PUBLIC_FACING" "$$USE_BACKSTAGE_AUTH_REDIRECT_FLOW" "$$BACKSTAGE_ADDITIONAL_SCOPES" "$$SHOULD_CREATE_COGNITO_RESOURCES" "$$BACKSTAGE_NAME" "$$BACKSTAGE_ORG" > .cmsrc; \
 	printf "%b.cmsrc is now populated. Run \`source .cmsrc\` before performing a deployment.\n%b" "${MAGENTA}" "${NC}"
 
 
 .PHONY: generate-python-requirements-files
-generate-python-requirements-files: ## Generates requirements.txt files from the pipfiles throughout the solution.
-	@printf "%bGenerating requirements.txt from pipfiles.%b\n" "${MAGENTA}" "${NC}"\
-	find ${SOLUTION_PATH} \( -name .venv -o -name node_modules -o -name "cdk.out" \) -prune -false -o -name "Pipfile" -execdir bash -c "echo; PIPENV_PIPFILE={} pipenv requirements 1> requirements.txt;" \;
+generate-python-requirements-files: ## Generates requirements.txt files using the python binary in the .venv environments throughout the solution.
+	@printf "%bGenerating requirements.txt from virtual environments (.venv) python binaries.%b\n" "${MAGENTA}" "${NC}"
+	find ${SOLUTION_PATH} \( -name node_modules -o -name "cdk.out" \) -prune -false -o -name ".venv" -type d -exec bash -c '{}/bin/python -m pip freeze > "{}/../requirements.txt"' \;
 
 ## ========================================================
 ## HELPERS

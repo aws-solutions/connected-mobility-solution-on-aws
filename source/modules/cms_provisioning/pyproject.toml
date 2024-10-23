@@ -10,6 +10,7 @@ omit = [
     "setup.py",
     "**/tests/*",
     "source/app.py",
+    "source/tests/conftest.py",
     "**/*_dependency_layer/**/*"
 ]
 

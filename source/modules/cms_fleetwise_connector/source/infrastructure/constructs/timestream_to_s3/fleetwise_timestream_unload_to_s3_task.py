@@ -13,13 +13,13 @@ from cms_common.config.metrics import OperationalMetricsInput
 from cms_common.config.resource_names import ResourceName, ResourcePrefix
 from cms_common.config.stack_inputs import SolutionConfigInputs
 from cms_common.constructs.vpc_construct import VpcConstruct
-from cms_common.policy_generators.ec2_vpc import generate_ec2_vpc_policy
-
-# Connected Mobility Solution on AWS
-from ...lib.policy_generators import (
-    generate_kms_policy_statement,
+from cms_common.policy_generators.cloudwatch import (
     generate_lambda_cloudwatch_logs_policy_document,
 )
+from cms_common.policy_generators.ec2_vpc import generate_ec2_vpc_policy
+from cms_common.policy_generators.kms import generate_kms_policy_statement_from_key_arn
+
+# Connected Mobility Solution on AWS
 from ..module_integration import TelemetryBucketInputs, TimestreamOutputs
 
 
@@ -120,8 +120,8 @@ class FleetWiseTimestreamUnloadToS3:
                             ],
                             resources=["*"],
                         ),
-                        generate_kms_policy_statement(
-                            construct, timestream.timestream_key_arn, True
+                        generate_kms_policy_statement_from_key_arn(
+                            timestream.timestream_key_arn, True
                         ),
                     ]
                 ),
@@ -143,8 +143,8 @@ class FleetWiseTimestreamUnloadToS3:
                                 f"{telemetry_bucket.bucket_arn}/{timestream_unload_s3_prefix_path}/*",
                             ],
                         ),
-                        generate_kms_policy_statement(
-                            construct, telemetry_bucket.bucket_key_arn, True
+                        generate_kms_policy_statement_from_key_arn(
+                            telemetry_bucket.bucket_key_arn, True
                         ),
                     ]
                 ),

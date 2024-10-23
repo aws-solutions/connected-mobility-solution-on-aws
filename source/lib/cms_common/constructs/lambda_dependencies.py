@@ -47,7 +47,6 @@ class LambdaDependenciesConstruct(Construct):
         with open(pipfile_path, "r", encoding="utf-8") as pipfile:
             new_pipfile = toml.load(pipfile)
         with open(requirements, "w", encoding="utf-8") as requirements_file:
-
             for package, constraint in new_pipfile["packages"].items():
                 if package not in ["boto3", "aws-cdk-lib"]:
                     self.req_formatter(
@@ -71,7 +70,10 @@ class LambdaDependenciesConstruct(Construct):
         self.dependency_layer = aws_lambda.LayerVersion(
             self,
             "lambda-dependency-layer-version",
-            code=aws_lambda.Code.from_asset(dependency_layer_path),
+            code=aws_lambda.Code.from_asset(
+                dependency_layer_path,
+                exclude=["**/tests/*"],
+            ),
             compatible_architectures=[
                 aws_lambda.Architecture.X86_64,
                 aws_lambda.Architecture.ARM_64,

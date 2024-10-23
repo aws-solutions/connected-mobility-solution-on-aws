@@ -1,8 +1,21 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
+import { Logger } from "winston";
+
+import { UrlReader } from "@backstage/backend-common";
+import { Location } from "@backstage/catalog-client";
+import {
+  Entity,
+  parseLocationRef,
+  getEntitySourceLocation,
+  ANNOTATION_SOURCE_LOCATION,
+} from "@backstage/catalog-model";
 import { Config } from "@backstage/config";
-import { parse } from "@aws-sdk/util-arn-parser";
+import { InputError } from "@backstage/errors";
+import { ScmIntegrations } from "@backstage/integration";
+import { AwsCredentialProvider } from "@backstage/integration-aws-node";
+
 import {
   BatchGetBuildsCommand,
   BatchGetProjectsCommand,
@@ -15,112 +28,56 @@ import {
   StartBuildCommand,
   StartBuildCommandOutput,
 } from "@aws-sdk/client-codebuild";
+import { PutParameterCommand, GetParameterCommand } from "@aws-sdk/client-ssm";
 
-import { AwsCredentialProvider } from "@backstage/integration-aws-node";
-
-import { getLocationForEntity } from "../utils";
 import {
   constants,
-  AcdpDeploymentTarget,
   AcdpBuildAction,
   BuildSourceConfig,
 } from "backstage-plugin-acdp-common";
-import { Location } from "@backstage/catalog-client";
-import {
-  Entity,
-  parseLocationRef,
-  getEntitySourceLocation,
-  getCompoundEntityRef,
-  stringifyEntityRef,
-  ANNOTATION_SOURCE_LOCATION,
-} from "@backstage/catalog-model";
-import { InputError } from "@backstage/errors";
-import { UrlReader } from "@backstage/backend-common";
-import { ScmIntegrations } from "@backstage/integration";
-import { Logger } from "winston";
-import {
-  SSMClient,
-  PutParameterCommand,
-  GetParameterCommand,
-} from "@aws-sdk/client-ssm";
-import * as path from "path";
 
-export class AcdpBuildService {
+import { awsApiCallWithErrorHandling, getLocationForEntity } from "../utils";
+import {
+  formatS3UrlToPath,
+  getCodeBuildSourceTypeForUrl,
+  parseCodeBuildArn,
+  removeUrlPrefix,
+  getDeploymentTargetForEntity,
+  getSsmParameterNameForEntityBuildParameters,
+  getSsmParameterNameForEntitySourceConfig,
+  updateEnvironmentVariablesForDeploymentTarget,
+} from "./utils";
+import { AcdpBaseService } from "./acdp-base-service";
+
+export interface AcdpBuildServiceOptions {
+  config: Config;
+  reader: UrlReader;
+  integrations: ScmIntegrations;
+  awsCredentialsProvider: AwsCredentialProvider;
+  logger: Logger;
+}
+
+export class AcdpBuildService extends AcdpBaseService {
   private reader: UrlReader;
   private integrations: ScmIntegrations;
-  private userAgentString: string;
-  private deploymentTargets: AcdpDeploymentTarget[];
-  private buildParameterSsmPrefix: string;
-  private awsCredentialsProvider: AwsCredentialProvider;
-  private ssmClient: SSMClient;
-  private logger: Logger;
 
-  constructor(options: {
-    config: Config;
-    reader: UrlReader;
-    integrations: ScmIntegrations;
-    awsCredentialsProvider: AwsCredentialProvider;
-    logger: Logger;
-  }) {
-    const { config, reader, integrations, awsCredentialsProvider, logger } =
-      options;
+  constructor(options: AcdpBuildServiceOptions) {
+    super({
+      ...options,
+      userAgentString: options.config.getString("acdp.metrics.userAgentString"),
+    });
+    const { reader, integrations } = options;
 
-    const defaultDeploymentTarget = {
-      name: constants.ACDP_DEFAULT_DEPLOYMENT_TARGET,
-      awsAccount: config.getString("acdp.deploymentDefaults.accountId"),
-      awsRegion: config.getString("acdp.deploymentDefaults.region"),
-      codeBuildArn: config.getString(
-        "acdp.deploymentDefaults.codeBuildProjectArn",
-      ),
-    };
-    this.deploymentTargets = [defaultDeploymentTarget];
-    this.buildParameterSsmPrefix = config.getString(
-      "acdp.buildConfig.buildConfigStoreSsmPrefix",
-    );
-    this.userAgentString = config.getString("acdp.metrics.userAgentString");
     this.reader = reader;
     this.integrations = integrations;
-    this.awsCredentialsProvider = awsCredentialsProvider;
-
-    this.ssmClient = new SSMClient({
-      customUserAgent: this.userAgentString,
-      credentialDefaultProvider: () =>
-        this.awsCredentialsProvider.sdkCredentialProvider,
-    });
-    this.logger = logger;
   }
 
-  private getDeploymentTargetForEntity(entity: Entity) {
-    const annotations = entity.metadata.annotations!;
-
-    const deploymentTargetName =
-      annotations[constants.ACDP_DEPLOYMENT_TARGET_ANNOTATION];
-
-    if (!deploymentTargetName) {
-      throw new InputError(
-        `No deployment target is set under annotation '${constants.ACDP_DEPLOYMENT_TARGET_ANNOTATION}'`,
-      );
-    }
-
-    const deploymentTarget = this.deploymentTargets.find(
-      (deploymentTarget) => deploymentTarget.name === deploymentTargetName,
-    );
-
-    if (!deploymentTarget) {
-      throw new InputError(
-        `No deployment target found with name '${deploymentTargetName}'`,
-      );
-    }
-
-    return deploymentTarget;
-  }
-
-  private getCodeBuildClient(region: string) {
+  private getCodeBuildClient(region?: string): CodeBuildClient {
     return new CodeBuildClient({
       region: region,
-      customUserAgent: this.userAgentString,
+      customUserAgent: this._userAgentString,
       credentialDefaultProvider: () =>
-        this.awsCredentialsProvider.sdkCredentialProvider,
+        this._awsCredentialsProvider.sdkCredentialProvider,
     });
   }
 
@@ -172,49 +129,66 @@ export class AcdpBuildService {
       return (await buildspecBody.buffer()).toString();
     } catch (err: any) {
       if (err.name === "NoSuchKey") {
-        this.logger.error("Buildspec not found");
+        this._logger.error("Buildspec not found");
         return undefined;
-      } else {
-        throw err;
       }
+
+      throw err;
     }
   }
 
   public async getProject(entity: Entity): Promise<Project | undefined> {
-    const deploymentTarget = this.getDeploymentTargetForEntity(entity);
-    const codeBuildClient = this.getCodeBuildClient(deploymentTarget.awsRegion);
-    const { projectName } = this.parseCodeBuildArn(
-      deploymentTarget.codeBuildArn,
+    const deploymentTarget = getDeploymentTargetForEntity(
+      entity,
+      this._deploymentTargets,
     );
+    const codeBuildClient = this.getCodeBuildClient(deploymentTarget.awsRegion);
+    const { projectName } = parseCodeBuildArn(deploymentTarget.codeBuildArn);
 
-    const projectQueryResult = await codeBuildClient.send(
-      new BatchGetProjectsCommand({
-        names: [projectName],
-      }),
+    const projectQueryResult = await awsApiCallWithErrorHandling(
+      () =>
+        codeBuildClient.send(
+          new BatchGetProjectsCommand({
+            names: [projectName],
+          }),
+        ),
+      `Could not get projects with project name: ${projectName}`,
+      this._logger,
     );
     return projectQueryResult.projects?.[0];
   }
 
   public async getBuilds(entity: Entity): Promise<Build[]> {
-    const deploymentTarget = this.getDeploymentTargetForEntity(entity);
-    const codeBuildClient = this.getCodeBuildClient(deploymentTarget.awsRegion);
-    const { projectName } = this.parseCodeBuildArn(
-      deploymentTarget.codeBuildArn,
+    const deploymentTarget = getDeploymentTargetForEntity(
+      entity,
+      this._deploymentTargets,
     );
+    const codeBuildClient = this.getCodeBuildClient(deploymentTarget.awsRegion);
+    const { projectName } = parseCodeBuildArn(deploymentTarget.codeBuildArn);
 
-    const buildIds = await codeBuildClient.send(
-      new ListBuildsForProjectCommand({
-        projectName,
-      }),
+    const buildIds = await awsApiCallWithErrorHandling(
+      () =>
+        codeBuildClient.send(
+          new ListBuildsForProjectCommand({
+            projectName,
+          }),
+        ),
+      `Could not list builds with project name: ${projectName}`,
+      this._logger,
     );
 
     let builds: Build[] = [];
 
     if (buildIds.ids) {
-      const output = await codeBuildClient.send(
-        new BatchGetBuildsCommand({
-          ids: buildIds.ids,
-        }),
+      const output = await awsApiCallWithErrorHandling(
+        () =>
+          codeBuildClient.send(
+            new BatchGetBuildsCommand({
+              ids: buildIds.ids,
+            }),
+          ),
+        `Could not get builds with build ids: ${buildIds.ids}`,
+        this._logger,
       );
       builds = output.builds ?? [];
     }
@@ -237,12 +211,15 @@ export class AcdpBuildService {
   }) {
     const { entity, action } = options;
 
-    const deploymentTarget = this.getDeploymentTargetForEntity(entity);
+    const deploymentTarget = getDeploymentTargetForEntity(
+      entity,
+      this._deploymentTargets,
+    );
     const codeBuildClient = this.getCodeBuildClient(deploymentTarget.awsRegion);
     const buildspecBody = await this.getBuildspecForAction(action, entity);
 
     if (buildspecBody === undefined) {
-      this.logger.error("No buildspec available for action, can't run build");
+      this._logger.error("No buildspec available for action, can't run build");
       const output: StartBuildCommandOutput = {
         build: undefined,
         $metadata: {},
@@ -251,50 +228,46 @@ export class AcdpBuildService {
     }
 
     const storedEnvironmentVariables =
-      await this.retrieveBuildEnvironmentVariables(entity);
+      await this._retrieveBuildEnvironmentVariables(entity);
 
     const buildSourceConfig = await this.retrieveBuildSourceConfig(entity);
 
-    const environmentVariables =
-      this.updateEnvironmentVariablesForDeploymentTarget(
-        storedEnvironmentVariables,
-        deploymentTarget,
-        entity,
-      );
-
-    return await codeBuildClient.send(
-      new StartBuildCommand({
-        projectName: deploymentTarget.codeBuildArn,
-        buildspecOverride: buildspecBody,
-        environmentVariablesOverride: environmentVariables,
-        sourceTypeOverride: buildSourceConfig.sourceType,
-        sourceLocationOverride: buildSourceConfig.sourceLocation,
-        sourceVersion: buildSourceConfig.sourceVersion,
-      }),
+    const environmentVariables = updateEnvironmentVariablesForDeploymentTarget(
+      deploymentTarget,
+      entity,
+      storedEnvironmentVariables,
     );
-  }
 
-  private parseCodeBuildArn(arn: string): {
-    accountId: string;
-    region: string;
-    service: string;
-    resource: string;
-    projectName: string;
-  } {
-    const parsedArn = parse(arn);
-    const resourceParts = parsedArn.resource.split("/");
-    const projectName = resourceParts[1].split(":")[0];
-
-    return { projectName, ...parsedArn };
+    return await awsApiCallWithErrorHandling(
+      () =>
+        codeBuildClient.send(
+          new StartBuildCommand({
+            projectName: deploymentTarget.codeBuildArn,
+            buildspecOverride: buildspecBody,
+            environmentVariablesOverride: environmentVariables,
+            sourceTypeOverride: buildSourceConfig.sourceType,
+            sourceLocationOverride: buildSourceConfig.sourceLocation,
+            sourceVersion: buildSourceConfig.sourceVersion,
+          }),
+        ),
+      `Could not start build for project name: ${deploymentTarget.codeBuildArn}`,
+      this._logger,
+    );
   }
 
   public async storeBuildEnvironmentVariables(
     entity: Entity,
     variables: EnvironmentVariable[],
   ) {
+    const deploymentTarget = getDeploymentTargetForEntity(
+      entity,
+      this._deploymentTargets,
+    );
     const serializedVariables = JSON.stringify(variables);
-    const parameterName =
-      this.getSsmParameterNameForEntityBuildParameters(entity);
+    const parameterName = getSsmParameterNameForEntityBuildParameters(
+      this._buildConfigSsmPrefix,
+      entity,
+    );
 
     const command = new PutParameterCommand({
       Name: parameterName,
@@ -303,108 +276,27 @@ export class AcdpBuildService {
       Overwrite: true,
     });
 
-    try {
-      await this.ssmClient.send(command);
-    } catch (error) {
-      this.logger.error("Failed to store build parameters in ssm", error);
-      throw new Error("Failed to store build parameters");
-    }
-  }
-
-  private async retrieveBuildEnvironmentVariables(
-    entity: Entity,
-  ): Promise<EnvironmentVariable[]> {
-    const parameterName =
-      this.getSsmParameterNameForEntityBuildParameters(entity);
-
-    const command = new GetParameterCommand({
-      Name: parameterName,
-      WithDecryption: true,
-    });
-
-    try {
-      const response = await this.ssmClient.send(command);
-      if (response.Parameter?.Value) {
-        const variables: EnvironmentVariable[] = JSON.parse(
-          response.Parameter.Value,
-        );
-        return variables;
-      }
-      throw new Error(`Parameter '${parameterName}' not found or has no value`);
-    } catch (error) {
-      this.logger.error("Failed to retrieve build parameters from ssm", error);
-      throw new Error("Failed to retrieve build parameters");
-    }
-  }
-
-  protected getSsmParameterNameForEntityBuildParameters(entity: Entity) {
-    const { kind, namespace, name } = getCompoundEntityRef(entity);
-    return path.posix.join(
-      this.buildParameterSsmPrefix,
-      kind.toLowerCase(),
-      namespace.toLowerCase(),
-      name.toLowerCase(),
-      constants.BUILD_PARAMETER_SSM_POSTFIX,
+    const ssmClient = this._getSSMClient(deploymentTarget.awsRegion);
+    await awsApiCallWithErrorHandling(
+      () => ssmClient.send(command),
+      `Failed to store build environment variables in ssm with parameter name: ${parameterName}`,
+      this._logger,
     );
-  }
-
-  protected getSsmParameterNameForEntitySourceConfig(entity: Entity) {
-    const { kind, namespace, name } = getCompoundEntityRef(entity);
-    return path.posix.join(
-      this.buildParameterSsmPrefix,
-      kind.toLowerCase(),
-      namespace.toLowerCase(),
-      name.toLowerCase(),
-      constants.BUILD_SOURCE_CONFIG_SSM_POSTFIX,
-    );
-  }
-
-  private updateEnvironmentVariablesForDeploymentTarget(
-    environmentVariables: EnvironmentVariable[],
-    deploymentTarget: AcdpDeploymentTarget,
-    entity: Entity,
-  ) {
-    if (!environmentVariables) environmentVariables = [];
-
-    const overrideValues = [
-      {
-        name: "AWS_ACCOUNT_ID",
-        value: deploymentTarget.awsAccount,
-      },
-      {
-        name: "AWS_REGION",
-        value: deploymentTarget.awsRegion,
-      },
-      {
-        name: constants.BACKSTAGE_ENTITY_UID_ENVIRONMENT_VARIABLE,
-        value: entity.metadata.uid,
-      },
-      {
-        name: "BACKSTAGE_ENTITY_REF",
-        value: stringifyEntityRef(entity),
-      },
-    ];
-
-    for (const variableOverride of overrideValues) {
-      const variableIndex = environmentVariables.findIndex(
-        (x) => x.name === variableOverride.name,
-      );
-      if (variableIndex >= 0) {
-        environmentVariables[variableIndex].value = variableOverride.value;
-      } else {
-        environmentVariables.push(variableOverride);
-      }
-    }
-
-    return environmentVariables;
   }
 
   public async storeBuildSourceConfig(
     entity: Entity,
     config: BuildSourceConfig,
   ) {
+    const deploymentTarget = getDeploymentTargetForEntity(
+      entity,
+      this._deploymentTargets,
+    );
+    const parameterName = getSsmParameterNameForEntitySourceConfig(
+      this._buildConfigSsmPrefix,
+      entity,
+    );
     const serializedConfig = JSON.stringify(config);
-    const parameterName = this.getSsmParameterNameForEntitySourceConfig(entity);
 
     const command = new PutParameterCommand({
       Name: parameterName,
@@ -413,100 +305,69 @@ export class AcdpBuildService {
       Overwrite: true,
     });
 
-    try {
-      await this.ssmClient.send(command);
-    } catch (error) {
-      this.logger.error("Failed to store build source config in ssm", error);
-      throw new Error("Failed to store build source config");
-    }
+    const ssmClient = this._getSSMClient(deploymentTarget.awsRegion);
+    await awsApiCallWithErrorHandling(
+      () => ssmClient.send(command),
+      `Failed to store build source config in ssm with parameter name: ${parameterName}.`,
+      this._logger,
+    );
   }
 
   private async retrieveBuildSourceConfig(
     entity: Entity,
   ): Promise<BuildSourceConfig> {
-    const parameterName = this.getSsmParameterNameForEntitySourceConfig(entity);
+    const deploymentTarget = getDeploymentTargetForEntity(
+      entity,
+      this._deploymentTargets,
+    );
+    const parameterName = getSsmParameterNameForEntitySourceConfig(
+      this._buildConfigSsmPrefix,
+      entity,
+    );
 
     const command = new GetParameterCommand({
       Name: parameterName,
       WithDecryption: true,
     });
 
-    try {
-      const response = await this.ssmClient.send(command);
-      if (response.Parameter?.Value) {
-        const storedConfig: BuildSourceConfig = JSON.parse(
-          response.Parameter.Value,
+    const ssmClient = this._getSSMClient(deploymentTarget.awsRegion);
+    const response = await awsApiCallWithErrorHandling(
+      () => ssmClient.send(command),
+      `Failed to get build source config from ssm with parameter name: ${parameterName}`,
+      this._logger,
+    );
+    if (response.Parameter?.Value) {
+      const storedConfig: BuildSourceConfig = JSON.parse(
+        response.Parameter.Value,
+      );
+
+      let config: BuildSourceConfig = storedConfig;
+
+      if (
+        storedConfig.useEntityAssets === true &&
+        entity.metadata.annotations?.[ANNOTATION_SOURCE_LOCATION] !== undefined
+      ) {
+        const catalogItemSourceLocation = removeUrlPrefix(
+          entity.metadata.annotations[ANNOTATION_SOURCE_LOCATION],
         );
-
-        let config: BuildSourceConfig = storedConfig;
-
-        if (
-          storedConfig.useEntityAssets === true &&
-          entity.metadata.annotations?.[ANNOTATION_SOURCE_LOCATION] !==
-            undefined
-        ) {
-          const catalogItemSourceLocation = removeUrlPrefix(
-            entity.metadata.annotations[ANNOTATION_SOURCE_LOCATION],
-          );
-          const sourceType = getCodeBuildSourceTypeForUrl(
+        const sourceType = getCodeBuildSourceTypeForUrl(
+          catalogItemSourceLocation,
+        );
+        let assetPathCodeBuildLocation: string = catalogItemSourceLocation;
+        if (sourceType === SourceType.S3)
+          assetPathCodeBuildLocation = formatS3UrlToPath(
             catalogItemSourceLocation,
           );
-          let assetPathCodeBuildLocation: string = catalogItemSourceLocation;
-          if (sourceType == SourceType.S3)
-            assetPathCodeBuildLocation = formatS3UrlToPath(
-              catalogItemSourceLocation,
-            );
 
-          config = {
-            useEntityAssets: true,
-            sourceType: sourceType,
-            sourceLocation: assetPathCodeBuildLocation,
-          };
-        }
-
-        return config;
+        config = {
+          useEntityAssets: true,
+          sourceType: sourceType,
+          sourceLocation: assetPathCodeBuildLocation,
+        };
       }
-      throw new Error(`Parameter '${parameterName}' not found or has no value`);
-    } catch (error) {
-      this.logger.error(
-        "Failed to retrieve build source config from ssm",
-        error,
-      );
-      throw new Error("Failed to retrieve build source config");
+
+      return config;
     }
+    throw new Error(`Parameter '${parameterName}' not found or has no value`);
   }
-}
-
-function removeUrlPrefix(input: string): string {
-  return input.replace(/^url:/, "");
-}
-
-function getCodeBuildSourceTypeForUrl(url: string): SourceType {
-  const githubPattern = /^https?:\/\/(www\.)?github\.com\/.+\/.+$/;
-  // NOSONAR
-  const s3Pattern =
-    /^https?:\/\/s3[\.-](?:[a-z0-9-]+)\.amazonaws\.com\/.+|https?:\/\/[a-z0-9-]+\.s3[\.-](?:[a-z0-9-]+)\.amazonaws\.com\/.+/;
-
-  if (githubPattern.test(url)) {
-    return SourceType.GITHUB;
-  } else if (s3Pattern.test(url)) {
-    return SourceType.S3;
-  } else {
-    return SourceType.NO_SOURCE;
-  }
-}
-
-function formatS3UrlToPath(url: string): string {
-  const urlObject = new URL(url);
-
-  let bucket: string;
-  let path: string = urlObject.pathname.substring(1);
-
-  if (urlObject.hostname.endsWith("s3.amazonaws.com")) {
-    bucket = urlObject.hostname.split(".s3.amazonaws.com")[0];
-  } else {
-    bucket = urlObject.hostname.split(".s3.")[0];
-  }
-
-  return `${bucket}/${path}`;
 }

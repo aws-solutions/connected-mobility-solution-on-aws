@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "PartnerOfferingV1Beta1",
+  "description": "A Partner Offering describes a service or application available as a partner solution.",
+  "examples": [
+      {
+          "apiVersion": "aws.amazon.com/v1beta1",
+          "kind": "PartnerOffering",
+          "metadata": {
+              "name": "partner-offering-name",
+              "title": "Partner Offering Name",
+              "description": "This is a partner offering.",
+              "tags": [
+                  "service",
+                  "automotive"
+              ]
+          },
+          "spec": {
+              "owner": "automotive-team",
+              "type": "service"
+          }
+      }
+  ],
+  "allOf": [
+      {
+          "$ref": "Entity"
+      },
+      {
+          "type": "object",
+          "required": [
+              "spec"
+          ],
+          "properties": {
+              "apiVersion": {
+                  "enum": [
+                      "aws.amazon.com/v1beta1"
+                  ]
+              },
+              "kind": {
+                  "enum": [
+                      "PartnerOffering"
+                  ]
+              },
+              "spec": {
+                  "type": "object",
+                  "required": [
+                      "type"
+                  ],
+                  "properties": {
+                      "type": {
+                          "type": "string",
+                          "description": "The type of software for the partner offering.",
+                          "examples": [
+                              "service",
+                              "application",
+                              "module"
+                          ],
+                          "minLength": 1
+                      },
+                      "author": {
+                          "type": "string",
+                          "description": "The author of the partner offering",
+                          "minLength": 1,
+                          "examples": [
+                            "aws"
+                          ]
+                      },
+                      "authorPageUrl": {
+                          "type": "string",
+                          "description": "The URL to the info page for the author of the partner offering",
+                          "minLength": 1,
+                          "examples": [
+                            "https://aws.amazon.com/marketplace/seller-profile?id=abcd"
+                        ]
+                      },
+                      "url": {
+                        "type": "string",
+                        "description": "The URL to the source/frontpage of the partner offering",
+                        "minLength": 1,
+                        "examples": [
+                            "https://aws.amazon.com/marketplace/pp/prodview-abcd",
+                            "https://github.com/aws-solutions/connected-mobility-solution-on-aws"
+                        ]
+                      }
+                  }
+              }
+          }
+      }
+  ]
+}

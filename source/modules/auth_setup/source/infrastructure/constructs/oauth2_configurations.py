@@ -10,7 +10,7 @@ from aws_cdk import CfnCondition, Fn, RemovalPolicy, SecretValue, Stack
 from constructs import Construct
 
 # CMS Common Library
-from cms_common.resource_names.auth import AuthResourceNames
+from cms_common.resource_names.auth import AuthSetupResourceNames
 
 # Connected Mobility Solution on AWS
 from .cognito import CognitoConstruct
@@ -29,7 +29,7 @@ class OAuth2Configurations(Construct):
     ) -> None:
         super().__init__(scope, construct_id)
 
-        auth_resource_names = AuthResourceNames.from_identity_provider_id(
+        auth_setup_resource_names = AuthSetupResourceNames.from_identity_provider_id(
             module_inputs_construct.stack_config.identity_provider_id
         )
 
@@ -83,7 +83,7 @@ class OAuth2Configurations(Construct):
             "idp-config",
             description="IdP configurations needed to facilitate authentication and authorization via OAuth 2.0 identity providers.",
             removal_policy=RemovalPolicy.DESTROY,
-            secret_name=auth_resource_names.idp_config_secret,
+            secret_name=auth_setup_resource_names.idp_config_secret,
             secret_string_value=SecretValue.unsafe_plain_text(  # Safe usage. No secret values exposed in template.
                 idp_config_json
             ),
@@ -125,7 +125,7 @@ class OAuth2Configurations(Construct):
             "service-client-config",
             description="Service client configuration needed for OAuth 2.0 operations.",
             removal_policy=RemovalPolicy.DESTROY,
-            secret_name=auth_resource_names.service_client_config_secret,
+            secret_name=auth_setup_resource_names.service_client_config_secret,
             secret_string_value=SecretValue.unsafe_plain_text(  # Safe usage. No values exposed in template.
                 service_client_config_json
             ),
@@ -157,7 +157,7 @@ class OAuth2Configurations(Construct):
             "user-client-config",
             description="User client configuration needed for OAuth 2.0 operations.",
             removal_policy=RemovalPolicy.DESTROY,
-            secret_name=auth_resource_names.user_client_config_secret,
+            secret_name=auth_setup_resource_names.user_client_config_secret,
             secret_string_value=SecretValue.unsafe_plain_text(  # Safe usage. No secret values exposed in template.
                 user_client_config_json
             ),

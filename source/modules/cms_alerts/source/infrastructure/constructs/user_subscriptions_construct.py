@@ -23,13 +23,11 @@ from constructs import Construct
 from cms_common.config.resource_names import ResourceName, ResourcePrefix
 from cms_common.config.stack_inputs import SolutionConfigInputs
 from cms_common.constructs.vpc_construct import VpcConstruct
-from cms_common.policy_generators.ec2_vpc import generate_ec2_vpc_policy
-
-# Connected Mobility Solution on AWS
-from ..lib.policy_generators import (
-    generate_kms_policy_document,
+from cms_common.policy_generators.cloudwatch import (
     generate_lambda_cloudwatch_logs_policy_document,
 )
+from cms_common.policy_generators.ec2_vpc import generate_ec2_vpc_policy
+from cms_common.policy_generators.kms import generate_kms_policy_statement_from_key_id
 
 
 class UserSubscriptionsConstruct(Construct):
@@ -144,11 +142,13 @@ class UserSubscriptionsConstruct(Construct):
                                 resources=[
                                     self.user_email_subscriptions_table.table_arn
                                 ],
-                            )
+                            ),
+                            generate_kms_policy_statement_from_key_id(
+                                self,
+                                self.user_email_subscriptions_table_key.key_id,
+                                True,
+                            ),
                         ]
-                    ),
-                    "kms-subs-table-key-policy": generate_kms_policy_document(
-                        self, self.user_email_subscriptions_table_key.key_id, True
                     ),
                     "ec2-policy": generate_ec2_vpc_policy(
                         self,

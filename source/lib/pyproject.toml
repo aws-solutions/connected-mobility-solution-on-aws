@@ -7,6 +7,7 @@ fail_under = 80.0
 omit = [
     "**/scripts/*",
     "setup.py",
+    "conftest.py",
     "**/tests/*",
     "**/*_dependency_layer/**/*",
 ]

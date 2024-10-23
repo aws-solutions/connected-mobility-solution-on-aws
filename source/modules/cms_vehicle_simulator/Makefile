@@ -50,7 +50,7 @@ deploy: verify-environment ## Deploy the stack for the module.
 		--capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
 		--parameter-overrides \
 			"AppUniqueId"="${APP_UNIQUE_ID}" \
-			"UserEmail"="${USER_EMAIL}" \
+			"DefaultUserEmail"="${DEFAULT_USER_EMAIL}" \
 
 .PHONY: destroy
 destroy: destroy-stack ## Teardown deployed stack
@@ -61,7 +61,7 @@ verify-environment: ## Checks for the required environment variables.
 ifneq (, $(wildcard ./cdk.context.json))
 	$(error 'cdk.context.json' cannot exist. Please delete the file and try again)
 endif
-ifndef USER_EMAIL
-	$(error USER_EMAIL is undefined. Set the variable using `export USER_EMAIL=...`, run `source .cmsrc` if it exists, or run `make create-rc-file` to generate .cmsrc)
+ifndef DEFAULT_USER_EMAIL
+	$(error DEFAULT_USER_EMAIL is undefined. Set the variable using `export DEFAULT_USER_EMAIL=...`, run `source .cmsrc` if it exists, or run `make create-rc-file` to generate .cmsrc)
 endif
 	@printf "%bEnvironment variables verified.%b\n" "${GREEN}" "${NC}"

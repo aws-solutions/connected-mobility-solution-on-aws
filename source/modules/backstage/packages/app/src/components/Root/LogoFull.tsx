@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React from "react";
+
+// Materual UI
 import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles({
@@ -13,7 +15,8 @@ const useStyles = makeStyles({
     fill: "#7df3e1",
   },
 });
-const LogoFull = () => {
+
+export const LogoFull = () => {
   const classes = useStyles();
 
   return (
@@ -29,5 +32,3 @@ const LogoFull = () => {
     </svg>
   );
 };
-
-export default LogoFull;

@@ -25,7 +25,7 @@ from cms_common.policy_generators.cloudwatch import (
     generate_lambda_cloudwatch_logs_policy_document,
 )
 from cms_common.policy_generators.ec2_vpc import generate_ec2_vpc_policy
-from cms_common.policy_generators.kms import generate_kms_policy_statement
+from cms_common.policy_generators.kms import generate_kms_policy_statement_from_key_id
 
 # Connected Mobility Solution on AWS
 from ...handlers.custom_resource.function.lib.custom_resource_type_enum import (
@@ -146,7 +146,7 @@ class PostProvisioningConstruct(Construct):
                                 ),
                             ],
                         ),
-                        generate_kms_policy_statement(
+                        generate_kms_policy_statement_from_key_id(
                             self,
                             kms_encryption_key_id=provisioning_db_resources.provisioned_vehicles_table_kms_key.key_id,
                             allow_encrypt=True,

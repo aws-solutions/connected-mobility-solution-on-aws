@@ -1,0 +1,234 @@
+{
+    "/cms-predictive-maintenance/cms-predictive-maintenance/chatbot-construct/vector-db-security-construct/custom-resource-policy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Wildcard permissions required for aoss:ListVpcEndpoints action.",
+                "appliesTo": [
+                    "Resource::*"
+                ]
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/chatbot-construct/bedrock-knowledge-base-construct/bedrock-policy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Wildcard permissions required for giving Bedrock service access to knowledge base resources.",
+                "appliesTo": [
+                    "Resource::*"
+                ]
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/chatbot-construct/bedrock-data-source-construct/custom-resource-policy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Wildcard permissions required for Bedrock StartIngestion action.",
+                "appliesTo": [
+                    "Resource::*"
+                ]
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/chatbot-construct/bedrock-data-source-construct/bedrock-policy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Wildcard permissions required to read all objects with a prefix from an S3 bucket.",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:s3:::test-bucket-us-east-1/predictive-maintenance/docs/*"
+                ]
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM4",
+                "reason": "Log retention lambda is created by AWS CDK L2 constructs and it uses managed roles.",
+                "appliesTo": [
+                    "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                ]
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Log retention lambda is created by AWS CDK L2 constructs and it uses wildcard permissions.",
+                "appliesTo": [
+                    "Resource::*"
+                ]
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/agent-action-group-construct/lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Wildcard permissions required to write to log streams and to attach VPC to Lambda. Wildcard permissions required to get object with a given prefix from S3 bucket.",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-predictive-maintenance-action-group:log-stream:*",
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*",
+                    "Resource::*",
+                    "Resource::arn:<AWS::Partition>:s3:::<cmspredictivemaintenancesagemakerassetsbucketconstructcmkencryptedbucket3E9D71D9>/inference/*"
+                ]
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predictor-construct/sagemaker-studio/custom-resource-policy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Wildcard permissions required to delete EFS Security Groups.",
+                "appliesTo": [
+                    "Resource::*"
+                ]
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predictor-construct/sagemaker-studio/role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Wildcard permissions required to write to CloudWatch log groups.",
+                "appliesTo": [
+                    "Action::sagemaker:*",
+                    "Resource::*",
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/sagemaker/*",
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/sagemaker/*:log-stream:*"
+                ]
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predictor-construct/sagemaker-pipeline/role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Wildcard permissions required by SageMaker pipelines to run the steps, read/write assets to the Sagemaker bucket and to write to CloudWatch log groups.",
+                "appliesTo": [
+                    "Action::sagemaker:*",
+                    "Resource::*",
+                    "Resource::arn:<AWS::Partition>:s3:::<cmspredictivemaintenancesagemakerassetsbucketconstructcmkencryptedbucket3E9D71D9>/*",
+                    "Action::logs:Describe*"
+                ]
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predictor-construct/sagemaker-pipeline/custom-resource-policy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Wildcard permissions required by custom resource to create pipeline definition and to read/write assets to the Sagemaker bucket.",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:s3:::<cmspredictivemaintenancesagemakerassetsbucketconstructcmkencryptedbucket3E9D71D9>/*"
+                ]
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predictor-construct/sagemaker-pipeline/deploy-pipeline-model-lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Wildcard permissions required by deploy pipeline model lambda function to create Sagemaker resources",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-predictive-maintenance-deploy-pipeline-model:log-stream:*",
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*",
+                    "Resource::*"
+                ]
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/authorization-lambda-construct/lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Wildcard permissions required to write to CloudWatch log groups and for enabling VPC.",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-predictive-maintenance-authorization:log-stream:*",
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*",
+                    "Resource::*"
+                ]
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predict-api-construct/lambda-role/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Wildcard permissions required to list SageMaker models and create transform jobs",
+                "appliesTo": [
+                    "Resource::*",
+                    "Resource::arn:<AWS::Partition>:sagemaker:<AWS::Region>:<AWS::AccountId>:transform-job/*"
+                ]
+            }
+        ] 
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predict-api-construct/lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Wildcard permissions required to write to CloudWatch log groups and for enabling VPC.",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-predictive-maintenance-predict-api:log-stream:*",
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*",
+                    "Resource::*"
+                ]
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predict-api-construct/api-gateway-to-lambda/LambdaRestApi/Default/predict/OPTIONS/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-APIG4",
+                "reason": "The OPTIONS operation does not require authorization."
+            },
+            {
+                "id": "AwsSolutions-COG4",
+                "reason": "The API GW method does not use a Cognito user pool authorizer."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predict-api-construct/api-gateway-to-lambda/LambdaRestApi/Default/predict/POST/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-COG4",
+                "reason": "The API GW method does not use a Cognito user pool authorizer, it uses a custom lambda authorizer."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predict-api-construct/api-gateway-to-lambda/LambdaRestApi/Default/batch-predict/OPTIONS/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-APIG4",
+                "reason": "The OPTIONS operation does not require authorization."
+            },
+            {
+                "id": "AwsSolutions-COG4",
+                "reason": "The API GW method does not use a Cognito user pool authorizer."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predict-api-construct/api-gateway-to-lambda/LambdaRestApi/Default/batch-predict/POST/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-COG4",
+                "reason": "The API GW method does not use a Cognito user pool authorizer, it uses a custom lambda authorizer."
+            }
+        ]
+    },
+    "/cms-predictive-maintenance/cms-predictive-maintenance/predict-api-construct/api-gateway-to-lambda/LambdaRestApiCloudWatchRole/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Wildcard permissions required to write to CloudWatch log groups.",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:*"
+                ]
+            }
+        ]
+    }
+}

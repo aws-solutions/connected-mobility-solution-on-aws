@@ -58,7 +58,7 @@ spec:
         title: Identity Provider ID
         type: string
       vpcName:
-        default: cms-vpc
+        default: cms
         description: Name of VPC associated with this deployment.
         title: VPC Name
         type: string

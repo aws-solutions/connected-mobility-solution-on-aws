@@ -7,10 +7,8 @@
 # AWS Libraries
 from aws_cdk import (
     Duration,
-    RemovalPolicy,
     aws_ec2,
     aws_iam,
-    aws_kms,
     aws_lambda,
     aws_lambda_event_sources,
     aws_logs,
@@ -21,14 +19,13 @@ from constructs import Construct
 # CMS Common Library
 from cms_common.config.resource_names import ResourceName, ResourcePrefix
 from cms_common.config.stack_inputs import SolutionConfigInputs
+from cms_common.constructs.cmk_encrypted_s3 import CMKEncryptedS3Construct
 from cms_common.constructs.vpc_construct import VpcConstruct
-from cms_common.policy_generators.ec2_vpc import generate_ec2_vpc_policy
-
-# Connected Mobility Solution on AWS
-from ..lib.policy_generators import (
-    generate_kms_policy_statement,
+from cms_common.policy_generators.cloudwatch import (
     generate_lambda_cloudwatch_logs_policy_document,
 )
+from cms_common.policy_generators.ec2_vpc import generate_ec2_vpc_policy
+from cms_common.policy_generators.kms import generate_kms_policy_statement_from_key_arn
 
 
 class S3ToGrafanaConstruct(Construct):
@@ -47,41 +44,10 @@ class S3ToGrafanaConstruct(Construct):
     ) -> None:
         super().__init__(scope, construct_id)
 
-        sever_access_logs_s3_key = aws_kms.Key(
+        self.grafana_assets_bucket = CMKEncryptedS3Construct(
             self,
-            "assets-server-access-logs-s3-key",
-            enable_key_rotation=True,
-            removal_policy=RemovalPolicy.DESTROY,
-        )
-
-        server_access_logs_bucket = aws_s3.Bucket(
-            self,
-            "assets-server-access-logs-bucket",
-            enforce_ssl=True,
-            encryption=aws_s3.BucketEncryption.KMS,
-            encryption_key=sever_access_logs_s3_key,
-            block_public_access=aws_s3.BlockPublicAccess.BLOCK_ALL,
-            versioned=True,
-        )
-
-        self.s3_key = aws_kms.Key(
-            self,
-            "assets-s3-key",
-            enable_key_rotation=True,
-            removal_policy=RemovalPolicy.DESTROY,
-        )
-
-        self.s3_bucket = aws_s3.Bucket(
-            self,
-            "assets-s3-bucket",
-            enforce_ssl=True,
-            encryption_key=self.s3_key,
-            encryption=aws_s3.BucketEncryption.KMS,
-            server_access_logs_bucket=server_access_logs_bucket,
-            block_public_access=aws_s3.BlockPublicAccess.BLOCK_ALL,
-            versioned=True,
-            auto_delete_objects=True,
-            removal_policy=RemovalPolicy.DESTROY,
+            "grafana-assets",
+            retain_on_stack_delete=False,
         )
 
         s3_to_grafana_lambda_function_name = ResourceName.hyphen_separated(
@@ -118,12 +84,12 @@ class S3ToGrafanaConstruct(Construct):
                             ],
                             effect=aws_iam.Effect.ALLOW,
                             resources=[
-                                f"{self.s3_bucket.bucket_arn}/{dashboard_s3_object_key_prefix}*",
-                                f"{self.s3_bucket.bucket_arn}/{alerts_s3_object_key_prefix}*",
+                                f"{self.grafana_assets_bucket.bucket.bucket_arn}/{dashboard_s3_object_key_prefix}*",
+                                f"{self.grafana_assets_bucket.bucket.bucket_arn}/{alerts_s3_object_key_prefix}*",
                             ],
                         ),
-                        generate_kms_policy_statement(
-                            kms_encryption_key_arn=self.s3_key.key_arn,
+                        generate_kms_policy_statement_from_key_arn(
+                            kms_encryption_key_arn=self.grafana_assets_bucket.key.key_arn,
                             allow_encrypt=False,
                         ),
                     ]
@@ -175,7 +141,7 @@ class S3ToGrafanaConstruct(Construct):
         # call the s3 to grafana lambda whenever an object with desired prefix
         # is uploaded to the s3 bucket
         dashboard_s3_event_source = aws_lambda_event_sources.S3EventSource(
-            bucket=self.s3_bucket,
+            bucket=self.grafana_assets_bucket.bucket,
             events=[aws_s3.EventType.OBJECT_CREATED],
             filters=[
                 aws_s3.NotificationKeyFilter(
@@ -184,7 +150,7 @@ class S3ToGrafanaConstruct(Construct):
             ],
         )
         alerts_s3_event_source = aws_lambda_event_sources.S3EventSource(
-            bucket=self.s3_bucket,
+            bucket=self.grafana_assets_bucket.bucket,
             events=[aws_s3.EventType.OBJECT_CREATED],
             filters=[
                 aws_s3.NotificationKeyFilter(
