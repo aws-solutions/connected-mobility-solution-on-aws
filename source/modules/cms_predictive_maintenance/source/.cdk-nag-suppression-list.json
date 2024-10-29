@@ -165,7 +165,7 @@
                     "Resource::arn:<AWS::Partition>:sagemaker:<AWS::Region>:<AWS::AccountId>:transform-job/*"
                 ]
             }
-        ] 
+        ]
     },
     "/cms-predictive-maintenance/cms-predictive-maintenance/predict-api-construct/lambda-role/Resource": {
         "rules_to_suppress": [

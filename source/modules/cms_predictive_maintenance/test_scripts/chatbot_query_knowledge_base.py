@@ -24,7 +24,7 @@ if __name__ == "__main__":
     bedrock_agents_runtime_client = boto3.client("bedrock-agent-runtime")
 
     MODEL_ID = "anthropic.claude-v2"
-    model_arn = f"arn:aws:bedrock:us-east-1::foundation-model/{MODEL_ID}"
+    MODEL_ARN = f"arn:aws:bedrock:us-east-1::foundation-model/{MODEL_ID}"
 
     knowledge_base_id = ssm_client.get_parameter(
         Name=f"/solution/{args.app_unique_id}/predictive-maintenance/chatbot/knowledge-base-id"
@@ -36,7 +36,7 @@ if __name__ == "__main__":
             "type": "KNOWLEDGE_BASE",
             "knowledgeBaseConfiguration": {
                 "knowledgeBaseId": knowledge_base_id,
-                "modelArn": model_arn,
+                "modelArn": MODEL_ARN,
             },
         },
     )

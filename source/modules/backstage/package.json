@@ -1,6 +1,6 @@
 {
   "name": "acdp-backstage",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "private": true,
   "license": "Apache-2.0",
   "description": "Backstage implementation preconfigured to work with CMS",
@@ -50,6 +50,7 @@
     "formidable": "^3.2.4",
     "ws": "^8.17.1",
     "axios": "^1.7.4",
-    "jsonpath-plus": "^10.0.7"
+    "jsonpath-plus": "^10.0.7",
+    "http-proxy-middleware": "^2.0.7"
   }
 }
