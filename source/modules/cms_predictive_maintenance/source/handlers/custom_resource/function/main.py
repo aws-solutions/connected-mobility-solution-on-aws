@@ -245,7 +245,7 @@ def delete_security_groups(security_group_ids: List[str]) -> None:
             if security_group["IpPermissions"]:
                 get_ec2_client().revoke_security_group_ingress(
                     GroupId=security_group_id,
-                    IpPermissions=security_group["IpPermissions"],
+                    IpPermissions=security_group["IpPermissions"],  # type: ignore[arg-type]
                 )
             logger.info(f"Ingress rule revoked for security group {security_group_id}.")
         except Exception as e:  # pylint: disable=broad-exception-caught
@@ -257,7 +257,7 @@ def delete_security_groups(security_group_ids: List[str]) -> None:
             if security_group["IpPermissionsEgress"]:
                 get_ec2_client().revoke_security_group_egress(
                     GroupId=security_group_id,
-                    IpPermissions=security_group["IpPermissionsEgress"],
+                    IpPermissions=security_group["IpPermissionsEgress"],  # type: ignore[arg-type]
                 )
             logger.info(f"Engress rule revoked for security group {security_group_id}.")
         except Exception as e:  # pylint: disable=broad-exception-caught

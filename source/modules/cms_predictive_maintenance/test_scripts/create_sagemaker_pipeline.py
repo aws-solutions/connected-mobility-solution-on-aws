@@ -41,7 +41,7 @@ if __name__ == "__main__":
         pipeline_assets_bucket_name=pipeline_assets_bucket_name,
         deploy_model_function_arn=pipeline_deploy_model_lambda_function_arn,
         endpoint_name=pipeline_deploy_model_endpoint_name,
-        resource_name_prefix=args.pipeline_name,
+        resource_name_suffix=args.pipeline_name,
     )
 
     sagemaker.create_pipeline(
