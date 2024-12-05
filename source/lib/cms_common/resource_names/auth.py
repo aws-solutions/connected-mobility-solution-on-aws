@@ -34,7 +34,7 @@ class AuthSetupResourceNames:
             service_client_config_secret_arn_ssm_parameter=f"{auth_prefix_with_id}/service-client-config/default/secret/arn",
             user_client_config_secret=f"{auth_prefix_with_id}/user-client-config/default",
             user_client_config_secret_arn_ssm_parameter=f"{auth_prefix_with_id}/user-client-config/default/secret/arn",
-            user_pool_id=f"{auth_prefix_with_id}/user-pool/id"
+            user_pool_id=f"{auth_prefix_with_id}/user-pool/id",
         )
 
 

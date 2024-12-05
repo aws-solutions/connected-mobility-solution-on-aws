@@ -159,13 +159,23 @@ export const PartnerOfferingCard = (props: PartnerOfferingCardProps) => {
               <Grid item xs={12}>
                 <Grid container spacing={2}>
                   {props.additionalLinks?.map(({ icon, text, url }, index) => (
-                    <Grid className={styles.linkText} item xs={6} key={index}>
+                    <Grid
+                      className={styles.linkText}
+                      item
+                      xs={6}
+                      key={`${text}-${index}`}
+                    >
                       <CardLink icon={icon} text={text} url={url} />
                     </Grid>
                   ))}
                   {partnerOffering.metadata.links?.map(
                     ({ url, icon, title }, index) => (
-                      <Grid className={styles.linkText} item xs={6} key={index}>
+                      <Grid
+                        className={styles.linkText}
+                        item
+                        xs={6}
+                        key={`${title}-${index}`}
+                      >
                         <CardLink
                           icon={iconResolver(icon)}
                           text={title || url}

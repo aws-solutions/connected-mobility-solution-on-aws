@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 
 [dev-packages]
-cms_common = {path = "../../../lib", editable = true}
+cms_common = {path = "./../../../lib", editable = true}
 aws-cdk-lib = ">=2.139.1"
 cdk-nag = "*"
 moto = {extras = ["all"], version = ">=5.0.6"}

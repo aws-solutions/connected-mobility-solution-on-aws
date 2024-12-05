@@ -45,9 +45,9 @@ define run-module-target
 		output=$$(make -C "$$1" $1 2>&1); \
 		module_target_exit_code=$$?; \
 		if [[ $$module_target_exit_code -ne 0 ]]; then \
-			printf "%bFinished %sMakefile %s failed.\n%s\n%b\n" "${RED}" "$$1" "$1" "$$output" "${NC}"; \
+			printf "%bFailed %s\n%s\n%b\n" "${RED}" "$$1" "$$output" "${NC}"; \
 		else \
-			printf "%bFinished %sMakefile %s passed.%b\n" "${GREEN}" "$$1" "$1" "${NC}"; \
+			printf "%bFinished %s%b\n" "${GREEN}" "$$1" "${NC}"; \
 		fi; \
 		return $$module_target_exit_code; \
 	}; \
@@ -55,7 +55,7 @@ define run-module-target
 	process_pids=(); \
 	IFS=' ' read -a s <<< "$2"; \
 	bs=5; \
-	printf "%bStarting %sMakefile %s.%b\n" "${MAGENTA}" "$$dir" "$1" "${NC}"; \
+	printf "%b\nCalling \"make %s\" for each module.%b\n" "${MAGENTA}" "$1" "${NC}"; \
 	for ((i=0; i<=$${#s[@]}; i+=bs)); do \
 		for module in "$${s[@]:i:bs}"; do \
 			(run_make_with_logging "$$module") & process_pids+=($$!); \
@@ -66,16 +66,27 @@ define run-module-target
 	exit $$did_make_target_fail;
 endef
 
+.PHONY: upgrade
+upgrade: root-lock ## Call root and all modules' "make upgrade". Upgrades all lock files while skipping python dependency installations.
+	@printf "%b\nUpgrading all module lock files.%b\n" "${MAGENTA}" "${NC}"
+	@$(call run-module-target,upgrade,${SubMakeDirs})
+	@printf "%b\nFinished upgrading lock files for entire solution.%b\n" "${GREEN}" "${NC}"
+	@printf "%bUpgraded node dependencies have been installed.%b\n" "${CYAN}" "${NC}"
+	@printf "%bRun \"make install\" to install upgraded python dependencies.%b\n" "${CYAN}" "${NC}"
+
+
 .PHONY: install
-install: root-install ## Call root and all modules' "make install".
+install: root-sync ## Call root and all modules' "make install". Installs all dependencies needed to build the solution.
+	@printf "%b\nInstalling dependencies from all module lock files.%b\n" "${MAGENTA}" "${NC}"
+	@printf "%bTo instead upgrade lock files and node dependencies, run \"make upgrade\" first.%b\n" "${CYAN}" "${NC}"
 	@$(call run-module-target,install,${SubMakeDirs})
-	@printf "%bFinished install.%b\n" "${GREEN}" "${NC}"
+	@printf "%b\nFinished installing dependencies from lock files for entire solution.%b\n" "${GREEN}" "${NC}"
 
 .PHONY: build
-build: ## Call all modules' "make build".
+build: ## Call all modules' "make build". Builds all modules templates and assets.
 	@printf "%bStarting build.%b\n" "${MAGENTA}" "${NC}"
 	@$(call run-module-target,build,${SubMakeDirs})
-	@printf "%bFinished build.%b\n" "${GREEN}" "${NC}"
+	@printf "%b\nFinished build for entire solution.%b\n" "${GREEN}" "${NC}"
 
 .PHONY: deploy
 deploy: create-rc-file ## Call all modules' "make deploy". Order enforced.
@@ -85,7 +96,7 @@ deploy: create-rc-file ## Call all modules' "make deploy". Order enforced.
 		$(MAKE) -C $$dir deploy || exit $$?; \
 	done
 	@$(call run-module-target,deploy,${DeployableDirs})
-	@printf "%bFinished deploy.%b\n" "${GREEN}" "${NC}"
+	@printf "%b\nFinished deploy for entire solution.%b\n" "${GREEN}" "${NC}"
 	@printf "%bView status:%b %bhttps://%s.console.aws.amazon.com/cloudformation/home?region=%s%b\n" "${YELLOW}" "${NC}" "${CYAN}" "${AWS_REGION}" "${AWS_REGION}" "${NC}"
 
 .PHONY: destroy
@@ -97,13 +108,13 @@ destroy: ## Call all modules' "make destroy". Order enforced.
 		printf "%bDestroying %s.%b\n" "${MAGENTA}" "$$dir" "${NC}"; \
 		$(MAKE) -C $$dir destroy || exit $$?; \
 	done
-	@printf "%bFinished destroy.%b\n" "${GREEN}" "${NC}"
+	@printf "%b\nFinished destroy for entire solution.%b\n" "${GREEN}" "${NC}"
 	@printf "%bView status:%b %bhttps://%s.console.aws.amazon.com/cloudformation/home?region=%s%b\n" "${YELLOW}" "${NC}" "${CYAN}" "${AWS_REGION}" "${AWS_REGION}" "${NC}"
 
 .PHONY: upload
 upload: create-upload-bucket upload-backstage-assets-zip ## Call root and all modules' "make upload" and upload backstage assets zip.
 	@$(call run-module-target,upload,${SubMakeDirs})
-	@printf "%bFinished upload.%b\n" "${MAGENTA}" "${NC}"
+	@printf "%b\nFinished upload for entire solution.%b\n" "${GREEN}" "${NC}"
 	@printf "%bView resources:%b %bhttps://s3.console.aws.amazon.com/s3/buckets/%s-%s?region=%s%b\n" "${YELLOW}" "${NC}" "${CYAN}" "${S3_ASSET_BUCKET_BASE_NAME}" "${AWS_REGION}" "${AWS_REGION}" "${NC}"
 
 .PHONY: upload-backstage-assets-zip
@@ -118,27 +129,27 @@ upload-backstage-assets-zip:
 .PHONY: verify-module
 verify-module: ## Run all verifications for CMS. CAUTION: Takes a long time.
 	@$(call run-module-target,verify-module,${SubMakeDirs})
-	@printf "%bFinished verify-module.%b\n" "${GREEN}" "${NC}"
+	@printf "%b\nFinished verify-module.%b\n" "${GREEN}" "${NC}"
 
 .PHONY: cfn-nag
 cfn-nag: ## Run cfn-nag for the entire solution.
 	@$(call run-module-target,cfn-nag,${SubMakeDirs})
-	@printf "%bFinished cfn-nag.%b\n" "${GREEN}" "${NC}"
+	@printf "%b\nFinished cfn-nag for entire solution.%b\n" "${GREEN}" "${NC}"
 
 .PHONY: unit-tests
 unit-tests:  ## Run unit-tests for the entire solution.
 	@$(call run-module-target,unit-tests,${SubMakeDirs})
-	@printf "%bFinished unit tests.%b\n" "${GREEN}" "${NC}"
+	@printf "%b\nFinished unit tests for entire solution.%b\n" "${GREEN}" "${NC}"
 
 .PHONY: test
 test:  ## Run cfn-nag and unit-tests for the entire solution.
 	@$(call run-module-target,test,${SubMakeDirs})
-	@printf "%bFinished test.%b\n" "${GREEN}" "${NC}"
+	@printf "%b\nFinished test for entire solution.%b\n" "${GREEN}" "${NC}"
 
 .PHONY: update-snapshots
 update-snapshots:  ## Run update-snapshots for the entire solution.
 	@$(call run-module-target,update-snapshots,${SubMakeDirs})
-	@printf "%bFinished update-snapshots.%b\n" "${GREEN}" "${NC}"
+	@printf "%b\nFinished update-snapshots.%b\n" "${GREEN}" "${NC}"
 
 .PHONY: version
 version: root-version ## Display solution name and current version and each module's version
@@ -149,11 +160,18 @@ version: root-version ## Display solution name and current version and each modu
 ## ========================================================
 ## INSTALL
 ## ========================================================
-.PHONY: root-install
-root-install: verify-required-tools ## Using pipenv, installs pip dependencies for root.
-	@printf "%bInstalling root pip dependencies.%b\n" "${MAGENTA}" "${NC}"
-	@pipenv install --dev --python ${PYTHON_VERSION}
-	@pipenv clean --python ${PYTHON_VERSION}
+.PHONY: root-sync
+root-sync: verify-required-tools ## Using pipenv, installs python dependencies for root from Pipfile.lock.
+	@printf "%bInstalling root python dependencies from Pipfile.lock.%b\n" "${MAGENTA}" "${NC}"
+	@pipenv sync --quiet --python ${PYTHON_VERSION} > /dev/null
+	@pipenv clean --bare --python ${PYTHON_VERSION}
+	@printf "%bFinished installing root python dependencies from Pipfile.lock.%b\n" "${GREEN}" "${NC}"
+
+.PHONY: root-lock
+root-lock: verify-required-tools ## Using pipenv, upgrades root Pipfile.lock.
+	@printf "%bUpdating root Pipfile.lock.%b\n" "${MAGENTA}" "${NC}"
+	@pipenv lock --python ${PYTHON_VERSION} > /dev/null 2>&1
+	@printf "%bFinished updating root Pipfile.lock.%b\n" "${GREEN}" "${NC}"
 
 ## ========================================================
 ## BUILD

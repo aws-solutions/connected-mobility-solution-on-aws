@@ -14,19 +14,19 @@ import pandas as pd
 np.random.seed(0)
 
 
-def read_dataset_csv(csv_file_path: str) -> np.ndarray[np.float64, Any]:
+def read_dataset_csv(csv_file_path: str) -> np.ndarray[Any, np.dtype[np.float64]]:
     dataset = pd.read_csv(csv_file_path)
     return dataset.to_numpy()
 
 
 def split_dataset(
-    dataset: np.ndarray[np.float64, Any],
+    dataset: np.ndarray[Any, np.dtype[np.float64]],
     train_split_ratio: float,
     validation_split_ratio: float,
 ) -> Tuple[
-    np.ndarray[np.float64, Any],
-    np.ndarray[np.float64, Any],
-    np.ndarray[np.float64, Any],
+    np.ndarray[Any, np.dtype[np.float64]],
+    np.ndarray[Any, np.dtype[np.float64]],
+    np.ndarray[Any, np.dtype[np.float64]],
 ]:
     np.random.shuffle(dataset)
     dataset_size = dataset.shape[0]

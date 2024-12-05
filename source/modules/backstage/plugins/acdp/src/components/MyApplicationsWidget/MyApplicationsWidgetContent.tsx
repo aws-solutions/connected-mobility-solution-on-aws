@@ -17,6 +17,22 @@ import { AcdpApplication, constants } from "backstage-plugin-acdp-common";
 import { isApplicationArnAvailable } from "../../utils";
 import { acdpMetricsApiRef } from "../../api";
 
+const ErrorPanelForQuery = ({
+  query,
+  title,
+}: {
+  query: UseQueryResult;
+  title: string;
+}) => {
+  return (
+    <>
+      {query.isError && (
+        <ResponseErrorPanel error={query.error as Error} title={title} />
+      )}
+    </>
+  );
+};
+
 export const MyApplicationsWidgetContent = () => {
   const api = useApi(acdpMetricsApiRef);
   const { entity } = useEntity();
@@ -141,22 +157,6 @@ export const MyApplicationsWidgetContent = () => {
     },
     enabled: Boolean(applicationTag),
   });
-
-  const ErrorPanelForQuery = ({
-    query,
-    title,
-  }: {
-    query: UseQueryResult;
-    title: string;
-  }) => {
-    return (
-      <>
-        {query.isError && (
-          <ResponseErrorPanel error={query.error as Error} title={title} />
-        )}
-      </>
-    );
-  };
 
   const areQueriesLoading = () =>
     (getApplicationByEntityQuery.isLoading &&

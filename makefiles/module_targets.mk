@@ -18,16 +18,21 @@ export JSII_RUNTIME_PACKAGE_CACHE_ROOT = ${MODULE_PATH}/.cdk_cache
 ## ========================================================
 ## COMMON TARGETS
 ## ========================================================
-.PHONY: pipenv-install
-pipenv-install: verify-required-tools ## Using pipenv, installs pip dependencies.
-	@printf "%bInstalling pip dependencies: %s%b\n" "${MAGENTA}" "${MODULE_NAME}" "${NC}"
-	@pipenv install --dev --python ${PYTHON_VERSION}
+.PHONY: pipenv-lock
+pipenv-lock: verify-required-tools ## Using pipenv, updates Pipfile.lock.
+	@printf "%bUpdating Pipfile.lock: %s%b\n" "${MAGENTA}" "${MODULE_NAME}" "${NC}"
+	@pipenv lock --python ${PYTHON_VERSION}
+
+.PHONY: pipenv-sync
+pipenv-sync: verify-required-tools ## Using pipenv, installs python dependencies from Pipfile.lock.
+	@printf "%bInstalling python dependencies: %s%b\n" "${MAGENTA}" "${MODULE_NAME}" "${NC}"
+	@pipenv sync --python ${PYTHON_VERSION}
 	@pipenv clean --python ${PYTHON_VERSION}
 
-.PHONY: cdk-solution-helper-install
-cdk-solution-helper-install: verify-required-tools ## Using npm, installs node modules for cdk-solution-helper.
+.PHONY: cdk-solution-helper-clean-install
+cdk-solution-helper-clean-install: verify-required-tools ## Using npm, installs node modules for cdk-solution-helper.
 	@printf "%bInstalling cdk-solution-helper node dependencies: %s%b\n" "${MAGENTA}" "${MODULE_NAME}" "${NC}"
-	@npm i --prefix deployment/cdk-solution-helper
+	@npm ci --prefix deployment/cdk-solution-helper
 
 .PHONY: build
 build: verify-required-tools ## Build templates and assets for the module.

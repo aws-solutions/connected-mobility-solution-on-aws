@@ -34,7 +34,9 @@ def test_handler(
     mocker: MagicMock,
 ) -> None:
     athena_client = boto3.client("athena")
-    athena_client.create_work_group(Name=os.environ["ATHENA_WORKGROUP"])
+    athena_client.create_work_group(
+        Name=os.environ["ATHENA_WORKGROUP"], Configuration={}
+    )
 
     mocked_requests: MagicMock = mocker.patch("requests.post")
     response = handler(athena_data_source_lambda_event, context)
@@ -45,7 +47,9 @@ def test_handler(
 @mock_aws
 def test_execute_query() -> None:
     athena_client = boto3.client("athena")
-    athena_client.create_work_group(Name=os.environ["ATHENA_WORKGROUP"])
+    athena_client.create_work_group(
+        Name=os.environ["ATHENA_WORKGROUP"], Configuration={}
+    )
 
     test_query_string = 'select * from "test-table"'
     query_execution_context = {"Database": "test-database-name"}

@@ -26,7 +26,7 @@ from ....infrastructure.cms_vehicle_simulator_stack import CmsVehicleSimulatorSt
 def fixture_snapshot_json_with_matcher(snapshot: SerializableData) -> SerializableData:
     matcher = path_value(
         mapping={
-            ".*": r"(\/?([0-9a-fA-F]+)\.zip|[a-zA-Z0-9:/-]+([0-9]{12})[a-zA-Z0-9:/-]+)",
+            ".*": r"(\/?([0-9a-fA-F]+)\.zip|[a-zA-Z0-9:/-]+(\d{12})[a-zA-Z0-9:/-]+)",
         },
         regex=True,
         types=(object,),

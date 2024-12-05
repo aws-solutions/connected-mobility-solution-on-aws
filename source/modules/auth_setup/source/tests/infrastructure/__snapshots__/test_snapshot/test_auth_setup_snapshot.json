@@ -278,7 +278,7 @@
       "Type": "AWS::SSM::Parameter::Value<String>"
     },
     "CallbackUrls": {
-      "AllowedPattern": "^[a-zA_Z]{1}[a-zA-Z0-9+-.]*:\\/\\/(www\\.)?[a-zA-Z0-9\\/@%._\\+~=-]*\\b\\/?$",
+      "AllowedPattern": "^(https:\\/\\/|http:\\/\\/localhost|(?!http:\\/\\/(?!localhost))[a-zA-Z0-9+-.]*:\\/\\/)[a-zA-Z0-9\\\\!$%&'()*+,\\-./:;<=>?@\\[\\]^_`{|}~]{1,1024}(?!#)$",
       "Default": "https://example.com",
       "Description": "List of callback URLs allowed for the Cognito user pool. These are the allowed redirect uris during authentication",
       "Type": "CommaDelimitedList"

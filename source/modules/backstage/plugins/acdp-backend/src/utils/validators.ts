@@ -25,7 +25,7 @@ export function isValidEntityRef(entityRef: string): boolean {
 
 export function isValidApplicationArn(arn: string): boolean {
   const applicationArnPattern =
-    /^arn:aws:servicecatalog:[a-z]+(-[a-z]+){1,2}-[0-9]{1}:[0-9]{12}:\/applications\/[a-zA-Z0-9-_]{1,256}$/;
+    /^arn:aws:servicecatalog:[a-z]+(-[a-z]+){1,2}-\d:\d{12}:\/applications\/[a-zA-Z0-9-_]{1,256}$/;
 
   return applicationArnPattern.test(arn);
 }

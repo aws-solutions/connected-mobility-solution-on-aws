@@ -50,7 +50,8 @@ min-public-methods=0
 # C0114, C0115, C0116 are for docstrings which we don't use
 # W0613 alarms on unused arguments
 # R0801 duplicated code false alarms on IAM statements
-disable = "C0114, C0115, C0116, W0613, R0801"
+# R0917 too many positional arguments
+disable = "C0114, C0115, C0116, W0613, R0801, R0917"
 
 [tool.pylint.'FORMAT']
 max-line-length=200

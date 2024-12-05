@@ -12,6 +12,10 @@
             {
                 "id": "AwsSolutions-CFR2",
                 "reason": "Ignore Web Application Firewall for now"
+            },
+            {
+                "id": "AwsSolutions-CFR7",
+                "reason": "False alarm. The AWS-cloudfront-s3 solutions construct provides Origin-Access-Control by default."
             }
         ]
     },

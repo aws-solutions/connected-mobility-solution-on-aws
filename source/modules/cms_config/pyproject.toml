@@ -64,7 +64,8 @@ min-public-methods=0
 # C0114, C0115, C0116 are for docstrings which we don't use
 # W0511 alarms on leaving TODO, FIXME, etc
 # W0613 alarms on unused arguments
-disable = "C0114, C0115, C0116, W0613, W0511"
+# R0917 too many positional arguments
+disable = "C0114, C0115, C0116, W0613, W0511, R0917"
 
 [tool.pylint.'FORMAT']
 max-line-length=200

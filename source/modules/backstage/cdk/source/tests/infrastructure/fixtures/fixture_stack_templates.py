@@ -24,7 +24,7 @@ from ....infrastructure.acdp_backstage_stack import AcdpBackstageStack
 def fixture_snapshot_json_with_matcher(snapshot: SerializableData) -> SerializableData:
     matcher = path_value(
         mapping={
-            ".*": r"(\/?([0-9a-fA-F]+)\.zip|[a-zA-Z0-9:/-]+([0-9]{12})[a-zA-Z0-9:/-]+)",
+            ".*": r"(\/?([0-9a-fA-F]+)\.zip|[a-zA-Z0-9:/-]+(\d{12})[a-zA-Z0-9:/-]+)",
         },
         regex=True,
         types=(object,),

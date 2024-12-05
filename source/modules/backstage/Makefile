@@ -25,13 +25,27 @@ include ${SOLUTION_PATH}/makefiles/global_targets.mk
 include ${SOLUTION_PATH}/makefiles/module_targets.mk
 
 .PHONY: yarn-install
-yarn-install: ## Using yarn, installs node dependencies for all modules.
-	@printf "%bInstalling node dependencies using yarn.%b\n" "${MAGENTA}" "${NC}"
-	@yarn install
+yarn-install: ## Using yarn, installs node dependencies from yarn.lock.
+	@printf "%bInstalling node dependencies from yarn.lock.%b\n" "${MAGENTA}" "${NC}"
+	@yarn install --frozen-lockfile
+
+# Classic yarn does not natively support upgrading yarn.lock without performing an install. Upgrade therefore will perform an install.
+# This behavior is different from the pipenv-lock targets, which do not perform an install, and only upgrade Pipfile.lock.
+# If upgrading to modern yarn, this target should be updated to only perform a lockfile upgrade without install.
+.PHONY: yarn-upgrade
+yarn-upgrade: ## Checks for node dependency upgrades and updates yarn.lock, then performs an install.
+	@printf "%bUpgrading yarn.lock and installing node dependencies.%b\n" "${MAGENTA}" "${NC}"
+	@yarn upgrade
+
+.PHONY: upgrade
+upgrade: pipenv-lock yarn-upgrade ## Checks for dependency upgrades and updates lock files. Does not install python dependencies.
+	@printf "%bUpgrading Backstage CDK pip dependencies.%b\n" "${MAGENTA}" "${NC}"
+	@cd "${MODULE_PATH}/cdk" && make upgrade
+	@printf "%bFinished updating lock files. Node dependency upgrades have also been installed.%b\n" "${GREEN}" "${NC}"
+	@printf "%bRun \"make install\" to install upgraded python dependencies.%b\n" "${CYAN}" "${NC}"
 
 .PHONY: install
-install: pipenv-install yarn-install ## Installs the resources and dependencies required to build the solution.
-	@cd cdk; make install
+install: pipenv-sync yarn-install ## Installs the resources and dependencies required to build the solution.
 	@printf "%bInstall finished.%b\n" "${GREEN}" "${NC}"
 
 .PHONY: deploy

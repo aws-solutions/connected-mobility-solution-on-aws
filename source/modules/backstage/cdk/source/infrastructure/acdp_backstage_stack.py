@@ -54,7 +54,7 @@ class AcdpBackstageStack(Stack):
 
         AppRegistryConstruct(
             self,
-            "backstage-app-registry",
+            "app-registry-construct",
             app_registry_inputs=AppRegistryInputs(
                 application_name=Aws.STACK_NAME,
                 application_type=solution_config_inputs.application_type,

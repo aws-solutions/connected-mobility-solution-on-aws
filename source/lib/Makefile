@@ -21,13 +21,18 @@ include ${SOLUTION_PATH}/makefiles/module_targets.mk
 ## ========================================================
 ## INSTALL
 ## ========================================================
+.PHONY: upgrade
+upgrade: pipenv-lock ## Upgrades Pipfile.lock.
+	@printf "%bPipfile.lock upgrade finished.%b\n" "${GREEN}" "${NC}"
+	@printf "%bRun \"make install\" to install upgraded python dependencies.%b\n" "${CYAN}" "${NC}"
+
 .PHONY: install
-install: pipenv-install ## Installs the resources and dependencies required to build the solution.
+install: pipenv-sync ## Installs the resources and dependencies required to build the solution.
 	@printf "%bInstall finished.%b\n" "${GREEN}" "${NC}"
 
 .PHONY: deploy
 deploy: ## Deploy library to pypi - NOT IMPLEMENTED
-	@printf "%bLibrary deployed to pypi. version=%s%b\n" "${GREEN}" "${MODULE_VERSION}" "${NC}"
+	@printf "%bLibrary does not yet support deployment to pypi. version=%s%b\n" "${GREEN}" "${MODULE_VERSION}" "${NC}"
 
 .PHONY: destroy
 destroy: ## NOT IMPLEMENTED
