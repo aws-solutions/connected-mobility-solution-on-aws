@@ -19,7 +19,12 @@
 
 import React, { ReactNode } from "react";
 import capitalize from "lodash/capitalize";
+
 import { Progress } from "@backstage/core-components";
+import { useEntityTypeFilter } from "@backstage/plugin-catalog-react";
+import { alertApiRef, useApi } from "@backstage/core-plugin-api";
+
+import { PopperProps } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -30,8 +35,6 @@ import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { useEntityTypeFilter } from "@backstage/plugin-catalog-react";
-import { alertApiRef, useApi } from "@backstage/core-plugin-api";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -46,6 +49,12 @@ const useStyles = makeStyles(
   },
   { name: "PartnerOfferingReactCategoryPicker" },
 );
+
+const PopperComponentRender = ({
+  popperProps,
+}: {
+  popperProps: PopperProps;
+}) => <div {...popperProps}>{popperProps.children as ReactNode}</div>;
 
 /**
  * The Category Picker that is rendered on the left side for picking
@@ -82,7 +91,7 @@ export const PartnerOfferingCategoryPicker = () => {
       </Typography>
       <Autocomplete<string, true>
         PopperComponent={(popperProps) => (
-          <div {...popperProps}>{popperProps.children as ReactNode}</div>
+          <PopperComponentRender popperProps={popperProps} />
         )}
         multiple
         id="categories-picker"

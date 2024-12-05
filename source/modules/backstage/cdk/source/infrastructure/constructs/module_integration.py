@@ -227,7 +227,7 @@ class ModuleInputsConstruct(Construct):
                 "Provide a custom ACM Certificate ARN to use for TLS."
             ),
             default="",
-            allowed_pattern="(^$)|(^unset$)|(^arn:aws:acm:[a-z0-9-]+:[0-9]{12}:certificate/[a-f0-9-]+$)",
+            allowed_pattern=r"(^$)|(^unset$)|(^arn:aws:acm:[a-z0-9-]+:\d{12}:certificate/[a-f0-9-]+$)",
             constraint_description="Must be '' or a valid ACM certificate ARN",
         ).value_as_string
 

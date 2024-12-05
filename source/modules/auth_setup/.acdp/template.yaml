@@ -80,7 +80,7 @@ spec:
               items:
                 title: Callback URL
                 default: ''
-                pattern: ^[a-zA_Z]{1}[a-zA-Z0-9+-.]*:\/\/(www\.)?[a-zA-Z0-9\/@%._\+~=-]*\b\/?$
+                pattern: ^(https:\/\/|http:\/\/localhost|(?!http:\/\/(?!localhost))[a-zA-Z0-9+-.]*:\/\/)[a-zA-Z0-9\\!$%&'()*+,\-./:;<=>?@\[\]^_`{|}~]{1,1024}(?!#)$
                 type: string
               title: Callback URLs (Optional)
               type: array

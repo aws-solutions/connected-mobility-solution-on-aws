@@ -58,10 +58,9 @@ class AppRegistryConstruct(Construct):
             attribute_group=attribute_group.attr_id,
         )
 
-        # Add awsApplication tag to stack associated with Application to facilitate "onboard"-ing application to myApplications dashboard
-        # Onboarding of application is not complete until top-level Stack gets the tag, which will need to be manually done post-deploy
+        # Add awsApplication tag to Stack resources associated with Application to "onboard" application to the myApplications dashboard
         Tags.of(scope).add(
             "awsApplication",
             cfn_application.attr_application_tag_value,
-            exclude_resource_types=[cfn_application.cfn_resource_type],
+            exclude_resource_types=[cfn_application.cfn_resource_type, "aws:cdk:stack"],
         )

@@ -213,7 +213,7 @@
       "Type": "String"
     },
     "CustomAcmCertificateArn": {
-      "AllowedPattern": "(^$)|(^arn:aws:acm:[a-z0-9-]+:[0-9]{12}:certificate/[a-f0-9-]+$)",
+      "AllowedPattern": "(^$)|(^arn:aws:acm:[a-z0-9-]+:\\d{12}:certificate/[a-f0-9-]+$)",
       "ConstraintDescription": "Must be '' or a valid ACM certificate ARN",
       "Default": "",
       "Description": "Optional when using a Public Hosted Zone with Route53. Required when HostedZoneId is Private or not provided. Provide a custom ACM Certificate ARN to use for TLS.",

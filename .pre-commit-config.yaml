@@ -191,7 +191,7 @@ repos:
         files: ^source/modules/cms_api
         verbose: true
         require_serial: true
-      - id: cms-common
+      - id: cms_common
         name: (Common)
         language: script
         args: ["--module-path", "source/lib", "--files-list"]

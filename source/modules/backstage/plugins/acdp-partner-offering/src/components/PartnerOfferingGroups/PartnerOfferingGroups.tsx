@@ -18,15 +18,18 @@
  */
 import React, { useCallback } from "react";
 
+import { errorApiRef, IconComponent, useApi } from "@backstage/core-plugin-api";
 import { useEntityList } from "@backstage/plugin-catalog-react";
 import { Progress } from "@backstage/core-components";
+
 import Typography from "@material-ui/core/Typography";
-import { errorApiRef, IconComponent, useApi } from "@backstage/core-plugin-api";
-import { PartnerOfferingGroup } from "../PartnerOfferingGroup";
+
 import {
   PartnerOfferingEntityV1beta1,
   isPartnerOfferingEntityV1beta1,
 } from "backstage-plugin-acdp-common";
+
+import { PartnerOfferingGroup } from "../PartnerOfferingGroup";
 import { PartnerOfferingGroupFilter } from "../types";
 
 /**
@@ -107,7 +110,7 @@ export const PartnerOfferingGroups = (props: PartnerOfferingGroupsProps) => {
 
         return (
           <PartnerOfferingGroup
-            key={index}
+            key={`${title}-${index}`}
             partnerOfferings={partnerOfferings}
             title={title}
             components={{ CardComponent: PartnerOfferingCardComponent }}

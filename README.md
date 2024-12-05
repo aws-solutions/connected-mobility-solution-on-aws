@@ -54,6 +54,9 @@ navigate to the [AWS Solution Page](https://aws.amazon.com/solutions/implementat
   - [Collection of Operational Metrics](#collection-of-operational-metrics)
   - [Uninstall the Solution](#uninstall-the-solution)
   - [Developer Guide](#developer-guide)
+    - [Dependencies](#dependencies)
+      - [Python](#python)
+      - [Node](#node)
     - [Logging](#logging)
       - [Lambda Functions](#lambda-functions)
       - [Backstage Logs](#backstage-logs)
@@ -166,7 +169,6 @@ Ensure your installation properly set your path by running the script below.
 
 ```bash
 nvm --version
-# Expected Output: x.xx.x
 ```
 
 #### Node / NPM
@@ -186,7 +188,6 @@ installation properly set your path by running the script below.
 
 ```bash
 yarn --version
-# Expected Output: x.xx.xx
 ```
 
 #### Pyenv
@@ -197,7 +198,6 @@ installation properly set your path by running the script below.
 
 ```bash
 pyenv --version
-# Expected Output: pyenv x.x.xx
 ```
 
 #### Python / Pip
@@ -217,7 +217,6 @@ installation properly set your PATH by running the script below.
 
 ```bash
 pipenv --version
-# Expected Output: pipenv, version xxxx.xx.x
 ```
 
 #### AWS CLI
@@ -230,7 +229,6 @@ set your PATH by running the script below.
 
 ```bash
 aws --version
-# Expected Output: aws-cli/x.xx.xx ...
 ```
 
 #### AWS CDK Toolkit
@@ -240,7 +238,6 @@ AWS CDK toolkit. Ensure your installation properly set your PATH by running the 
 
 ```bash
 cdk --version
-# Expected Output: x.xxx.x (build ...)
 ```
 
 #### Verify Required Tool Installations
@@ -490,6 +487,50 @@ how to disable this capability, please see the
     remain queryable for up to 30 minutes after deletion.
 
 ## Developer Guide
+
+### Dependencies
+
+To properly manage dependency versions, ensuring consistency and security across solution installations and usages,
+lock files (Pipfile.lock, yarn.lock, package-lock.json) are included throughout the repository.
+
+For fresh installations, or for simply ensuring you have the correct dependencies as specified in the lock files,
+the `make install` target should be used, which will install all lock file dependencies throughout the solution,
+**without checking for or performing dependency upgrades**.
+
+To upgrade or add new dependencies, lock file updates should be performed. For this, the `make upgrade` target should
+be used, which will check for dependency upgrades based on semver versions specified throughout the solution, and update
+the lock files accordingly. **This will also install upgraded node dependencies, but will not install upgraded python
+dependencies.** To install upgraded python dependencies, a subsequent `make install` run is necessary.
+
+> **NOTE:** Upgraded or installing Python or Node dependencies individually is also supported. Run `make help` for a full
+> list of supported make targets to support this behavior.
+
+See below for more details on Python and Node dependency management.
+
+#### Python
+
+This solution uses `pipenv` for Python dependency management. For more information, see the
+[pipenv documentation](https://pipenv.pypa.io/en/latest/index.html).
+
+`make install` will install python dependencies from Pipfile.lock files **without checking for or
+performing dependency upgrades**. This is to ensure consistent versioning of dependencies as specified
+in the included lock files.
+
+`make upgrade` will upgrade Pipfile.lock files across the solution **without installing dependencies**. To then
+install upgraded dependencies, run `make install`.
+
+#### Node
+
+This solution uses `yarn` and `npm` for management of Node dependencies. For more information, see the
+[yarn documentation](https://classic.yarnpkg.com/en/) and [npm documentation](https://docs.npmjs.com/).
+
+`make install` will install node dependencies from package-lock.json or yarn.lock files **without checking for
+or performing dependency upgrades**. This is to ensure consistent versioning of dependencies as specified
+in the included lock files.
+
+`make upgrade` will upgrade package-lock.json and yarn.lock files across the solution **while also installing upgraded
+depdnencies**. A subsequent `make install` run is not necessary for installing upgraded node dependencies, but is recommended
+for installing upgraded Python dependnecies, ensuring alignment between installed dependencies and the updated lock files.
 
 ### Logging
 

@@ -13,12 +13,19 @@ export async function awsApiCallWithErrorHandling<T>(
   try {
     return await apiCall();
   } catch (error: any) {
-    if (typeof error.message === "string" && typeof error.statusCode === "number") {
+    if (
+      typeof error.message === "string" &&
+      typeof error.statusCode === "number"
+    ) {
       logger.error(`${customErrorMessage} Error: ${error}`);
-      throw new Error(`Error while calling AWS API. Status Code: ${error.statusCode}`);
+      throw new Error(
+        `Error while calling AWS API. Status Code: ${error.statusCode}`,
+      );
     } else {
       logger.error(`${customErrorMessage} Unexpected Error: ${error}`);
-      throw new Error("Unexpected error while calling AWS API. Status code unknown.");
+      throw new Error(
+        "Unexpected error while calling AWS API. Status code unknown.",
+      );
     }
   }
 }

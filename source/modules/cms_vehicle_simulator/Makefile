@@ -30,13 +30,27 @@ include ${SOLUTION_PATH}/makefiles/common_config.mk
 include ${SOLUTION_PATH}/makefiles/global_targets.mk
 include ${SOLUTION_PATH}/makefiles/module_targets.mk
 
-.PHONY: npm-install
-npm-install: ## Using npm, installs node dependencies.
+.PHONY: npm-clean-install
+npm-clean-install: ## Using npm, installs node dependencies from package-lock.json.
 	@printf "%bInstalling node dependencies using npm.%b\n" "${MAGENTA}" "${NC}"
-	@npm i --prefix source/console
+	@npm ci --prefix source/console
+
+# Although npm supports updating package-lock.json without performing an installation, since yarn does not, and yarn is used elsewhere
+# in the solution, for consistent behavior across updating node dependencies, an install is also performed here.
+# This behavior is different from the pipenv-lock targets, which do not perform an install, and only upgrade Pipfile.lock.
+# If upgrading to modern yarn, this target should be updated to only perform a lockfile update without install.
+.PHONY: npm-update
+npm-update: ## Checks for node dependency upgrades and updates package-lock.json, then performs an install.
+	@printf "%bUpgrading package-lock.json and installing node dependencies.%b\n" "${MAGENTA}" "${NC}"
+	@npm update --prefix source/console
+
+.PHONY: upgrade
+upgrade: pipenv-lock npm-update ## Checks for dependency upgrades and updates lock files. Does not install python dependencies.
+	@printf "%bFinished upgrading lock files and installing node dependencies.%b\n" "${GREEN}" "${NC}"
+	@printf "%bRun \"make install\" to install updated python dependencies.%b\n" "${CYAN}" "${NC}"
 
 .PHONY: install
-install: pipenv-install npm-install cdk-solution-helper-install ## Installs the resources and dependencies required to build the solution.
+install: pipenv-sync npm-clean-install cdk-solution-helper-clean-install ## Installs the resources and dependencies required to build the solution.
 	@printf "%bInstall finished.%b\n" "${GREEN}" "${NC}"
 
 .PHONY: deploy

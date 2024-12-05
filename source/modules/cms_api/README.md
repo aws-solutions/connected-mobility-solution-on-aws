@@ -80,7 +80,7 @@ Pipenv [Github Repository](https://github.com/pypa/pipenv)
 
 ```bash
 pip install --user pipenv
-pipenv install --dev
+pipenv sync --dev
 ```
 
 NVM [Github Repository](https://github.com/nvm-sh/nvm)
@@ -186,7 +186,7 @@ After deploying the solution a Postman collection can be generated to test and i
 
 ```bash
 cd ./deployment/postman_collection
-npm install
+npm ci
 node index.js --stack-name <name-of-cloud-formation-stack> --region <region-of-cloud-formation-stack>
 ```
 

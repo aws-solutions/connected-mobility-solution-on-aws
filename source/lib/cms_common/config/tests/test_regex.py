@@ -44,10 +44,11 @@ from ..regex import RegexPattern
         (RegexPattern.CALLBACK_URLS, "myapp://valid.com", True),
         (RegexPattern.CALLBACK_URLS, "my+app://valid.com", True),
         (RegexPattern.CALLBACK_URLS, "http://localhost", True),
-        (RegexPattern.CALLBACK_URLS, "myapp://invalid.com:edu", False),
-        (RegexPattern.CALLBACK_URLS, "myapp://invalid.com.", False),
+        (RegexPattern.CALLBACK_URLS, "https://hostname:0000/valid", True),
         (RegexPattern.CALLBACK_URLS, "myapp:/invalid.com", False),
         (RegexPattern.CALLBACK_URLS, "myapp://invalid.com#fragment", False),
+        (RegexPattern.CALLBACK_URLS, "http://invalid.com", False),
+        (RegexPattern.CALLBACK_URLS, "", False),
         (
             RegexPattern.SECRETSMANAGER_SECRET_ARN,
             "arn:aws:secretsmanager:us-east-1:111111111111:secret:/solution/auth/cms/client-config/default-74hfa7",

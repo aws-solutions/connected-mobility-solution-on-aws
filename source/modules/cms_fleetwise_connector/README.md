@@ -73,7 +73,7 @@ Pipenv [Github Repository](https://github.com/pypa/pipenv)
 
 ```bash
 pip install --user pipenv
-pipenv install --dev
+pipenv sync --dev
 ```
 
 NVM [Github Repository](https://github.com/nvm-sh/nvm)

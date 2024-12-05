@@ -30,9 +30,14 @@ include ${SOLUTION_PATH}/makefiles/common_config.mk
 include ${SOLUTION_PATH}/makefiles/global_targets.mk
 include ${SOLUTION_PATH}/makefiles/module_targets.mk
 
+.PHONY: upgrade
+upgrade: pipenv-lock ## Upgrades Pipfile.lock.
+	@printf "%bPipfile.lock upgrade finished.%b\n" "${GREEN}" "${NC}"
+	@printf "%bRun \"make install\" to install upgraded python dependencies.%b\n" "${CYAN}" "${NC}"
+
 .PHONY: install
-install: pipenv-install cdk-solution-helper-install ## Installs the resources and dependencies required to build the solution.
-	@printf "${MAGENTA}Install finished.${NC}\n"
+install: pipenv-sync cdk-solution-helper-clean-install ## Installs the resources and dependencies required to build the solution.
+	@printf "%bInstall finished.%b\n" "${GREEN}" "${NC}"
 
 .PHONY: deploy
 deploy: ## Deploy the stack for the module.
