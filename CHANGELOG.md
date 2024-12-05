@@ -10,6 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Update cross-spawn to resolve CVE
+- Skip tagging top-level Stack via exclude resources arg
+- Separating install and upgrade functionality in make targets
+- Update cms_common pre-commit target to align with package name in setup.py, fixing bug preventing running lib pre-commit via make lib-pre-commit or cd source/lib; make pre-commit
+- Address pre-commit failures throughout solution
+- Address SonarQube code smells
+   - Defining components outside of render function (nested components)
+   - Regex changes
+   - Not using index as key for React components
 
 ## [2.0.1] - 2024-10-30
 
