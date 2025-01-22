@@ -31,7 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Defining components outside of render function (nested components)
   - Regex changes
   - Not using index as key for React components
-- Update cross-spawn to resolve CVE.
 
 ## [2.0.1] - 2024-10-30
 
