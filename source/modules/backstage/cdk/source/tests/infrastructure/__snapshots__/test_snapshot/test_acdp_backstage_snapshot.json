@@ -88,7 +88,7 @@
         "S3AssetKeyPrefix": "test-object-key-prefix"
       }
     },
-    "acdpbackstageauroradatabaseconstructauroraserverlessclusterRotationSingleUserSARMapping62943CC5": {
+    "acdpbackstageauroradatabaseconstructauroraserverlessv2clusterRotationSingleUserSARMappingADC876DD": {
       "aws": {
         "applicationId": "test",
         "semanticVersion": "1.1.367"
@@ -164,7 +164,7 @@
     }
   },
   "Resources": {
-    "acdpbackstageauroradatabaseconstructauroraserverlesscluster0FD1CD15": {
+    "acdpbackstageauroradatabaseconstructauroraserverlessv2cluster5C123028": {
       "DeletionPolicy": "Snapshot",
       "DependsOn": [
         "ssmappuniqueidregistermodule9C5C2C5D"
@@ -173,12 +173,11 @@
         "CopyTagsToSnapshot": true,
         "DBClusterParameterGroupName": "default.aurora-postgresql13",
         "DBSubnetGroupName": {
-          "Ref": "acdpbackstageauroradatabaseconstructauroraserverlessclusterSubnets00E2E32A"
+          "Ref": "acdpbackstageauroradatabaseconstructauroraserverlessv2clusterSubnetsEAC25CD7"
         },
         "DeletionProtection": false,
         "Engine": "aurora-postgresql",
-        "EngineMode": "serverless",
-        "EngineVersion": "13.9",
+        "EngineVersion": "13.16",
         "MasterUserPassword": {
           "Fn::Join": [
             "",
@@ -202,6 +201,11 @@
               ":SecretString:username::}}"
             ]
           ]
+        },
+        "Port": 5432,
+        "ServerlessV2ScalingConfiguration": {
+          "MaxCapacity": 8,
+          "MinCapacity": 1
         },
         "StorageEncrypted": true,
         "Tags": [
@@ -242,7 +246,7 @@
       "Type": "AWS::RDS::DBCluster",
       "UpdateReplacePolicy": "Snapshot"
     },
-    "acdpbackstageauroradatabaseconstructauroraserverlessclusterRotationSingleUser489CBB82": {
+    "acdpbackstageauroradatabaseconstructauroraserverlessv2clusterRotationSingleUserB3DFB9F6": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
         "ssmappuniqueidregistermodule9C5C2C5D"
@@ -251,7 +255,7 @@
         "Location": {
           "ApplicationId": {
             "Fn::FindInMap": [
-              "acdpbackstageauroradatabaseconstructauroraserverlessclusterRotationSingleUserSARMapping62943CC5",
+              "acdpbackstageauroradatabaseconstructauroraserverlessv2clusterRotationSingleUserSARMappingADC876DD",
               {
                 "Ref": "AWS::Partition"
               },
@@ -260,7 +264,7 @@
           },
           "SemanticVersion": {
             "Fn::FindInMap": [
-              "acdpbackstageauroradatabaseconstructauroraserverlessclusterRotationSingleUserSARMapping62943CC5",
+              "acdpbackstageauroradatabaseconstructauroraserverlessv2clusterRotationSingleUserSARMappingADC876DD",
               {
                 "Ref": "AWS::Partition"
               },
@@ -281,7 +285,7 @@
             ]
           },
           "excludeCharacters": " %+~`#$&*()|[]{}:;<>?!'/@\"\\",
-          "functionName": "tabaseconstructauroraserverlessclusterRotationSingleUserD8895971",
+          "functionName": "baseconstructauroraserverlessv2clusterRotationSingleUserB6E84B2A",
           "vpcSecurityGroupIds": {
             "Fn::GetAtt": [
               "acdpbackstageauroradatabaseconstructdatabasesecuritygroup40706936",
@@ -329,12 +333,12 @@
       "Type": "AWS::Serverless::Application",
       "UpdateReplacePolicy": "Delete"
     },
-    "acdpbackstageauroradatabaseconstructauroraserverlessclusterSubnets00E2E32A": {
+    "acdpbackstageauroradatabaseconstructauroraserverlessv2clusterSubnetsEAC25CD7": {
       "DependsOn": [
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
-        "DBSubnetGroupDescription": "Subnets for aurora-serverless-cluster database",
+        "DBSubnetGroupDescription": "Subnets for aurora-serverless-v2-cluster database",
         "SubnetIds": [
           {
             "Fn::Join": [
@@ -389,6 +393,49 @@
         ]
       },
       "Type": "AWS::RDS::DBSubnetGroup"
+    },
+    "acdpbackstageauroradatabaseconstructauroraserverlessv2clusterwriter1CF26572": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "ssmappuniqueidregistermodule9C5C2C5D"
+      ],
+      "Properties": {
+        "DBClusterIdentifier": {
+          "Ref": "acdpbackstageauroradatabaseconstructauroraserverlessv2cluster5C123028"
+        },
+        "DBInstanceClass": "db.serverless",
+        "Engine": "aurora-postgresql",
+        "PromotionTier": 0,
+        "PubliclyAccessible": false,
+        "Tags": [
+          {
+            "Key": "awsApplication",
+            "Value": {
+              "Fn::GetAtt": [
+                "appregistryconstructappregistryapplicationAC1A319B",
+                "ApplicationTagValue"
+              ]
+            }
+          },
+          {
+            "Key": "Solutions:DeploymentUUID",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "{{resolve:ssm:/solution/",
+                  {
+                    "Ref": "AcdpUniqueId"
+                  },
+                  "/config/deployment-uuid}}"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "Type": "AWS::RDS::DBInstance",
+      "UpdateReplacePolicy": "Delete"
     },
     "acdpbackstageauroradatabaseconstructdatabasesecret557C9B62": {
       "DeletionPolicy": "Delete",
@@ -464,7 +511,7 @@
           "Ref": "acdpbackstageauroradatabaseconstructdatabasesecret557C9B62"
         },
         "TargetId": {
-          "Ref": "acdpbackstageauroradatabaseconstructauroraserverlesscluster0FD1CD15"
+          "Ref": "acdpbackstageauroradatabaseconstructauroraserverlessv2cluster5C123028"
         },
         "TargetType": "AWS::RDS::DBCluster"
       },
@@ -512,7 +559,7 @@
       "Properties": {
         "RotationLambdaARN": {
           "Fn::GetAtt": [
-            "acdpbackstageauroradatabaseconstructauroraserverlessclusterRotationSingleUser489CBB82",
+            "acdpbackstageauroradatabaseconstructauroraserverlessv2clusterRotationSingleUserB3DFB9F6",
             "Outputs.RotationLambdaARN"
           ]
         },
@@ -580,7 +627,7 @@
         "Description": "from backstageacdpbackstageauroradatabaseconstructdatabasesecuritygroup833C86EB:{IndirectPort}",
         "FromPort": {
           "Fn::GetAtt": [
-            "acdpbackstageauroradatabaseconstructauroraserverlesscluster0FD1CD15",
+            "acdpbackstageauroradatabaseconstructauroraserverlessv2cluster5C123028",
             "Endpoint.Port"
           ]
         },
@@ -599,7 +646,7 @@
         },
         "ToPort": {
           "Fn::GetAtt": [
-            "acdpbackstageauroradatabaseconstructauroraserverlesscluster0FD1CD15",
+            "acdpbackstageauroradatabaseconstructauroraserverlessv2cluster5C123028",
             "Endpoint.Port"
           ]
         }
@@ -644,7 +691,7 @@
         },
         "FromPort": {
           "Fn::GetAtt": [
-            "acdpbackstageauroradatabaseconstructauroraserverlesscluster0FD1CD15",
+            "acdpbackstageauroradatabaseconstructauroraserverlessv2cluster5C123028",
             "Endpoint.Port"
           ]
         },
@@ -657,7 +704,7 @@
         "IpProtocol": "tcp",
         "ToPort": {
           "Fn::GetAtt": [
-            "acdpbackstageauroradatabaseconstructauroraserverlesscluster0FD1CD15",
+            "acdpbackstageauroradatabaseconstructauroraserverlessv2cluster5C123028",
             "Endpoint.Port"
           ]
         }
@@ -1176,7 +1223,7 @@
               },
               {
                 "Name": "SOLUTION_VERSION",
-                "Value": "v2.0.2"
+                "Value": "v2.0.3"
               },
               {
                 "Name": "WEB_HOSTNAME",

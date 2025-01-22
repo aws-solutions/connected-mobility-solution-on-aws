@@ -5,19 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.3] - 2025-01-22
+
+### Upgrade
+
+- Upgrade from Aurora Serverless V1 to V2 since new deployments of V1 are not allowed.
+
+### Fixed
+
+- Configure MinLength constraint on VPC Name to prevent an issue on the AWS Console with empty strings.
+- General code cleanup for unused files
+
 ## [2.0.2] - 2024-12-05
 
 ### Fixed
 
-- Update cross-spawn to resolve CVE
-- Skip tagging top-level Stack via exclude resources arg
-- Separating install and upgrade functionality in make targets
-- Update cms_common pre-commit target to align with package name in setup.py, fixing bug preventing running lib pre-commit via make lib-pre-commit or cd source/lib; make pre-commit
-- Address pre-commit failures throughout solution
-- Address SonarQube code smells
-   - Defining components outside of render function (nested components)
-   - Regex changes
-   - Not using index as key for React components
+- Update cross-spawn to resolve CVE.
 
 ## [2.0.1] - 2024-10-30
 
