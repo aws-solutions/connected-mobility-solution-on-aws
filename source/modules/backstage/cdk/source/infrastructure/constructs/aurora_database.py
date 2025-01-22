@@ -31,17 +31,21 @@ class AuroraDatabaseConstruct(Construct):
             self, "database-security-group", vpc=vpc, allow_all_outbound=False
         )
 
-        database = aws_rds.ServerlessCluster(
+        database = aws_rds.DatabaseCluster(
             self,
-            "aurora-serverless-cluster",
+            "aurora-serverless-v2-cluster",
             engine=cluster_engine,
+            serverless_v2_min_capacity=1,
+            serverless_v2_max_capacity=8,
+            writer=aws_rds.ClusterInstance.serverless_v2("writer"),
             credentials=aws_rds.Credentials.from_secret(
                 self.database_credentials_secret
             ),
             vpc=vpc,
             vpc_subnets=isolated_subnets,
-            deletion_protection=False,  # deletion protection disabled to allow for graceful teardown
             security_groups=[self.database_security_group],
+            deletion_protection=False,
+            storage_encrypted=True,
         )
 
         database.add_rotation_single_user(

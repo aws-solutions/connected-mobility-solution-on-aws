@@ -133,7 +133,7 @@ class AcdpBackstageConstruct(Construct):
             isolated_subnets=vpc_construct.isolated_subnet_selection,
             credentials_secret_name=f"{module_inputs.acdp_config_ssm_prefix_with_slash_prefix}/backstage/db_credentials",
             cluster_engine=aws_rds.DatabaseClusterEngine.aurora_postgres(
-                version=aws_rds.AuroraPostgresEngineVersion.VER_13_9
+                version=aws_rds.AuroraPostgresEngineVersion.VER_13_16
             ),
             rotation_interval_days=Duration.days(90),
         )
