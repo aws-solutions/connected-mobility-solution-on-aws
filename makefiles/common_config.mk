@@ -15,7 +15,7 @@ export AWS_REGION ?= ${DEFAULTS.AWS_REGION}
 # ========================================================
 export SOLUTION_NAME ?= connected-mobility-solution-on-aws
 export SOLUTION_DESCRIPTION ?= Accelerate development and deployment of connected vehicle assets with purpose-built, deployment-ready accelerators, and an Automotive Cloud Developer Portal
-export SOLUTION_VERSION ?= v2.0.3
+export SOLUTION_VERSION ?= v2.0.4
 export SOLUTION_AUTHOR = AWS Industrial Solutions Team
 export SOLUTION_ID = SO0241
 # Path is relative to this file's location, moving this file requires updating this path.
