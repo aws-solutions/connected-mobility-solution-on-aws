@@ -1,7 +1,7 @@
 
 
 AWSTemplateFormatVersion: "2010-09-09"
-Description: (SO0241-CMS.23) connected-mobility-solution-on-aws - vpc. Version v2.0.4
+Description: (SO0241-CMS.23) connected-mobility-solution-on-aws - vpc. Version v2.0.5
   This template deploys a VPC, with a pair of public and private subnets spread
   across two Availability Zones. It deploys an internet gateway, with a default
   route on the public subnets. It deploys a pair of NAT gateways (one in each AZ),

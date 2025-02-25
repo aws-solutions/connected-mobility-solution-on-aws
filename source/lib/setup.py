@@ -52,7 +52,7 @@ setup(
         "toml>=0.10.2",
     ],
     name="cms_common",
-    version="2.0.4",
+    version="2.0.5",
     description="Common library used in CMS modules",
     packages=find_packages(
         exclude=[
