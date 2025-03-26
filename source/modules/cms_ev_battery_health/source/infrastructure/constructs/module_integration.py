@@ -14,6 +14,7 @@ from cms_common.config.resource_names import ResourceName, ResourcePrefix
 from cms_common.config.ssm import resolve_ssm_parameter
 from cms_common.config.stack_inputs import SolutionConfigInputs
 from cms_common.constructs.app_unique_id import AppUniqueId
+from cms_common.constructs.encrypted_s3 import EncryptedS3Construct
 from cms_common.constructs.identity_provider_config import IdentityProviderConfig
 from cms_common.constructs.vpc_construct import create_vpc_config, get_vpc_name
 from cms_common.resource_names.module_short_names import CMSModuleShortNames
@@ -22,10 +23,8 @@ from cms_common.resource_names.module_short_names import CMSModuleShortNames
 @dataclass(frozen=True)
 class AthenaDataSourceProperties:
     athena_data_storage_bucket_arn: str
-    athena_data_storage_bucket_key_arn: str
     athena_workgroup_name: str
     athena_results_bucket_arn: str
-    athena_results_bucket_key_arn: str
     glue_catalog_name: str
     glue_database_name: str
     glue_table_name: str
@@ -82,22 +81,10 @@ class ModuleInputsConstruct(Construct):
                     name="athena-result-bucket/arn",
                 )
             ),
-            athena_results_bucket_key_arn=resolve_ssm_parameter(
-                parameter_name=ResourceName.slash_separated(
-                    prefix=api_module_ssm_prefix_with_leading_slash,
-                    name="athena-result-bucket/key-arn",
-                )
-            ),
             athena_data_storage_bucket_arn=resolve_ssm_parameter(
                 parameter_name=ResourceName.slash_separated(
                     prefix=connect_store_module_ssm_prefix_with_leading_slash,
                     name="s3-storage-bucket/arn",
-                )
-            ),
-            athena_data_storage_bucket_key_arn=resolve_ssm_parameter(
-                parameter_name=ResourceName.slash_separated(
-                    prefix=connect_store_module_ssm_prefix_with_leading_slash,
-                    name="s3-storage-bucket/key-arn",
                 )
             ),
             glue_catalog_name=resolve_ssm_parameter(
@@ -137,6 +124,10 @@ class ModuleInputsConstruct(Construct):
                 prefix=alerts_module_ssm_prefix_with_leading_slash,
                 name="publish-api/endpoint",
             )
+        )
+
+        self.s3_log_lifecycle_rules = (
+            EncryptedS3Construct.create_log_lifecycle_cfn_parameters(self)
         )
 
 

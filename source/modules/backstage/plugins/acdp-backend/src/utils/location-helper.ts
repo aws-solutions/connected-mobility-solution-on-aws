@@ -1,12 +1,10 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { ScmIntegrationRegistry } from "@backstage/integration";
+import { resolveSafeChildPath } from "@backstage/backend-plugin-api";
 import { Location } from "@backstage/catalog-client";
-
-import { resolveSafeChildPath } from "@backstage/backend-common";
-
 import { InputError } from "@backstage/errors";
+import { ScmIntegrationRegistry } from "@backstage/integration";
 
 import * as path from "path";
 

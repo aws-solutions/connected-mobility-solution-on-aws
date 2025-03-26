@@ -11,10 +11,12 @@ import {
 } from "@backstage/core-plugin-api";
 
 import {
+  acdpAccountDirectoryApiRef,
+  AcdpAccountDirectoryImpl,
   acdpBuildApiRef,
-  AcdpBuildApi,
+  AcdpBuildImpl,
   acdpMetricsApiRef,
-  AcdpMetricsApi,
+  AcdpMetricsImpl,
 } from "./api";
 
 export const acdpPlugin: BackstagePlugin = createPlugin({
@@ -24,13 +26,19 @@ export const acdpPlugin: BackstagePlugin = createPlugin({
       api: acdpBuildApiRef,
       deps: { configApi: configApiRef, identityApi: identityApiRef },
       factory: ({ configApi, identityApi }) =>
-        new AcdpBuildApi({ configApi, identityApi }),
+        new AcdpBuildImpl({ configApi, identityApi }),
     }),
     createApiFactory({
       api: acdpMetricsApiRef,
       deps: { configApi: configApiRef, identityApi: identityApiRef },
       factory: ({ configApi, identityApi }) =>
-        new AcdpMetricsApi({ configApi, identityApi }),
+        new AcdpMetricsImpl({ configApi, identityApi }),
+    }),
+    createApiFactory({
+      api: acdpAccountDirectoryApiRef,
+      deps: { configApi: configApiRef, identityApi: identityApiRef },
+      factory: ({ configApi, identityApi }) =>
+        new AcdpAccountDirectoryImpl({ configApi, identityApi }),
     }),
   ],
 });

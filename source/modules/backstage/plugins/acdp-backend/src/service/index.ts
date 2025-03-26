@@ -4,3 +4,4 @@
 export * from "./acdp-base-service";
 export * from "./acdp-build-service";
 export * from "./acdp-metrics-service";
+export * from "./acdp-account-directory-service";

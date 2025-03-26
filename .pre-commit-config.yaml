@@ -85,7 +85,7 @@ repos:
         name: (ROOT) Black
         exclude: ^(source/|.nightswatch/)
   - repo: https://github.com/hadialqattan/pycln
-    rev: v2.4.0
+    rev: v2.5.0
     hooks:
       - id: pycln
         name: (ROOT) Pycln
@@ -293,5 +293,13 @@ repos:
         args: ["--module-path", ".nightswatch", "--files-list"]
         entry: ./deployment/script_run_module_hooks.py
         files: ^.nightswatch
+        verbose: true
+        require_serial: true
+      - id: cms-ui
+        name: (UI)
+        language: script
+        args: ["--module-path", "source/modules/cms_ui", "--files-list"]
+        entry: ./deployment/script_run_module_hooks.py
+        files: ^source/modules/cms_ui
         verbose: true
         require_serial: true

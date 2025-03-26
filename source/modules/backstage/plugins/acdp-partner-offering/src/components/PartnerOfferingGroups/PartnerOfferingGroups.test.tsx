@@ -25,7 +25,6 @@ jest.mock("../PartnerOfferingGroup/PartnerOfferingGroup", () => ({
   PartnerOfferingGroup: jest.fn(() => null),
 }));
 
-import React from "react";
 import { useEntityList } from "@backstage/plugin-catalog-react";
 import { PartnerOfferingGroups } from "./PartnerOfferingGroups";
 import { renderInTestApp, TestApiProvider } from "@backstage/test-utils";

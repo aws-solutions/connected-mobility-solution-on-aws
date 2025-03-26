@@ -152,7 +152,7 @@ For tools not listed here, stable versions should work appropriately.
 
 | Dependency | Version  |
 |------------|----------|
-| [NodeJS](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)   | 18.20.*    |
+| [NodeJS](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)   | 22.13.*    |
 | [Python](https://www.python.org)                                              | 3.12.*     |
 
 ### Install Required Tools (OSX/Linux)
@@ -183,7 +183,7 @@ version of Node. Manually installing Node without the use of nvm is not recommen
 
 #### Yarn
 
-Follow the [yarn installation guide](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable). Ensure your
+Follow the [yarn installation guide](https://yarnpkg.com/getting-started/install). Ensure your
 installation properly set your path by running the script below.
 
 ```bash
@@ -311,19 +311,17 @@ Ensure you've followed the steps in the previous [deployment prerequisites](#dep
 
 ### Build the Solution's Modules
 
-The build target manages dependencies, builds required assets (e.g. packaged lambdas), and creates the
-AWS CloudFormation templates for all modules.
+The build target builds required assets (e.g. packaged lambdas) and creates the AWS CloudFormation templates for all
+modules. It then consolidates all module assets into the root deployment directory and creates the Backstage assets zip.
 
 ```bash
-make build-all
+make build
 ```
-
-> **NOTE:** There is also a `build` target. Running that instead of `build-all` will trigger an error for a "missing file".
 
 ### Upload Assets to S3
 
 The upload target creates the necessary buckets for, and uploads, the global and regional assets.
-It also uploads the Backstage .zip asset.
+It also uploads the Backstage assets zip.
 
 ```bash
 make upload
@@ -331,7 +329,7 @@ make upload
 
 ### Deploy on AWS
 
-The deploy target deploys all CMS modules, including the ACDP, in an enforced order.
+The deploy target deploys all CMS modules, including ACDP, in an enforced order.
 
 ```bash
 make deploy
@@ -491,7 +489,7 @@ how to disable this capability, please see the
 ### Dependencies
 
 To properly manage dependency versions, ensuring consistency and security across solution installations and usages,
-lock files (Pipfile.lock, yarn.lock, package-lock.json) are included throughout the repository.
+lock files (Pipfile.lock, yarn.lock) are included throughout the repository.
 
 For fresh installations, or for simply ensuring you have the correct dependencies as specified in the lock files,
 the `make install` target should be used, which will install all lock file dependencies throughout the solution,
@@ -499,8 +497,8 @@ the `make install` target should be used, which will install all lock file depen
 
 To upgrade or add new dependencies, lock file updates should be performed. For this, the `make upgrade` target should
 be used, which will check for dependency upgrades based on semver versions specified throughout the solution, and update
-the lock files accordingly. **This will also install upgraded node dependencies, but will not install upgraded python
-dependencies.** To install upgraded python dependencies, a subsequent `make install` run is necessary.
+the lock files accordingly. **This does not install upgraded dependencies.** To subsequentally install upgraded dependencies,
+run `make install`.
 
 > **NOTE:** Upgraded or installing Python or Node dependencies individually is also supported. Run `make help` for a full
 > list of supported make targets to support this behavior.
@@ -521,16 +519,15 @@ install upgraded dependencies, run `make install`.
 
 #### Node
 
-This solution uses `yarn` and `npm` for management of Node dependencies. For more information, see the
-[yarn documentation](https://classic.yarnpkg.com/en/) and [npm documentation](https://docs.npmjs.com/).
+This solution uses `yarn` for management of Node dependencies. For more information, see the
+[yarn documentation](https://classic.yarnpkg.com/en/).
 
-`make install` will install node dependencies from package-lock.json or yarn.lock files **without checking for
+`make install` will install node dependencies from yarn.lock files **without checking for
 or performing dependency upgrades**. This is to ensure consistent versioning of dependencies as specified
 in the included lock files.
 
-`make upgrade` will upgrade package-lock.json and yarn.lock files across the solution **while also installing upgraded
-depdnencies**. A subsequent `make install` run is not necessary for installing upgraded node dependencies, but is recommended
-for installing upgraded Python dependnecies, ensuring alignment between installed dependencies and the updated lock files.
+`make upgrade` will upgrade yarn.lock files across the solution **without installing dependencies**. To then
+install upgraded dependencies, run `make install`.
 
 ### Logging
 

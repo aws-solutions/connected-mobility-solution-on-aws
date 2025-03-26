@@ -50,5 +50,29 @@
                 "reason": "Log retention lambda uses policies that require wildcard permissions."
             }
         ]
+    },
+    "/cms-config/cms-config/custom-resource-lambda-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "The non-container Lambda function is not configured to use the latest runtime version."
+            }
+        ]
+    },
+    "/cms-config/cms-config/metrics-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "The non-container Lambda function is not configured to use the latest runtime version."
+            }
+        ]
+    },
+    "/cms-config/cms-config/aws-resource-lookup-custom-resource-lambda/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "The non-container Lambda function is not configured to use the latest runtime version."
+            }
+        ]
     }
 }

@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as path from "path";
-import { Logger } from "winston";
 import * as yaml from "yaml";
 import { z } from "zod";
 
@@ -13,11 +12,12 @@ import {
 } from "@aws-sdk/client-s3";
 
 import {
-  UrlReader,
+  AuthService,
+  DiscoveryService,
+  LoggerService,
   resolveSafeChildPath,
-  PluginEndpointDiscovery,
-} from "@backstage/backend-common";
-import { AuthService } from "@backstage/backend-plugin-api";
+  UrlReaderService,
+} from "@backstage/backend-plugin-api";
 import { CatalogClient, Location } from "@backstage/catalog-client";
 import {
   CompoundEntityRef,
@@ -64,12 +64,12 @@ interface CtxInput extends JsonObject {
 
 interface AcdpCatalogCreateActionInput {
   config: Config;
-  reader: UrlReader;
+  reader: UrlReaderService;
   integrations: ScmIntegrations;
   catalogClient: CatalogClient;
-  discovery: PluginEndpointDiscovery;
+  discovery: DiscoveryService;
   auth: AuthService;
-  logger: Logger;
+  logger: LoggerService;
 }
 
 const copyDocsAssetsToCatalog = async (options: {
@@ -111,7 +111,7 @@ const copyDocsAssetsToCatalog = async (options: {
     baseUrl: fetchBaseUrl,
     fetchUrl: resolvedLocation.target,
     outputPath: docsTmpPath,
-    // token: ctx.input.token, #This is added in next patch version of the fetchContents func...uncomment this on next lib bump
+    token: ctx.input.token?.toString(),
   });
   ctx.logger.info("Finished: Fetching docs from source location");
   ctx.logger.info("Starting: Publishing docs to techdocs asset location");
@@ -216,11 +216,6 @@ const writeCatalogItemToS3 = async (options: {
   );
 
   // Inject required annotations into catalog-info.yaml
-
-  // For now, we only support 1 deployment target. in the future, this should come from inputs
-  ctx.input.entity.metadata.annotations[
-    constants.ACDP_DEPLOYMENT_TARGET_ANNOTATION
-  ] = constants.ACDP_DEFAULT_DEPLOYMENT_TARGET;
 
   if (ctx.input.docsSiteSourcePath !== undefined) {
     ctx.input.entity.metadata.annotations["aws.amazon.com/techdocs-builder"] =

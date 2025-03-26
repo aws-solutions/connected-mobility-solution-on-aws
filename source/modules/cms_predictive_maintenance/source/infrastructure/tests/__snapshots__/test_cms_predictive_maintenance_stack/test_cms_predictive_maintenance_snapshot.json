@@ -47,10 +47,10 @@
         "value": "nodejs20.x"
       },
       "cn-north-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "cn-northwest-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "eu-central-1": {
         "value": "nodejs20.x"
@@ -101,10 +101,10 @@
         "value": "nodejs20.x"
       },
       "us-gov-east-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "us-gov-west-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "us-iso-east-1": {
         "value": "nodejs18.x"
@@ -170,6 +170,16 @@
       "Default": "/cdk-bootstrap/hnb659fds/version",
       "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
       "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "S3LogExpirationDays": {
+      "Default": 90,
+      "Description": "The number of days before log bucket objects expire.",
+      "Type": "Number"
+    },
+    "S3LogNoncurrentVersionExpirationDays": {
+      "Default": 1,
+      "Description": "The number of days before log bucket non-current versions are deleted after they've expired.",
+      "Type": "Number"
     }
   },
   "Resources": {
@@ -275,7 +285,7 @@
         "Environment": {
           "Variables": {
             "INFERENCE_DATA_S3_BUCKET_NAME": {
-              "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructcmkencryptedbucket3E9D71D9"
+              "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructencryptedbucket8260F56D"
             },
             "INFERENCE_INPUT_DATA_S3_KEY": "inference/latest.csv",
             "INFERENCE_OUTPUT_DATA_S3_KEY": "inference/latest.csv.out",
@@ -614,7 +624,7 @@
                         },
                         ":s3:::",
                         {
-                          "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructcmkencryptedbucket3E9D71D9"
+                          "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructencryptedbucket8260F56D"
                         }
                       ]
                     ]
@@ -633,39 +643,9 @@
                         },
                         ":s3:::",
                         {
-                          "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructcmkencryptedbucket3E9D71D9"
+                          "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructencryptedbucket8260F56D"
                         },
                         "/inference/*"
-                      ]
-                    ]
-                  }
-                },
-                {
-                  "Action": [
-                    "kms:Decrypt",
-                    "kms:DescribeKey"
-                  ],
-                  "Effect": "Allow",
-                  "Resource": {
-                    "Fn::Join": [
-                      "",
-                      [
-                        "arn:",
-                        {
-                          "Ref": "AWS::Partition"
-                        },
-                        ":kms:",
-                        {
-                          "Ref": "AWS::Region"
-                        },
-                        ":",
-                        {
-                          "Ref": "AWS::AccountId"
-                        },
-                        ":key/",
-                        {
-                          "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructcmkkeyF3E50C20"
-                        }
                       ]
                     ]
                   }
@@ -1214,20 +1194,6 @@
       "DependsOn": [
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
-      "Metadata": {
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "W5",
-              "reason": "Unable to know egress requirement. leaving open for now"
-            },
-            {
-              "id": "W40",
-              "reason": "Unable to know egress requirement. leaving open for now"
-            }
-          ]
-        }
-      },
       "Properties": {
         "GroupDescription": "Default/cms-predictive-maintenance/cms-predictive-maintenance/cdk-lambdas-vpc-construct/security-group",
         "SecurityGroupEgress": [
@@ -1752,7 +1718,10 @@
                     {
                       "Ref": "AWS::Partition"
                     },
-                    ":s3:::test-bucket-us-east-1"
+                    ":s3:::",
+                    {
+                      "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructencryptedbucket8260F56D"
+                    }
                   ]
                 ]
               }
@@ -1775,7 +1744,11 @@
                     {
                       "Ref": "AWS::Partition"
                     },
-                    ":s3:::test-bucket-us-east-1/predictive-maintenance/docs/*"
+                    ":s3:::",
+                    {
+                      "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructencryptedbucket8260F56D"
+                    },
+                    "/predictive-maintenance/docs/*"
                   ]
                 ]
               }
@@ -1831,7 +1804,10 @@
                   {
                     "Ref": "AWS::Partition"
                   },
-                  ":s3:::test-bucket-us-east-1"
+                  ":s3:::",
+                  {
+                    "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructencryptedbucket8260F56D"
+                  }
                 ]
               ]
             },
@@ -2504,16 +2480,6 @@
         "cmspredictivemaintenancecustomresourcelambdaconstructlambdarole5C24959F",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
-      "Metadata": {
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "W92",
-              "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
-            }
-          ]
-        }
-      },
       "Properties": {
         "Code": {
           "S3Bucket": {
@@ -2661,18 +2627,6 @@
                 "Resource::*"
               ],
               "id": "AwsSolutions-IAM5",
-              "reason": "ec2 Network Interfaces permissions need to be wildcard"
-            }
-          ]
-        },
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "Wildcard permissions required to write to log streams."
-            },
-            {
-              "id": "W11",
               "reason": "ec2 Network Interfaces permissions need to be wildcard"
             }
           ]
@@ -2885,20 +2839,6 @@
       "DependsOn": [
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
-      "Metadata": {
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "W40",
-              "reason": "Lambdas need outbound communication to contact other resources in VPC"
-            },
-            {
-              "id": "W5",
-              "reason": "Lambdas are inside Private Subnets and may need to communicate to services over internet. So the CIDR is wide open on egress for now"
-            }
-          ]
-        }
-      },
       "Properties": {
         "GroupDescription": "Default/cms-predictive-maintenance/cms-predictive-maintenance/custom-resource-lambda-construct/security-group",
         "SecurityGroupEgress": [
@@ -3184,7 +3124,7 @@
         },
         "Type": "String",
         "Value": {
-          "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructcmkencryptedbucket3E9D71D9"
+          "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructencryptedbucket8260F56D"
         }
       },
       "Type": "AWS::SSM::Parameter"
@@ -4201,11 +4141,8 @@
         "Environment": {
           "Variables": {
             "BATCH_INFERENCE_DATA_OUTPUT_S3_KEY_PREFIX": "inference",
-            "BATCH_INFERENCE_DATA_S3_BUCKET_KMS_KEY_ID": {
-              "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructcmkkeyF3E50C20"
-            },
             "BATCH_INFERENCE_DATA_S3_BUCKET_NAME": {
-              "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructcmkencryptedbucket3E9D71D9"
+              "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructencryptedbucket8260F56D"
             },
             "BATCH_INFERENCE_INSTANCE_COUNT": "1",
             "BATCH_INFERENCE_INSTANCE_TYPE": "ml.m5.xlarge",
@@ -4844,7 +4781,7 @@
         "PipelineDefinition": {
           "PipelineDefinitionS3Location": {
             "Bucket": {
-              "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructcmkencryptedbucket3E9D71D9"
+              "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructencryptedbucket8260F56D"
             },
             "Key": "pipelines/predictive-maintenance-pipeline.json"
           }
@@ -4893,7 +4830,7 @@
       ],
       "Properties": {
         "PipelineAssetsBucketName": {
-          "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructcmkencryptedbucket3E9D71D9"
+          "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructencryptedbucket8260F56D"
         },
         "PipelineDefinitionS3Key": "pipelines/predictive-maintenance-pipeline.json",
         "PipelineDeployModelLambdaArn": {
@@ -4972,7 +4909,7 @@
                     },
                     ":s3:::",
                     {
-                      "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructcmkencryptedbucket3E9D71D9"
+                      "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructencryptedbucket8260F56D"
                     },
                     "/pipelines/predictive-maintenance-pipeline.json"
                   ]
@@ -4996,7 +4933,7 @@
                       },
                       ":s3:::",
                       {
-                        "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructcmkencryptedbucket3E9D71D9"
+                        "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructencryptedbucket8260F56D"
                       }
                     ]
                   ]
@@ -5011,28 +4948,13 @@
                       },
                       ":s3:::",
                       {
-                        "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructcmkencryptedbucket3E9D71D9"
+                        "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructencryptedbucket8260F56D"
                       },
                       "/*"
                     ]
                   ]
                 }
               ]
-            },
-            {
-              "Action": [
-                "kms:Decrypt",
-                "kms:DescribeKey",
-                "kms:Encrypt",
-                "kms:GenerateDataKey"
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "cmspredictivemaintenancesagemakerassetsbucketconstructcmkkeyF3E50C20",
-                  "Arn"
-                ]
-              }
             }
           ],
           "Version": "2012-10-17"
@@ -5511,7 +5433,7 @@
                           },
                           ":s3:::",
                           {
-                            "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructcmkencryptedbucket3E9D71D9"
+                            "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructencryptedbucket8260F56D"
                           }
                         ]
                       ]
@@ -5526,28 +5448,13 @@
                           },
                           ":s3:::",
                           {
-                            "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructcmkencryptedbucket3E9D71D9"
+                            "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructencryptedbucket8260F56D"
                           },
                           "/*"
                         ]
                       ]
                     }
                   ]
-                },
-                {
-                  "Action": [
-                    "kms:Decrypt",
-                    "kms:DescribeKey",
-                    "kms:Encrypt",
-                    "kms:GenerateDataKey"
-                  ],
-                  "Effect": "Allow",
-                  "Resource": {
-                    "Fn::GetAtt": [
-                      "cmspredictivemaintenancesagemakerassetsbucketconstructcmkkeyF3E50C20",
-                      "Arn"
-                    ]
-                  }
                 }
               ],
               "Version": "2012-10-17"
@@ -6133,7 +6040,7 @@
       },
       "Type": "AWS::SageMaker::Domain"
     },
-    "cmspredictivemaintenancesagemakerassetsbucketconstructcmkencryptedbucket3E9D71D9": {
+    "cmspredictivemaintenancesagemakerassetsbucketconstructencryptedbucket8260F56D": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
         "ssmappuniqueidregistermodule9C5C2C5D"
@@ -6143,13 +6050,7 @@
           "ServerSideEncryptionConfiguration": [
             {
               "ServerSideEncryptionByDefault": {
-                "KMSMasterKeyID": {
-                  "Fn::GetAtt": [
-                    "cmspredictivemaintenancesagemakerassetsbucketconstructcmkkeyF3E50C20",
-                    "Arn"
-                  ]
-                },
-                "SSEAlgorithm": "aws:kms"
+                "SSEAlgorithm": "AES256"
               }
             }
           ]
@@ -6189,13 +6090,13 @@
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain"
     },
-    "cmspredictivemaintenancesagemakerassetsbucketconstructcmkencryptedbucketPolicy52A24F4E": {
+    "cmspredictivemaintenancesagemakerassetsbucketconstructencryptedbucketPolicy6C1C1A2F": {
       "DependsOn": [
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
         "Bucket": {
-          "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructcmkencryptedbucket3E9D71D9"
+          "Ref": "cmspredictivemaintenancesagemakerassetsbucketconstructencryptedbucket8260F56D"
         },
         "PolicyDocument": {
           "Statement": [
@@ -6213,7 +6114,7 @@
               "Resource": [
                 {
                   "Fn::GetAtt": [
-                    "cmspredictivemaintenancesagemakerassetsbucketconstructcmkencryptedbucket3E9D71D9",
+                    "cmspredictivemaintenancesagemakerassetsbucketconstructencryptedbucket8260F56D",
                     "Arn"
                   ]
                 },
@@ -6223,7 +6124,7 @@
                     [
                       {
                         "Fn::GetAtt": [
-                          "cmspredictivemaintenancesagemakerassetsbucketconstructcmkencryptedbucket3E9D71D9",
+                          "cmspredictivemaintenancesagemakerassetsbucketconstructencryptedbucket8260F56D",
                           "Arn"
                         ]
                       },
@@ -6239,75 +6140,6 @@
       },
       "Type": "AWS::S3::BucketPolicy"
     },
-    "cmspredictivemaintenancesagemakerassetsbucketconstructcmkkeyF3E50C20": {
-      "DeletionPolicy": "Retain",
-      "DependsOn": [
-        "ssmappuniqueidregistermodule9C5C2C5D"
-      ],
-      "Properties": {
-        "EnableKeyRotation": true,
-        "KeyPolicy": {
-          "Statement": [
-            {
-              "Action": "kms:*",
-              "Effect": "Allow",
-              "Principal": {
-                "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":root"
-                    ]
-                  ]
-                }
-              },
-              "Resource": "*"
-            },
-            {
-              "Action": [
-                "kms:Decrypt",
-                "kms:Encrypt",
-                "kms:ReEncrypt*",
-                "kms:GenerateDataKey*"
-              ],
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "logging.s3.amazonaws.com"
-              },
-              "Resource": "*"
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "Tags": [
-          {
-            "Key": "Solutions:DeploymentUUID",
-            "Value": {
-              "Fn::Join": [
-                "",
-                [
-                  "{{resolve:ssm:/solution/",
-                  {
-                    "Ref": "AppUniqueId"
-                  },
-                  "/config/deployment-uuid}}"
-                ]
-              ]
-            }
-          }
-        ]
-      },
-      "Type": "AWS::KMS::Key",
-      "UpdateReplacePolicy": "Retain"
-    },
     "cmspredictivemaintenancesagemakerassetsbucketconstructlogbucketB2F96BDD": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
@@ -6319,14 +6151,25 @@
           "ServerSideEncryptionConfiguration": [
             {
               "ServerSideEncryptionByDefault": {
-                "KMSMasterKeyID": {
-                  "Fn::GetAtt": [
-                    "cmspredictivemaintenancesagemakerassetsbucketconstructcmkkeyF3E50C20",
-                    "Arn"
-                  ]
-                },
-                "SSEAlgorithm": "aws:kms"
+                "SSEAlgorithm": "AES256"
               }
+            }
+          ]
+        },
+        "LifecycleConfiguration": {
+          "Rules": [
+            {
+              "AbortIncompleteMultipartUpload": {
+                "DaysAfterInitiation": 1
+              },
+              "ExpirationInDays": {
+                "Ref": "S3LogExpirationDays"
+              },
+              "Id": "expire-current-version-and-delete-old-objects",
+              "NoncurrentVersionExpirationInDays": {
+                "Ref": "S3LogNoncurrentVersionExpirationDays"
+              },
+              "Status": "Enabled"
             }
           ]
         },

@@ -134,7 +134,7 @@ class PreProvisioningConstruct(Construct):
             self,
             "lambda-function",
             function_name=pre_provisioning_lambda_function_name,
-            code=aws_lambda.Code.from_asset("dist/lambda/provisioning.zip"),
+            code=aws_lambda.Code.from_asset("deployment/dist/lambda/provisioning.zip"),
             description="CMS Provisioning pre-provisioning lambda function",
             handler="function.pre_provision.handler",
             runtime=aws_lambda.Runtime.PYTHON_3_12,

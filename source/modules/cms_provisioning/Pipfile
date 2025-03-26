@@ -5,22 +5,21 @@ name = "pypi"
 
 [packages]
 attrs = ">=22.1.0"
-aws_lambda_powertools = {extras=["tracer", "validation"], version=">=2.4.0"}
+aws-lambda-powertools = {extras=["tracer", "validation"], version=">=3.6.0"}
 cattrs = ">=22.1.0"
-
 dataclass-type-validator = ">=0.1.2"
 requests = ">=2.32.0"
 "cms_common" = {path = "./../../lib", editable = true}
 
 [dev-packages]
-aws-cdk-lib = ">=2.139.1"
+aws-cdk-lib = ">=2.176.0"
 aws-secretsmanager-caching = "*"
 awsiotsdk = "*"
-boto3 = ">=1.26.0"
-boto3-stubs = {extras = ["essential", "dynamodb", "iot", "secretsmanager", "grafana"], version = "*"}
+boto3 = ">=1.37.0"
+boto3-stubs = {extras = ["essential", "dynamodb", "iot", "secretsmanager", "grafana"], version = ">=1.37.0"}
 cdk-nag = "*"
 exceptiongroup = "*"
-moto = {extras = ["all"], version = ">=5.0.6"}
+moto = {extras = ["all"], version = ">=5.0.27"}
 mkdocs-techdocs-core = "*"
 mypy = "*"
 pre-commit = "*"
@@ -32,7 +31,7 @@ pytest-mock = "*"
 setuptools = ">=71.0.0"
 syrupy = "*"
 toml = ">=0.10.2"
-types-boto3 = ">=1.0.2"
+types-boto3 = ">=1.37.0"
 types-python-dateutil = "*"
 types-pyyaml = "*"
 types-requests = ">=2.32.0"

@@ -5,10 +5,9 @@ import { SourceType } from "@aws-sdk/client-codebuild";
 import { Entity } from "@backstage/catalog-model";
 
 export interface AcdpDeploymentTarget {
-  name: string;
-  codeBuildArn: string;
-  awsAccount: string;
+  awsAccountId: string;
   awsRegion: string;
+  codeBuildArn: string;
   codeBuildIamRoleOverrideArn?: string;
 }
 

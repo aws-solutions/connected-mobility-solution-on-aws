@@ -18,7 +18,6 @@ from aws_cdk import (
     aws_dynamodb,
     aws_ec2,
     aws_iam,
-    aws_kms,
     aws_lambda,
     aws_logs,
     aws_s3,
@@ -408,7 +407,7 @@ class SimulatorConstruct(Construct):  # pylint: disable=too-many-instance-attrib
             self,
             "provisioning-lambda",
             function_name=provisioning_lambda_name,
-            code=aws_lambda.Code.from_asset("dist/lambda/stepfunction.zip"),
+            code=aws_lambda.Code.from_asset("deployment/dist/lambda/stepfunction.zip"),
             description="CMS Vehicle Simulator Provisioning Function",
             environment={
                 "IOT_ENDPOINT": self.iot_endpoint,
@@ -442,7 +441,7 @@ class SimulatorConstruct(Construct):  # pylint: disable=too-many-instance-attrib
             self,
             "simulator-engine-lambda",
             function_name=simulator_lambda_name,
-            code=aws_lambda.Code.from_asset("dist/lambda/stepfunction.zip"),
+            code=aws_lambda.Code.from_asset("deployment/dist/lambda/stepfunction.zip"),
             description="CMS Vehicle Simulator Function",
             environment={
                 "IOT_ENDPOINT": self.iot_endpoint,
@@ -475,7 +474,7 @@ class SimulatorConstruct(Construct):  # pylint: disable=too-many-instance-attrib
             self,
             "cleanup-lambda",
             function_name=cleanup_lambda_name,
-            code=aws_lambda.Code.from_asset("dist/lambda/stepfunction.zip"),
+            code=aws_lambda.Code.from_asset("deployment/dist/lambda/stepfunction.zip"),
             description="Provisioning Artifact Cleanup Function",
             environment={
                 "IOT_ENDPOINT": self.iot_endpoint,
@@ -564,18 +563,11 @@ class SimulatorConstruct(Construct):  # pylint: disable=too-many-instance-attrib
             )
         )
 
-        simulator_log_group_kms_key = aws_kms.Key(
-            self,
-            "vs-simulator-log-group-kms-key",
-            enable_key_rotation=True,
-        )
-
         simulator_log_group = aws_logs.LogGroup(
             self,
             "step-functions-log-group",
             removal_policy=RemovalPolicy.RETAIN,
             retention=aws_logs.RetentionDays.THREE_MONTHS,
-            encryption_key=simulator_log_group_kms_key,
             log_group_name=generate_physical_name(
                 scope=self,
                 prefix="/aws/vendedlogs/states",
@@ -586,19 +578,6 @@ class SimulatorConstruct(Construct):  # pylint: disable=too-many-instance-attrib
                 ],
                 max_length=512,
             ),
-        )
-
-        simulator_log_group_kms_key.add_to_resource_policy(
-            statement=aws_iam.PolicyStatement(
-                effect=aws_iam.Effect.ALLOW,
-                principals=[
-                    aws_iam.ServicePrincipal(
-                        f"logs.{Stack.of(self).region}.amazonaws.com"
-                    )
-                ],
-                actions=["kms:Encrypt", "kms:Decrypt", "kms:GenerateDataKey"],
-                resources=["*"],
-            )
         )
 
         simulator_state_machine_role = aws_iam.Role(

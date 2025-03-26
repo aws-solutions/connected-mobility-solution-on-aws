@@ -4,9 +4,9 @@
 import express, { NextFunction, Request, Response } from "express";
 import request from "supertest";
 
-import { getVoidLogger } from "@backstage/backend-common";
 import { mockServices } from "@backstage/backend-test-utils";
 import { stringifyEntityRef } from "@backstage/catalog-model";
+import { AuthorizeResult } from "@backstage/plugin-permission-common";
 
 import { createAcdpBuildRouter } from ".";
 import { StartBuildInput } from "../utils";
@@ -20,24 +20,33 @@ import {
 
 import { AcdpBuildAction } from "backstage-plugin-acdp-common";
 
+let mockedAcdpBuildApi: MockedAcdpBuildApi;
 let app: express.Express;
+const logger = mockServices.logger.mock();
+const permissions = mockServices.permissions.mock();
+
 const mockIsAuthenticated = (req: Request, _: Response, next: NextFunction) => {
   req.user = { token: "test-token" };
   return next();
 };
 
-beforeAll(async () => {
-  const logger = getVoidLogger();
+beforeEach(async () => {
+  jest
+    .spyOn(permissions, "authorize")
+    .mockResolvedValue([{ result: AuthorizeResult.ALLOW }]);
 
   const acdpBuildService = new MockedAcdpBuildService();
+  mockedAcdpBuildApi = new MockedAcdpBuildApi(
+    mockCatalogClient(mockedCatalogEntity),
+    acdpBuildService,
+  );
+
   const router = await createAcdpBuildRouter({
     logger: logger,
-    acdpBuildApi: new MockedAcdpBuildApi(
-      mockCatalogClient(mockedCatalogEntity),
-      acdpBuildService,
-    ),
+    acdpBuildApi: mockedAcdpBuildApi,
     auth: mockServices.auth(),
     httpAuth: mockServices.httpAuth(),
+    permissions: permissions,
   });
 
   app = express().use(mockIsAuthenticated, router);
@@ -55,6 +64,18 @@ describe("GET /project", () => {
 
     expect(response.status).toEqual(200);
   });
+
+  it("should return NotAllowedError for unauthorized request", async () => {
+    jest
+      .spyOn(permissions, "authorize")
+      .mockResolvedValue([{ result: AuthorizeResult.DENY }]);
+
+    const response = await request(app).get(
+      `/project?entityRef=${stringifyEntityRef(mockedCatalogEntity)}`,
+    );
+
+    expect(response.text).toContain("NotAllowedError: User is unauthorized.");
+  });
 });
 
 describe("GET /builds", () => {
@@ -70,6 +91,18 @@ describe("GET /builds", () => {
     const response = await request(app).get("/builds");
 
     expect(response.status).toEqual(400);
+  });
+
+  it("should return NotAllowedError for unauthorized request", async () => {
+    jest
+      .spyOn(permissions, "authorize")
+      .mockResolvedValue([{ result: AuthorizeResult.DENY }]);
+
+    const response = await request(app).get(
+      `/builds?entityRef=${stringifyEntityRef(mockedCatalogEntity)}`,
+    );
+
+    expect(response.text).toContain("NotAllowedError: User is unauthorized.");
   });
 });
 
@@ -92,6 +125,20 @@ describe("POST /start-build for deploy", () => {
     const response = await request(app).post("/start-build").send(requestBody);
 
     expect(response.status).toEqual(400);
+  });
+
+  it("should return NotAllowedError for unauthorized request", async () => {
+    jest
+      .spyOn(permissions, "authorize")
+      .mockResolvedValue([{ result: AuthorizeResult.DENY }]);
+
+    const requestBody: StartBuildInput = {
+      entityRef: stringifyEntityRef(mockedCatalogEntity),
+      action: AcdpBuildAction.DEPLOY,
+    };
+    const response = await request(app).post("/start-build").send(requestBody);
+
+    expect(response.text).toContain("NotAllowedError: User is unauthorized.");
   });
 });
 

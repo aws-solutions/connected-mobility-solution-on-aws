@@ -72,7 +72,7 @@ class AuthorizationLambdaConstruct(Construct):
             function_name=authorization_lambda_function_name,
             runtime=aws_lambda.Runtime.PYTHON_3_12,
             code=aws_lambda.Code.from_asset(
-                "dist/lambda/authorization.zip",
+                "deployment/dist/lambda/authorization.zip",
                 exclude=["**/tests/*"],
             ),
             timeout=Duration.seconds(60),

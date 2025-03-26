@@ -50,6 +50,7 @@ deploy: ## Deploy the stack for the module.
 		--capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
 		--parameter-overrides \
 			"AppUniqueId"="${APP_UNIQUE_ID}" \
+			"S3LogExpirationDays"="${LOG_BUCKET_RETENTION_DAYS}" \
 
 .PHONY: destroy
 destroy: destroy-stack ## Teardown deployed stack

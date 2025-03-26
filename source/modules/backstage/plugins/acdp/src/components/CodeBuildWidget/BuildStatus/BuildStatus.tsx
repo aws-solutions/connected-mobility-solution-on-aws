@@ -1,7 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import React from "react";
 import { StatusType } from "@aws-sdk/client-codebuild";
 
 import { StatusRunning, StatusOK, StatusAborted, StatusError } from "./Status";

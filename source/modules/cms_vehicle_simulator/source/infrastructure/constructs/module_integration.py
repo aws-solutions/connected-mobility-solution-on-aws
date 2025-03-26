@@ -26,7 +26,7 @@ class ModuleInputsConstruct(Construct):
 
         self.admin_email = CfnParameter(
             Stack.of(self),
-            "DefaultUserEmail",
+            "AdminUserEmail",
             type="String",
             description="The user E-Mail to access the UI",
             allowed_pattern=RegexPattern.EMAIL,

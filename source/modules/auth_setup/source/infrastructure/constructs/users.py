@@ -25,7 +25,6 @@ class UsersConstruct(Construct):
             self,
             "user-pool",
             user_pool_name=f"{cognito_id}-user-pool",
-            advanced_security_mode=aws_cognito.AdvancedSecurityMode.ENFORCED,
             removal_policy=RemovalPolicy.DESTROY,
             sign_in_aliases=aws_cognito.SignInAliases(
                 email=True,
@@ -66,6 +65,8 @@ class UsersConstruct(Construct):
                 device_only_remembered_on_user_prompt=True,
             ),
         )
+
+        self.user_pool_id = self.user_pool.user_pool_id
 
         user_scope = aws_cognito.ResourceServerScope(
             scope_name=f"{cognito_id}-user",

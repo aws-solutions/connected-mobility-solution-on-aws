@@ -75,5 +75,5 @@ class AuthSetupStack(Stack):
             idp_config_secret_arn=oauth2_configurations.idp_config_secret.secret_arn,
             service_client_config_secret_arn=oauth2_configurations.service_client_config_secret.secret_arn,
             user_client_config_secret_arn=oauth2_configurations.user_client_config_secret.secret_arn,
-            user_pool_id=cognito_construct.users_construct.user_pool.user_pool_id,
+            cognito_config=cognito_construct.cognito_config,
         )

@@ -26,6 +26,7 @@ from .constructs.backstage_container import BackstageContainerConstruct
 from .constructs.cognito_user import CognitoUserConstruct
 from .constructs.load_balancer import LoadBalancerConstruct
 from .constructs.module_integration import ModuleInputsConstruct
+from .constructs.multi_account_construct import MultiAccountConstruct
 
 
 class AcdpBackstageStack(Stack):
@@ -41,13 +42,16 @@ class AcdpBackstageStack(Stack):
     ) -> None:
         super().__init__(scope, construct_id, *args, **kwargs)
 
-        CfnMapping(
+        solution_mapping = CfnMapping(
             self,
             "Solution",
             mapping={
                 "AssetsConfig": {
                     "S3AssetBucketName": s3_asset_bucket_name,
                     "S3AssetKeyPrefix": s3_asset_config_inputs.object_key_prefix,
+                },
+                "Config": {
+                    "SendAnonymousUsage": "Yes",
                 },
             },
         )
@@ -68,6 +72,7 @@ class AcdpBackstageStack(Stack):
             self,
             "module-inputs-construct",
             solution_config_inputs=solution_config_inputs,
+            solution_mapping=solution_mapping,
         )
 
         # Check if a config stack for the app unique id is registered. Fail stack
@@ -145,6 +150,13 @@ class AcdpBackstageConstruct(Construct):
             postgres_database_construct=aurora_database_construct,
             vpc=vpc_construct.vpc,
             private_subnets=vpc_construct.private_subnet_selection,
+        )
+
+        MultiAccountConstruct(
+            self,
+            "multi-account-construct",
+            module_inputs=module_inputs,
+            backstage_container_construct=backstage_container_construct,
         )
 
         LoadBalancerConstruct(

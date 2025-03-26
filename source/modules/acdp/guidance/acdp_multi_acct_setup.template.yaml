@@ -1,0 +1,277 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: This template creates roles necessary for seamless Cross-Account configuration
+Parameters:
+  AcdpAwsAccountId:
+    Type: String
+    Description: The 12-digit AWS account ID where ACDP is deployed
+    AllowedPattern: ^\d{12}$
+    ConstraintDescription: Acdp AWS AccountId must be a 12-digit number
+  AcdpUniqueId:
+    Type: String
+    Description: Unique identifier for the ACDP deployment. You can find this as the first part of your acdp cloudformation stack name ${ACDP_UID}--acdp
+    AllowedPattern: ^[\w+=,.@-]{3,63}$
+    ConstraintDescription: Enter a valid identifier
+  AcdpDeploymentRegion:
+    Type: String
+    Description: The region in which ACDP is deployed
+    AllowedPattern: ^(us|eu|ap|sa|ca|me|af|il)-(north|south|east|west|central)-(1|2|3|4)$
+    ConstraintDescription: Provide valid region name(Non government regions only)
+  OrgId:
+    Type: String
+    Description: The Organizations ID
+    AllowedPattern: ^o-[a-z0-9]{10,32}$
+    ConstraintDescription: OrgId must be a valid Organizations ID (e.g., o-a1b2c3d4e5)
+  OuIdList:
+    Type: CommaDelimitedList
+    Description: List of OU IDs to allow listing accounts for
+    AllowedPattern: ^(ou-[a-z0-9]{4,32}-[a-z0-9]{8,32})(,ou-[a-z0-9]{4,32}-[a-z0-9]{8,32})*$
+    ConstraintDescription: OUIds must be a comma-separated list of valid OU IDs
+      (e.g., ou-abcd-12345678)
+  AllowedRegions:
+    Type: CommaDelimitedList
+    Description: Allowed Regions
+    AllowedPattern: ^(us|eu|ap|sa|ca|me|af|il)-(north|south|east|west|central)-(1|2|3|4)$
+    ConstraintDescription: Provide valid region name(Non government regions only)
+  PrivateAssetsBucketName:
+    Type: String
+    Description: The private bucket name located in your ACDP account to share private assets
+    AllowedPattern: ^[\w+=,.@-]{3,63}$
+    ConstraintDescription: Enter a valid bucket name
+Resources:
+  AvailableRegionsSSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: StringList
+      Description: Available Regions
+      Name:  /solution/acdp/multi-acct-setup/available-regions
+      Value: !Join [",", !Ref AllowedRegions]
+  EnrolledOrganizationsSSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: StringList
+      Description: Enrolled Organizations
+      Name:  /solution/acdp/multi-acct-setup/enrolled-organizations
+      Value: !Join [",", !Ref OuIdList]
+  AcdpAccountEnrollmentStackSet:
+    Type: AWS::CloudFormation::StackSet
+    Properties:
+      PermissionModel: SERVICE_MANAGED
+      StackSetName: AcdpAccountEnrollmentStackSet
+      AutoDeployment:
+        Enabled: true
+        RetainStacksOnAccountRemoval: false
+      Capabilities:
+        - CAPABILITY_NAMED_IAM
+      Description: "Roles required for ACDP to deploy in this account"
+      ManagedExecution:
+        Active: true
+      Parameters:
+        - ParameterKey: AcdpAwsAccountId
+          ParameterValue: !Ref AcdpAwsAccountId
+        - ParameterKey: AcdpDeploymentRegion
+          ParameterValue: !Ref AcdpDeploymentRegion
+        - ParameterKey: AcdpUniqueId
+          ParameterValue: !Ref AcdpUniqueId
+        - ParameterKey: OrgId
+          ParameterValue: !Ref OrgId
+        - ParameterKey: PrivateAssetsBucketName
+          ParameterValue: !Ref PrivateAssetsBucketName
+      StackInstancesGroup:
+        - DeploymentTargets:
+            OrganizationalUnitIds: !Ref OuIdList
+          Regions: !Ref AllowedRegions
+      TemplateBody: |
+        AWSTemplateFormatVersion: '2010-09-09'
+        Description: This template creates roles in all the accounts which are part of OU's enrolled in ACDP
+        Parameters:
+          PrivateAssetsBucketName:
+            Type: String
+            Description: The private bucket name located in your ACDP account to share private assets
+            AllowedPattern: ^[\w+=,.@-]{3,63}$
+            ConstraintDescription: Enter a valid bucket name
+          OrgId:
+            Type: String
+            Description: The Organizations ID
+            AllowedPattern: ^o-[a-z0-9]{10,32}$
+            ConstraintDescription: OrgId must be a valid Organizations ID (e.g., o-a1b2c3d4e5)
+          AcdpUniqueId:
+            Type: String
+            Description: Unique identifier for the ACDP deployment. You can find this as the first part of your acdp cloudformation stack name ${ACDP_UID}--acdp
+            AllowedPattern: ^[\w+=,.@-]{3,63}$
+            ConstraintDescription: Enter a valid identifier
+          AcdpDeploymentRegion:
+            Type: String
+            Description: The region in which ACDP is deployed
+            AllowedPattern: ^(us|eu|ap|sa|ca|me|af|il)-(north|south|east|west|central)-(1|2|3|4)$
+            ConstraintDescription: Provide valid region name(Non government regions only)
+          AcdpAwsAccountId:
+            Type: String
+            Description: The 12-digit AWS account ID where ACDP is deployed
+            AllowedPattern: ^\d{12}$
+            ConstraintDescription: AWS Account Id must be a 12-digit number
+        Resources:
+          ACDPCloudformationRole:
+            Type: AWS::IAM::Role
+            Properties:
+              RoleName: !Sub acdp-cloudformation-role-${AWS::Region}
+              AssumeRolePolicyDocument:
+                Version: '2012-10-17'
+                Statement:
+                  - Effect: Allow
+                    Principal:
+                      Service: cloudformation.amazonaws.com
+                    Action: sts:AssumeRole
+              ManagedPolicyArns:
+                - arn:aws:iam::aws:policy/AdministratorAccess
+          ACDPCodeBuildAssumeRole:
+            Type: AWS::IAM::Role
+            Properties:
+              RoleName: !Sub acdp-codebuild-assume-role-${AWS::Region}
+              AssumeRolePolicyDocument:
+                Version: '2012-10-17'
+                Statement:
+                  - Effect: Allow
+                    Principal:
+                      Service: codebuild.amazonaws.com
+                      AWS: !Sub arn:aws:iam::${AcdpAwsAccountId}:role/${AcdpUniqueId}-${AcdpDeploymentRegion}-deploy-project
+                    Action: sts:AssumeRole
+                    Condition:
+                      StringEquals:
+                        'aws:PrincipalOrgId': !Ref OrgId
+              Policies:
+                - PolicyName: CloudformationPolicy
+                  PolicyDocument:
+                    Version: '2012-10-17'
+                    Statement:
+                      - Effect: Allow
+                        Action:
+                          - cloudformation:DescribeStacks
+                          - cloudformation:CreateChangeSet
+                          - cloudformation:DescribeChangeSet
+                          - cloudformation:ExecuteChangeSet
+                          - cloudformation:CreateStack
+                          - cloudformation:DeleteStack
+                          - cloudformation:UpdateStack
+                          - cloudformation:GetTemplateSummary
+                        Resource: !Sub arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/*
+                - PolicyName: PassRolePolicy
+                  PolicyDocument:
+                    Version: '2012-10-17'
+                    Statement:
+                      - Effect: Allow
+                        Action: iam:PassRole
+                        Resource: !GetAtt ACDPCloudformationRole.Arn
+                - PolicyName: S3ReadPolicy
+                  PolicyDocument:
+                    Version: '2012-10-17'
+                    Statement:
+                      - Effect: Allow
+                        Action:
+                          - s3:GetObject
+                        Resource:
+                          - !Sub arn:aws:s3:::${PrivateAssetsBucketName}/*
+          ACDPMetricsApiRole:
+            Type: AWS::IAM::Role
+            Properties:
+              RoleName: !Sub acdp-metrics-role-${AWS::Region}
+              AssumeRolePolicyDocument:
+                Version: '2012-10-17'
+                Statement:
+                  - Effect: Allow
+                    Principal:
+                      AWS: !Sub arn:aws:iam::${AcdpAwsAccountId}:role/${AcdpUniqueId}-${AcdpDeploymentRegion}-backstage-task
+                    Action: sts:AssumeRole
+                    Condition:
+                      StringEquals:
+                        'aws:PrincipalOrgId': !Ref OrgId
+              Policies:
+                - PolicyName: CostExplorerPolicy
+                  PolicyDocument:
+                    Version: '2012-10-17'
+                    Statement:
+                      - Effect: Allow
+                        Action:
+                          - ce:GetCostAndUsage
+                        Resource: "*"
+                - PolicyName: ServiceCatalogPolicy
+                  PolicyDocument:
+                    Version: '2012-10-17'
+                    Statement:
+                      - Effect: Allow
+                        Action:
+                          - servicecatalog:GetApplication
+                        Resource: !Sub arn:aws:servicecatalog:${AWS::Region}:${AWS::AccountId}:/application/*
+        Outputs:
+          CloudformationRoleARN:
+            Description: ARN of the created Cloudformation IAM Role
+            Value: !GetAtt ACDPCloudformationRole.Arn
+            Export:
+              Name: CloudFormationAdminRoleARN
+          ACDPCodeBuildAssumeRoleARN:
+            Description: ARN of the created Codebuild IAM Role
+            Value: !GetAtt ACDPCodeBuildAssumeRole.Arn
+            Export:
+              Name: CodeBuildAssumeRoleARN
+  ACDPOrgsTrustRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: acdp-orgs-trust-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS:
+                - !Sub arn:aws:iam::${AcdpAwsAccountId}:role/${AcdpUniqueId}-${AcdpDeploymentRegion}-backstage-task
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: ListAllAccounts
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - organizations:ListAccounts
+                Resource: '*'
+        - PolicyName: ListAccountsForSpecificOUs
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - organizations:ListAccountsForParent
+                  - organizations:DescribeOrganizationalUnit
+                Resource:
+                  Fn::Transform:
+                    Name: 'OuArnListMacro'
+                    Parameters:
+                      OuIdList: !Ref OuIdList
+                      OrgId: !Ref OrgId
+                      AccountId: !Ref AWS::AccountId
+        - PolicyName: SSMPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: ssm:GetParameter
+                Resource:
+                  - !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${AvailableRegionsSSMParameter}'
+                  - !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${EnrolledOrganizationsSSMParameter}'
+Outputs:
+  ACDPOrgsTrustRoleArn:
+    Description: ARN of the created IAM Role that can only be assumed by the
+      specific FargateTaskRole
+    Value: !GetAtt ACDPOrgsTrustRole.Arn
+    Export:
+      Name: !Sub ${AWS::StackName}-ACDPOrgsTrustRoleArn
+  AvailableRegionsSSMParameterName:
+    Description: Name of available regions ssm parameter
+    Value: !Ref AvailableRegionsSSMParameter
+    Export:
+      Name: !Sub ${AWS::StackName}-AvailableRegionsSSMParameter
+  EnrolledOrganizationsSSMParameterArn:
+    Description: Name of enrolled organizations ssm parameter
+    Value: !Ref EnrolledOrganizationsSSMParameter
+    Export:
+      Name: !Sub ${AWS::StackName}-EnrolledOrganizationsSSMParameter

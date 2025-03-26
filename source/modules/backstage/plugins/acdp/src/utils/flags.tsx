@@ -14,7 +14,16 @@ export const isApplicationArnAvailable = (entity: Entity) => {
 };
 
 export const isDeploymentTargetAvailable = (entity: Entity) => {
-  return Boolean(
-    entity.metadata.annotations?.[constants.ACDP_DEPLOYMENT_TARGET_ANNOTATION],
+  return (
+    Boolean(
+      entity.metadata.annotations?.[
+        constants.ACDP_DEPLOYMENT_TARGET_ACCOUNT_ANNOTATION
+      ],
+    ) &&
+    Boolean(
+      entity.metadata.annotations?.[
+        constants.ACDP_DEPLOYMENT_TARGET_REGION_ANNOTATION
+      ],
+    )
   );
 };

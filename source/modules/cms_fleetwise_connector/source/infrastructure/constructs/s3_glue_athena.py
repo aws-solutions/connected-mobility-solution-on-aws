@@ -6,11 +6,10 @@
 # SEE: https://docs.aws.amazon.com/iot-fleetwise/latest/developerguide/controlling-access.html
 
 # AWS Libraries
-from aws_cdk import ArnFormat, Stack, aws_ec2, aws_glue, aws_iam, aws_kms
+from aws_cdk import ArnFormat, Stack, aws_ec2, aws_glue, aws_iam
 from constructs import Construct
 
 # CMS Common Library
-from cms_common.aspects.nag_suppression import NagSuppression, NagType
 from cms_common.config.resource_names import ResourceName, ResourcePrefix
 from cms_common.config.stack_inputs import SolutionConfigInputs
 from cms_common.constructs.vpc_construct import VpcConstruct
@@ -18,7 +17,6 @@ from cms_common.constructs.vpc_prefix_list_lookup_custom_resource import (
     VpcPrefixListLookupCustomResourceConstruct,
 )
 from cms_common.policy_generators.ec2_vpc import generate_ec2_vpc_policy
-from cms_common.policy_generators.kms import generate_kms_policy_statement_from_key_arn
 
 # Connected Mobility Solution on AWS
 from .module_integration import ModuleConfigInputs, TelemetryBucketInputs
@@ -49,49 +47,17 @@ class S3GlueAthenaConstruct(Construct):
         )
         glue_table_prefix = "fleetwise-data-"
 
-        glue_crawler_log_kms_key = aws_kms.Key(
-            self,
-            "log-group-kms-key",
-            enable_key_rotation=True,
-        )
-
-        glue_crawler_log_kms_key.add_to_resource_policy(
-            aws_iam.PolicyStatement(
-                effect=aws_iam.Effect.ALLOW,
-                principals=[aws_iam.ServicePrincipal("logs.amazonaws.com")],
-                resources=["*"],
-                actions=[
-                    "kms:Encrypt*",
-                    "kms:Decrypt*",
-                    "kms:ReEncrypt*",
-                    "kms:GenerateDataKey*",
-                    "kms:Describe*",
-                ],
-                conditions={
-                    "ArnLike": {
-                        "kms:EncryptionContext:aws:logs:arn": Stack.of(self).format_arn(
-                            service="logs",
-                            resource="log-group",
-                            resource_name="/aws-glue/*",
-                            arn_format=ArnFormat.COLON_RESOURCE_NAME,
-                        ),
-                    }
-                },
-            )
-        )
         security_configuration = aws_glue.CfnSecurityConfiguration(
             self,
             "security-configuration",
             name=f"{glue_crawler_name}-security",
             encryption_configuration=aws_glue.CfnSecurityConfiguration.EncryptionConfigurationProperty(
                 cloud_watch_encryption=aws_glue.CfnSecurityConfiguration.CloudWatchEncryptionProperty(
-                    cloud_watch_encryption_mode="SSE-KMS",
-                    kms_key_arn=glue_crawler_log_kms_key.key_arn,
+                    cloud_watch_encryption_mode="DISABLED",
                 ),
                 s3_encryptions=[
                     aws_glue.CfnSecurityConfiguration.S3EncryptionProperty(
-                        kms_key_arn=telemetry_bucket.bucket_key_arn,
-                        s3_encryption_mode="SSE-KMS",
+                        s3_encryption_mode="SSE-S3",
                     )
                 ],
             ),
@@ -116,10 +82,6 @@ class S3GlueAthenaConstruct(Construct):
                                 telemetry_bucket.bucket_arn,
                                 f"{telemetry_bucket.bucket_arn}/{module_config.timestream_unload_s3_prefix_path}/*",
                             ],
-                        ),
-                        generate_kms_policy_statement_from_key_arn(
-                            kms_encryption_key_arn=telemetry_bucket.bucket_key_arn,
-                            allow_encrypt=True,
                         ),
                     ]
                 ),
@@ -246,10 +208,6 @@ class S3GlueAthenaConstruct(Construct):
                                 ),
                             ],
                         ),
-                        generate_kms_policy_statement_from_key_arn(
-                            kms_encryption_key_arn=glue_crawler_log_kms_key.key_arn,
-                            allow_encrypt=True,
-                        ),
                     ]
                 ),
             },
@@ -327,28 +285,3 @@ class S3GlueAthenaConstruct(Construct):
             crawler_security_configuration=security_configuration.name,
         )
         glue_crawler.node.add_dependency(glue_connection)
-
-        NagSuppression.add_inline_suppression(
-            node=glue_security_group.node.default_child,
-            suppression={
-                "rules_to_suppress": [
-                    {
-                        "id": "W5",
-                        "reason": "Glue requires a fully open ingress that is self referencing",
-                    },
-                    {
-                        "id": "W29",
-                        "reason": "Glue requires a fully open egress that is self referencing",
-                    },
-                    {
-                        "id": "W40",
-                        "reason": "Glue requires a fully open egress that is self referencing",
-                    },
-                    {
-                        "id": "W42",
-                        "reason": "Glue requires a fully open ingress that is self referencing",
-                    },
-                ]
-            },
-            nag_type=NagType.CFN_NAG,
-        )

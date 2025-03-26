@@ -17,6 +17,9 @@ from aws_cdk import (
 )
 from constructs import Construct
 
+# CMS Common Library
+from cms_common.config.multi_account import MultiAccountConfig
+
 # Connected Mobility Solution on AWS
 from .module_integration import ModuleInputsConstruct
 
@@ -27,7 +30,7 @@ class ModuleDeployCodeBuildConstruct(Construct):
         scope: Construct,
         stack_id: str,
         solution_mapping: CfnMapping,
-        cloudformation_role_arn: str,
+        cloudformation_role_name: str,
         vpc: aws_ec2.IVpc,
         private_subnet_selection: aws_ec2.SubnetSelection,
         module_inputs: ModuleInputsConstruct,
@@ -39,6 +42,7 @@ class ModuleDeployCodeBuildConstruct(Construct):
             self,
             "module-deploy-code-build-role",
             description="Module Deploy CodeBuild Role",
+            role_name=f"{module_inputs.acdp_uid}-{Stack.of(self).region}-deploy-project",
             assumed_by=aws_iam.ServicePrincipal("codebuild.amazonaws.com"),
             inline_policies={
                 "s3-policy": aws_iam.PolicyDocument(
@@ -87,21 +91,6 @@ class ModuleDeployCodeBuildConstruct(Construct):
                         ),
                     ]
                 ),
-                "s3-kms-policy": aws_iam.PolicyDocument(
-                    statements=[
-                        aws_iam.PolicyStatement(
-                            effect=aws_iam.Effect.ALLOW,
-                            actions=[
-                                "kms:GenerateDataKey",
-                                "kms:Decrypt",
-                                "kms:Encrypt",
-                            ],
-                            resources=[
-                                module_inputs.local_asset_bucket_inputs.bucket_key_arn
-                            ],
-                        ),
-                    ]
-                ),
                 "cloudformation-policy": aws_iam.PolicyDocument(
                     statements=[
                         aws_iam.PolicyStatement(
@@ -132,7 +121,14 @@ class ModuleDeployCodeBuildConstruct(Construct):
                         aws_iam.PolicyStatement(
                             effect=aws_iam.Effect.ALLOW,
                             actions=["iam:PassRole"],
-                            resources=[cloudformation_role_arn],
+                            resources=[
+                                Stack.of(self).format_arn(
+                                    service="iam",
+                                    resource="role",
+                                    region="",
+                                    resource_name=cloudformation_role_name,
+                                )
+                            ],
                         )
                     ]
                 ),
@@ -158,8 +154,16 @@ class ModuleDeployCodeBuildConstruct(Construct):
                 compute_type=aws_codebuild.ComputeType.LARGE,
                 build_image=aws_codebuild.LinuxBuildImage.STANDARD_7_0,
                 environment_variables={
-                    "CLOUDFORMATION_ROLE_ARN": aws_codebuild.BuildEnvironmentVariable(
-                        value=cloudformation_role_arn,
+                    "CLOUDFORMATION_ROLE_NAME": aws_codebuild.BuildEnvironmentVariable(
+                        value=MultiAccountConfig.CLOUDFORMATION_ROLE_NAME,
+                        type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
+                    ),
+                    "DEFAULT_CLOUDFORMATION_ROLE_NAME": aws_codebuild.BuildEnvironmentVariable(
+                        value=cloudformation_role_name,
+                        type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
+                    ),
+                    "DEPLOYMENT_ROLE_NAME": aws_codebuild.BuildEnvironmentVariable(
+                        value=MultiAccountConfig.DEPLOYMENT_ROLE_NAME,
                         type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
                     ),
                 },

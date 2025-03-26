@@ -27,7 +27,7 @@ done
 script_dir="$(dirname "$(realpath "$0")")"
 dot_acdp_dir="$MODULE_ROOT_DIR/.acdp"
 mkdocs_staging_dir="$STAGING_DIST_DIR/mkdocs"
-backstage_template_dir="$REGIONAL_ASSETS_DIR/backstage/templates"
+backstage_template_dir="$REGIONAL_ASSETS_DIR/backstage/entities/templates"
 backstage_acdp_assets_dir="$REGIONAL_ASSETS_DIR/backstage/acdp/${MODULE_NAME}/.acdp"
 backstage_docs_dir="$REGIONAL_ASSETS_DIR/backstage/docs"
 backstage_docs_assets_dir="$backstage_docs_dir/components/${MODULE_NAME}"

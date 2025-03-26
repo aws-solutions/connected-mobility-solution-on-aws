@@ -12,8 +12,10 @@ from .fixtures.fixtures_shared import (
 )
 from .handlers.fixtures.fixture_custom_resource import (
     fixture_context,
+    fixture_custom_resource_create_and_upload_default_users_and_groups_event,
     fixture_custom_resource_create_deployment_uuid_event,
     fixture_custom_resource_event,
+    fixture_mock_s3_bucket,
 )
 from .infrastructure.fixtures.fixture_stack_templates import (
     fixture_acdp_stack_parameters,

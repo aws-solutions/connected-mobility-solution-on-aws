@@ -1,0 +1,15 @@
+.amplify-tabs {
+  display: none;
+}
+
+.signout-button {
+  position:absolute;
+  top: 17px;
+  right: 20px;
+}
+
+.top-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}

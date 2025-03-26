@@ -1,11 +1,10 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { Logger } from "winston";
-
 import { Application } from "@aws-sdk/client-service-catalog-appregistry";
 
-import { getVoidLogger } from "@backstage/backend-common";
+import { LoggerService } from "@backstage/backend-plugin-api";
+import { mockServices } from "@backstage/backend-test-utils";
 import { Entity } from "@backstage/catalog-model";
 import { Config } from "@backstage/config";
 import { AwsCredentialProvider } from "@backstage/integration-aws-node";
@@ -16,9 +15,9 @@ import {
   mockedApplicationArn,
   mockedApplicationTag,
   mockedCurrentMonthCost,
-  mockConfig,
   mockCredentialsProvider,
   mockedCatalogEntity,
+  mockConfigWithoutMultiAccount,
 } from "../../mocks";
 import { AcdpMetricsService } from "../acdp-metrics-service";
 
@@ -31,12 +30,12 @@ export class MockedAcdpMetricsService extends AcdpMetricsService {
   public constructor(
     config?: Config,
     awsCredentialsProvider?: AwsCredentialProvider,
-    logger?: Logger,
+    logger?: LoggerService,
   ) {
     super({
-      config: config ?? mockConfig,
+      config: config ?? mockConfigWithoutMultiAccount,
       awsCredentialsProvider: awsCredentialsProvider ?? mockCredentialsProvider,
-      logger: logger ?? getVoidLogger(),
+      logger: logger ?? mockServices.logger.mock(),
     });
 
     this.mockedApplication = {

@@ -73,12 +73,15 @@ deploy: ## Deploy the stack for the module.
 		--parameter-overrides \
 			"AcdpUniqueId"="${ACDP_UNIQUE_ID}" \
 			"VpcName"="${VPC_NAME}" \
-			"DefaultUserEmail"="${DEFAULT_USER_EMAIL}" \
+			"AdminUserEmail"="${ADMIN_USER_EMAIL}" \
+			"ShouldCreateCognitoUser"="${SHOULD_CREATE_COGNITO_USER}" \
 			"IdentityProviderId"="${IDENTITY_PROVIDER_ID}" \
 			"Route53HostedZoneId"="${ROUTE53_HOSTED_ZONE_ID}" \
 			"FullyQualifiedDomainName"="${FULLY_QUALIFIED_DOMAIN_NAME}" \
 			"CustomAcmCertificateArn"="${CUSTOM_ACM_CERTIFICATE_ARN}" \
 			"IsPublicFacing"="${IS_PUBLIC_FACING}" \
+			"S3LogExpirationDays"="${LOG_BUCKET_RETENTION_DAYS}" \
+			"EnableMultiAccountDeployment"="${ENABLE_MULTI_ACCOUNT_DEPLOYMENT}" \
 			${shell [ -n "${CLOUDFORMATION_ROLE_ARN}" ] && echo "--role-arn ${CLOUDFORMATION_ROLE_ARN}"}
 
 .PHONY: destroy

@@ -21,8 +21,8 @@ from cms_common.constructs.app_unique_id import AppUniqueId
 from cms_common.constructs.cdk_lambda_vpc_config_construct import (
     CDKLambdasVpcConfigConstruct,
 )
-from cms_common.constructs.cmk_encrypted_s3 import CMKEncryptedS3Construct
 from cms_common.constructs.custom_resource_lambda import CustomResourceLambdaConstruct
+from cms_common.constructs.encrypted_s3 import EncryptedS3Construct
 from cms_common.constructs.lambda_dependencies import LambdaDependenciesConstruct
 from cms_common.constructs.vpc_construct import VpcConstruct
 
@@ -141,8 +141,8 @@ class CmsPredictiveMaintenanceConstruct(Construct):
         lambda_dependencies_construct = LambdaDependenciesConstruct(
             self,
             "dependency-layer-construct",
-            pipfile_path=f"{dirname(dirname(dirname(abspath(__file__))))}/Pipfile",
-            dependency_layer_path=f"{os.getcwd()}/source/infrastructure/cms_predictive_maintenance_dependency_layer",
+            pipfile_lock_dir=dirname(dirname(dirname(abspath(__file__)))),
+            dependency_layer_path=f"{os.getcwd()}/deployment/dist/lambda/cms_predictive_maintenance_dependency_layer",
         )
 
         custom_resource_lambda_construct = CustomResourceLambdaConstruct(
@@ -151,14 +151,15 @@ class CmsPredictiveMaintenanceConstruct(Construct):
             dependency_layer=lambda_dependencies_construct.dependency_layer,
             unique_id=module_inputs_construct.app_unique_id,
             name=solution_config_inputs.module_short_name,
-            asset_path="dist/lambda/custom_resource.zip",
+            asset_path=f"{os.getcwd()}/deployment/dist/lambda/custom_resource.zip",
             user_agent_string=solution_config_inputs.get_user_agent_string(),
             vpc_construct=vpc_construct,
         )
 
-        sagemaker_assets_bucket_construct = CMKEncryptedS3Construct(
+        sagemaker_assets_bucket_construct = EncryptedS3Construct(
             self,
             "sagemaker-assets-bucket-construct",
+            log_lifecycle_rules=module_inputs_construct.s3_log_lifecycle_rules,
         )
 
         predictor_construct = PredictorConstruct(
@@ -195,11 +196,10 @@ class CmsPredictiveMaintenanceConstruct(Construct):
                 model_name=config["chatbot"]["embedding"]["model_name"]
             ),
             s3_data_source_inputs=S3DataSourceConfig(
-                bucket_name=config["chatbot"]["data_source"]["s3"]["bucket_name"],
+                bucket_name=sagemaker_assets_bucket_construct.bucket.bucket_name,
                 object_key_prefix=config["chatbot"]["data_source"]["s3"][
                     "object_key_prefix"
                 ],
-                bucket_owner_account_id=Stack.of(self).account,
             ),
             data_source_chunking_config=DataSourceChunkingConfig(
                 strategy=config["chatbot"]["data_source"]["chunking_configuration"][

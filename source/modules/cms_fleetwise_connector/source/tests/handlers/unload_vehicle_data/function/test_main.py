@@ -35,7 +35,6 @@ def fixture_event() -> Dict[str, Any]:
         "cmsConnectStore": {
             "telemetryBucketName": "bucket-name",
             "telemetryPrefixPath": "bucket-prefix",
-            "telemetryBucketKmsKeyArn": "arn:aws:kms:us-east-1:11111111111:key/bucket-key-id",
         },
         "timeInfo": {
             "lastUnloadEndTime": "2023-01-01T00:00:00Z",
@@ -127,7 +126,6 @@ def timestream_unload_query_stubber_param_builder(
             timestream_table=event["timestream"]["tableName"],
             s3_bucket=event["cmsConnectStore"]["telemetryBucketName"],
             s3_prefix=event["cmsConnectStore"]["telemetryPrefixPath"],
-            s3_kms_key_arn=event["cmsConnectStore"]["telemetryBucketKmsKeyArn"],
             last_unload_end_time=event["timeInfo"]["lastUnloadEndTime"],
             next_unload_end_time=event["timeInfo"]["nextUnloadEndTime"],
             vin_field_name=event["fleetwise"]["vehicleVinAttributeName"],

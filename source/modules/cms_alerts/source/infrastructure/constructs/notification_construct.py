@@ -162,7 +162,9 @@ class NotificationConstruct(Construct):
             self,
             "send-notifications-lambda",
             function_name=notifications_lambda_name,
-            code=aws_lambda.Code.from_asset("dist/lambda/send_notifications.zip"),
+            code=aws_lambda.Code.from_asset(
+                "deployment/dist/lambda/send_notifications.zip"
+            ),
             description="CMS Alerts Notifications Lambda Function",
             environment={
                 "USER_AGENT_STRING": solution_config_inputs.get_user_agent_string(),

@@ -3,12 +3,13 @@
 
 import express from "express";
 import Router from "express-promise-router";
-import { Logger } from "winston";
 
-import { AuthService, HttpAuthService } from "@backstage/backend-plugin-api";
+import { LoggerService } from "@backstage/backend-plugin-api";
+import { createPermissionIntegrationRouter } from "@backstage/plugin-permission-node";
+import { acdpPermissions } from "backstage-plugin-acdp-common";
 
 export interface AcdpBaseRouterOptions {
-  logger: Logger;
+  logger: LoggerService;
 }
 
 export async function createAcdpBaseRouter(
@@ -16,8 +17,15 @@ export async function createAcdpBaseRouter(
 ): Promise<express.Router> {
   const { logger } = options;
 
+  // eslint-disable-next-line new-cap
   const router = Router();
   router.use(express.json());
+
+  const permissionIntegrationRouter = createPermissionIntegrationRouter({
+    permissions: acdpPermissions,
+  });
+
+  router.use(permissionIntegrationRouter);
 
   router.get("/health", (_, response) => {
     logger.info("PONG!");
@@ -25,19 +33,4 @@ export async function createAcdpBaseRouter(
   });
 
   return router;
-}
-
-export async function getAuthToken(
-  httpAuth: HttpAuthService,
-  auth: AuthService,
-  req: express.Request<any, any, any, any, any>,
-  targetPluginId: string,
-): Promise<string> {
-  const credentials = await httpAuth.credentials(req);
-  const { token } = await auth.getPluginRequestToken({
-    onBehalfOf: credentials,
-    targetPluginId: targetPluginId,
-  });
-
-  return token;
 }

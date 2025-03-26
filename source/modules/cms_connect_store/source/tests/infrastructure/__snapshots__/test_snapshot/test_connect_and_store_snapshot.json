@@ -47,10 +47,10 @@
         "value": "nodejs20.x"
       },
       "cn-north-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "cn-northwest-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "eu-central-1": {
         "value": "nodejs20.x"
@@ -101,10 +101,10 @@
         "value": "nodejs20.x"
       },
       "us-gov-east-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "us-gov-west-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "us-iso-east-1": {
         "value": "nodejs18.x"
@@ -142,6 +142,16 @@
       "Default": "/cdk-bootstrap/hnb659fds/version",
       "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
       "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "S3LogExpirationDays": {
+      "Default": 90,
+      "Description": "The number of days before log bucket objects expire.",
+      "Type": "Number"
+    },
+    "S3LogNoncurrentVersionExpirationDays": {
+      "Default": 1,
+      "Description": "The number of days before log bucket non-current versions are deleted after they've expired.",
+      "Type": "Number"
     }
   },
   "Resources": {
@@ -1005,20 +1015,6 @@
       "DependsOn": [
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
-      "Metadata": {
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "W5",
-              "reason": "Unable to know egress requirement. leaving open for now"
-            },
-            {
-              "id": "W40",
-              "reason": "Unable to know egress requirement. leaving open for now"
-            }
-          ]
-        }
-      },
       "Properties": {
         "GroupDescription": "cms-connect-store-stack/connect-store/cdk-lambdas-vpc-construct/security-group",
         "SecurityGroupEgress": [
@@ -1150,7 +1146,7 @@
                 [
                   "s3://",
                   {
-                    "Ref": "connectstoreroots3constructcmkencryptedbucketB398B73B"
+                    "Ref": "connectstoreroots3constructencryptedbucket39CFDB23"
                   },
                   "/cms/data"
                 ]
@@ -1272,7 +1268,7 @@
                   "Resource": [
                     {
                       "Fn::GetAtt": [
-                        "connectstoreroots3constructcmkencryptedbucketB398B73B",
+                        "connectstoreroots3constructencryptedbucket39CFDB23",
                         "Arn"
                       ]
                     },
@@ -1282,7 +1278,7 @@
                         [
                           {
                             "Fn::GetAtt": [
-                              "connectstoreroots3constructcmkencryptedbucketB398B73B",
+                              "connectstoreroots3constructencryptedbucket39CFDB23",
                               "Arn"
                             ]
                           },
@@ -1291,38 +1287,6 @@
                       ]
                     }
                   ]
-                },
-                {
-                  "Action": [
-                    "kms:Decrypt",
-                    "kms:DescribeKey",
-                    "kms:Encrypt",
-                    "kms:GenerateDataKey"
-                  ],
-                  "Effect": "Allow",
-                  "Resource": {
-                    "Fn::Join": [
-                      "",
-                      [
-                        "arn:",
-                        {
-                          "Ref": "AWS::Partition"
-                        },
-                        ":kms:",
-                        {
-                          "Ref": "AWS::Region"
-                        },
-                        ":",
-                        {
-                          "Ref": "AWS::AccountId"
-                        },
-                        ":key/",
-                        {
-                          "Ref": "connectstoreroots3constructcmkkeyD4B815A3"
-                        }
-                      ]
-                    ]
-                  }
                 }
               ],
               "Version": "2012-10-17"
@@ -1424,7 +1388,7 @@
             {
               "S3": {
                 "BucketName": {
-                  "Ref": "connectstoreroots3constructcmkencryptedbucketB398B73B"
+                  "Ref": "connectstoreroots3constructencryptedbucket39CFDB23"
                 },
                 "Key": "${topic()}/${timestamp()}",
                 "RoleArn": {
@@ -1546,7 +1510,7 @@
         "ExtendedS3DestinationConfiguration": {
           "BucketARN": {
             "Fn::GetAtt": [
-              "connectstoreroots3constructcmkencryptedbucketB398B73B",
+              "connectstoreroots3constructencryptedbucket39CFDB23",
               "Arn"
             ]
           },
@@ -1681,12 +1645,6 @@
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
-        "KmsKeyId": {
-          "Fn::GetAtt": [
-            "connectstoreiotcoretos3parquetconstructiotkinesisloggrouploggroupkey4F821379",
-            "Arn"
-          ]
-        },
         "RetentionInDays": 90,
         "Tags": [
           {
@@ -1716,97 +1674,6 @@
         ]
       },
       "Type": "AWS::Logs::LogGroup",
-      "UpdateReplacePolicy": "Retain"
-    },
-    "connectstoreiotcoretos3parquetconstructiotkinesisloggrouploggroupkey4F821379": {
-      "DeletionPolicy": "Retain",
-      "DependsOn": [
-        "connectstoreglueresourcesconstructiotdataconversiongluedatabase53316BBE",
-        "connectstoreglueresourcesconstructiotmainstreamglueschematableCE0ADAE5",
-        "connectstoreglueresourcesconstructvehiclesignalspecificationjsonschema277B1F8A",
-        "ssmappuniqueidregistermodule9C5C2C5D"
-      ],
-      "Properties": {
-        "EnableKeyRotation": true,
-        "KeyPolicy": {
-          "Statement": [
-            {
-              "Action": "kms:*",
-              "Effect": "Allow",
-              "Principal": {
-                "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":root"
-                    ]
-                  ]
-                }
-              },
-              "Resource": "*"
-            },
-            {
-              "Action": [
-                "kms:Encrypt",
-                "kms:Decrypt",
-                "kms:GenerateDataKey"
-              ],
-              "Effect": "Allow",
-              "Principal": {
-                "Service": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "logs.",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ".amazonaws.com"
-                    ]
-                  ]
-                }
-              },
-              "Resource": "*"
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "Tags": [
-          {
-            "Key": "awsApplication",
-            "Value": {
-              "Fn::GetAtt": [
-                "appregistryconstructappregistryapplicationAC1A319B",
-                "ApplicationTagValue"
-              ]
-            }
-          },
-          {
-            "Key": "Solutions:DeploymentUUID",
-            "Value": {
-              "Fn::Join": [
-                "",
-                [
-                  "{{resolve:ssm:/solution/",
-                  {
-                    "Ref": "AppUniqueId"
-                  },
-                  "/config/deployment-uuid}}"
-                ]
-              ]
-            }
-          }
-        ]
-      },
-      "Type": "AWS::KMS::Key",
       "UpdateReplacePolicy": "Retain"
     },
     "connectstoreiotcoretos3parquetconstructiotkinesislogstreamF3CAC841": {
@@ -2180,7 +2047,7 @@
                   "Resource": [
                     {
                       "Fn::GetAtt": [
-                        "connectstoreroots3constructcmkencryptedbucketB398B73B",
+                        "connectstoreroots3constructencryptedbucket39CFDB23",
                         "Arn"
                       ]
                     },
@@ -2190,7 +2057,7 @@
                         [
                           {
                             "Fn::GetAtt": [
-                              "connectstoreroots3constructcmkencryptedbucketB398B73B",
+                              "connectstoreroots3constructencryptedbucket39CFDB23",
                               "Arn"
                             ]
                           },
@@ -2199,38 +2066,6 @@
                       ]
                     }
                   ]
-                },
-                {
-                  "Action": [
-                    "kms:Decrypt",
-                    "kms:DescribeKey",
-                    "kms:Encrypt",
-                    "kms:GenerateDataKey"
-                  ],
-                  "Effect": "Allow",
-                  "Resource": {
-                    "Fn::Join": [
-                      "",
-                      [
-                        "arn:",
-                        {
-                          "Ref": "AWS::Partition"
-                        },
-                        ":kms:",
-                        {
-                          "Ref": "AWS::Region"
-                        },
-                        ":",
-                        {
-                          "Ref": "AWS::AccountId"
-                        },
-                        ":key/",
-                        {
-                          "Ref": "connectstoreroots3constructcmkkeyD4B815A3"
-                        }
-                      ]
-                    ]
-                  }
                 }
               ],
               "Version": "2012-10-17"
@@ -2538,55 +2373,7 @@
         "Type": "String",
         "Value": {
           "Fn::GetAtt": [
-            "connectstoreroots3constructcmkencryptedbucketB398B73B",
-            "Arn"
-          ]
-        }
-      },
-      "Type": "AWS::SSM::Parameter"
-    },
-    "connectstoremoduleoutputsconstructssmtelemetrystoragebucketkeyarnA25146A0": {
-      "DependsOn": [
-        "ssmappuniqueidregistermodule9C5C2C5D"
-      ],
-      "Properties": {
-        "Description": "The ARN of the encryption key for the S3 bucket in which the telemetry data is stored.",
-        "Name": {
-          "Fn::Join": [
-            "",
-            [
-              "/solution/",
-              {
-                "Ref": "AppUniqueId"
-              },
-              "/test-module-short-name/s3-storage-bucket/key-arn"
-            ]
-          ]
-        },
-        "Tags": {
-          "Solutions:DeploymentUUID": {
-            "Fn::Join": [
-              "",
-              [
-                "{{resolve:ssm:/solution/",
-                {
-                  "Ref": "AppUniqueId"
-                },
-                "/config/deployment-uuid}}"
-              ]
-            ]
-          },
-          "awsApplication": {
-            "Fn::GetAtt": [
-              "appregistryconstructappregistryapplicationAC1A319B",
-              "ApplicationTagValue"
-            ]
-          }
-        },
-        "Type": "String",
-        "Value": {
-          "Fn::GetAtt": [
-            "connectstoreroots3constructcmkkeyD4B815A3",
+            "connectstoreroots3constructencryptedbucket39CFDB23",
             "Arn"
           ]
         }
@@ -2633,7 +2420,7 @@
         },
         "Type": "String",
         "Value": {
-          "Ref": "connectstoreroots3constructcmkencryptedbucketB398B73B"
+          "Ref": "connectstoreroots3constructencryptedbucket39CFDB23"
         }
       },
       "Type": "AWS::SSM::Parameter"
@@ -2683,7 +2470,7 @@
       },
       "Type": "AWS::SSM::Parameter"
     },
-    "connectstoreroots3constructcmkencryptedbucketB398B73B": {
+    "connectstoreroots3constructencryptedbucket39CFDB23": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
         "ssmappuniqueidregistermodule9C5C2C5D"
@@ -2693,13 +2480,7 @@
           "ServerSideEncryptionConfiguration": [
             {
               "ServerSideEncryptionByDefault": {
-                "KMSMasterKeyID": {
-                  "Fn::GetAtt": [
-                    "connectstoreroots3constructcmkkeyD4B815A3",
-                    "Arn"
-                  ]
-                },
-                "SSEAlgorithm": "aws:kms"
+                "SSEAlgorithm": "AES256"
               }
             }
           ]
@@ -2748,13 +2529,13 @@
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain"
     },
-    "connectstoreroots3constructcmkencryptedbucketPolicyCC38F932": {
+    "connectstoreroots3constructencryptedbucketPolicy74D27917": {
       "DependsOn": [
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
         "Bucket": {
-          "Ref": "connectstoreroots3constructcmkencryptedbucketB398B73B"
+          "Ref": "connectstoreroots3constructencryptedbucket39CFDB23"
         },
         "PolicyDocument": {
           "Statement": [
@@ -2772,7 +2553,7 @@
               "Resource": [
                 {
                   "Fn::GetAtt": [
-                    "connectstoreroots3constructcmkencryptedbucketB398B73B",
+                    "connectstoreroots3constructencryptedbucket39CFDB23",
                     "Arn"
                   ]
                 },
@@ -2782,7 +2563,7 @@
                     [
                       {
                         "Fn::GetAtt": [
-                          "connectstoreroots3constructcmkencryptedbucketB398B73B",
+                          "connectstoreroots3constructencryptedbucket39CFDB23",
                           "Arn"
                         ]
                       },
@@ -2798,84 +2579,6 @@
       },
       "Type": "AWS::S3::BucketPolicy"
     },
-    "connectstoreroots3constructcmkkeyD4B815A3": {
-      "DeletionPolicy": "Retain",
-      "DependsOn": [
-        "ssmappuniqueidregistermodule9C5C2C5D"
-      ],
-      "Properties": {
-        "EnableKeyRotation": true,
-        "KeyPolicy": {
-          "Statement": [
-            {
-              "Action": "kms:*",
-              "Effect": "Allow",
-              "Principal": {
-                "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":root"
-                    ]
-                  ]
-                }
-              },
-              "Resource": "*"
-            },
-            {
-              "Action": [
-                "kms:Decrypt",
-                "kms:Encrypt",
-                "kms:ReEncrypt*",
-                "kms:GenerateDataKey*"
-              ],
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "logging.s3.amazonaws.com"
-              },
-              "Resource": "*"
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "Tags": [
-          {
-            "Key": "awsApplication",
-            "Value": {
-              "Fn::GetAtt": [
-                "appregistryconstructappregistryapplicationAC1A319B",
-                "ApplicationTagValue"
-              ]
-            }
-          },
-          {
-            "Key": "Solutions:DeploymentUUID",
-            "Value": {
-              "Fn::Join": [
-                "",
-                [
-                  "{{resolve:ssm:/solution/",
-                  {
-                    "Ref": "AppUniqueId"
-                  },
-                  "/config/deployment-uuid}}"
-                ]
-              ]
-            }
-          }
-        ]
-      },
-      "Type": "AWS::KMS::Key",
-      "UpdateReplacePolicy": "Retain"
-    },
     "connectstoreroots3constructlogbucket7F2AE2BB": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
@@ -2887,14 +2590,25 @@
           "ServerSideEncryptionConfiguration": [
             {
               "ServerSideEncryptionByDefault": {
-                "KMSMasterKeyID": {
-                  "Fn::GetAtt": [
-                    "connectstoreroots3constructcmkkeyD4B815A3",
-                    "Arn"
-                  ]
-                },
-                "SSEAlgorithm": "aws:kms"
+                "SSEAlgorithm": "AES256"
               }
+            }
+          ]
+        },
+        "LifecycleConfiguration": {
+          "Rules": [
+            {
+              "AbortIncompleteMultipartUpload": {
+                "DaysAfterInitiation": 1
+              },
+              "ExpirationInDays": {
+                "Ref": "S3LogExpirationDays"
+              },
+              "Id": "expire-current-version-and-delete-old-objects",
+              "NoncurrentVersionExpirationInDays": {
+                "Ref": "S3LogNoncurrentVersionExpirationDays"
+              },
+              "Status": "Enabled"
             }
           ]
         },

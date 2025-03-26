@@ -1,11 +1,11 @@
 {
   "name": "acdp-backstage",
-  "version": "2.0.6",
+  "version": "2.1.0",
   "private": true,
   "license": "Apache-2.0",
   "description": "Backstage implementation preconfigured to work with CMS",
   "engines": {
-    "node": "18 || 20"
+    "node": "20 || 22"
   },
   "backstage": {
     "role": "cli"
@@ -18,10 +18,10 @@
     "build:all": "backstage-cli repo build --all",
     "build-image": "yarn workspace backend build-image",
     "tsc": "tsc",
-    "tsc:full": "tsc --skipLibCheck false --incremental false",
+    "tsc:full": "tsc --skipLibCheck true --incremental false",
     "clean": "backstage-cli repo clean",
     "test": "backstage-cli repo test --testTimeout 30000",
-    "test:all": "backstage-cli repo test --coverage --testTimeout 30000",
+    "test:all": "backstage-cli repo test --coverage --testTimeout 30000 --maxWorkers=50%",
     "lint": "backstage-cli repo lint --since origin/mainline",
     "lint:all": "backstage-cli repo lint",
     "prettier:check": "prettier --check .",
@@ -34,7 +34,7 @@
     ]
   },
   "devDependencies": {
-    "@backstage/cli": "^0.26.11",
+    "@backstage/cli": "^0.29.4",
     "@types/supertest": "^2.0.14",
     "concurrently": "^8.0.1",
     "lerna": "^7.1.5",
@@ -53,8 +53,9 @@
     "jsonpath-plus": "^10.3.0",
     "http-proxy-middleware": "^2.0.7",
     "cross-spawn": "^7.0.5",
+    "@aws-sdk/client-s3": "^3.744.0",
     "koa": "^2.15.4",
-    "elliptic": "^6.6.1"
+    "xml-crypto": "^6.0.1"
   },
-  "packageManager": "yarn@1.22.22"
+  "packageManager": "yarn@4.6.0"
 }

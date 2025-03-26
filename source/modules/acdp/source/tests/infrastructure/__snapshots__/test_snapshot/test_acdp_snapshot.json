@@ -1,5 +1,13 @@
 {
   "Conditions": {
+    "acdpmultiaccountconstructshouldcreatemultiaccountpolicy6E0243F1": {
+      "Fn::Equals": [
+        {
+          "Ref": "EnableMultiAccountDeployment"
+        },
+        "true"
+      ]
+    },
     "moduleinputsconstructisbackstageadditionalscopessetcondition622861A7": {
       "Fn::Not": [
         {
@@ -85,10 +93,10 @@
         "value": "nodejs20.x"
       },
       "cn-north-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "cn-northwest-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "eu-central-1": {
         "value": "nodejs20.x"
@@ -139,10 +147,10 @@
         "value": "nodejs20.x"
       },
       "us-gov-east-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "us-gov-west-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "us-iso-east-1": {
         "value": "nodejs18.x"
@@ -174,6 +182,12 @@
     "AcdpUniqueId": {
       "Default": "acdp",
       "Description": "Name of the ACDP deployment",
+      "Type": "String"
+    },
+    "AdminUserEmail": {
+      "AllowedPattern": "(^$)|^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$",
+      "ConstraintDescription": "User E-Mail must be a valid E-Mail address",
+      "Description": "The user E-Mail to access backstage UI",
       "Type": "String"
     },
     "BackstageAdditionalScopes": {
@@ -219,11 +233,14 @@
       "Description": "Optional when using a Public Hosted Zone with Route53. Required when HostedZoneId is Private or not provided. Provide a custom ACM Certificate ARN to use for TLS.",
       "Type": "String"
     },
-    "DefaultUserEmail": {
-      "AllowedPattern": "(^$)|^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$",
-      "ConstraintDescription": "User E-Mail must be a valid E-Mail address",
-      "Default": "",
-      "Description": "The user E-Mail to access backstage UI",
+    "EnableMultiAccountDeployment": {
+      "AllowedValues": [
+        "true",
+        "false"
+      ],
+      "ConstraintDescription": "Value must be boolean (true, false)",
+      "Default": "false",
+      "Description": "Boolean flag that configures multi account deployment support",
       "Type": "String"
     },
     "FullyQualifiedDomainName": {
@@ -249,11 +266,45 @@
       "Description": "Boolean flag that configures if public endpoints should be created for ACDP/Backstage resources. If true, the VPC must have an Internet Gateway",
       "Type": "String"
     },
+    "OrgsManagementAccountRegion": {
+      "AllowedPattern": "^(us|eu|ap|sa|ca|me|af|il)-(north|south|east|west|central)-(1|2|3|4)$|null$",
+      "ConstraintDescription": "Provide valid region name[Non government regions only]",
+      "Default": "null",
+      "Description": "Region where org management accounts resources are located",
+      "Type": "String"
+    },
+    "OrgsManagementAwsAccountId": {
+      "AllowedPattern": "^\\d{12}$|null$",
+      "ConstraintDescription": "AWS Account Id must be a 12-digit number. This is only required if EnableMultiAccountDeployment is set to true.",
+      "Default": "null",
+      "Description": "The 12-digit AWS account ID where Org Management Account resources are deployed. This is only required if EnableMultiAccountDeployment is set to true.",
+      "Type": "String"
+    },
     "Route53HostedZoneId": {
       "AllowedPattern": "^(|Z[A-Z0-9]{1,30})$",
       "ConstraintDescription": "Must be '' or a valid Route53 Hosted Zone Id",
       "Default": "",
       "Description": "Optional: Id of the Route53 Hosted Zone. Set to create records in Route53 for the required DNS entries.",
+      "Type": "String"
+    },
+    "S3LogExpirationDays": {
+      "Default": 90,
+      "Description": "The number of days before log bucket objects expire.",
+      "Type": "Number"
+    },
+    "S3LogNoncurrentVersionExpirationDays": {
+      "Default": 1,
+      "Description": "The number of days before log bucket non-current versions are deleted after they've expired.",
+      "Type": "Number"
+    },
+    "ShouldCreateCognitoUser": {
+      "AllowedValues": [
+        "true",
+        "false"
+      ],
+      "ConstraintDescription": "Value must be boolean (true, false)",
+      "Default": "true",
+      "Description": "Boolean flag that determined whether to create an Amazon Cognito user using the Admin user email.",
       "Type": "String"
     },
     "UseBackstageAuthRedirectFlow": {
@@ -459,6 +510,45 @@
       },
       "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroup"
     },
+    "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "CustomEnvironment": {
+          "ADMIN_USERNAME": {
+            "Fn::Select": [
+              0,
+              {
+                "Fn::Split": [
+                  "@",
+                  {
+                    "Ref": "AdminUserEmail"
+                  }
+                ]
+              }
+            ]
+          },
+          "ADMIN_USER_EMAIL": {
+            "Ref": "AdminUserEmail"
+          }
+        },
+        "DestinationBucket": {
+          "Ref": "backstageassetbucketconstructencryptedbucket8BE77EF0"
+        },
+        "DestinationKeyPrefix": "backstage/catalog",
+        "Resource": "CreateAndUploadDefaultUsersAndGroups",
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "customresourceconstructlambdafunction78B09163",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::CreateAndUploadDefaultUsersAndGroups",
+      "UpdateReplacePolicy": "Delete"
+    },
     "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
@@ -466,7 +556,7 @@
       ],
       "Properties": {
         "DestinationBucket": {
-          "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+          "Ref": "backstageassetbucketconstructencryptedbucket8BE77EF0"
         },
         "DestinationKeyPrefix": "backstage-default-assets",
         "Resource": "ExtractS3ZipToTargetBucket",
@@ -506,7 +596,7 @@
       ],
       "Properties": {
         "DestinationBucket": {
-          "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+          "Ref": "backstageassetbucketconstructencryptedbucket8BE77EF0"
         },
         "DestinationKey": "test-backstage-s3-assets-key-prefix/pipeline/backstage_pipeline_source.zip",
         "Resource": "CopyS3Object",
@@ -624,7 +714,7 @@
                       },
                       ":s3:::",
                       {
-                        "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+                        "Ref": "backstageassetbucketconstructencryptedbucket8BE77EF0"
                       }
                     ]
                   ]
@@ -639,27 +729,13 @@
                       },
                       ":s3:::",
                       {
-                        "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+                        "Ref": "backstageassetbucketconstructencryptedbucket8BE77EF0"
                       },
                       "/*"
                     ]
                   ]
                 }
               ]
-            },
-            {
-              "Action": [
-                "kms:GenerateDataKey",
-                "kms:Decrypt",
-                "kms:Encrypt"
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "backstageassetbucketconstructcmkkeyDD56344B",
-                  "Arn"
-                ]
-              }
             }
           ],
           "Version": "2012-10-17"
@@ -828,14 +904,21 @@
           "ComputeType": "BUILD_GENERAL1_LARGE",
           "EnvironmentVariables": [
             {
-              "Name": "CLOUDFORMATION_ROLE_ARN",
+              "Name": "CLOUDFORMATION_ROLE_NAME",
+              "Type": "PLAINTEXT",
+              "Value": "acdp-cloudformation-role"
+            },
+            {
+              "Name": "DEFAULT_CLOUDFORMATION_ROLE_NAME",
               "Type": "PLAINTEXT",
               "Value": {
-                "Fn::GetAtt": [
-                  "acdpcloudformationroleC3BA7F88",
-                  "Arn"
-                ]
+                "Ref": "acdpcloudformationroleC3BA7F88"
               }
+            },
+            {
+              "Name": "DEPLOYMENT_ROLE_NAME",
+              "Type": "PLAINTEXT",
+              "Value": "acdp-codebuild-assume-role"
             }
           ],
           "Image": "aws/codebuild/standard:7.0",
@@ -1054,7 +1137,7 @@
                           },
                           ":s3:::",
                           {
-                            "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+                            "Ref": "backstageassetbucketconstructencryptedbucket8BE77EF0"
                           }
                         ]
                       ]
@@ -1069,7 +1152,7 @@
                           },
                           ":s3:::",
                           {
-                            "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+                            "Ref": "backstageassetbucketconstructencryptedbucket8BE77EF0"
                           },
                           "/*"
                         ]
@@ -1081,28 +1164,6 @@
               "Version": "2012-10-17"
             },
             "PolicyName": "s3-policy"
-          },
-          {
-            "PolicyDocument": {
-              "Statement": [
-                {
-                  "Action": [
-                    "kms:GenerateDataKey",
-                    "kms:Decrypt",
-                    "kms:Encrypt"
-                  ],
-                  "Effect": "Allow",
-                  "Resource": {
-                    "Fn::GetAtt": [
-                      "backstageassetbucketconstructcmkkeyDD56344B",
-                      "Arn"
-                    ]
-                  }
-                }
-              ],
-              "Version": "2012-10-17"
-            },
-            "PolicyName": "s3-kms-policy"
           },
           {
             "PolicyDocument": {
@@ -1152,9 +1213,22 @@
                   "Action": "iam:PassRole",
                   "Effect": "Allow",
                   "Resource": {
-                    "Fn::GetAtt": [
-                      "acdpcloudformationroleC3BA7F88",
-                      "Arn"
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":iam::",
+                        {
+                          "Ref": "AWS::AccountId"
+                        },
+                        ":role/",
+                        {
+                          "Ref": "acdpcloudformationroleC3BA7F88"
+                        }
+                      ]
                     ]
                   }
                 }
@@ -1164,6 +1238,21 @@
             "PolicyName": "iam-policy"
           }
         ],
+        "RoleName": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "-deploy-project"
+            ]
+          ]
+        },
         "Tags": [
           {
             "Key": "awsApplication",
@@ -1721,12 +1810,12 @@
       },
       "Type": "AWS::SSM::Parameter"
     },
-    "acdpmoduleoutputsconstructssmcodebuildprojectarnB877AF6E": {
+    "acdpmoduleoutputsconstructssmcodebuildprojectarnmulti867436FD": {
       "DependsOn": [
         "ssmappuniqueidD1DCE51D"
       ],
       "Properties": {
-        "Description": "CodeBuild Project ARN for Backstage ACDP plugin",
+        "Description": "CodeBuild Project ARN for Backstage ACDP plugin (Multi-Account)",
         "Name": {
           "Fn::Join": [
             "",
@@ -1802,81 +1891,7 @@
       },
       "Type": "AWS::SSM::Parameter"
     },
-    "acdpmoduleoutputsconstructssmlocalassetconfigassetbucketbackstagecustomtemplatekeyprefix002EBC4A": {
-      "DependsOn": [
-        "ssmappuniqueidD1DCE51D"
-      ],
-      "Properties": {
-        "Description": "Bucket key prefix for the local bucket where custom ACDP deployable resources are discovered",
-        "Name": {
-          "Fn::Join": [
-            "",
-            [
-              "/solution/",
-              {
-                "Ref": "AcdpUniqueId"
-              },
-              "/config/acdp-asset-config/local/backstage-custom-template-key-prefix"
-            ]
-          ]
-        },
-        "Tags": {
-          "Solutions:DeploymentUUID": {
-            "Fn::GetAtt": [
-              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
-              "SolutionUUID"
-            ]
-          },
-          "awsApplication": {
-            "Fn::GetAtt": [
-              "acdpappregistryappregistryapplication0BC5FAC5",
-              "ApplicationTagValue"
-            ]
-          }
-        },
-        "Type": "String",
-        "Value": "backstage/templates"
-      },
-      "Type": "AWS::SSM::Parameter"
-    },
-    "acdpmoduleoutputsconstructssmlocalassetconfigassetbucketbackstagedefaulttemplatekeyprefixE8CC838A": {
-      "DependsOn": [
-        "ssmappuniqueidD1DCE51D"
-      ],
-      "Properties": {
-        "Description": "Bucket key prefix for the local bucket where deafault ACDP deployable resources are discovered",
-        "Name": {
-          "Fn::Join": [
-            "",
-            [
-              "/solution/",
-              {
-                "Ref": "AcdpUniqueId"
-              },
-              "/config/acdp-asset-config/local/backstage-default-template-key-prefix"
-            ]
-          ]
-        },
-        "Tags": {
-          "Solutions:DeploymentUUID": {
-            "Fn::GetAtt": [
-              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
-              "SolutionUUID"
-            ]
-          },
-          "awsApplication": {
-            "Fn::GetAtt": [
-              "acdpappregistryappregistryapplication0BC5FAC5",
-              "ApplicationTagValue"
-            ]
-          }
-        },
-        "Type": "String",
-        "Value": "backstage-default-assets/templates"
-      },
-      "Type": "AWS::SSM::Parameter"
-    },
-    "acdpmoduleoutputsconstructssmlocalassetconfigassetbucketcatalogkeyprefix7AD25CDF": {
+    "acdpmoduleoutputsconstructssmlocalassetbucketconfigcatalogkeyprefix866935FD": {
       "DependsOn": [
         "ssmappuniqueidD1DCE51D"
       ],
@@ -1913,12 +1928,12 @@
       },
       "Type": "AWS::SSM::Parameter"
     },
-    "acdpmoduleoutputsconstructssmlocalassetconfigassetbucketdefaultassetsprefix3BDC7CA9": {
+    "acdpmoduleoutputsconstructssmlocalassetbucketconfigdefaultassetsprefixC5C9CF95": {
       "DependsOn": [
         "ssmappuniqueidD1DCE51D"
       ],
       "Properties": {
-        "Description": "S3 prefix for default ACDP deployable assets in the local asset bucket",
+        "Description": "S3 prefix for default ACDP assets (docs, buildspecs, entities, etc.) in the local asset bucket",
         "Name": {
           "Fn::Join": [
             "",
@@ -1950,12 +1965,12 @@
       },
       "Type": "AWS::SSM::Parameter"
     },
-    "acdpmoduleoutputsconstructssmlocalassetconfigassetbucketrootkey066F4843": {
+    "acdpmoduleoutputsconstructssmlocalassetbucketconfigdefaultentitiesprefix4C1A0268": {
       "DependsOn": [
         "ssmappuniqueidD1DCE51D"
       ],
       "Properties": {
-        "Description": "Root s3 prefix to give backstage access to in the local asset bucket",
+        "Description": "S3 prefix for default ACDP catalog entities (templates, users, groups, etc.) in the local asset bucket",
         "Name": {
           "Fn::Join": [
             "",
@@ -1964,7 +1979,7 @@
               {
                 "Ref": "AcdpUniqueId"
               },
-              "/config/acdp-asset-config/local/root-s3-key"
+              "/config/acdp-asset-config/local/default-entities-prefix"
             ]
           ]
         },
@@ -1983,48 +1998,11 @@
           }
         },
         "Type": "String",
-        "Value": "backstage"
+        "Value": "backstage-default-assets/entities"
       },
       "Type": "AWS::SSM::Parameter"
     },
-    "acdpmoduleoutputsconstructssmlocalassetconfigassetbuckettechdocskeyprefix35D6AF83": {
-      "DependsOn": [
-        "ssmappuniqueidD1DCE51D"
-      ],
-      "Properties": {
-        "Description": "Bucket key prefix where Techdocs resources are published to",
-        "Name": {
-          "Fn::Join": [
-            "",
-            [
-              "/solution/",
-              {
-                "Ref": "AcdpUniqueId"
-              },
-              "/config/acdp-asset-config/local/techdocs-key-prefix"
-            ]
-          ]
-        },
-        "Tags": {
-          "Solutions:DeploymentUUID": {
-            "Fn::GetAtt": [
-              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
-              "SolutionUUID"
-            ]
-          },
-          "awsApplication": {
-            "Fn::GetAtt": [
-              "acdpappregistryappregistryapplication0BC5FAC5",
-              "ApplicationTagValue"
-            ]
-          }
-        },
-        "Type": "String",
-        "Value": "backstage/techdocs"
-      },
-      "Type": "AWS::SSM::Parameter"
-    },
-    "acdpmoduleoutputsconstructssmlocalassetconfigbackstagediscoveryrefreshfreqmins11197405": {
+    "acdpmoduleoutputsconstructssmlocalassetbucketconfigdiscoveryrefreshfreqminsBB994993": {
       "DependsOn": [
         "ssmappuniqueidD1DCE51D"
       ],
@@ -2063,12 +2041,12 @@
       },
       "Type": "AWS::SSM::Parameter"
     },
-    "acdpmoduleoutputsconstructssmlocalassetconfigbucketkeyarn735FE967": {
+    "acdpmoduleoutputsconstructssmlocalassetbucketconfigentititesprefixF250C4AB": {
       "DependsOn": [
         "ssmappuniqueidD1DCE51D"
       ],
       "Properties": {
-        "Description": "KMS Key ARN of the local asset bucket",
+        "Description": "Root s3 prefix to give backstage access to in the local asset bucket",
         "Name": {
           "Fn::Join": [
             "",
@@ -2077,7 +2055,7 @@
               {
                 "Ref": "AcdpUniqueId"
               },
-              "/config/acdp-asset-config/local/asset-bucket/key-arn"
+              "/config/acdp-asset-config/local/entities-prefix"
             ]
           ]
         },
@@ -2096,16 +2074,11 @@
           }
         },
         "Type": "String",
-        "Value": {
-          "Fn::GetAtt": [
-            "backstageassetbucketconstructcmkkeyDD56344B",
-            "Arn"
-          ]
-        }
+        "Value": "backstage"
       },
       "Type": "AWS::SSM::Parameter"
     },
-    "acdpmoduleoutputsconstructssmlocalassetconfigbucketname198EB7B4": {
+    "acdpmoduleoutputsconstructssmlocalassetbucketconfigname17DB11D0": {
       "DependsOn": [
         "ssmappuniqueidD1DCE51D"
       ],
@@ -2139,12 +2112,12 @@
         },
         "Type": "String",
         "Value": {
-          "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+          "Ref": "backstageassetbucketconstructencryptedbucket8BE77EF0"
         }
       },
       "Type": "AWS::SSM::Parameter"
     },
-    "acdpmoduleoutputsconstructssmlocalassetconfigbucketregionAB4E476F": {
+    "acdpmoduleoutputsconstructssmlocalassetbucketconfigregionF71CA860": {
       "DependsOn": [
         "ssmappuniqueidD1DCE51D"
       ],
@@ -2179,6 +2152,160 @@
         "Type": "String",
         "Value": {
           "Ref": "AWS::Region"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmlocalassetbucketconfigtechdocskeyprefixD7ADD8E5": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Bucket key prefix where Techdocs resources are published to",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/config/acdp-asset-config/local/techdocs-key-prefix"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": "backstage/techdocs"
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmmultiacctorgsenablemultiaccountdeployment6C40A277": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "The flag that toggles multi-account-deployment feature",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/multi-acct/enable-multi-account-deployment"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "EnableMultiAccountDeployment"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmmultiacctorgsmanagementaccountawsregion750E3521": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "Region where org management accounts resources are located",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/multi-acct/orgs-management-account-region"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "OrgsManagementAccountRegion"
+        }
+      },
+      "Type": "AWS::SSM::Parameter"
+    },
+    "acdpmoduleoutputsconstructssmmultiacctorgsmanagementawsaccountidFB216B02": {
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "Description": "The 12-digit AWS account ID where Org Management Account resources are deployed",
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "/solution/",
+              {
+                "Ref": "AcdpUniqueId"
+              },
+              "/multi-acct/orgs-management-account-id"
+            ]
+          ]
+        },
+        "Tags": {
+          "Solutions:DeploymentUUID": {
+            "Fn::GetAtt": [
+              "deploymentuuidconstructdeploymentuuidcustomresourceC885F329",
+              "SolutionUUID"
+            ]
+          },
+          "awsApplication": {
+            "Fn::GetAtt": [
+              "acdpappregistryappregistryapplication0BC5FAC5",
+              "ApplicationTagValue"
+            ]
+          }
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "OrgsManagementAwsAccountId"
         }
       },
       "Type": "AWS::SSM::Parameter"
@@ -2387,9 +2514,62 @@
       },
       "Type": "AWS::SSM::Parameter"
     },
+    "acdpmultiaccountconstructmultiacctpolicy3D0C2353": {
+      "Condition": "acdpmultiaccountconstructshouldcreatemultiaccountpolicy6E0243F1",
+      "DependsOn": [
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":iam::*:role/acdp-codebuild-assume-role-*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": "iam:PassRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":iam::*:role/acdp-cloudformation-role-*"
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "acdpmultiaccountconstructmultiacctpolicy3D0C2353",
+        "Roles": [
+          {
+            "Ref": "acdpmoduledeployprojectmoduledeploycodebuildroleB125328F"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Policy"
+    },
     "acdppipelinesconstructbackstagebuildkey53146B85": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -2451,6 +2631,7 @@
     },
     "acdppipelinesconstructbackstagebuildpipelineproject8C07A386": {
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -2603,6 +2784,7 @@
     },
     "acdppipelinesconstructbackstagebuildpipelineprojectPolicyDocument67EA1C00": {
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -2638,6 +2820,7 @@
     },
     "acdppipelinesconstructbackstagebuildrole470B2DCB": {
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -2759,6 +2942,7 @@
     },
     "acdppipelinesconstructbackstagebuildroleDefaultPolicyEF6D76B7": {
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -3042,6 +3226,7 @@
     },
     "acdppipelinesconstructbackstagecodebuildsecuritygroupE511867D": {
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -3093,6 +3278,7 @@
     },
     "acdppipelinesconstructbackstagecodepipeline2D3F668A": {
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -3147,7 +3333,7 @@
                 "Configuration": {
                   "PollForSourceChanges": false,
                   "S3Bucket": {
-                    "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+                    "Ref": "backstageassetbucketconstructencryptedbucket8BE77EF0"
                   },
                   "S3ObjectKey": {
                     "Fn::GetAtt": [
@@ -3271,6 +3457,7 @@
     "acdppipelinesconstructbackstagecodepipelineArtifactsBucket9777AC61": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -3325,6 +3512,7 @@
     "acdppipelinesconstructbackstagecodepipelineArtifactsBucketEncryptionKeyAliasDC847BFB": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -3345,6 +3533,7 @@
     "acdppipelinesconstructbackstagecodepipelineArtifactsBucketEncryptionKeyF6DDC81C": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -3406,6 +3595,7 @@
     },
     "acdppipelinesconstructbackstagecodepipelineArtifactsBucketPolicyA7030BC8": {
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -3459,6 +3649,7 @@
     },
     "acdppipelinesconstructbackstagecodepipelineBuildStageBackstageBuildImageCodePipelineActionRole350B235B": {
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -3517,6 +3708,7 @@
     },
     "acdppipelinesconstructbackstagecodepipelineBuildStageBackstageBuildImageCodePipelineActionRoleDefaultPolicyA57AC59F": {
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -3553,6 +3745,7 @@
     },
     "acdppipelinesconstructbackstagecodepipelineDeployStageBackstageDeployCodePipelineActionRole5B9646C2": {
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -3611,6 +3804,7 @@
     },
     "acdppipelinesconstructbackstagecodepipelineDeployStageBackstageDeployCodePipelineActionRoleDefaultPolicy5CFA45E0": {
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -3647,6 +3841,7 @@
     },
     "acdppipelinesconstructbackstagecodepipelineSourceStageBackstageS3SourceBackstageAssetCodePipelineActionRole111364E2": {
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -3705,6 +3900,7 @@
     },
     "acdppipelinesconstructbackstagecodepipelineSourceStageBackstageS3SourceBackstageAssetCodePipelineActionRoleDefaultPolicyCAB844F9": {
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -3723,7 +3919,7 @@
               "Resource": [
                 {
                   "Fn::GetAtt": [
-                    "backstageassetbucketconstructcmkencryptedbucketE8CD3782",
+                    "backstageassetbucketconstructencryptedbucket8BE77EF0",
                     "Arn"
                   ]
                 },
@@ -3733,7 +3929,7 @@
                     [
                       {
                         "Fn::GetAtt": [
-                          "backstageassetbucketconstructcmkencryptedbucketE8CD3782",
+                          "backstageassetbucketconstructencryptedbucket8BE77EF0",
                           "Arn"
                         ]
                       },
@@ -3748,19 +3944,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "Action": [
-                "kms:Decrypt",
-                "kms:DescribeKey"
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "backstageassetbucketconstructcmkkeyDD56344B",
-                  "Arn"
-                ]
-              }
             },
             {
               "Action": [
@@ -3826,6 +4009,7 @@
     "acdppipelinesconstructbackstagedeploykey6400441D": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -3887,10 +4071,12 @@
     },
     "acdppipelinesconstructbackstagedeploypipelineproject3068AE0E": {
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
         "acdppipelinesconstructbackstagedeploypipelineprojectPolicyDocumentB45C6A12",
+        "acdppipelinesconstructvalidatemultiaccountparameters65AFB1B6",
         "ssmappuniqueidD1DCE51D"
       ],
       "Properties": {
@@ -3931,10 +4117,17 @@
               }
             },
             {
-              "Name": "DEFAULT_USER_EMAIL",
+              "Name": "ADMIN_USER_EMAIL",
               "Type": "PLAINTEXT",
               "Value": {
-                "Ref": "DefaultUserEmail"
+                "Ref": "AdminUserEmail"
+              }
+            },
+            {
+              "Name": "SHOULD_CREATE_COGNITO_USER",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "ShouldCreateCognitoUser"
               }
             },
             {
@@ -4001,7 +4194,7 @@
               "Name": "LOCAL_ASSET_BUCKET_NAME",
               "Type": "PLAINTEXT",
               "Value": {
-                "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+                "Ref": "backstageassetbucketconstructencryptedbucket8BE77EF0"
               }
             },
             {
@@ -4035,6 +4228,20 @@
               "Type": "PARAMETER_STORE",
               "Value": {
                 "Ref": "moduleinputsconstructssmispublicfacing787E6E85"
+              }
+            },
+            {
+              "Name": "ENABLE_MULTI_ACCOUNT_DEPLOYMENT",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "EnableMultiAccountDeployment"
+              }
+            },
+            {
+              "Name": "LOG_BUCKET_RETENTION_DAYS",
+              "Type": "PLAINTEXT",
+              "Value": {
+                "Ref": "S3LogExpirationDays"
               }
             }
           ],
@@ -4127,9 +4334,11 @@
     },
     "acdppipelinesconstructbackstagedeploypipelineprojectPolicyDocumentB45C6A12": {
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
+        "acdppipelinesconstructvalidatemultiaccountparameters65AFB1B6",
         "ssmappuniqueidD1DCE51D"
       ],
       "Properties": {
@@ -4162,6 +4371,7 @@
     },
     "acdppipelinesconstructbackstagedeployroleC909101A": {
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -4260,7 +4470,7 @@
                           },
                           ":s3:::",
                           {
-                            "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+                            "Ref": "backstageassetbucketconstructencryptedbucket8BE77EF0"
                           }
                         ]
                       ]
@@ -4275,27 +4485,13 @@
                           },
                           ":s3:::",
                           {
-                            "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+                            "Ref": "backstageassetbucketconstructencryptedbucket8BE77EF0"
                           },
                           "/*"
                         ]
                       ]
                     }
                   ]
-                },
-                {
-                  "Action": [
-                    "kms:Decrypt",
-                    "kms:Encrypt",
-                    "kms:GenerateDataKey"
-                  ],
-                  "Effect": "Allow",
-                  "Resource": {
-                    "Fn::GetAtt": [
-                      "backstageassetbucketconstructcmkkeyDD56344B",
-                      "Arn"
-                    ]
-                  }
                 }
               ],
               "Version": "2012-10-17"
@@ -4509,6 +4705,7 @@
     },
     "acdppipelinesconstructbackstagedeployroleDefaultPolicy79C58584": {
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -4858,6 +5055,7 @@
     "acdppipelinesconstructbackstageecrA3584D57": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -4905,6 +5103,7 @@
     },
     "acdppipelinesconstructbackstagepipelineroleC81291F3": {
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -4955,7 +5154,7 @@
                           },
                           ":s3:::",
                           {
-                            "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+                            "Ref": "backstageassetbucketconstructencryptedbucket8BE77EF0"
                           }
                         ]
                       ]
@@ -4970,7 +5169,7 @@
                           },
                           ":s3:::",
                           {
-                            "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+                            "Ref": "backstageassetbucketconstructencryptedbucket8BE77EF0"
                           },
                           "/",
                           {
@@ -5105,6 +5304,7 @@
     },
     "acdppipelinesconstructbackstagepipelineroleDefaultPolicy5CCDEA82": {
       "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
         "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
         "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
         "acdpbackstageassetsconstructs3policyA50772A6",
@@ -5208,20 +5408,44 @@
       },
       "Type": "AWS::IAM::Policy"
     },
-    "backstageassetbucketconstructcmkencryptedbucketE8CD3782": {
+    "acdppipelinesconstructvalidatemultiaccountparameters65AFB1B6": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "acdpbackstageassetsconstructbackstagedefaultusersandgroupscustomresource72402F10",
+        "acdpbackstageassetsconstructbackstagetemplateassetscopycustomresource32AF3B04",
+        "acdpbackstageassetsconstructdeploymentbackstagezipassetB64A29C2",
+        "acdpbackstageassetsconstructs3policyA50772A6",
+        "ssmappuniqueidD1DCE51D"
+      ],
+      "Properties": {
+        "EnableMultiAccountDeployment": {
+          "Ref": "EnableMultiAccountDeployment"
+        },
+        "OrgsManagementAccountRegion": {
+          "Ref": "OrgsManagementAccountRegion"
+        },
+        "OrgsManagementAwsAccountId": {
+          "Ref": "OrgsManagementAwsAccountId"
+        },
+        "Resource": "ValidateMultiAccountParameters",
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "customresourceconstructlambdafunction78B09163",
+            "Arn"
+          ]
+        }
+      },
+      "Type": "Custom::ValidateMultiAccountParameters",
+      "UpdateReplacePolicy": "Delete"
+    },
+    "backstageassetbucketconstructencryptedbucket8BE77EF0": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "BucketEncryption": {
           "ServerSideEncryptionConfiguration": [
             {
               "ServerSideEncryptionByDefault": {
-                "KMSMasterKeyID": {
-                  "Fn::GetAtt": [
-                    "backstageassetbucketconstructcmkkeyDD56344B",
-                    "Arn"
-                  ]
-                },
-                "SSEAlgorithm": "aws:kms"
+                "SSEAlgorithm": "AES256"
               }
             }
           ]
@@ -5255,10 +5479,10 @@
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain"
     },
-    "backstageassetbucketconstructcmkencryptedbucketPolicy0B97E32C": {
+    "backstageassetbucketconstructencryptedbucketPolicyE07DA0EB": {
       "Properties": {
         "Bucket": {
-          "Ref": "backstageassetbucketconstructcmkencryptedbucketE8CD3782"
+          "Ref": "backstageassetbucketconstructencryptedbucket8BE77EF0"
         },
         "PolicyDocument": {
           "Statement": [
@@ -5276,7 +5500,7 @@
               "Resource": [
                 {
                   "Fn::GetAtt": [
-                    "backstageassetbucketconstructcmkencryptedbucketE8CD3782",
+                    "backstageassetbucketconstructencryptedbucket8BE77EF0",
                     "Arn"
                   ]
                 },
@@ -5286,7 +5510,7 @@
                     [
                       {
                         "Fn::GetAtt": [
-                          "backstageassetbucketconstructcmkencryptedbucketE8CD3782",
+                          "backstageassetbucketconstructencryptedbucket8BE77EF0",
                           "Arn"
                         ]
                       },
@@ -5302,66 +5526,6 @@
       },
       "Type": "AWS::S3::BucketPolicy"
     },
-    "backstageassetbucketconstructcmkkeyDD56344B": {
-      "DeletionPolicy": "Retain",
-      "Properties": {
-        "EnableKeyRotation": true,
-        "KeyPolicy": {
-          "Statement": [
-            {
-              "Action": "kms:*",
-              "Effect": "Allow",
-              "Principal": {
-                "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":root"
-                    ]
-                  ]
-                }
-              },
-              "Resource": "*"
-            },
-            {
-              "Action": [
-                "kms:Decrypt",
-                "kms:Encrypt",
-                "kms:ReEncrypt*",
-                "kms:GenerateDataKey*"
-              ],
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "logging.s3.amazonaws.com"
-              },
-              "Resource": "*"
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "Tags": [
-          {
-            "Key": "awsApplication",
-            "Value": {
-              "Fn::GetAtt": [
-                "acdpappregistryappregistryapplication0BC5FAC5",
-                "ApplicationTagValue"
-              ]
-            }
-          }
-        ]
-      },
-      "Type": "AWS::KMS::Key",
-      "UpdateReplacePolicy": "Retain"
-    },
     "backstageassetbucketconstructlogbucketC5C46452": {
       "DeletionPolicy": "Retain",
       "Properties": {
@@ -5370,14 +5534,25 @@
           "ServerSideEncryptionConfiguration": [
             {
               "ServerSideEncryptionByDefault": {
-                "KMSMasterKeyID": {
-                  "Fn::GetAtt": [
-                    "backstageassetbucketconstructcmkkeyDD56344B",
-                    "Arn"
-                  ]
-                },
-                "SSEAlgorithm": "aws:kms"
+                "SSEAlgorithm": "AES256"
               }
+            }
+          ]
+        },
+        "LifecycleConfiguration": {
+          "Rules": [
+            {
+              "AbortIncompleteMultipartUpload": {
+                "DaysAfterInitiation": 1
+              },
+              "ExpirationInDays": {
+                "Ref": "S3LogExpirationDays"
+              },
+              "Id": "expire-current-version-and-delete-old-objects",
+              "NoncurrentVersionExpirationInDays": {
+                "Ref": "S3LogNoncurrentVersionExpirationDays"
+              },
+              "Status": "Enabled"
             }
           ]
         },
@@ -5460,20 +5635,6 @@
       "Type": "AWS::S3::BucketPolicy"
     },
     "cdklambdasvpcconstructsecuritygroupF9971F98": {
-      "Metadata": {
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "W5",
-              "reason": "Unable to know egress requirement. leaving open for now"
-            },
-            {
-              "id": "W40",
-              "reason": "Unable to know egress requirement. leaving open for now"
-            }
-          ]
-        }
-      },
       "Properties": {
         "GroupDescription": "acdp/cdk-lambdas-vpc-construct/security-group",
         "SecurityGroupEgress": [
@@ -5513,16 +5674,6 @@
       "DependsOn": [
         "customresourceconstructlambdaroleB2CB3F79"
       ],
-      "Metadata": {
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "W92",
-              "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
-            }
-          ]
-        }
-      },
       "Properties": {
         "Code": {
           "S3Bucket": {
@@ -5652,18 +5803,6 @@
                 "Resource::*"
               ],
               "id": "AwsSolutions-IAM5",
-              "reason": "ec2 Network Interfaces permissions need to be wildcard"
-            }
-          ]
-        },
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "Wildcard permissions required to write to log streams."
-            },
-            {
-              "id": "W11",
               "reason": "ec2 Network Interfaces permissions need to be wildcard"
             }
           ]
@@ -5861,20 +6000,6 @@
       "Type": "AWS::IAM::Role"
     },
     "customresourceconstructsecuritygroup50DD39AF": {
-      "Metadata": {
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "W40",
-              "reason": "Lambdas need outbound communication to contact other resources in VPC"
-            },
-            {
-              "id": "W5",
-              "reason": "Lambdas are inside Private Subnets and may need to communicate to services over internet. So the CIDR is wide open on egress for now"
-            }
-          ]
-        }
-      },
       "Properties": {
         "GroupDescription": "acdp/custom-resource-construct/security-group",
         "SecurityGroupEgress": [

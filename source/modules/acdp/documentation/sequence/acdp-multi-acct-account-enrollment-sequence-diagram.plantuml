@@ -1,0 +1,39 @@
+@startuml acdp-multi-acct-account-enrollment-sequence-diagram
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist
+!include AWSPuml/AWSCommon.puml
+
+!include AWSPuml/ManagementGovernance/Organizations.puml
+!include AWSPuml/ManagementGovernance/OrganizationsAccount.puml
+!include AWSPuml/ManagementGovernance/OrganizationsOrganizationalUnit.puml
+!include AWSPuml/ManagementGovernance/CloudFormation.puml
+!include AWSPuml/ManagementGovernance/CloudFormationStack.puml
+
+Actor "AWS Account User" as user
+
+box Organizations Management Account
+participant "$CloudFormationIMG()\nAcdpAccountEnrollment StackSet" as cfn_stackset <<AcdpAccountEnrollment StackSet>>
+participant "$OrganizationsOrganizationalUnitIMG()\nEnroled Organizational Unit" as enrolled_ou <<Enrolled Organizational Unit>>
+participant "$OrganizationsAccountIMG()\nNew Account" as new_account <<New Account>>
+endbox
+
+box New Account
+participant "$CloudFormationIMG()\nCloudFormation" as new_acct_cfn <<CloudFormation>>
+participant "$CloudFormationStackIMG()\nAcdpAccountEnrollmentStack" as acdp_acct_enrollment_stack <<AcdpAccountEnrollmentStack>>
+endbox
+
+user -> enrolled_ou: Create new account
+enrolled_ou -> new_account
+cfn_stackset <-- new_account: New account detected
+activate cfn_stackset $AWS_COLOR_COSMOS
+cfn_stackset -> new_acct_cfn: Trigger CloudFormation deploy
+activate new_acct_cfn $AWS_COLOR_COSMOS
+new_acct_cfn -> acdp_acct_enrollment_stack: Deploy AcdpAccountEnrollmentStack
+cfn_stackset <-[#red]- new_acct_cfn: Upon failure: Account enrollment failed
+cfn_stackset <-[#green]- new_acct_cfn: Upon success: Account enrollment successful
+deactivate new_acct_cfn
+deactivate cfn_stackset
+
+@enduml

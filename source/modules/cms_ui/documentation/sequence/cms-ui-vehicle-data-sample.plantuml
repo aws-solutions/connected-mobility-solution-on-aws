@@ -1,0 +1,102 @@
+@startuml cms-ui-vehicle-data-sample
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist
+!include AWSPuml/AWSCommon.puml
+
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/General/Internet.puml
+!include AWSPuml/General/Globe.puml
+!include AWSPuml/NetworkingContentDelivery/CloudFront.puml
+!include AWSPuml/ApplicationIntegration/APIGateway.puml
+!include AWSPuml/SecurityIdentityCompliance/Cognito.puml
+!include AWSPuml/FrontEndWebMobile/LocationService.puml
+!include AWSPuml/SecurityIdentityCompliance/IdentityandAccessManagement.puml
+
+!$UI_COLOR = "#248823"
+!$LAMBDA_COLOR = "#D76511"
+!$API_COLOR = "#A020F0"
+!$OAUTH_COLOR = "#A020F0"
+!$FLEETWISE_COLOR = "#248823"
+!$DATA_COLOR = "#248823"
+!$LOCATION_COLOR = "#CD484F"
+
+actor User as user
+
+box Client Machine
+participant "$GlobeIMG()\nWeb Browser" as browser << Web Browser >>
+endbox
+
+box AWS Cloud
+participant "$CloudFrontIMG()\nCMS UI" as cms_ui << CloudFront >>
+endbox
+
+box Auth Infra
+participant "$InternetIMG()\nOAuth2.0 API" as oauth_idp << OAuth2.0 API >>
+participant "$CognitoIMG()\nIdentity Pool" as identity_pool << Cognito >>
+endbox
+
+box AWS Cloud
+participant "$APIGatewayIMG()\nCMS UI API" as cms_ui_api << API Gateway >>
+participant "$LambdaIMG()\nToken Validation Lambda" as token_validation_lambda << Lambda Function >>
+participant "$LambdaIMG()\nAPI Lambda" as api_lambda << Lambda Function >>
+participant "$InternetIMG()\nVehicle Data" as vehicle_data << Vehicle Data Provider >>
+participant "$LocationServiceIMG()\n Street Map" as street_map << Location Service Map >>
+participant "$IdentityandAccessManagementIMG()\n IAM" as iam << IAM >>
+endbox
+
+
+user -> browser: Navigate to CMS website
+browser --> cms_ui: Web request
+cms_ui --> browser: Return static page
+browser --> oauth_idp: Login flow
+activate oauth_idp $OAUTH_COLOR
+oauth_idp --> browser: Redirect to login page
+user -> browser: Complete login
+browser --> oauth_idp: Pass credentials
+oauth_idp <--> browser: Token exchange
+deactivate oauth_idp
+browser --> browser: Redirect to content page
+user -> browser: Navigate to vehicle map view
+browser --> cms_ui_api: Read vehicle telemetry
+activate cms_ui_api $API_COLOR
+cms_ui_api --> token_validation_lambda: Validate access token
+activate token_validation_lambda $LAMBDA_COLOR
+token_validation_lambda --> oauth_idp: JWT and claim verification
+activate oauth_idp $OAUTH_COLOR
+oauth_idp --> token_validation_lambda
+deactivate oauth_idp
+token_validation_lambda --> cms_ui_api: Token and claims valid
+deactivate token_validation_lambda
+cms_ui_api -> api_lambda: Read vehicle telemetry
+activate api_lambda $LAMBDA_COLOR
+api_lambda --> vehicle_data: Read vehicle telemetry
+activate vehicle_data $DATA_COLOR
+vehicle_data --> vehicle_data: Read S3/Timestream
+vehicle_data --> api_lambda
+deactivate vehicle_data
+api_lambda --> cms_ui_api
+deactivate api_lambda
+cms_ui_api --> browser
+deactivate cms_ui_api
+browser --> identity_pool: Request SigV4 token
+activate identity_pool $OAUTH_COLOR
+identity_pool --> oauth_idp: Validate user identity
+activate oauth_idp $OAUTH_COLOR
+oauth_idp --> identity_pool
+deactivate oauth_idp
+identity_pool --> browser: Return SigV4 token
+deactivate identity_pool
+browser --> street_map: Request map tiles/style
+activate street_map $LOCATION_COLOR
+street_map <--> iam: Validate role permission
+street_map --> browser: Display map
+deactivate street_map
+browser --> street_map: Request map tiles/style
+activate street_map $LOCATION_COLOR
+street_map <--> iam: User does not have permissions
+street_map --> browser: Display error page
+deactivate street_map
+
+@enduml

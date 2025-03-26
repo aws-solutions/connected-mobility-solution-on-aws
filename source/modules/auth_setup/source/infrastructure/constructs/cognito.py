@@ -10,7 +10,7 @@ from constructs import Construct
 from cms_common.aspects.condition import ConditionAspect
 
 # Connected Mobility Solution on AWS
-from .module_integration import ModuleInputsConstruct
+from .module_integration import CognitoConfig, ModuleInputsConstruct
 from .services import ServicesConstruct
 from .users import UsersConstruct
 
@@ -37,4 +37,9 @@ class CognitoConstruct(Construct):
             cognito_id=module_inputs_construct.stack_config.identity_provider_id,
             user_pool=self.users_construct.user_pool,
         )
+
+        self.cognito_config = CognitoConfig(
+            user_pool_id=self.users_construct.user_pool_id,
+        )
+
         Aspects.of(self).add(ConditionAspect(should_create_resources_condition))

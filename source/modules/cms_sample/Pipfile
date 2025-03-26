@@ -7,9 +7,9 @@ name = "pypi"
 
 [dev-packages]
 "cms_common" = {path = "./../../lib", editable = true}
-aws-cdk-lib = ">=2.139.1"
-boto3 = ">=1.26.0"
-boto3-stubs = {extras = ["essential"], version = "*"}
+aws-cdk-lib = ">=2.176.0"
+boto3 = ">=1.37.0"
+boto3-stubs = {extras = ["essential"], version = ">=1.37.0"}
 cdk-nag = "*"
 freezegun="*"
 jinja2 = "*"

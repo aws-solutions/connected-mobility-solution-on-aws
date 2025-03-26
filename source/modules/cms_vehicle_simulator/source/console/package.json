@@ -5,8 +5,7 @@
   "private": true,
   "license": "Apache-2.0",
   "engines": {
-    "npm": ">=8.0.0 < 10.0.0",
-    "node": "18 || 20"
+    "node": "20 || 22"
   },
   "dependencies": {
     "@aws-amplify/api": "^5.4.13",
@@ -16,45 +15,50 @@
     "@aws-amplify/interactions": "^5.2.19",
     "@aws-amplify/storage": "^5.9.14",
     "@aws-amplify/ui-react": "^4.6.0",
+    "@babel/core": "^7.26.0",
     "@maplibre/maplibre-gl-geocoder": "1.5.0",
+    "@popperjs/core": "^2.11.8",
+    "@testing-library/dom": "^10.0.0",
     "@testing-library/jest-dom": "^6.0.0",
-    "@testing-library/react": "^14.0.0",
+    "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/jest": "^29.5.1",
-    "@types/node": "18.16.6",
+    "@types/node": "^22.10.5",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.1",
     "@types/react-router-dom": "^5.3.3",
     "aws-amplify": "^5.3.21",
     "aws-sdk": "^2.1665.0",
+    "axios": "^1.8.3",
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.10.5",
     "maplibre-gl": "^2.4.0",
     "maplibre-gl-js-amplify": "^3.0.5",
     "moment": "^2.29.4",
-    "react": "^18.2.0",
+    "react": "^18.3.1",
     "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
     "react-refresh": "^0.14.0",
     "react-router-dom": "^6.10.0",
     "react-scripts": "^5.0.1",
-    "typescript": "5.1.6",
+    "rollup": "^4.22.4",
+    "typescript": "^4.0.0",
     "web-vitals": "^3.3.1"
   },
   "resolutions": {
     "follow-redirects": "^1.15.4",
+    "axios": "^1.8.3",
     "rollup": "^4.22.4",
-    "http-proxy-middleware": "^2.0.7"
+    "http-proxy-middleware": "^2.0.7",
+    "nth-check": "^2.0.1",
+    "cross-spawn": "^7.0.5"
   },
   "overrides": {
     "nth-check": "^2.0.1",
-    "typescript": "5.1.6",
     "@babel/traverse": "^7.23.2",
     "braces": "^3.0.3",
     "ws": "^8.17.1",
-    "path-to-regexp": "^0.1.12",
-    "cross-spawn": "^7.0.5",
-    "axios": "^1.8.2"
+    "path-to-regexp": "^0.1.10"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -103,5 +107,6 @@
     "transformIgnorePatterns": [
       "node_modules/(?!axios)"
     ]
-  }
+  },
+  "packageManager": "yarn@4.6.0"
 }

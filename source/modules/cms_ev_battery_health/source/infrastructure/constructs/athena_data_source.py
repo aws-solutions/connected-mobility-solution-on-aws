@@ -9,7 +9,6 @@ from constructs import Construct
 
 # CMS Common Library
 from cms_common.constructs.custom_resource_lambda import CustomResourceLambdaConstruct
-from cms_common.policy_generators.kms import generate_kms_policy_statement_from_key_arn
 
 # Connected Mobility Solution on AWS
 from ...handlers.custom_resource.function.lib.custom_resource_type_enum import (
@@ -162,14 +161,6 @@ class AthenaDataSourceConstruct(Construct):
                             f"{athena_data_source_properties.athena_results_bucket_arn}*",
                             f"{athena_data_source_properties.athena_data_storage_bucket_arn}*",
                         ],
-                    ),
-                    generate_kms_policy_statement_from_key_arn(
-                        kms_encryption_key_arn=athena_data_source_properties.athena_data_storage_bucket_key_arn,
-                        allow_encrypt=False,
-                    ),
-                    generate_kms_policy_statement_from_key_arn(
-                        kms_encryption_key_arn=athena_data_source_properties.athena_results_bucket_key_arn,
-                        allow_encrypt=True,
                     ),
                 ],
             )

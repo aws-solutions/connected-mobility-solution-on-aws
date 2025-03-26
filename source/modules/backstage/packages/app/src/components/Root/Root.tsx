@@ -1,7 +1,9 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
+
+import { Administration } from "@backstage-community/plugin-rbac";
 
 import { makeStyles } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
@@ -13,6 +15,7 @@ import CreateComponentIcon from "@material-ui/icons/AddCircleOutline";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 
+import { RequirePermission } from "@backstage/plugin-permission-react";
 import {
   Settings as SidebarSettings,
   UserSettingsSignInAvatar,
@@ -30,8 +33,11 @@ import {
   Link,
 } from "@backstage/core-components";
 
+import { acdpPartnerOfferingReadPermission } from "backstage-plugin-acdp-common";
+
 import { LogoFull } from "./LogoFull";
 import { LogoIcon } from "./LogoIcon";
+import { NullErrorPage } from "../ErrorPage/NullErrorPage";
 
 const useSidebarLogoStyles = makeStyles({
   root: {
@@ -76,9 +82,17 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarItem icon={ExtensionIcon} to="api-docs" text="APIs" />
         <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
         <SidebarItem icon={CreateComponentIcon} to="create" text="Create..." />
-        <SidebarItem icon={ShoppingCart} to="partners" text="Partners..." />
+        <RequirePermission
+          permission={acdpPartnerOfferingReadPermission}
+          errorPage={<NullErrorPage />}
+        >
+          <SidebarItem icon={ShoppingCart} to="partners" text="Partners..." />
+        </RequirePermission>
         {/* End global nav */}
         <SidebarDivider />
+      </SidebarGroup>
+      <SidebarGroup label="Admin">
+        <Administration />
       </SidebarGroup>
       <SidebarSpace />
       <SidebarDivider />

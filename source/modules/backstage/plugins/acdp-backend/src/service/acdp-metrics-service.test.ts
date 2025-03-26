@@ -12,18 +12,17 @@ import {
   ServiceCatalogAppRegistryClient,
 } from "@aws-sdk/client-service-catalog-appregistry";
 
-import { getVoidLogger } from "@backstage/backend-common";
-
+import { mockServices } from "@backstage/backend-test-utils";
 import { constants } from "backstage-plugin-acdp-common";
 
 import {
   mockedApplicationArn,
   mockedApplicationTag,
   mockedCurrentMonthCost,
-  mockConfig,
   mockCredentialsProvider,
   mockSsmClientGetBuildParameters,
   mockedCatalogEntity,
+  mockConfigWithoutMultiAccount,
 } from "../mocks";
 import {
   AcdpMetricsService,
@@ -37,9 +36,9 @@ const mockedSsmClient = mockClient(SSMClient);
 let acdpMetricsService: AcdpMetricsService;
 beforeAll(async () => {
   const acdpMetricsServiceMockedOptions: AcdpMetricsServiceOptions = {
-    config: mockConfig,
+    config: mockConfigWithoutMultiAccount,
     awsCredentialsProvider: mockCredentialsProvider,
-    logger: getVoidLogger(),
+    logger: mockServices.logger.mock(),
   };
   acdpMetricsService = new AcdpMetricsService(acdpMetricsServiceMockedOptions);
 });

@@ -39,6 +39,7 @@ class OAuth2Configurations(Construct):
         cognito_issuer = f"https://cognito-idp.{cognito_construct.users_construct.user_pool.stack.region}.amazonaws.com/{cognito_construct.users_construct.user_pool.user_pool_id}"
         cognito_token_endpoint = f"https://{cognito_domain_prefix}.auth.{Stack.of(cognito_construct.users_construct).region}.amazoncognito.com/oauth2/token"
         cognito_authorize_endpoint = f"https://{cognito_domain_prefix}.auth.{Stack.of(cognito_construct.users_construct).region}.amazoncognito.com/oauth2/authorize"
+        cognito_logout_endpoint = f"https://{cognito_domain_prefix}.auth.{Stack.of(cognito_construct.users_construct).region}.amazoncognito.com/logout"
 
         cognito_auds = [  # This is a list, since a specific aud does not need to specified when validating, only the existance of any valid aud.
             cognito_construct.users_construct.client.user_pool_client_id,
@@ -61,6 +62,7 @@ class OAuth2Configurations(Construct):
                     "issuer": cognito_issuer,
                     "token_endpoint": cognito_token_endpoint,
                     "authorization_endpoint": cognito_authorize_endpoint,
+                    "logout_endpoint": cognito_logout_endpoint,
                     "alternate_aud_key": "client_id",  # Cognito uses `client_id` instead of `aud` for access tokens.
                     "auds": cognito_auds,
                     "scopes": cognito_scopes,
@@ -71,6 +73,7 @@ class OAuth2Configurations(Construct):
                     "issuer": "",
                     "token_endpoint": cognito_token_endpoint,
                     "authorization_endpoint": cognito_authorize_endpoint,
+                    "logout_endpoint": cognito_logout_endpoint,
                     "alternate_aud_key": "",
                     "auds": [],
                     "scopes": [],

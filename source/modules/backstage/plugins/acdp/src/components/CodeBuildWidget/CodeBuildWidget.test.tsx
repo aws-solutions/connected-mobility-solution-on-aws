@@ -4,13 +4,14 @@
 import { AnyApiRef } from "@backstage/core-plugin-api";
 import { EntityProvider } from "@backstage/plugin-catalog-react";
 import {
-  setupRequestMockHandlers,
+  registerMswTestHooks,
   TestApiProvider,
   wrapInTestApp,
 } from "@backstage/test-utils";
+
 import { act, render, waitFor } from "@testing-library/react";
 import { setupServer } from "msw/node";
-import React from "react";
+
 import { acdpBuildApiRef } from "../../api";
 import { mockCodeBuildEntity, MockAcdpBuildApi } from "../../mocks";
 import { AcdpBuildWidget } from "./CodeBuildWidget";
@@ -21,7 +22,7 @@ const apis: [AnyApiRef, Partial<unknown>][] = [
 
 describe("AcdpBuildWidget", () => {
   const worker = setupServer();
-  setupRequestMockHandlers(worker);
+  registerMswTestHooks(worker);
 
   it("should display widget when ARN is present", async () => {
     const rendered = render(

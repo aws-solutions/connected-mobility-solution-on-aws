@@ -52,34 +52,6 @@ def test_nag_suppression_cdk_metadata() -> None:
         assert False
 
 
-def test_nag_suppression_cfn_metadata() -> None:
-    app = App()
-    test_stack = NagTestStack(app, "nag-test-stack")
-    cfn_nag_suppression = NagSuppression(
-        f"{dirname(realpath(__file__))}/test-cfn-nag-suppression-list.json",
-        NagType.CFN_NAG,
-    )
-
-    l1_construct = test_stack.test_key.node.default_child
-    if l1_construct is not None:
-        cfn_nag_suppression.visit(l1_construct)
-        template = assertions.Template.from_stack(test_stack)
-        template.has_resource(
-            "AWS::KMS::Key",
-            {
-                "Metadata": {
-                    "cfn_nag": {
-                        "rules_to_suppress": [
-                            {"id": "test-cfn-id", "reason": "test-cfn-reason"}
-                        ]
-                    }
-                }
-            },
-        )
-    else:
-        assert False
-
-
 def test_nag_suppression_inline_cdk_metadata() -> None:
     app = App()
     test_stack = NagTestStack(app, "nag-test-stack")
@@ -99,32 +71,6 @@ def test_nag_suppression_inline_cdk_metadata() -> None:
                 "cdk_nag": {
                     "rules_to_suppress": [
                         {"id": "test-cdk-id", "reason": "test-cdk-reason"}
-                    ]
-                }
-            }
-        },
-    )
-
-
-def test_nag_suppression_inline_cfn_metadata() -> None:
-    app = App()
-    test_stack = NagTestStack(app, "nag-test-stack")
-    NagSuppression.add_inline_suppression(
-        node=test_stack.test_key.node.default_child,
-        suppression={
-            "rules_to_suppress": [{"id": "test-cfn-id", "reason": "test-cfn-reason"}]
-        },
-        nag_type=NagType.CFN_NAG,
-    )
-
-    template = assertions.Template.from_stack(test_stack)
-    template.has_resource(
-        "AWS::KMS::Key",
-        {
-            "Metadata": {
-                "cfn_nag": {
-                    "rules_to_suppress": [
-                        {"id": "test-cfn-id", "reason": "test-cfn-reason"}
                     ]
                 }
             }

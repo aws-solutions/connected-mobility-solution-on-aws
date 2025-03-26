@@ -170,5 +170,45 @@
                 "reason": "Wildcard permissions are required by the log retention lambda."
             }
         ]
+    },
+    "/cms-provisioning/cms-provisioning/custom-resource-lambda-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "The non-container Lambda function is not configured to use the latest runtime version."
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/pre-provisioning-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "The non-container Lambda function is not configured to use the latest runtime version."
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/iot-credentials-construct/rotate-secret-lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "The non-container Lambda function is not configured to use the latest runtime version."
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/post-provisioning-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "The non-container Lambda function is not configured to use the latest runtime version."
+            }
+        ]
+    },
+    "/cms-provisioning/cms-provisioning/initial-connection-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "The non-container Lambda function is not configured to use the latest runtime version."
+            }
+        ]
     }
 }

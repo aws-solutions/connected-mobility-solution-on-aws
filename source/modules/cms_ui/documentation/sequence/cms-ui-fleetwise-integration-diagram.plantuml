@@ -1,0 +1,96 @@
+@startuml cms-ui-fleetwise-integration-diagram
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist
+!include AWSPuml/AWSCommon.puml
+
+!include AWSPuml/Compute/Lambda.puml
+!include AWSPuml/InternetOfThings/IoTMQTTProtocol.puml
+!include AWSPuml/InternetOfThings/IoTRule.puml
+!include AWSPuml/InternetOfThings/IoTFleetWise.puml
+!include AWSPuml/Storage/SimpleStorageService.puml
+!include AWSPuml/Analytics/KinesisDataStreams.puml
+!include AWSPuml/Analytics/Glue.puml
+!include AWSPuml/SecurityIdentityCompliance/SecretsManager.puml
+!include AWSPuml/General/Internet.puml
+!include AWSPuml/General/Globe.puml
+!include AWSPuml/NetworkingContentDelivery/CloudFront.puml
+!include AWSPuml/ApplicationIntegration/APIGateway.puml
+
+!$UI_COLOR = "#248823"
+!$LAMBDA_COLOR = "#D76511"
+!$API_COLOR = "#A020F0"
+!$OAUTH_COLOR = "#A020F0"
+!$FLEETWISE_COLOR = "#248823"
+
+actor User as user
+
+box Client Machine
+participant "$GlobeIMG()\nWeb Browser" as browser << Web Browser >>
+endbox
+
+box AWS Cloud
+participant "$CloudFrontIMG()\nCMS UI" as cms_ui << CloudFront >>
+endbox
+
+box CMS UI API
+participant "$APIGatewayIMG()\nCMS UI API" as cms_ui_api << API Gateway >>
+participant "$LambdaIMG()\nToken Validation Lambda" as token_validation_lambda << Lambda Function >>
+participant "$LambdaIMG()\nAPI Lambda" as api_lambda << Lambda Function >>
+endbox
+
+box OAuth2.0 IdP
+participant "$InternetIMG()\nOAuth2.0 API" as oauth_idp << OAuth2.0 API >>
+endbox
+
+box AWS Cloud
+participant "$IoTFleetWiseIMG()\nIoT FleetWise" as fleetwise << IoT FleetWise >>
+endbox
+
+user -> browser: Navigate to CMS website
+browser --> cms_ui: Web request
+cms_ui --> browser: Return static page
+browser --> oauth_idp: Login flow
+activate oauth_idp $OAUTH_COLOR
+oauth_idp --> browser: Redirect to login page
+user -> browser: Complete login
+browser --> oauth_idp: Pass credentials
+oauth_idp <--> browser: Token exchange
+deactivate oauth_idp
+browser --> browser: Redirect to content page
+user -> browser: CRUD Fleets and Vehicles
+browser --> cms_ui_api: CRUD Fleets/Vehicles
+activate cms_ui_api $API_COLOR
+cms_ui_api -> token_validation_lambda: Validate access token
+activate token_validation_lambda $LAMBDA_COLOR
+token_validation_lambda --> oauth_idp: JWT and claim verification
+activate oauth_idp $OAUTH_COLOR
+oauth_idp --> token_validation_lambda
+deactivate oauth_idp
+token_validation_lambda --> cms_ui_api: Token and claims valid
+deactivate token_validation_lambda
+cms_ui_api -> api_lambda: CRUD Fleets/Vehicles
+activate api_lambda $LAMBDA_COLOR
+api_lambda --> api_lambda: Validate inputs and format request(s)
+api_lambda -> fleetwise: CRUD Fleets/Vehicles
+activate fleetwise $FLEETWISE_COLOR
+fleetwise --> api_lambda
+deactivate fleetwise
+api_lambda --> api_lambda: Process and format response
+api_lambda --> cms_ui_api
+deactivate api_lambda
+cms_ui_api --> browser: Send success notification to the user
+cms_ui_api -> api_lambda: CRUD Fleets/Vehicles
+activate api_lambda $LAMBDA_COLOR
+api_lambda --> api_lambda: Validate inputs and format request(s)
+api_lambda -> fleetwise: CRUD Fleets/Vehicles
+activate fleetwise $FLEETWISE_COLOR
+fleetwise --> api_lambda: Error creating fleet/vehicle
+deactivate fleetwise
+api_lambda --> cms_ui_api
+deactivate api_lambda
+cms_ui_api --> browser: Send failure notification to the user
+deactivate cms_ui_api
+
+@enduml

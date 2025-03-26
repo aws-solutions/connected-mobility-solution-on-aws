@@ -130,8 +130,8 @@ class CmsEVBatteryHealthConstruct(Construct):
         lambda_dependencies = LambdaDependenciesConstruct(
             self,
             "cms-ev-dependency-layer-construct",
-            pipfile_path=f"{dirname(dirname(dirname(abspath(__file__))))}/Pipfile",
-            dependency_layer_path=f"{os.getcwd()}/source/infrastructure/cms_ev_battery_health_dependency_layer",
+            pipfile_lock_dir=dirname(dirname(dirname(abspath(__file__)))),
+            dependency_layer_path=f"{os.getcwd()}/deployment/dist/lambda/cms_ev_battery_health_dependency_layer",
         )
 
         custom_resource_lambda = CustomResourceLambdaConstruct(
@@ -140,7 +140,7 @@ class CmsEVBatteryHealthConstruct(Construct):
             dependency_layer=lambda_dependencies.dependency_layer,
             unique_id=module_inputs_construct.app_unique_id,
             name=solution_config_inputs.module_short_name,
-            asset_path="dist/lambda/custom_resource.zip",
+            asset_path=f"{os.getcwd()}/deployment/dist/lambda/custom_resource.zip",
             user_agent_string=solution_config_inputs.get_user_agent_string(),
             vpc_construct=vpc_construct,
         )
@@ -188,7 +188,7 @@ class CmsEVBatteryHealthConstruct(Construct):
         s3_to_grafana = S3ToGrafanaConstruct(
             self,
             "cms-ev-s3-to-grafana-construct",
-            app_unique_id=module_inputs_construct.app_unique_id,
+            module_inputs=module_inputs_construct,
             solution_config_inputs=solution_config_inputs,
             dependency_layer=lambda_dependencies.dependency_layer,
             grafana_api_key_secret_arn=grafana_api_key.secret.secret_arn,
@@ -203,7 +203,6 @@ class CmsEVBatteryHealthConstruct(Construct):
             "cms-ev-grafana-dashboard-construct",
             grafana_s3_bucket_name=s3_to_grafana.grafana_assets_bucket.bucket.bucket_name,
             grafana_s3_bucket_arn=s3_to_grafana.grafana_assets_bucket.bucket.bucket_arn,
-            grafana_s3_bucket_key_arn=s3_to_grafana.grafana_assets_bucket.key.key_arn,
             data_sources={
                 GrafanaDataSourceType.ATHENA.value: {
                     "data_source": athena_data_source.data_source.get_att("datasource"),
@@ -246,7 +245,6 @@ class CmsEVBatteryHealthConstruct(Construct):
             "cms-ev-grafana-alerts-construct",
             grafana_s3_bucket_name=s3_to_grafana.grafana_assets_bucket.bucket.bucket_name,
             grafana_s3_bucket_arn=s3_to_grafana.grafana_assets_bucket.bucket.bucket_arn,
-            grafana_s3_bucket_key_arn=s3_to_grafana.grafana_assets_bucket.key.key_arn,
             data_sources={
                 GrafanaDataSourceType.ATHENA.value: {
                     "data_source": athena_data_source.data_source.get_att("datasource"),

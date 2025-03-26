@@ -49,23 +49,6 @@ class CustomResourceLambdaConstruct(Construct):
             },
         )
 
-        NagSuppression.add_inline_suppression(
-            node=self.role.node.default_child,
-            suppression={
-                "rules_to_suppress": [
-                    {
-                        "id": "AwsSolutions-IAM5",
-                        "reason": "Wildcard permissions required to write to log streams.",
-                    },
-                    {
-                        "id": "W11",
-                        "reason": "ec2 Network Interfaces permissions need to be wildcard",
-                    },
-                ]
-            },
-            nag_type=NagType.CFN_NAG,
-        )
-
         # Can't include unique id in the nag suppression since it is typically a Cfn ref. Wildcard it instead.
         NagSuppression.add_inline_suppression(
             node=self.role.node.default_child,
@@ -99,23 +82,6 @@ class CustomResourceLambdaConstruct(Construct):
             allow_all_outbound=True,  # NOSONAR
         )
 
-        NagSuppression.add_inline_suppression(
-            node=self.security_group.node.default_child,
-            suppression={
-                "rules_to_suppress": [
-                    {
-                        "id": "W40",
-                        "reason": "Lambdas need outbound communication to contact other resources in VPC",
-                    },
-                    {
-                        "id": "W5",
-                        "reason": "Lambdas are inside Private Subnets and may need to communicate to services over internet. So the CIDR is wide open on egress for now",
-                    },
-                ]
-            },
-            nag_type=NagType.CFN_NAG,
-        )
-
         self.function = aws_lambda.Function(
             self,
             "lambda-function",
@@ -137,19 +103,6 @@ class CustomResourceLambdaConstruct(Construct):
             vpc=vpc_construct.vpc,  # type: ignore[arg-type]
             vpc_subnets=vpc_construct.private_subnet_selection,
             security_groups=[self.security_group],
-        )
-
-        NagSuppression.add_inline_suppression(
-            node=self.function.node.default_child,
-            suppression={
-                "rules_to_suppress": [
-                    {
-                        "id": "W92",
-                        "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now.",
-                    },
-                ]
-            },
-            nag_type=NagType.CFN_NAG,
         )
 
     def add_policy_to_custom_resource_lambda(self, policy: aws_iam.Policy) -> None:

@@ -21,23 +21,24 @@ class CognitoUserConstruct(Construct):
     ) -> None:
         super().__init__(scope, construct_id)
 
-        cognito_default_user_pool_user = aws_cognito.CfnUserPoolUser(
+        cognito_admin_user_pool_user = aws_cognito.CfnUserPoolUser(
             self,
-            "user-pool-user",
+            "admin-user",
             user_pool_id=module_inputs.user_pool_id,
-            username=Fn.select(0, Fn.split("@", module_inputs.default_user_email)),
+            username=module_inputs.admin_username,
             desired_delivery_mediums=["EMAIL"],
             force_alias_creation=True,
             user_attributes=[
-                {"name": "email", "value": module_inputs.default_user_email},
+                {"name": "email", "value": module_inputs.admin_user_email},
                 {"name": "email_verified", "value": "True"},
             ],
         )
 
-        cognito_default_user_pool_user.cfn_options.condition = CfnCondition(
+        cognito_admin_user_pool_user.cfn_options.condition = CfnCondition(
             self,
-            "should-create-cognito-default-user-condition",
-            expression=Fn.condition_not(
-                Fn.condition_equals(lhs=module_inputs.default_user_email, rhs="")
+            "should-create-cognito-admin-user-condition",
+            expression=Fn.condition_equals(
+                module_inputs.should_create_cognito_user,
+                "true",
             ),
         )

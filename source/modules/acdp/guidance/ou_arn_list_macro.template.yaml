@@ -1,0 +1,59 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Creates a Lambda function and registers it as a CloudFormation macro
+
+Resources:
+  OuArnListMacroFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Runtime: python3.12
+      Handler: index.handler
+      Role: !GetAtt OuArnListMacroFunctionRole.Arn
+      Code:
+        ZipFile: |
+          def handler(event, context):
+              params = event.get('params', {})
+              try:
+                  ou_id_list = params.get('OuIdList')
+                  org_id = params.get('OrgId')
+                  account_id = params.get('AccountId')
+
+                  fragment = [
+                      f"arn:aws:organizations::{account_id}:ou/{org_id}/{ou_id}"
+                      for ou_id in ou_id_list
+                  ]
+              except KeyError as e:
+                  return {
+                      'requestId': event['requestId'],
+                      'status': 'failure',
+                      'errorMessage': f'Missing key: {str(e)}'
+                  }
+
+              return {
+                  'requestId': event['requestId'],
+                  'status': 'success',
+                  'fragment': fragment
+              }
+
+  OuArnListMacroFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+  OuArnListMacro:
+    Type: AWS::CloudFormation::Macro
+    Properties:
+      Name: OuArnListMacro
+      FunctionName: !GetAtt OuArnListMacroFunction.Arn
+
+Outputs:
+  MacroName:
+    Description: Name of the registered macro
+    Value: OuArnListMacro

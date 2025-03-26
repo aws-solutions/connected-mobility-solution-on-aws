@@ -1,0 +1,38 @@
+p, role:example/viewer, catalog-entity, read, allow
+p, role:example/viewer, catalog.location.read, read, allow
+p, role:example/viewer, scaffolder-template, read, allow
+p, role:example/viewer, scaffolder.task.read, read, allow
+p, role:example/viewer, acdp.build.read, read, allow
+p, role:example/viewer, acdp.metrics.read, read, allow
+p, role:example/viewer, acdp.partner-offering.read, read, allow
+
+p, role:example/manager, catalog-entity, read, allow
+p, role:example/manager, catalog-entity, delete, allow
+p, role:example/manager, catalog-entity, update, allow
+p, role:example/manager, catalog.entity.create, create, allow
+p, role:example/manager, catalog.entity.validate, use, allow
+p, role:example/manager, catalog.location.read, read, allow
+p, role:example/manager, catalog.location.create, create, allow
+p, role:example/manager, catalog.location.delete, delete, allow
+p, role:example/manager, catalog.location.analyze, use, allow
+p, role:example/manager, scaffolder-template, read, allow
+p, role:example/manager, scaffolder-action, use, allow
+p, role:example/manager, scaffolder.task.read, read, allow
+p, role:example/manager, scaffolder.task.cancel, use, allow
+p, role:example/manager, scaffolder.task.create, create, allow
+p, role:example/manager, scaffolder.template.management, use, allow
+p, role:example/manager, policy-entity, read, allow
+p, role:example/manager, acdp.build.read, read, allow
+p, role:example/manager, acdp.build.start, use, allow
+p, role:example/manager, acdp.metrics.read, read, allow
+p, role:example/manager, acdp.partner-offering.read, read, allow
+
+p, role:example/admin, catalog-entity, read, allow
+p, role:example/admin, policy-entity, read, allow
+p, role:example/admin, policy-entity, create, allow
+p, role:example/admin, policy-entity, delete, allow
+p, role:example/admin, policy-entity, update, allow
+
+g, group:acdp/viewers, role:example/viewer
+g, group:acdp/managers, role:example/manager
+g, group:acdp/admins, role:example/admin

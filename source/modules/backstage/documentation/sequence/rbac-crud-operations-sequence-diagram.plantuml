@@ -1,0 +1,68 @@
+@startuml backstage-crud-operations-diagram
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist
+!include AWSPuml/AWSCommon.puml
+
+!include AWSPuml/ManagementGovernance/CloudFormation.puml
+!include AWSPuml/General/Globe.puml
+!include AWSPuml/Storage/SimpleStorageService.puml
+!include AWSPuml/General/SourceCode.puml
+!include AWSPuml/General/GenericApplication.puml
+!include AWSPuml/Database/AuroraInstance.puml
+
+!$PLUGIN_COLOR = "#1A1340"
+!$GENERIC_COLOR = "#8D8B93"
+
+actor BackstageUser as user
+actor "BackstageAdmin\nBackstageSuperUser" as admin
+
+box Backstage Deploy
+participant "$CloudFormationIMG()\nBackstage CloudFormation Deploy" as backstage_deploy << Backstage CloudFormation Deploy >>
+endbox
+
+box Client Machine
+participant "$GlobeIMG()\nWeb Browser" as browser << Web Browser >>
+endbox
+
+box OAuth2.0 Provider Plugin
+participant "$SourceCodeIMG()\nOAuth2.0 Provider Plugin" as oauth_plugin << OAuth2.0 Provider Plugin >>
+participant "$SimpleStorageServiceIMG()\nBackstage Catalog" as catalog << Backstage Catalog >>
+endbox
+
+box Backstage Community RBAC Plugin
+participant "$GenericApplicationIMG()\nCommunity RBAC Plugin" as rbac_plugin << Community RBAC Plugin >>
+participant "$AuroraInstanceIMG()\nRBAC Plugin Database Instance" as rds << RBAC Plugin Database Instance >>
+endbox
+
+backstage_deploy -> catalog: Create initial Admin user entity
+backstage_deploy -> catalog: Create default Group entities
+backstage_deploy -> rbac_plugin: Setup initial permission policies and mappings via .csv config
+rbac_plugin --> rds: Populate initial permission policies and mappings
+
+|||
+
+user -> browser: Authenticate via Backstage login
+browser --> oauth_plugin: Initiate login
+activate oauth_plugin $PLUGIN_COLOR
+oauth_plugin <--> catalog: Check for user entity
+oauth_plugin -> catalog: Create user entity if not found
+oauth_plugin --> browser: Return user context token
+deactivate oauth_plugin
+
+|||
+
+|||
+
+admin -> browser: Authenticate via Backstage login
+admin -> browser: Navigate to RBAC page
+browser <--> rbac_plugin: Authorize RBAC management permissions (see other diagram)
+admin -> browser: Create permission policy or role...and/or...Assign users, groups, roles, permissions.
+browser --> rbac_plugin: Send CRUD request
+activate rbac_plugin $GENERIC_COLOR
+rbac_plugin <--> rds: Perform CRUD operation
+rbac_plugin --> admin: Return operation result. Authorization change is immediate.
+deactivate rbac_plugin
+
+@enduml

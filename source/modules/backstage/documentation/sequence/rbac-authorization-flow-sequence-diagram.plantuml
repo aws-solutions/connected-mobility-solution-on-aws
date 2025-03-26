@@ -1,0 +1,51 @@
+@startuml backstage-rbac-authorization-flow-diagram
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist
+!include AWSPuml/AWSCommon.puml
+
+!include AWSPuml/General/Globe.puml
+!include AWSPuml/General/SourceCode.puml
+!include AWSPuml/General/GenericApplication.puml
+!include AWSPuml/Database/AuroraInstance.puml
+
+!$PLUGIN_COLOR = "#1A1340"
+!$GENERIC_COLOR = "#8D8B93"
+
+actor BackstageUser as user
+
+box Client Machine
+participant "$GlobeIMG()\nWeb Browser" as browser << Web Browser >>
+endbox
+
+box ACDP or Backstage Plugin
+participant "$SourceCodeIMG()\nBackstage Plugin" as backstage_plugin << Backstage Plugin >>
+endbox
+
+box Backstage Community RBAC Plugin
+participant "$GenericApplicationIMG()\nCommunity RBAC Plugin" as rbac_plugin << Community RBAC Plugin >>
+participant "$AuroraInstanceIMG()\nRBAC Plugin Database Instance" as rds << RBAC Plugin Database Instance >>
+endbox
+
+user -> browser: Authenticate via Backstage login
+browser --> rbac_plugin: Retrieve authenticated user permissions
+activate rbac_plugin $GENERIC_COLOR
+rbac_plugin <--> rds: Check permissions, groups, roles
+rbac_plugin --> browser: Return user permissions
+deactivate rbac_plugin
+browser --> user: Render appropriate views
+
+user -> browser: Perform action
+browser --> backstage_plugin: Trigger API
+activate backstage_plugin $PLUGIN_COLOR
+backstage_plugin -> rbac_plugin: Initiate permission request
+activate rbac_plugin $GENERIC_COLOR
+rbac_plugin <--> rds: Check permission policy
+rbac_plugin --> backstage_plugin: Return permission response
+deactivate rbac_plugin
+backstage_plugin -> backstage_plugin: Handle permission response
+backstage_plugin --> user: Allow or deny action
+deactivate backstage_plugin
+
+@enduml

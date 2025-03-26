@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # Standard Library
+import os
 import tempfile
 from os.path import abspath, dirname
 from typing import Any, Dict, List
@@ -20,8 +21,8 @@ from aws_cdk import Stack, assertions, aws_lambda
 # Connected Mobility Solution on AWS
 from ..app_unique_id import AppUniqueId
 from ..cdk_lambda_vpc_config_construct import CDKLambdasVpcConfigConstruct
-from ..cmk_encrypted_s3 import CMKEncryptedS3Construct
 from ..custom_resource_lambda import CustomResourceLambdaConstruct
+from ..encrypted_s3 import EncryptedS3Construct
 from ..identity_provider_config import IdentityProviderConfig
 from ..lambda_dependencies import LambdaDependenciesConstruct, LambdaDependencyError
 from ..vpc_construct import VpcConfig, VpcConstruct
@@ -68,7 +69,7 @@ def fixture_app_unique_id_cfn_parameter(
 @pytest.fixture(name="cmk_encrpyted_s3_stack", scope="session")
 def fixture_cmk_encrpyted_s3_stack() -> assertions.Template:
     stack = Stack()
-    CMKEncryptedS3Construct(
+    EncryptedS3Construct(
         stack,
         "test-cmk-encrypted-s3",
     )
@@ -87,8 +88,8 @@ def fixture_empty_lambda_dependencies_stack() -> assertions.Template:
         LambdaDependenciesConstruct(
             stack,
             "test-lambda-dependencies",
-            pipfile_path=f"{dirname(abspath(__file__))}/test_pipfile_empty.toml",
-            dependency_layer_path=f"{dirname(abspath(__file__))}/mock_dependency_layer",
+            pipfile_lock_dir=f"{dirname(abspath(__file__))}/mock_lock_files/empty",
+            dependency_layer_path=f"{dirname(abspath(__file__))}/mock_dependency_layer/empty",
         )
         return assertions.Template.from_stack(stack)
 
@@ -106,8 +107,8 @@ def fixture_populated_lambda_dependencies_stack() -> assertions.Template:
             LambdaDependenciesConstruct(
                 stack,
                 "test-lambda-dependencies",
-                pipfile_path=f"{dirname(abspath(__file__))}/test_pipfile_populated.toml",
-                dependency_layer_path=f"{dirname(abspath(__file__))}/mock_dependency_layer",
+                pipfile_lock_dir=f"{dirname(abspath(__file__))}/mock_lock_files/populated",
+                dependency_layer_path=f"{dirname(abspath(__file__))}/mock_dependency_layer/populated",
             )
         except LambdaDependencyError:
             pass  # Error excpected because dependencies are not real
@@ -147,14 +148,14 @@ def fixture_custom_resource_lambda_stack() -> assertions.Template:
         lambda_dependencies = LambdaDependenciesConstruct(
             stack,
             "test-lambda-dependencies",
-            pipfile_path=f"{dirname(abspath(__file__))}/test_pipfile_empty.toml",
-            dependency_layer_path=f"{dirname(abspath(__file__))}/mock_dependency_layer",
+            pipfile_lock_dir=f"{dirname(abspath(__file__))}/mock_lock_files/empty",
+            dependency_layer_path=f"{dirname(abspath(__file__))}/mock_dependency_layer/empty",
         )
         CustomResourceLambdaConstruct(
             stack,
             "test-custom-resource-lambda",
             dependency_layer=lambda_dependencies.dependency_layer,
-            asset_path="dist/lambda/custom_resource.zip",
+            asset_path=f"{os.getcwd()}/deployment/dist/lambda/custom_resource.zip",
             unique_id="test-id",
             name="test-module-name",
             user_agent_string="test-user-agent-string",

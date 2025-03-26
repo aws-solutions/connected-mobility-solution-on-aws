@@ -1,13 +1,15 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { Logger } from "winston";
 import { z } from "zod";
 
 import { SourceType } from "@aws-sdk/client-codebuild";
 
-import { UrlReader } from "@backstage/backend-common";
-import { AuthService } from "@backstage/backend-plugin-api";
+import {
+  AuthService,
+  LoggerService,
+  UrlReaderService,
+} from "@backstage/backend-plugin-api";
 import { CatalogClient } from "@backstage/catalog-client";
 import { Entity, parseEntityRef } from "@backstage/catalog-model";
 import { Config } from "@backstage/config";
@@ -19,6 +21,7 @@ import { JsonObject } from "@backstage/types";
 import { AcdpBuildAction, constants } from "backstage-plugin-acdp-common";
 
 import { AcdpBuildService } from "../service/acdp-build-service";
+import { OperationalMetrics } from "../utils/operational-metrics";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -41,11 +44,11 @@ interface CtxInput extends JsonObject {
 
 export const createAcdpConfigureAction = async (options: {
   config: Config;
-  reader: UrlReader;
+  reader: UrlReaderService;
   integrations: ScmIntegrations;
   catalogClient: CatalogClient;
   auth: AuthService;
-  logger: Logger;
+  logger: LoggerService;
 }) => {
   const { config, reader, integrations, catalogClient, logger, auth } = options;
 
@@ -59,6 +62,10 @@ export const createAcdpConfigureAction = async (options: {
     integrations: integrations,
     awsCredentialsProvider: awsCredentialProvider,
     logger: logger,
+    operationalMetrics: new OperationalMetrics({
+      logger,
+      config,
+    }),
   });
 
   return createTemplateAction<CtxInput>({

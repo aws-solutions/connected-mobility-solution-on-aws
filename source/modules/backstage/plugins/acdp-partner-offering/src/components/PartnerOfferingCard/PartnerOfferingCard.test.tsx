@@ -28,7 +28,7 @@ import {
   TestApiProvider,
 } from "@backstage/test-utils";
 import { PartnerOfferingCard } from "./PartnerOfferingCard";
-import React from "react";
+
 import { RELATION_OWNED_BY } from "@backstage/catalog-model";
 import { fireEvent } from "@testing-library/react";
 import { permissionApiRef } from "@backstage/plugin-permission-react";

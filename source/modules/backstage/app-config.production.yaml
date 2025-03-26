@@ -7,6 +7,32 @@ app:
 organization:
   name: ${BACKSTAGE_ORG}
 
+acdp:
+  s3Catalog:
+    bucketName: ${LOCAL_ASSET_BUCKET_NAME}
+    prefix: ${LOCAL_ASSET_BUCKET_CATALOG_KEY_PREFIX}
+    region: ${LOCAL_ASSET_BUCKET_REGION}
+  buildConfig:
+    buildConfigStoreSsmPrefix: ${ACDP_BUILD_CONFIG_SSM_PREFIX}
+  deploymentDefaults:
+    codeBuildProjectArn: ${CODEBUILD_PROJECT_ARN}
+    accountId: ${DEFAULT_TARGET_ACCOUNT_ID}
+    region: ${DEFAULT_TARGET_REGION}
+  accountDirectory:
+    enableMultiAccountDeployment: ${ENABLE_MULTI_ACCOUNT_DEPLOYMENT}
+    organizationsAccountId: ${ORGS_MANAGEMENT_AWS_ACCOUNT_ID}
+    organizationsManagementAccountRegion: ${ORGS_MANAGEMENT_ACCOUNT_REGION}
+    organizationsAccountAssumeRoleName: ${ORGS_ACCOUNT_DIRECTORY_ASSUME_ROLE_NAME}
+    availableRegionsParameterName: ${ORGS_AVAILABLE_REGIONS_SSM_PARAMETER_NAME}
+    enrolledOrgsParameterName: ${ORGS_ENROLLED_ORGS_SSM_PARAMETER_NAME}
+    metricsRoleName: ${METRICS_ROLE_NAME}
+  metrics:
+    userAgentString: ${USER_AGENT_STRING}
+  operationalMetrics:
+    solutionVersion: ${SOLUTION_VERSION}
+    solutionId: ${SOLUTION_ID}
+    deploymentUuid: ${DEPLOYMENT_UUID}
+    sendAnonymousMetrics: ${SEND_ANONYMOUS_METRICS}
 backend:
   auth: # Legacy auth is required for supporting certain plugins: https://backstage.io/docs/auth/service-to-service-auth/#legacy-tokens
     externalAccess:
@@ -46,6 +72,20 @@ techdocs:
       region: ${LOCAL_ASSET_BUCKET_REGION}
       bucketRootPath: ${LOCAL_ASSET_BUCKET_TECHDOCS_KEY_PREFIX}
 
+permission:
+  enabled: true
+  rbac:
+    policies-csv-file: ./default_permission_policies.csv # This file is copied to the container root in the Dockerfile
+    policyFileReload: true
+    admin:
+      superUsers:
+        - name: user:acdp/${ADMIN_USERNAME}
+    pluginsWithPermission:
+      - catalog
+      - scaffolder
+      - permission
+      - acdp
+
 auth:
   environment: production
   session: # Session secret is necessary to enable session support in the auth-backend
@@ -60,38 +100,23 @@ auth:
   config:
     additionalScopes: ${BACKSTAGE_ADDITIONAL_SCOPES}
 
-
 scaffolder:
   concurrentTasksLimit: 10
-
-acdp:
-  s3Catalog:
-    bucketName: ${LOCAL_ASSET_BUCKET_NAME}
-    prefix: ${LOCAL_ASSET_BUCKET_CATALOG_KEY_PREFIX}
-    region: ${LOCAL_ASSET_BUCKET_REGION}
-  buildConfig:
-    buildConfigStoreSsmPrefix: ${ACDP_BUILD_CONFIG_SSM_PREFIX}
-  deploymentDefaults:
-    codeBuildProjectArn: ${CODEBUILD_PROJECT_ARN}
-    accountId: ${TARGET_ACCOUNT_ID}
-    region: ${TARGET_REGION}
-  metrics:
-    userAgentString: ${USER_AGENT_STRING}
 
 catalog:
   providers:
     awsS3:
-      localAssetBucketUserProvidedTemplates:
+      localAssetBucketEntities:
         bucketName: ${LOCAL_ASSET_BUCKET_NAME}
-        prefix: ${LOCAL_ASSET_BUCKET_BACKSTAGE_USER_PROVIDED_TEMPLATE_KEY_PREFIX}
+        prefix: ${LOCAL_ASSET_BUCKET_ENTITIES_PREFIX}
         region: ${LOCAL_ASSET_BUCKET_REGION}
         schedule:
           frequency:
             minutes: ${LOCAL_ASSET_BUCKET_DISCOVERY_REFRESH_FREQ}
           timeout: { minutes: 3 }
-      localAssetBucketDefaultTemplates:
+      localAssetBucketDefaultEntities:
         bucketName: ${LOCAL_ASSET_BUCKET_NAME}
-        prefix: ${LOCAL_ASSET_BUCKET_BACKSTAGE_DEFAULT_TEMPLATE_KEY_PREFIX}
+        prefix: ${LOCAL_ASSET_BUCKET_DEFAULT_ENTITIES_PREFIX}
         region: ${LOCAL_ASSET_BUCKET_REGION}
         schedule:
           frequency:

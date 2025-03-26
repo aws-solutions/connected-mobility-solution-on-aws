@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-aws_lambda_powertools = {extras=["tracer", "validation"], version=">=2.4.0"}
+aws-lambda-powertools = {extras=["tracer", "validation"], version=">=3.7.0"}
 arrow = ">=1.2.3"
 attrs = ">=22.1.0"
 cattrs = ">=22.1.0"
@@ -13,13 +13,13 @@ dataclass-type-validator = ">=0.1.2"
 requests = ">=2.32.0"
 
 [dev-packages]
-aws-cdk-lib = ">=2.139.1"
-boto3 = ">=1.26.0"
-boto3-stubs = {extras = ["essential", "iot", "s3", "ssm", "secretsmanager"], version = "*"}
+aws-cdk-lib = ">=2.176.0"
+boto3 = ">=1.37.0"
+boto3-stubs = {extras = ["essential", "iot", "s3", "ssm", "secretsmanager"], version = ">=1.37.0"}
 cdk-nag = "*"
 exceptiongroup = "*"
 mkdocs-techdocs-core = "*"
-moto = {extras = ["all"], version = ">=5.0.6"}
+moto = {extras = ["all"], version = ">=5.0.27"}
 mypy = "*"
 pre-commit = "*"
 pycln = "*"
@@ -33,7 +33,7 @@ syrupy = "*"
 toml = ">=0.10.2"
 types-setuptools = ">=65.6.0.1"
 types-requests = ">=2.32.0"
-types-boto3 = ">=1.0.2"
+types-boto3 = ">=1.37.0"
 types-python-dateutil = "*"
 types-pyyaml = "*"
 types-toml = ">=0.10.2"

@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-import React from "react";
 import { Theme, makeStyles, useTheme } from "@material-ui/core/styles";
 import { ItemCardHeader } from "@backstage/core-components";
 import { FavoriteEntity } from "@backstage/plugin-catalog-react";

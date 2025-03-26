@@ -3,7 +3,7 @@
 
 import { stringifyEntityRef } from "@backstage/catalog-model";
 
-import { AcdpMetricsApi } from ".";
+import { AcdpMetricsImpl } from ".";
 import {
   mockMetricsEntity,
   mockGlobalFetch,
@@ -11,7 +11,7 @@ import {
   baseUrl,
 } from "../mocks";
 
-const acdpMetricsApiClient = new AcdpMetricsApi(mockAcdpBaseApiInput);
+const acdpMetricsApiClient = new AcdpMetricsImpl(mockAcdpBaseApiInput);
 
 let mockedFetch: jest.SpyInstance;
 beforeEach(() => {
@@ -31,7 +31,7 @@ describe("AcdpMetricsApi", () => {
     const fetchCall = mockedFetch.mock.calls[0][0].valueOf() as Request;
     expect(fetchCall.method).toEqual("GET");
     expect(fetchCall.url).toEqual(
-      `${baseUrl}/api/acdp-backend/application/by-entity?entityRef=component%3Aacdp-metrics%2Fcms-sample`,
+      `${baseUrl}/api/acdp/application/by-entity?entityRef=component%3Aacdp-metrics%2Fcms-sample`,
     );
   });
 
@@ -43,7 +43,7 @@ describe("AcdpMetricsApi", () => {
     const fetchCall = mockedFetch.mock.calls[0][0].valueOf() as Request;
     expect(fetchCall.method).toEqual("GET");
     expect(fetchCall.url).toEqual(
-      `${baseUrl}/api/acdp-backend/application/by-arn?arn=arn%3Aaws%3Aservicecatalog%3Aus-east-2%3A111111111111%3A%2Fapplications%2Ftest-application-id`,
+      `${baseUrl}/api/acdp/application/by-arn?arn=arn%3Aaws%3Aservicecatalog%3Aus-east-2%3A111111111111%3A%2Fapplications%2Ftest-application-id`,
     );
   });
 
@@ -56,7 +56,7 @@ describe("AcdpMetricsApi", () => {
     const fetchCall = mockedFetch.mock.calls[0][0].valueOf() as Request;
     expect(fetchCall.method).toEqual("GET");
     expect(fetchCall.url).toEqual(
-      `${baseUrl}/api/acdp-backend/cost/current-month-net-unblended?entityRef=component%3Aacdp-metrics%2Fcms-sample&awsApplicationTag=mocked-aws-application-tag`,
+      `${baseUrl}/api/acdp/cost/current-month-net-unblended?entityRef=component%3Aacdp-metrics%2Fcms-sample&awsApplicationTag=mocked-aws-application-tag`,
     );
   });
 });

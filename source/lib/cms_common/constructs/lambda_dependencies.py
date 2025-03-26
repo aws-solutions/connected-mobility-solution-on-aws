@@ -3,13 +3,10 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # Standard Library
-import os
 import pathlib
-from io import TextIOWrapper
+import shutil
+import subprocess  # nosec
 from typing import Any
-
-# Third Party Libraries
-import toml
 
 # AWS Libraries
 from aws_cdk import aws_lambda
@@ -31,42 +28,79 @@ class LambdaDependenciesConstruct(Construct):
         self,
         scope: Construct,
         construct_id: str,
-        pipfile_path: str,
+        pipfile_lock_dir: str,
         dependency_layer_path: str,
         **kwargs: Any,
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        pip_path = f"{dependency_layer_path}/python"
+        # Define and create the installation directory
+        installation_path = f"{dependency_layer_path}/python"
+        shutil.rmtree(installation_path, ignore_errors=True)
+        pathlib.Path(installation_path).mkdir(parents=True, exist_ok=True)
 
-        # Create the directories required for the dependency layer
-        pathlib.Path(pip_path).mkdir(parents=True, exist_ok=True)
-        requirements = f"{dependency_layer_path}/requirements.txt"
+        # Define the requirements.txt path, and create the file from Pipfile.lock using `pipenv requirements`
+        requirements_path = f"{dependency_layer_path}/requirements.txt"
+        try:
+            with open(requirements_path, "w", encoding="utf-8") as requirements_file:
+                subprocess.run(  # nosec
+                    [
+                        "pipenv",
+                        "requirements",
+                        "--categories",
+                        "packages",
+                        "--exclude-markers",
+                    ],
+                    stdout=requirements_file,
+                    check=True,
+                    cwd=pipfile_lock_dir,
+                )
 
-        # Copy Pipfile to build directory as requirements.txt format and excluding the large packages
-        with open(pipfile_path, "r", encoding="utf-8") as pipfile:
-            new_pipfile = toml.load(pipfile)
-        with open(requirements, "w", encoding="utf-8") as requirements_file:
-            for package, constraint in new_pipfile["packages"].items():
-                if package not in ["boto3", "aws-cdk-lib"]:
-                    self.req_formatter(
-                        package=package,
-                        constraint=constraint,
-                        requirements_file=requirements_file,
-                    )
+                # Remove the "editable" flag (-e) to allow for proper installation of editables libs (e.g. cms_common) into the dependency layer
+                with open(requirements_path, "r", encoding="utf-8") as file:
+                    lines = file.readlines()
 
-        # Install the requirements in the build directory (CDK will use this whole folder to build the zip)
-        requirements_building_exit_code = os.system(  # nosec
-            (
-                f"/bin/bash -c 'python -m pip install -q "
-                f"--platform manylinux2014_x86_64 --python-version 3.12 --implementation cp --only-binary=:all: --upgrade --no-cache-dir "
-                f"--target {pip_path} --requirement {requirements}'"
+                modified_lines = [
+                    line.replace("-e ", "", 1) if line.startswith("-e ") else line
+                    for line in lines
+                ]
+
+                with open(requirements_path, "w", encoding="utf-8") as file:
+                    file.writelines(modified_lines)
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            raise LambdaDependencyError(
+                "Failed to generate requirements.txt file for Lambda dependency layer."
+            ) from e
+
+        try:
+            subprocess.run(  # nosec
+                [
+                    "python",
+                    "-m",
+                    "pip",
+                    "install",
+                    "-q",
+                    "--platform",
+                    "manylinux2014_x86_64",
+                    "--python-version",
+                    "3.12",
+                    "--implementation",
+                    "cp",
+                    "--only-binary=:all:",
+                    "--no-cache-dir",
+                    "--target",
+                    installation_path,
+                    "--requirement",
+                    requirements_path,
+                ],
+                check=True,
             )
-        )
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            raise LambdaDependencyError(
+                "Failed to install from requirements.txt file for Lambda dependency layer."
+            ) from e
 
-        if requirements_building_exit_code > 0:
-            raise LambdaDependencyError("Failed to install lambda layer dependencies.")
-
+        # Create the dependency layer using the dependency_layer_path directory
         self.dependency_layer = aws_lambda.LayerVersion(
             self,
             "lambda-dependency-layer-version",
@@ -82,27 +116,3 @@ class LambdaDependenciesConstruct(Construct):
                 aws_lambda.Runtime.PYTHON_3_12,
             ],
         )
-
-    def req_formatter(
-        self, package: str, constraint: Any, requirements_file: TextIOWrapper
-    ) -> None:
-        if constraint == "*":
-            requirements_file.write(package + "\n")
-        else:
-            try:
-                extras = (
-                    str(constraint.get("extras", "all"))
-                    .replace("'", "")
-                    .replace('"', "")
-                )
-
-                # Requirements.txt wildcards are done by not specifying a version, replace with empty string instead
-                version = constraint["version"] if constraint["version"] != "*" else ""
-
-                requirements_file.write(f"{package}{extras} {version}\n")
-            except (TypeError, KeyError, AttributeError):
-                if isinstance(constraint, str):
-                    requirements_file.write(f"{package} {constraint}\n")
-
-            if isinstance(constraint, dict) and constraint.get("path"):
-                requirements_file.write(f"{constraint['path']}\n")

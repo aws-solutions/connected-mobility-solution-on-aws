@@ -1,7 +1,7 @@
 
 
 AWSTemplateFormatVersion: "2010-09-09"
-Description: (SO0241-CMS.23) connected-mobility-solution-on-aws - vpc. Version v2.0.6
+Description: (SO0241-CMS.23) connected-mobility-solution-on-aws - vpc. Version v2.1.0
   This template deploys a VPC, with a pair of public and private subnets spread
   across two Availability Zones. It deploys an internet gateway, with a default
   route on the public subnets. It deploys a pair of NAT gateways (one in each AZ),
@@ -605,15 +605,6 @@ Resources:
       Tags:
         - Key: Name
           Value: !Ref VpcName
-    Metadata:
-      cfn_nag:
-        rules_to_suppress:
-          - id: "W40"
-            reason: "A protocol of -1 is necessary to allow all ports for the various AWS services accessed by
-              interface endpoints associated with this security group."
-          - id: "W42"
-            reason: "A protocol of -1 is necessary to allow all ports for the various AWS services accessed by
-              interface endpoints associated with this security group."
 
   DynamoDBEndpoint:
     Type: AWS::EC2::VPCEndpoint

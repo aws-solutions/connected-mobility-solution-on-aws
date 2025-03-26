@@ -17,9 +17,14 @@ export const techdocsModuleCustomBuildStrategy = createBackendModule({
     env.registerInit({
       deps: {
         config: coreServices.rootConfig,
+        logger: coreServices.logger,
         techdocs: techdocsBuildsExtensionPoint,
       },
-      async init({ config, techdocs }) {
+      async init({ config, logger, techdocs }) {
+        logger.info(
+          "Initializing custom build strategy module, extension of the techdocs plugin.",
+        );
+
         const docsBuildStrategy: DocsBuildStrategy = {
           shouldBuild: async (params) => {
             const shouldBuildAnnotation =

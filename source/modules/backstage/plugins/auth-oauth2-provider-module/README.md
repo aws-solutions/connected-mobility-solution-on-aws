@@ -6,3 +6,5 @@ sign-in and identity management, see the docs: <https://backstage.io/docs/auth/i
 
 The current implementation creates a user entity ref based on email, and assigns
 a Backstage token for that user entity regardless of the entities existence within the Backstage catalog.
+
+> This plugin was created through the Backstage CLI

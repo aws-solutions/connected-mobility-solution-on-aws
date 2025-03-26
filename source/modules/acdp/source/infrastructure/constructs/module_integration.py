@@ -15,7 +15,7 @@ from constructs import Construct
 # CMS Common Library
 from cms_common.config.regex import RegexPattern
 from cms_common.config.resource_names import ResourceName, ResourcePrefix
-from cms_common.constructs.cmk_encrypted_s3 import CMKEncryptedS3Construct
+from cms_common.constructs.encrypted_s3 import EncryptedS3Construct, LifecycleConfig
 from cms_common.constructs.identity_provider_config import IdentityProviderConfig
 from cms_common.constructs.vpc_construct import create_vpc_config
 from cms_common.resource_names.module_short_names import CMSModuleShortNames
@@ -38,11 +38,9 @@ class BackstageS3LocalAssetsConfigInputs:
     bucket: aws_s3.IBucket
     bucket_name: str
     bucket_region: str
-    bucket_key_arn: str
-    bucket_access_root_key: str
-    backstage_default_assets_prefix: str
-    backstage_user_provided_template_key_prefix: str
-    backstage_default_template_key_prefix: str
+    entities_prefix: str
+    default_assets_prefix: str
+    default_entities_prefix: str
     catalog_key_prefix: str
     techdocs_key_prefix: str
     discovery_refresh_frequency_mins: Union[int, float]
@@ -68,6 +66,16 @@ class BackstageAuthConfigInputs:
     identity_provider_id: str
     use_auth_redirect_flow: str
     additional_scopes: str
+    should_create_cognito_user: str
+    admin_user_email: str
+    admin_username: str
+
+
+@define(auto_attribs=True, frozen=True)
+class BackstageMultiAcctSetupInputs:
+    enable_multi_account_deployment: str
+    orgs_management_aws_account_id: str
+    orgs_management_account_region: str
 
 
 class ModuleInputsConstruct(Construct):
@@ -76,8 +84,9 @@ class ModuleInputsConstruct(Construct):
         scope: Construct,
         construct_id: str,
         solution_mapping: CfnMapping,
-        local_asset_bucket_construct: CMKEncryptedS3Construct,
+        local_asset_bucket_construct: EncryptedS3Construct,
         backstage_s3_assets_key_prefix: str,
+        log_lifecycle_rules: LifecycleConfig,
     ) -> None:
         super().__init__(scope, construct_id)
 
@@ -98,21 +107,19 @@ class ModuleInputsConstruct(Construct):
 
         self.vpc_config = create_vpc_config(vpc_name=self.vpc_name)
 
+        self.log_lifecycle_rules = log_lifecycle_rules
+
         self.acdp_config_ssm_prefix = ResourcePrefix.slash_separated(
             app_unique_id=self.acdp_uid,
             module_name=CMSModuleShortNames.CONFIG,
             leading_slash=True,
         )
 
-        self.default_user_email = CfnParameter(
-            Stack.of(self),
-            "DefaultUserEmail",
-            type="String",
-            description="The user E-Mail to access backstage UI",
-            allowed_pattern=RegexPattern.OPTIONAL_EMAIL,
-            default="",
-            constraint_description="User E-Mail must be a valid E-Mail address",
-        ).value_as_string
+        self.acdp_multi_acct_ssm_prefix = ResourcePrefix.slash_separated(
+            app_unique_id=self.acdp_uid,
+            module_name="multi-acct",
+            leading_slash=True,
+        )
 
         # Backstage Domain Inputs
         # Rather than creating SSM parameters in ModuleOutputsConstruct similar to other config,
@@ -284,6 +291,17 @@ class ModuleInputsConstruct(Construct):
             ),
         )
 
+        admin_user_email = CfnParameter(
+            Stack.of(self),
+            "AdminUserEmail",
+            type="String",
+            description="The user E-Mail to access backstage UI",
+            allowed_pattern=RegexPattern.OPTIONAL_EMAIL,
+            constraint_description="User E-Mail must be a valid E-Mail address",
+        ).value_as_string
+
+        admin_username = Fn.select(0, Fn.split("@", admin_user_email))
+
         self.backstage_auth_config_inputs = BackstageAuthConfigInputs(
             identity_provider_id=IdentityProviderConfig.create_cfn_parameter(
                 Stack.of(self)
@@ -302,6 +320,17 @@ class ModuleInputsConstruct(Construct):
                 backstage_additional_scopes,
                 "cms-unset",
             ).to_string(),
+            should_create_cognito_user=CfnParameter(
+                Stack.of(self),
+                "ShouldCreateCognitoUser",
+                type="String",
+                description="Boolean flag that determined whether to create an Amazon Cognito user using the Admin user email.",
+                allowed_values=["true", "false"],
+                constraint_description=("Value must be boolean (true, false)"),
+                default="true",
+            ).value_as_string,
+            admin_user_email=admin_user_email,
+            admin_username=admin_username,
         )
 
         # Backstage S3 Regional Assets Inputs
@@ -315,19 +344,17 @@ class ModuleInputsConstruct(Construct):
         )
 
         # Backstage S3 Local Assets Inputs
-        backstage_local_asset_bucket_access_root_key = "backstage"
+        backstage_local_asset_bucket_entities_prefix = "backstage"
         backstage_local_asset_bucket_default_assets_prefix = "backstage-default-assets"
         self.local_asset_bucket_inputs = BackstageS3LocalAssetsConfigInputs(
             bucket=local_asset_bucket_construct.bucket,
             bucket_name=local_asset_bucket_construct.bucket.bucket_name,
             bucket_region=Stack.of(self).region,
-            bucket_key_arn=local_asset_bucket_construct.key.key_arn,
-            bucket_access_root_key=backstage_local_asset_bucket_access_root_key,
-            backstage_default_assets_prefix=backstage_local_asset_bucket_default_assets_prefix,
-            backstage_user_provided_template_key_prefix=f"{backstage_local_asset_bucket_access_root_key}/templates",
-            backstage_default_template_key_prefix=f"{backstage_local_asset_bucket_default_assets_prefix}/templates",
-            catalog_key_prefix=f"{backstage_local_asset_bucket_access_root_key}/catalog",
-            techdocs_key_prefix=f"{backstage_local_asset_bucket_access_root_key}/techdocs",
+            entities_prefix=backstage_local_asset_bucket_entities_prefix,
+            default_assets_prefix=backstage_local_asset_bucket_default_assets_prefix,
+            default_entities_prefix=f"{backstage_local_asset_bucket_default_assets_prefix}/entities",
+            catalog_key_prefix=f"{backstage_local_asset_bucket_entities_prefix}/catalog",
+            techdocs_key_prefix=f"{backstage_local_asset_bucket_entities_prefix}/techdocs",
             discovery_refresh_frequency_mins=CfnParameter(
                 Stack.of(self),
                 "BackstageLocalAssetDiscoveryRefreshMins",
@@ -336,6 +363,36 @@ class ModuleInputsConstruct(Construct):
                 min_value=1,
                 default=30,
             ).value_as_number,
+        )
+
+        self.backstage_multi_acct_setup_inputs = BackstageMultiAcctSetupInputs(
+            enable_multi_account_deployment=CfnParameter(
+                Stack.of(self),
+                "EnableMultiAccountDeployment",
+                type="String",
+                description="Boolean flag that configures multi account deployment support",
+                allowed_values=["true", "false"],
+                constraint_description=("Value must be boolean (true, false)"),
+                default="false",
+            ).value_as_string,
+            orgs_management_aws_account_id=CfnParameter(
+                Stack.of(self),
+                "OrgsManagementAwsAccountId",
+                description="The 12-digit AWS account ID where Org Management Account resources are deployed. This is only required if EnableMultiAccountDeployment is set to true.",
+                type="String",
+                allowed_pattern=r"^\d{12}$|null$",
+                constraint_description="AWS Account Id must be a 12-digit number. This is only required if EnableMultiAccountDeployment is set to true.",
+                default="null",
+            ).value_as_string,
+            orgs_management_account_region=CfnParameter(
+                Stack.of(self),
+                "OrgsManagementAccountRegion",
+                description="Region where org management accounts resources are located",
+                type="String",
+                allowed_pattern=r"^(us|eu|ap|sa|ca|me|af|il)-(north|south|east|west|central)-(1|2|3|4)$|null$",
+                constraint_description="Provide valid region name[Non government regions only]",
+                default="null",
+            ).value_as_string,
         )
 
 
@@ -353,6 +410,8 @@ class ModuleOutputsConstruct(Construct):  # pylint: disable=too-many-arguments
         backstage_general_config_inputs: BackstageGeneralConfigInputs,
         backstage_regional_asset_config_inputs: BackstageS3RegionalAssetsConfigInputs,
         backstage_local_asset_bucket_config_inputs: BackstageS3LocalAssetsConfigInputs,
+        acdp_multi_acct_ssm_prefix: str,
+        backstage_multi_acct_setup_inputs: BackstageMultiAcctSetupInputs,
     ) -> None:
         super().__init__(scope, construct_id)
 
@@ -397,9 +456,9 @@ class ModuleOutputsConstruct(Construct):  # pylint: disable=too-many-arguments
 
         aws_ssm.StringParameter(
             self,
-            "ssm-codebuild-project-arn",
+            "ssm-codebuild-project-arn-multi",
             string_value=codebuild_project_arn,
-            description="CodeBuild Project ARN for Backstage ACDP plugin",
+            description="CodeBuild Project ARN for Backstage ACDP plugin (Multi-Account)",
             parameter_name=ResourceName.slash_separated(
                 prefix=acdp_config_ssm_prefix,
                 name="codebuild-project/arn",
@@ -531,7 +590,7 @@ class ModuleOutputsConstruct(Construct):  # pylint: disable=too-many-arguments
         # Backstage Local Config
         aws_ssm.StringParameter(
             self,
-            "ssm-local-asset-config-bucket-name",
+            "ssm-local-asset-bucket-config-name",
             string_value=backstage_local_asset_bucket_config_inputs.bucket_name,
             description="Name of the local asset bucket where ACDP Deployable resources are discovered",
             parameter_name=ResourceName.slash_separated(
@@ -543,7 +602,7 @@ class ModuleOutputsConstruct(Construct):  # pylint: disable=too-many-arguments
 
         aws_ssm.StringParameter(
             self,
-            "ssm-local-asset-config-bucket-region",
+            "ssm-local-asset-bucket-config-region",
             string_value=backstage_local_asset_bucket_config_inputs.bucket_region,
             description="Region of the local bucket where ACDP Deployable resources are discovered",
             parameter_name=ResourceName.slash_separated(
@@ -555,37 +614,25 @@ class ModuleOutputsConstruct(Construct):  # pylint: disable=too-many-arguments
 
         aws_ssm.StringParameter(
             self,
-            "ssm-local-asset-config-bucket-key-arn",
-            string_value=backstage_local_asset_bucket_config_inputs.bucket_key_arn,
-            description="KMS Key ARN of the local asset bucket",
-            parameter_name=ResourceName.slash_separated(
-                prefix=acdp_config_ssm_prefix,
-                name=f"{local_asset_config_ssm_path}/asset-bucket/key-arn",
-            ),
-            simple_name=False,
-        )
-
-        aws_ssm.StringParameter(
-            self,
-            "ssm-local-asset-config-asset-bucket-root-key",
+            "ssm-local-asset-bucket-config-entitites-prefix",
             string_value=str(
-                backstage_local_asset_bucket_config_inputs.bucket_access_root_key
+                backstage_local_asset_bucket_config_inputs.entities_prefix
             ),
             description="Root s3 prefix to give backstage access to in the local asset bucket",
             parameter_name=ResourceName.slash_separated(
                 prefix=acdp_config_ssm_prefix,
-                name=f"{local_asset_config_ssm_path}/root-s3-key",
+                name=f"{local_asset_config_ssm_path}/entities-prefix",
             ),
             simple_name=False,
         )
 
         aws_ssm.StringParameter(
             self,
-            "ssm-local-asset-config-asset-bucket-default-assets-prefix",
+            "ssm-local-asset-bucket-config-default-assets-prefix",
             string_value=str(
-                backstage_local_asset_bucket_config_inputs.backstage_default_assets_prefix
+                backstage_local_asset_bucket_config_inputs.default_assets_prefix
             ),
-            description="S3 prefix for default ACDP deployable assets in the local asset bucket",
+            description="S3 prefix for default ACDP assets (docs, buildspecs, entities, etc.) in the local asset bucket",
             parameter_name=ResourceName.slash_separated(
                 prefix=acdp_config_ssm_prefix,
                 name=f"{local_asset_config_ssm_path}/default-assets-prefix",
@@ -595,35 +642,21 @@ class ModuleOutputsConstruct(Construct):  # pylint: disable=too-many-arguments
 
         aws_ssm.StringParameter(
             self,
-            "ssm-local-asset-config-asset-bucket-backstage-custom-template-key-prefix",
+            "ssm-local-asset-bucket-config-default-entities-prefix",
             string_value=str(
-                backstage_local_asset_bucket_config_inputs.backstage_user_provided_template_key_prefix
+                backstage_local_asset_bucket_config_inputs.default_entities_prefix
             ),
-            description="Bucket key prefix for the local bucket where custom ACDP deployable resources are discovered",
+            description="S3 prefix for default ACDP catalog entities (templates, users, groups, etc.) in the local asset bucket",
             parameter_name=ResourceName.slash_separated(
                 prefix=acdp_config_ssm_prefix,
-                name=f"{local_asset_config_ssm_path}/backstage-custom-template-key-prefix",
+                name=f"{local_asset_config_ssm_path}/default-entities-prefix",
             ),
             simple_name=False,
         )
 
         aws_ssm.StringParameter(
             self,
-            "ssm-local-asset-config-asset-bucket-backstage-default-template-key-prefix",
-            string_value=str(
-                backstage_local_asset_bucket_config_inputs.backstage_default_template_key_prefix
-            ),
-            description="Bucket key prefix for the local bucket where deafault ACDP deployable resources are discovered",
-            parameter_name=ResourceName.slash_separated(
-                prefix=acdp_config_ssm_prefix,
-                name=f"{local_asset_config_ssm_path}/backstage-default-template-key-prefix",
-            ),
-            simple_name=False,
-        )
-
-        aws_ssm.StringParameter(
-            self,
-            "ssm-local-asset-config-asset-bucket-catalog-key-prefix",
+            "ssm-local-asset-bucket-config-catalog-key-prefix",
             string_value=str(
                 backstage_local_asset_bucket_config_inputs.catalog_key_prefix
             ),
@@ -637,7 +670,7 @@ class ModuleOutputsConstruct(Construct):  # pylint: disable=too-many-arguments
 
         aws_ssm.StringParameter(
             self,
-            "ssm-local-asset-config-asset-bucket-techdocs-key-prefix",
+            "ssm-local-asset-bucket-config-techdocs-key-prefix",
             string_value=str(
                 backstage_local_asset_bucket_config_inputs.techdocs_key_prefix
             ),
@@ -651,7 +684,7 @@ class ModuleOutputsConstruct(Construct):  # pylint: disable=too-many-arguments
 
         aws_ssm.StringParameter(
             self,
-            "ssm-local-asset-config-backstage-discovery-refresh-freq-mins",
+            "ssm-local-asset-bucket-config-discovery-refresh-freq-mins",
             string_value=str(
                 backstage_local_asset_bucket_config_inputs.discovery_refresh_frequency_mins
             ),
@@ -659,6 +692,43 @@ class ModuleOutputsConstruct(Construct):  # pylint: disable=too-many-arguments
             parameter_name=ResourceName.slash_separated(
                 prefix=acdp_config_ssm_prefix,
                 name=f"{local_asset_config_ssm_path}/discovery-refresh-frequency-mins",
+            ),
+            simple_name=False,
+        )
+
+        # Backstage Multi Account Setup Inputs
+        aws_ssm.StringParameter(
+            self,
+            "ssm-multi-acct-orgs-enable-multi-account-deployment",
+            string_value=backstage_multi_acct_setup_inputs.enable_multi_account_deployment,
+            description="The flag that toggles multi-account-deployment feature",
+            parameter_name=ResourceName.slash_separated(
+                prefix=acdp_multi_acct_ssm_prefix,
+                name="enable-multi-account-deployment",
+            ),
+            simple_name=False,
+        )
+
+        aws_ssm.StringParameter(
+            self,
+            "ssm-multi-acct-orgs-management-aws-account-id",
+            string_value=backstage_multi_acct_setup_inputs.orgs_management_aws_account_id,
+            description="The 12-digit AWS account ID where Org Management Account resources are deployed",
+            parameter_name=ResourceName.slash_separated(
+                prefix=acdp_multi_acct_ssm_prefix,
+                name="orgs-management-account-id",
+            ),
+            simple_name=False,
+        )
+
+        aws_ssm.StringParameter(
+            self,
+            "ssm-multi-acct-orgs-management-account-aws-region",
+            string_value=backstage_multi_acct_setup_inputs.orgs_management_account_region,
+            description="Region where org management accounts resources are located",
+            parameter_name=ResourceName.slash_separated(
+                prefix=acdp_multi_acct_ssm_prefix,
+                name="orgs-management-account-region",
             ),
             simple_name=False,
         )

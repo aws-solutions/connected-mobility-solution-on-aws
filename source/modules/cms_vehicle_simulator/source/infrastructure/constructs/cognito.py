@@ -33,7 +33,6 @@ class CognitoConstruct(Construct):
                 "require_symbols": True,
                 "require_uppercase": True,
             },
-            advanced_security_mode=aws_cognito.AdvancedSecurityMode.ENFORCED,
             removal_policy=RemovalPolicy.DESTROY,
             self_sign_up_enabled=False,
             sign_in_aliases={"email": True},

@@ -30,27 +30,23 @@ include ${SOLUTION_PATH}/makefiles/common_config.mk
 include ${SOLUTION_PATH}/makefiles/global_targets.mk
 include ${SOLUTION_PATH}/makefiles/module_targets.mk
 
-.PHONY: npm-clean-install
-npm-clean-install: ## Using npm, installs node dependencies from package-lock.json.
-	@printf "%bInstalling node dependencies using npm.%b\n" "${MAGENTA}" "${NC}"
-	@npm ci --prefix source/console
+.PHONY: yarn-install
+yarn-install: ## Using yarn, installs node dependencies from yarn.lock.
+	@printf "%bInstalling node dependencies using yarn.%b\n" "${MAGENTA}" "${NC}"
+	@yarn --cwd source/console install --immutable --refresh-lockfile
 
-# Although npm supports updating package-lock.json without performing an installation, since yarn does not, and yarn is used elsewhere
-# in the solution, for consistent behavior across updating node dependencies, an install is also performed here.
-# This behavior is different from the pipenv-lock targets, which do not perform an install, and only upgrade Pipfile.lock.
-# If upgrading to modern yarn, this target should be updated to only perform a lockfile update without install.
-.PHONY: npm-update
-npm-update: ## Checks for node dependency upgrades and updates package-lock.json, then performs an install.
-	@printf "%bUpgrading package-lock.json and installing node dependencies.%b\n" "${MAGENTA}" "${NC}"
-	@npm update --prefix source/console
+.PHONY: yarn-up
+yarn-up: ## Checks for node dependency upgrades and updates yarn.lock without installing upgraded dependencies.
+	@printf "%bUpgrading yarn.lock.%b\n" "${MAGENTA}" "${NC}"
+	@yarn --cwd source/console up --mode=update-lockfile
 
 .PHONY: upgrade
-upgrade: pipenv-lock npm-update ## Checks for dependency upgrades and updates lock files. Does not install python dependencies.
-	@printf "%bFinished upgrading lock files and installing node dependencies.%b\n" "${GREEN}" "${NC}"
-	@printf "%bRun \"make install\" to install updated python dependencies.%b\n" "${CYAN}" "${NC}"
+upgrade: pipenv-lock yarn-up ## Checks for dependency updates and upgrades lock files. Does not install dependencies.
+	@printf "%bFinished upgrading lock files.%b\n" "${GREEN}" "${NC}"
+	@printf "%bRun \"make install\" to install updated dependencies.%b\n" "${CYAN}" "${NC}"
 
 .PHONY: install
-install: pipenv-sync npm-clean-install cdk-solution-helper-clean-install ## Installs the resources and dependencies required to build the solution.
+install: pipenv-sync yarn-install cdk-solution-helper-clean-install ## Installs the resources and dependencies required to build the solution.
 	@printf "%bInstall finished.%b\n" "${GREEN}" "${NC}"
 
 .PHONY: deploy
@@ -64,7 +60,7 @@ deploy: verify-environment ## Deploy the stack for the module.
 		--capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
 		--parameter-overrides \
 			"AppUniqueId"="${APP_UNIQUE_ID}" \
-			"DefaultUserEmail"="${DEFAULT_USER_EMAIL}" \
+			"AdminUserEmail"="${ADMIN_USER_EMAIL}" \
 
 .PHONY: destroy
 destroy: destroy-stack ## Teardown deployed stack
@@ -75,7 +71,7 @@ verify-environment: ## Checks for the required environment variables.
 ifneq (, $(wildcard ./cdk.context.json))
 	$(error 'cdk.context.json' cannot exist. Please delete the file and try again)
 endif
-ifndef DEFAULT_USER_EMAIL
-	$(error DEFAULT_USER_EMAIL is undefined. Set the variable using `export DEFAULT_USER_EMAIL=...`, run `source .cmsrc` if it exists, or run `make create-rc-file` to generate .cmsrc)
+ifndef ADMIN_USER_EMAIL
+	$(error ADMIN_USER_EMAIL is undefined. Set the variable using `export ADMIN_USER_EMAIL=...`, run `source .cmsrc` if it exists, or run `make create-rc-file` to generate .cmsrc)
 endif
 	@printf "%bEnvironment variables verified.%b\n" "${GREEN}" "${NC}"

@@ -10,6 +10,7 @@ from aws_cdk import (
     ArnFormat,
     Aws,
     CfnMapping,
+    CustomResource,
     RemovalPolicy,
     Stack,
     aws_codebuild,
@@ -25,8 +26,10 @@ from constructs import Construct
 # CMS Common Library
 from cms_common.config.resource_names import get_application_level_path_prefix
 from cms_common.config.stack_inputs import SolutionConfigInputs
+from cms_common.constructs.custom_resource_lambda import CustomResourceLambdaConstruct
 
 # Connected Mobility Solution on AWS
+from ...handlers.custom_resource.function.main import CustomResourceTypes
 from .backstage_assets import BackstageSourceAssetZipLocation
 from .module_integration import ModuleInputsConstruct
 
@@ -43,6 +46,7 @@ class Pipelines(Construct):
         private_subnet_selection: aws_ec2.SubnetSelection,
         backstage_source_asset_zip_location: BackstageSourceAssetZipLocation,
         solution_config_inputs: SolutionConfigInputs,
+        custom_resource_lambda_construct: CustomResourceLambdaConstruct,
         **kwargs: Any,
     ) -> None:
         super().__init__(scope, stack_id, **kwargs)
@@ -129,17 +133,6 @@ class Pipelines(Construct):
                                     region="",
                                     arn_format=ArnFormat.SLASH_RESOURCE_NAME,
                                 ),
-                            ],
-                        ),
-                        aws_iam.PolicyStatement(
-                            effect=aws_iam.Effect.ALLOW,
-                            actions=[
-                                "kms:Decrypt",
-                                "kms:Encrypt",
-                                "kms:GenerateDataKey",
-                            ],
-                            resources=[
-                                module_inputs.local_asset_bucket_inputs.bucket_key_arn
                             ],
                         ),
                     ]
@@ -330,6 +323,20 @@ class Pipelines(Construct):
                 },
             ),
         )
+
+        validate_multi_account_parameters_custom_resource = CustomResource(
+            self,
+            "validate-multi-account-parameters",
+            service_token=custom_resource_lambda_construct.function.function_arn,
+            resource_type=f"Custom::{CustomResourceTypes.ResourceTypes.VALIDATE_MULTI_ACCOUNT_PARAMETERS.value}",
+            properties={
+                "Resource": CustomResourceTypes.ResourceTypes.VALIDATE_MULTI_ACCOUNT_PARAMETERS.value,
+                "EnableMultiAccountDeployment": module_inputs.backstage_multi_acct_setup_inputs.enable_multi_account_deployment,
+                "OrgsManagementAwsAccountId": module_inputs.backstage_multi_acct_setup_inputs.orgs_management_aws_account_id,
+                "OrgsManagementAccountRegion": module_inputs.backstage_multi_acct_setup_inputs.orgs_management_account_region,
+            },
+        )
+
         backstage_deploy_project = aws_codebuild.PipelineProject(
             self,
             "backstage-deploy-pipeline-project",
@@ -362,8 +369,12 @@ class Pipelines(Construct):
                     value=module_inputs.backstage_auth_config_inputs.identity_provider_id,
                     type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
                 ),
-                "DEFAULT_USER_EMAIL": aws_codebuild.BuildEnvironmentVariable(
-                    value=module_inputs.default_user_email,
+                "ADMIN_USER_EMAIL": aws_codebuild.BuildEnvironmentVariable(
+                    value=module_inputs.backstage_auth_config_inputs.admin_user_email,
+                    type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
+                ),
+                "SHOULD_CREATE_COGNITO_USER": aws_codebuild.BuildEnvironmentVariable(
+                    value=module_inputs.backstage_auth_config_inputs.should_create_cognito_user,
                     type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
                 ),
                 "AWS_REGION": aws_codebuild.BuildEnvironmentVariable(
@@ -428,7 +439,19 @@ class Pipelines(Construct):
                     value=backstage_domain_input_parameters.is_public_facing_parameter.parameter_name,
                     type=aws_codebuild.BuildEnvironmentVariableType.PARAMETER_STORE,
                 ),
+                "ENABLE_MULTI_ACCOUNT_DEPLOYMENT": aws_codebuild.BuildEnvironmentVariable(
+                    value=module_inputs.backstage_multi_acct_setup_inputs.enable_multi_account_deployment,
+                    type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
+                ),
+                "LOG_BUCKET_RETENTION_DAYS": aws_codebuild.BuildEnvironmentVariable(
+                    value=module_inputs.log_lifecycle_rules.expiration_days,
+                    type=aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
+                ),
             },
+        )
+
+        backstage_deploy_project.node.add_dependency(
+            validate_multi_account_parameters_custom_resource
         )
 
         self.backstage_ecr.grant_pull_push(backstage_pipeline_project)

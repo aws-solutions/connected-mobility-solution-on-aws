@@ -6,23 +6,23 @@ name = "pypi"
 [packages]
 arrow = ">=1.2.3"
 attrs = ">=22.1.0"
-aws_lambda_powertools = {extras=["tracer", "validation"], version=">=2.4.0"}
+aws-lambda-powertools = {extras=["tracer", "validation"], version=">=3.7.0"}
 cattrs = ">=22.1.0"
 cms_common = {path = "./../../lib", editable = true}
 pyhumps = "*"
 requests = ">=2.32.0"
 
 [dev-packages]
-aws-cdk-lib = ">=2.139.1"
+aws-cdk-lib = ">=2.176.0"
 "aws-solutions-constructs.aws-sqs-lambda" = "*"
 "aws-solutions-constructs.aws-sns-sqs" = "*"
-boto3 = ">=1.26.0"
-boto3-stubs = {extras = ["essential", "sns", "dynamodb", "dynamodbstreams", "ssm"], version = "*"}
+boto3 = ">=1.37.0"
+boto3-stubs = {extras = ["essential", "sns", "dynamodb", "dynamodbstreams", "ssm"], version = ">=1.37.0"}
 cdk-nag = "*"
 exceptiongroup = "*"
 mkdocs-techdocs-core = "*"
 mypy = "*"
-moto = {extras = ["all"], version = ">=5.0.6"}
+moto = {extras = ["all"], version = ">=5.0.27"}
 pre-commit = "*"
 pycln = "*"
 pylint = "*"
@@ -32,7 +32,7 @@ pytest-mock = "*"
 setuptools = ">=71.0.0"
 syrupy = "*"
 toml = ">=0.10.2"
-types-boto3 = ">=1.0.2"
+types-boto3 = ">=1.37.0"
 types-python-dateutil = "*"
 types-pyyaml = "*"
 types-setuptools = ">=65.6.0.1"

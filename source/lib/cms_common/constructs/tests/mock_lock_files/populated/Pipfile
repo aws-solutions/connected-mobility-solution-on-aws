@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+aws-lambda-powertools = {extras=["tracer", "validation"], version=">=3.7.0"}
+pyjwt = {extras=["crypto"], version="*"}
+requests = ">=2.32.0"
+cms_common = {path = "./../../../../../../lib", editable = true}
+
+[dev-packages]
+aws-cdk-lib = ">=2.139.1"
+
+[requires]
+python_version = "3.12"

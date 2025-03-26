@@ -9,7 +9,7 @@ export interface AcdpBaseApiInput {
   identityApi: IdentityApi;
 }
 
-export class AcdpBaseApi {
+export abstract class AcdpBaseApi {
   private readonly configApi: ConfigApi;
   private readonly identityApi: IdentityApi;
 
@@ -19,9 +19,7 @@ export class AcdpBaseApi {
   }
 
   async _fetch<T = any>(input: string, init?: RequestInit): Promise<T> {
-    const baseUrl = `${this.configApi.getString(
-      "backend.baseUrl",
-    )}/api/acdp-backend`;
+    const baseUrl = `${this.configApi.getString("backend.baseUrl")}/api/acdp`;
 
     const { token: idToken } = await this.identityApi.getCredentials();
 

@@ -19,7 +19,7 @@ import { MockedAcdpBuildService } from "../service/mocks/acdp-build-service.mock
 import {
   mockSsmClientGetBuildParameters,
   mockUrlReader,
-  mockedConfigData,
+  mockedConfigDataWithMultiAccount,
   mockedCatalogEntity,
   resetUrlReaderMocks,
   mockCatalogClient,
@@ -53,7 +53,8 @@ function setupCommonBuildMocks() {
   mockedSsmClient
     .on(GetParameterCommand, {
       Name: getSsmParameterNameForEntitySourceConfig(
-        mockedConfigData.acdp.buildConfig.buildConfigStoreSsmPrefix,
+        mockedConfigDataWithMultiAccount.acdp.buildConfig
+          .buildConfigStoreSsmPrefix,
         mockedCatalogEntity,
       ),
     })
@@ -72,16 +73,18 @@ describe("AcdpBuildApi", () => {
       mockedCodeBuildClient.on(BatchGetProjectsCommand).resolves({
         projects: [
           {
-            arn: mockedConfigData.acdp.deploymentDefaults.codeBuildProjectArn,
+            arn: mockedConfigDataWithMultiAccount.acdp.deploymentDefaults
+              .codeBuildProjectArn,
           },
         ],
       });
 
-      const project = await acdpBuildApi.getProject(mockedCatalogEntity);
+      const project = await acdpBuildApi.getProject();
 
       expect(mockedCodeBuildClient.calls()).toHaveLength(1);
       expect(project?.arn).toEqual(
-        mockedConfigData.acdp.deploymentDefaults.codeBuildProjectArn,
+        mockedConfigDataWithMultiAccount.acdp.deploymentDefaults
+          .codeBuildProjectArn,
       );
     });
   });

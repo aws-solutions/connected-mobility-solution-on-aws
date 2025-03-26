@@ -14,12 +14,12 @@ from aws_cdk import (
     aws_elasticloadbalancingv2,
     aws_route53,
     aws_route53_targets,
-    aws_s3,
 )
 from constructs import Construct
 
 # CMS Common Library
 from cms_common.aspects.condition import ConditionAspect
+from cms_common.constructs.encrypted_s3 import EncryptedS3Construct
 
 # Connected Mobility Solution on AWS
 from .backstage_container import BackstageContainerConstruct
@@ -52,13 +52,10 @@ class LoadBalancerConstruct(Construct):
             drop_invalid_header_fields=True,
         )
 
-        alb_access_logs_bucket = aws_s3.Bucket(
+        alb_access_logs_bucket = EncryptedS3Construct.create_log_bucket(
             self,
             "alb-access-logs-bucket",
-            block_public_access=aws_s3.BlockPublicAccess.BLOCK_ALL,
-            enforce_ssl=True,
-            versioned=True,
-            encryption=aws_s3.BucketEncryption.S3_MANAGED,
+            log_lifecycle_rules=module_inputs.s3_log_lifecycle_rules,
         )
 
         alb.log_access_logs(

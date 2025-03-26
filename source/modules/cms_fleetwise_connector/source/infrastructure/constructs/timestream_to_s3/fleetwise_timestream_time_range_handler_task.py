@@ -78,7 +78,9 @@ class FleetWiseTimestreamTimeRangeHandler:
             construct,
             "time-range-handler-lambda",
             function_name=lambda_name,
-            code=aws_lambda.Code.from_asset("dist/lambda/time_range_handler.zip"),
+            code=aws_lambda.Code.from_asset(
+                "deployment/dist/lambda/time_range_handler.zip"
+            ),
             description="CMS FleetWise Connector - Time Range Handler",
             environment={
                 "REPORT_METRICS_ENABLED": operational_metrics.report_metrics_enabled,

@@ -8,7 +8,7 @@ metadata:
   - api
   title: CMS API Module
   annotations:
-    backstage.io/techdocs-ref: dir:../docs/components/cms-api/
+    backstage.io/techdocs-ref: dir:../../docs/components/cms-api/
 spec:
   type: service
   output:
@@ -42,9 +42,26 @@ spec:
             - Group
             - User
     required:
-    - componentId
-    - owner
+      - componentId
+      - owner
     title: Provide the required information
+  - properties:
+      targetAwsAccountId:
+        description: Target AWS Account ID to deploy the module
+        pattern: '^\d{12}$'
+        title: Target AWS Account Id
+        type: string
+        ui:field: AwsAccountId
+      targetAwsRegion:
+        description: Target AWS Region to deploy module
+        pattern: '^(us|eu|ap|sa|ca|me|af|il)-(north|south|east|west|central)-(1|2|3|4)$'
+        title: Target AWS Region
+        type: string
+        ui:field: AwsRegion
+    required:
+      - targetAwsAccountId
+      - targetAwsRegion
+    title: Provide the target account information
   - properties:
       appUniqueId:
         default: cms
@@ -53,7 +70,7 @@ spec:
         type: string
         ui:disabled: true
     required:
-    - appUniqueId
+      - appUniqueId
     title: Provide the Module Configuration
   steps:
   - action: aws:acdp:catalog:create
@@ -61,16 +78,18 @@ spec:
     name: ACDP S3 Catalog Create
     input:
       componentId: ${{ parameters.componentId }}
-      assetsSourcePath: dir:../acdp/cms-api/
-      docsSiteSourcePath: dir:../docs/components/cms-api/site/
+      assetsSourcePath: dir:../../acdp/cms-api/
+      docsSiteSourcePath: dir:../../docs/components/cms-api/site/
       entity:
         apiVersion: backstage.io/v1alpha1
         kind: Component
         metadata:
           annotations:
             aws.amazon.com/acdp-deploy-on-create: "true"
+            aws.amazon.com/acdp-deployment-target-account: ${{parameters.targetAwsAccountId}}
+            aws.amazon.com/acdp-deployment-target-region: ${{parameters.targetAwsRegion}}
           description: ${{parameters.description}}
-          name: ${{parameters.componentId}}
+          name: ${{parameters.componentId}}-${{parameters.targetAwsAccountId}}-${{parameters.targetAwsRegion}}
           namespace: acdp
         spec:
           lifecycle: experimental

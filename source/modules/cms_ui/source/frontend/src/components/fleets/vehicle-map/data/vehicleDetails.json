@@ -1,0 +1,4502 @@
+{
+  "vehicle_0": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_1": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_2": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_3": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_4": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_5": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_6": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_7": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_8": {
+    "status": "UNHEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_9": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_10": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_11": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_12": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_13": {
+    "status": "UNHEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_14": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_15": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_16": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_17": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_18": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_19": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_20": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_21": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_22": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_23": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_24": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_25": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_26": {
+    "status": "UNHEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_27": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_28": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_29": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_30": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_31": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_32": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_33": {
+    "status": "UNHEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_34": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_35": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_36": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_37": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_38": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_39": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_40": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_41": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_42": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_43": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_44": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_45": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_46": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_47": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_48": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_49": {
+    "status": "UNHEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_50": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_51": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_52": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_53": {
+    "status": "UNHEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_54": {
+    "status": "UNHEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_55": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_56": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_57": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_58": {
+    "status": "UNHEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_59": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_60": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_61": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_62": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_63": {
+    "status": "UNHEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_64": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_65": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_66": {
+    "status": "UNHEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_67": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_68": {
+    "status": "UNHEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_69": {
+    "status": "UNHEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_70": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_71": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_72": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_73": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_74": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_75": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_76": {
+    "status": "UNHEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_77": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_78": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_79": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_80": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_81": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_82": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_83": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_84": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_85": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_86": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_87": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_88": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_89": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_90": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_91": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_92": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_93": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_94": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_95": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_96": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_97": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_98": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  },
+  "vehicle_99": {
+    "status": "HEALTHY",
+    "metrics": [
+      {
+        "name": "Tire Pressure (FL)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Tire Pressure (FR)",
+        "value": "34 psi"
+      },
+      {
+        "name": "Tire Pressure (RL)",
+        "value": "36 psi"
+      },
+      {
+        "name": "Tire Pressure (RR)",
+        "value": "35 psi"
+      },
+      {
+        "name": "Oil Temperature",
+        "value": "190\u00b0F"
+      },
+      {
+        "name": "Engine Temperature",
+        "value": "210\u00b0F"
+      },
+      {
+        "name": "Fuel Level",
+        "value": "60%"
+      },
+      {
+        "name": "Windscreen Fluid",
+        "value": "75%"
+      },
+      {
+        "name": "Brake Fluid",
+        "value": "80%"
+      },
+      {
+        "name": "Battery Health",
+        "value": "90%"
+      }
+    ]
+  }
+}

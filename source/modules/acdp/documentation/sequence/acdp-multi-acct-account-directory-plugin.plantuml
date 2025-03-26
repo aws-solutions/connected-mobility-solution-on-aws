@@ -1,0 +1,46 @@
+@startuml acdp-multi-acct-account-directory-plugin
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist
+!include AWSPuml/AWSCommon.puml
+
+!include AWSPuml/General/Globe.puml
+!include AWSPuml/ManagementGovernance/Organizations.puml
+!include AWSPuml/ManagementGovernance/CloudFormation.puml
+!include AWSPuml/SecurityIdentityCompliance/IdentityandAccessManagement.puml
+!include AWSPuml/Containers/Fargate.puml
+!include AWSPuml/DeveloperTools/CodeBuild.puml
+
+actor "Authenticated User" as user
+
+box Client Machine
+participant "$GlobeIMG()\nBackstage Create Page" as browser << Backstage Create Page >>
+endbox
+
+box ACDP Account
+participant "$FargateIMG()\nBackstage Backend" as backstage_backend <<Backstage Backend>>
+endbox
+
+box Organizations Management Account
+participant "$OrganizationsIMG()\nOrganizations" as organizations <<Organizations>>
+participant "$IdentityandAccessManagementIMG()\nIAM" as org_acct_iam <<IAM>>
+endbox
+
+user -> browser: Get available accounts and regions for deployment
+browser --> backstage_backend
+activate backstage_backend $AWS_COLOR_SMILE
+org_acct_iam -> backstage_backend: Assume iam role in organizations management account
+activate org_acct_iam $AWS_COLOR_MARS
+backstage_backend <-[#red]- org_acct_iam: Organization Account resources not deployed: No Role found to assume
+backstage_backend <-[#green]- org_acct_iam: Role assumption successful
+deactivate org_acct_iam
+organizations <- backstage_backend: Fetch list of enrolled accounts and allowed regions
+activate organizations $AWS_COLOR_COSMOS
+organizations --> backstage_backend
+deactivate organizations
+browser <- backstage_backend: Format and return list of available accounts and regions
+deactivate backstage_backend
+user <-- browser
+
+@enduml

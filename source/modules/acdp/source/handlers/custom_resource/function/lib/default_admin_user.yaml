@@ -1,0 +1,9 @@
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: !ENV ADMIN_USERNAME
+  namespace: acdp
+spec:
+  profile:
+    email: !ENV ADMIN_USER_EMAIL
+  memberOf: [admins]

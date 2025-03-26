@@ -3,3 +3,4 @@
 
 export * from "./acdp-build-api";
 export * from "./acdp-metrics-api";
+export * from "./acdp-account-directory-api";

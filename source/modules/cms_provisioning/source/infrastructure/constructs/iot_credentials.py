@@ -158,7 +158,7 @@ class IoTCredentialsConstruct(Construct):
             handler="function.main.handler",
             function_name=rotate_secret_lambda_function_name,
             runtime=aws_lambda.Runtime.PYTHON_3_12,
-            code=aws_lambda.Code.from_asset("dist/lambda/rotate_secret.zip"),
+            code=aws_lambda.Code.from_asset("deployment/dist/lambda/rotate_secret.zip"),
             timeout=Duration.seconds(60),
             role=rotate_secret_lambda_role,
             layers=[dependency_layer],

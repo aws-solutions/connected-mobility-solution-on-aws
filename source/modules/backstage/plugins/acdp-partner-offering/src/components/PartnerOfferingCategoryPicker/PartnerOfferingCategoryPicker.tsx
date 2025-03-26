@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import capitalize from "lodash/capitalize";
 
 import { Progress } from "@backstage/core-components";
@@ -50,11 +50,9 @@ const useStyles = makeStyles(
   { name: "PartnerOfferingReactCategoryPicker" },
 );
 
-const PopperComponentRender = ({
-  popperProps,
-}: {
-  popperProps: PopperProps;
-}) => <div {...popperProps}>{popperProps.children as ReactNode}</div>;
+const PopperComponentRender = (popperProps: PopperProps) => (
+  <div {...popperProps}>{popperProps.children as ReactNode}</div>
+);
 
 /**
  * The Category Picker that is rendered on the left side for picking
@@ -90,9 +88,7 @@ export const PartnerOfferingCategoryPicker = () => {
         Categories
       </Typography>
       <Autocomplete<string, true>
-        PopperComponent={(popperProps) => (
-          <PopperComponentRender popperProps={popperProps} />
-        )}
+        PopperComponent={PopperComponentRender}
         multiple
         id="categories-picker"
         options={availableTypes}

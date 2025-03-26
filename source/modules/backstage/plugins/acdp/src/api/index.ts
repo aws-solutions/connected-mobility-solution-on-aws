@@ -4,3 +4,4 @@
 export * from "./AcdpBuildApi";
 export * from "./AcdpBaseApi";
 export * from "./AcdpMetricsApi";
+export * from "./AcdpAccountDirectoryApi";

@@ -1,14 +1,14 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { Logger } from "winston";
+import { LoggerService } from "@backstage/backend-plugin-api";
 
 // Log granular error message and error object.
 // Throw generic error message with status code.
 export async function awsApiCallWithErrorHandling<T>(
   apiCall: () => Promise<T>,
   customErrorMessage: string,
-  logger: Logger,
+  logger: LoggerService,
 ): Promise<T> {
   try {
     return await apiCall();

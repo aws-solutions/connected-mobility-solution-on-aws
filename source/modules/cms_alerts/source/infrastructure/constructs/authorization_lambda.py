@@ -45,7 +45,7 @@ class AuthorizationLambdaConstruct(Construct):
             self,
             "authorization-lambda",
             function_name=authorization_lambda_name,
-            code=aws_lambda.Code.from_asset("dist/lambda/authorization.zip"),
+            code=aws_lambda.Code.from_asset("deployment/dist/lambda/authorization.zip"),
             description="CMS Alerts Authorization Function",
             environment={
                 "USER_AGENT_STRING": solution_config_inputs.get_user_agent_string(),

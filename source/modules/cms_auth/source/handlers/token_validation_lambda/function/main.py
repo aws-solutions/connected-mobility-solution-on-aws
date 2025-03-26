@@ -76,6 +76,7 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
 
         try:
             token: str = event["Token"]
+            specified_aud: str = event.get("SpecifiedAud", None)
         except KeyError as e:
             logger.error(
                 "KeyError while accessing Lambda event. Ensure event has the expected values.",
@@ -104,6 +105,7 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
             token=token,
             idp_config=idp_config,
             verify_using_alternate_aud=verify_using_alternate_aud,
+            specified_aud=specified_aud,
         )
         token_validation_response["message"] = "Token validation successful!"
         token_validation_response["status_code"] = 200
@@ -185,27 +187,35 @@ def verify_expiration(
 @lru_cache(maxsize=MAX_CACHE_SIZE_TOKENS)
 @tracer.capture_method
 def verify_and_cache_token(
-    token: str, idp_config: CMSIdPConfig, verify_using_alternate_aud: bool
+    token: str,
+    idp_config: CMSIdPConfig,
+    verify_using_alternate_aud: bool,
+    specified_aud: str,
 ) -> bool:
     well_known_jwks = get_cached_issuer_jwks(idp_config.issuer)
     token_jwk = verify_signing_kid(token, well_known_jwks)
+    auds = [specified_aud] if specified_aud else idp_config.auds
 
     if not verify_using_alternate_aud:
         token_claims = verify_claims(
             token,
             token_jwk,
             issuer=idp_config.issuer,
-            audience=idp_config.auds,
-        )  # Validate iss and aud during decode
+            audience=auds,
+        )  # Validate iss and supplied aud during decode
     else:
         token_claims = verify_claims(
-            token, token_jwk, idp_config.issuer, audience=None
-        )  # Set audience to None to 'skip' aud check during decode
+            token,
+            token_jwk,
+            issuer=idp_config.issuer,
+            audience=None,
+        )
         verify_alternate_aud(
             alternate_aud_key=str(idp_config.alternate_aud_key),
-            known_auds=idp_config.auds,
+            known_auds=auds,
             token_claims=token_claims,
         )
+
     verify_scope(token_claims, idp_config.scopes)
 
     return True

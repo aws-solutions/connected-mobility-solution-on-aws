@@ -96,7 +96,7 @@ class MetricsConstruct(Construct):
             self,
             "lambda-function",
             code=aws_lambda.Code.from_asset(
-                "dist/lambda/metrics.zip",
+                "deployment/dist/lambda/metrics.zip",
                 exclude=["**/tests/*"],
             ),
             handler="function.main.handler",

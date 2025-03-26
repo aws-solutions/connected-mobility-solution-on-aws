@@ -47,12 +47,12 @@ class CustomDirBuild(build):
 # Explicit setup call necessary for use with `pipenv-setup`
 setup(
     install_requires=[
-        "aws-lambda-powertools[tracer,validation]>=2.4.0",
+        "aws-lambda-powertools[tracer,validation]>=3.3.0",
         "cattrs>=22.1.0",
         "toml>=0.10.2",
     ],
     name="cms_common",
-    version="2.0.6",
+    version="2.1.0",
     description="Common library used in CMS modules",
     packages=find_packages(
         exclude=[

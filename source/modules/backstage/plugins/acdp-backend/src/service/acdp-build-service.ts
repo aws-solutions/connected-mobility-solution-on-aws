@@ -1,9 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { Logger } from "winston";
-
-import { UrlReader } from "@backstage/backend-common";
+import { LoggerService, UrlReaderService } from "@backstage/backend-plugin-api";
 import { Location } from "@backstage/catalog-client";
 import {
   Entity,
@@ -34,6 +32,7 @@ import {
   constants,
   AcdpBuildAction,
   BuildSourceConfig,
+  ACDP_METRICS_TYPE_CONSTANT,
 } from "backstage-plugin-acdp-common";
 
 import { awsApiCallWithErrorHandling, getLocationForEntity } from "../utils";
@@ -48,18 +47,22 @@ import {
   updateEnvironmentVariablesForDeploymentTarget,
 } from "./utils";
 import { AcdpBaseService } from "./acdp-base-service";
+import { OperationalMetrics } from "../utils/operational-metrics";
 
 export interface AcdpBuildServiceOptions {
   config: Config;
-  reader: UrlReader;
+  reader: UrlReaderService;
   integrations: ScmIntegrations;
   awsCredentialsProvider: AwsCredentialProvider;
-  logger: Logger;
+  logger: LoggerService;
+  operationalMetrics: OperationalMetrics;
 }
 
 export class AcdpBuildService extends AcdpBaseService {
-  private reader: UrlReader;
+  private reader: UrlReaderService;
   private integrations: ScmIntegrations;
+  private operational_metrics: OperationalMetrics;
+  private enableMultiAccountDeployment: boolean;
 
   constructor(options: AcdpBuildServiceOptions) {
     super({
@@ -70,6 +73,10 @@ export class AcdpBuildService extends AcdpBaseService {
 
     this.reader = reader;
     this.integrations = integrations;
+    this.operational_metrics = options.operationalMetrics;
+    this.enableMultiAccountDeployment = options.config.getBoolean(
+      "acdp.accountDirectory.enableMultiAccountDeployment",
+    );
   }
 
   private getCodeBuildClient(region?: string): CodeBuildClient {
@@ -137,13 +144,13 @@ export class AcdpBuildService extends AcdpBaseService {
     }
   }
 
-  public async getProject(entity: Entity): Promise<Project | undefined> {
-    const deploymentTarget = getDeploymentTargetForEntity(
-      entity,
-      this._deploymentTargets,
+  public async getProject(): Promise<Project | undefined> {
+    const codeBuildClient = this.getCodeBuildClient(
+      this._defaultDeploymentTarget.awsRegion,
     );
-    const codeBuildClient = this.getCodeBuildClient(deploymentTarget.awsRegion);
-    const { projectName } = parseCodeBuildArn(deploymentTarget.codeBuildArn);
+    const { projectName } = parseCodeBuildArn(
+      this._defaultDeploymentTarget.codeBuildArn,
+    );
 
     const projectQueryResult = await awsApiCallWithErrorHandling(
       () =>
@@ -159,12 +166,12 @@ export class AcdpBuildService extends AcdpBaseService {
   }
 
   public async getBuilds(entity: Entity): Promise<Build[]> {
-    const deploymentTarget = getDeploymentTargetForEntity(
-      entity,
-      this._deploymentTargets,
+    const codeBuildClient = this.getCodeBuildClient(
+      this._defaultDeploymentTarget.awsRegion,
     );
-    const codeBuildClient = this.getCodeBuildClient(deploymentTarget.awsRegion);
-    const { projectName } = parseCodeBuildArn(deploymentTarget.codeBuildArn);
+    const { projectName } = parseCodeBuildArn(
+      this._defaultDeploymentTarget.codeBuildArn,
+    );
 
     const buildIds = await awsApiCallWithErrorHandling(
       () =>
@@ -213,9 +220,20 @@ export class AcdpBuildService extends AcdpBaseService {
 
     const deploymentTarget = getDeploymentTargetForEntity(
       entity,
-      this._deploymentTargets,
+      this._defaultDeploymentTarget.codeBuildArn,
     );
-    const codeBuildClient = this.getCodeBuildClient(deploymentTarget.awsRegion);
+
+    await this.operational_metrics.sendMetrics({
+      Type: ACDP_METRICS_TYPE_CONSTANT,
+      CrossAccountDeploymentEnabled: this.enableMultiAccountDeployment,
+      CrossAccountDeploymentUsed:
+        deploymentTarget.awsAccountId !==
+        this._defaultDeploymentTarget.awsAccountId,
+    });
+
+    const codeBuildClient = this.getCodeBuildClient(
+      this._defaultDeploymentTarget.awsRegion,
+    );
     const buildspecBody = await this.getBuildspecForAction(action, entity);
 
     if (buildspecBody === undefined) {
@@ -242,7 +260,7 @@ export class AcdpBuildService extends AcdpBaseService {
       () =>
         codeBuildClient.send(
           new StartBuildCommand({
-            projectName: deploymentTarget.codeBuildArn,
+            projectName: this._defaultDeploymentTarget.codeBuildArn,
             buildspecOverride: buildspecBody,
             environmentVariablesOverride: environmentVariables,
             sourceTypeOverride: buildSourceConfig.sourceType,
@@ -250,7 +268,7 @@ export class AcdpBuildService extends AcdpBaseService {
             sourceVersion: buildSourceConfig.sourceVersion,
           }),
         ),
-      `Could not start build for project name: ${deploymentTarget.codeBuildArn}`,
+      `Could not start build for project name: ${this._defaultDeploymentTarget.codeBuildArn}`,
       this._logger,
     );
   }
@@ -259,10 +277,6 @@ export class AcdpBuildService extends AcdpBaseService {
     entity: Entity,
     variables: EnvironmentVariable[],
   ) {
-    const deploymentTarget = getDeploymentTargetForEntity(
-      entity,
-      this._deploymentTargets,
-    );
     const serializedVariables = JSON.stringify(variables);
     const parameterName = getSsmParameterNameForEntityBuildParameters(
       this._buildConfigSsmPrefix,
@@ -276,7 +290,9 @@ export class AcdpBuildService extends AcdpBaseService {
       Overwrite: true,
     });
 
-    const ssmClient = this._getSSMClient(deploymentTarget.awsRegion);
+    const ssmClient = this._getSSMClient(
+      this._defaultDeploymentTarget.awsRegion,
+    );
     await awsApiCallWithErrorHandling(
       () => ssmClient.send(command),
       `Failed to store build environment variables in ssm with parameter name: ${parameterName}`,
@@ -288,10 +304,6 @@ export class AcdpBuildService extends AcdpBaseService {
     entity: Entity,
     config: BuildSourceConfig,
   ) {
-    const deploymentTarget = getDeploymentTargetForEntity(
-      entity,
-      this._deploymentTargets,
-    );
     const parameterName = getSsmParameterNameForEntitySourceConfig(
       this._buildConfigSsmPrefix,
       entity,
@@ -305,7 +317,9 @@ export class AcdpBuildService extends AcdpBaseService {
       Overwrite: true,
     });
 
-    const ssmClient = this._getSSMClient(deploymentTarget.awsRegion);
+    const ssmClient = this._getSSMClient(
+      this._defaultDeploymentTarget.awsRegion,
+    );
     await awsApiCallWithErrorHandling(
       () => ssmClient.send(command),
       `Failed to store build source config in ssm with parameter name: ${parameterName}.`,
@@ -316,10 +330,6 @@ export class AcdpBuildService extends AcdpBaseService {
   private async retrieveBuildSourceConfig(
     entity: Entity,
   ): Promise<BuildSourceConfig> {
-    const deploymentTarget = getDeploymentTargetForEntity(
-      entity,
-      this._deploymentTargets,
-    );
     const parameterName = getSsmParameterNameForEntitySourceConfig(
       this._buildConfigSsmPrefix,
       entity,
@@ -330,7 +340,9 @@ export class AcdpBuildService extends AcdpBaseService {
       WithDecryption: true,
     });
 
-    const ssmClient = this._getSSMClient(deploymentTarget.awsRegion);
+    const ssmClient = this._getSSMClient(
+      this._defaultDeploymentTarget.awsRegion,
+    );
     const response = await awsApiCallWithErrorHandling(
       () => ssmClient.send(command),
       `Failed to get build source config from ssm with parameter name: ${parameterName}`,

@@ -15,6 +15,7 @@ from cms_common.config.resource_names import ResourceName, ResourcePrefix
 from cms_common.config.ssm import resolve_ssm_parameter
 from cms_common.config.stack_inputs import SolutionConfigInputs
 from cms_common.constructs.app_unique_id import AppUniqueId
+from cms_common.constructs.encrypted_s3 import EncryptedS3Construct
 from cms_common.constructs.vpc_construct import create_vpc_config, get_vpc_name
 from cms_common.resource_names.auth import AuthResourceNames
 from cms_common.resource_names.module_short_names import CMSModuleShortNames
@@ -31,7 +32,6 @@ class GlueInputs:
 @dataclass(frozen=True)
 class RootBucketInputs:
     bucket_arn: str
-    bucket_key_arn: str
 
 
 @dataclass(frozen=True)
@@ -91,12 +91,6 @@ class ModuleInputsConstruct(Construct):
                     name="s3-storage-bucket/arn",
                 )
             ),
-            bucket_key_arn=resolve_ssm_parameter(
-                parameter_name=ResourceName.slash_separated(
-                    prefix=connect_store_module_ssm_prefix_with_leading_slash,
-                    name="s3-storage-bucket/key-arn",
-                )
-            ),
         )
 
         self.token_validation = TokenValidationInputs(
@@ -105,6 +99,10 @@ class ModuleInputsConstruct(Construct):
                     app_unique_id=self.app_unique_id
                 ).token_validation_lambda_arn
             ),
+        )
+
+        self.s3_log_lifecycle_rules = (
+            EncryptedS3Construct.create_log_lifecycle_cfn_parameters(self)
         )
 
 
@@ -117,7 +115,6 @@ class ModuleOutputsConstruct(Construct):
         solution_config_inputs: SolutionConfigInputs,
         athena_result_bucket_name: str,
         athena_result_bucket_arn: str,
-        athena_result_bucket_key_arn: str,
         athena_workgroup_name: str,
         appsync_graphql_url: str,
     ) -> None:
@@ -157,16 +154,6 @@ class ModuleOutputsConstruct(Construct):
             description="Region of S3 bucket where Athena results are stored",
             parameter_name=ResourceName.slash_separated(
                 prefix=ssm_parameter_name_prefix, name="athena-result-bucket/region"
-            ),
-            simple_name=False,
-        )
-        self.athena_result_bucket_key_arn = aws_ssm.StringParameter(
-            self,
-            "ssm-athena-result-bucket-key-arn",
-            string_value=athena_result_bucket_key_arn,
-            description="Arn of KMS key for S3 bucket where Athena results are stored",
-            parameter_name=ResourceName.slash_separated(
-                prefix=ssm_parameter_name_prefix, name="athena-result-bucket/key-arn"
             ),
             simple_name=False,
         )

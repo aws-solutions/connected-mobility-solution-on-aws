@@ -3,20 +3,20 @@
 set -e && [[ "$DEBUG" == 'true' ]] && set -x
 
 # Get reference for all important folders
-root_dir="$(dirname "$(dirname "$(realpath "$0")")")"
-repo_root_dir="$root_dir/../../.."
-deployment_dir="$root_dir/deployment"
-build_dist_dir="$deployment_dir/regional-s3-assets"
-pipeline_source_dist_dir="$build_dist_dir/$MODULE_NAME/pipeline"
+ROOT_DIR="$(dirname "$(dirname "$(realpath "$0")")")"
+REPO_ROOT_DIR="$ROOT_DIR/../../.."
+DEPLOYMENT_DIR="$ROOT_DIR/deployment"
+BUILD_DIST_DIR="$DEPLOYMENT_DIR/regional-s3-assets"
+PIPELINE_SOURCE_DIST_DIR="$BUILD_DIST_DIR/$MODULE_NAME/pipeline"
 
-printf "%b[VirtualEnv] Activating venv found in %s\n%b" "${GREEN}" "${root_dir}" "${NC}"
-source "$root_dir/.venv/bin/activate"
+printf "%b[VirtualEnv] Activating venv found in %s\n%b" "${GREEN}" "${ROOT_DIR}" "${NC}"
+source "$ROOT_DIR/.venv/bin/activate"
 
 printf "%b[Init] Remove old dist files from previous runs\n%b" "${GREEN}" "${NC}"
-rm -rf "$build_dist_dir"
+rm -rf "$BUILD_DIST_DIR"
 
-mkdir -p "$build_dist_dir"
-mkdir -p "$pipeline_source_dist_dir"
+mkdir -p "$BUILD_DIST_DIR"
+mkdir -p "$PIPELINE_SOURCE_DIST_DIR"
 
 printf "%b[Packing] Source code artifacts\n%b" "${GREEN}" "${NC}"
 
@@ -55,7 +55,7 @@ exclude_dirs=(
     "**/*.dist-lib/*"
 )
 
-zip_command="(cd $repo_root_dir && zip -r $pipeline_source_dist_dir/backstage_pipeline_source.zip"
+zip_command="(cd $REPO_ROOT_DIR && zip -r $PIPELINE_SOURCE_DIST_DIR/backstage_pipeline_source.zip"
 
 for folder in "${include_folders[@]}"; do
     zip_command+=" '$folder'"

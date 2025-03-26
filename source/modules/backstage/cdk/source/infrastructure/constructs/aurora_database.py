@@ -46,6 +46,9 @@ class AuroraDatabaseConstruct(Construct):
             security_groups=[self.database_security_group],
             deletion_protection=False,
             storage_encrypted=True,
+            backup=aws_rds.BackupProps(
+                retention=Duration.days(15),
+            ),
         )
 
         database.add_rotation_single_user(

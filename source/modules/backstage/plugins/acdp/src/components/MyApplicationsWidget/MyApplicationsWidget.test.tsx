@@ -1,8 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import React from "react";
-
 import { AnyApiRef } from "@backstage/core-plugin-api";
 import { EntityProvider } from "@backstage/plugin-catalog-react";
 import { wrapInTestApp, TestApiProvider } from "@backstage/test-utils";

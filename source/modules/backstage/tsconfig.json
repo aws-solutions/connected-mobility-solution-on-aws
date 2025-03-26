@@ -4,13 +4,16 @@
     "packages/*/src",
     "plugins/*/src",
     "plugins/*/dev",
-    "plugins/*/migrations"
+    "plugins/*/migrations",
+    "packages/*/config.d.ts",
+	  "plugins/*/config.d.ts"
   ],
   "exclude": [
     "node_modules"
   ],
   "compilerOptions": {
     "outDir": "dist-types",
-    "rootDir": "."
+    "rootDir": ".",
+    "jsx": "react-jsx"
   }
 }

@@ -189,10 +189,10 @@
         "value": "nodejs20.x"
       },
       "cn-north-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "cn-northwest-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "eu-central-1": {
         "value": "nodejs20.x"
@@ -243,10 +243,10 @@
         "value": "nodejs20.x"
       },
       "us-gov-east-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "us-gov-west-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "us-iso-east-1": {
         "value": "nodejs18.x"
@@ -538,9 +538,6 @@
           }
         ],
         "SmsVerificationMessage": "The verification code to your new account is {####}",
-        "UserPoolAddOns": {
-          "AdvancedSecurityMode": "ENFORCED"
-        },
         "UserPoolName": {
           "Fn::Join": [
             "",
@@ -1101,7 +1098,15 @@
                   {
                     "Ref": "AWS::Region"
                   },
-                  ".amazoncognito.com/oauth2/authorize\", \"alternate_aud_key\": \"client_id\", \"auds\": [\"",
+                  ".amazoncognito.com/oauth2/authorize\", \"logout_endpoint\": \"https://",
+                  {
+                    "Ref": "cognitousersuserpooluserpoolcognitodomain284E63B2"
+                  },
+                  ".auth.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".amazoncognito.com/logout\", \"alternate_aud_key\": \"client_id\", \"auds\": [\"",
                   {
                     "Ref": "cognitousersuserpooluserclientE8342D23"
                   },
@@ -1149,7 +1154,15 @@
                   {
                     "Ref": "AWS::Region"
                   },
-                  ".amazoncognito.com/oauth2/authorize\", \"alternate_aud_key\": \"\", \"auds\": [], \"scopes\": []}"
+                  ".amazoncognito.com/oauth2/authorize\", \"logout_endpoint\": \"https://",
+                  {
+                    "Ref": "cognitousersuserpooluserpoolcognitodomain284E63B2"
+                  },
+                  ".auth.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".amazoncognito.com/logout\", \"alternate_aud_key\": \"\", \"auds\": [], \"scopes\": []}"
                 ]
               ]
             }

@@ -19,13 +19,15 @@ from constructs import Construct
 # CMS Common Library
 from cms_common.config.resource_names import ResourceName, ResourcePrefix
 from cms_common.config.stack_inputs import SolutionConfigInputs
-from cms_common.constructs.cmk_encrypted_s3 import CMKEncryptedS3Construct
+from cms_common.constructs.encrypted_s3 import EncryptedS3Construct
 from cms_common.constructs.vpc_construct import VpcConstruct
 from cms_common.policy_generators.cloudwatch import (
     generate_lambda_cloudwatch_logs_policy_document,
 )
 from cms_common.policy_generators.ec2_vpc import generate_ec2_vpc_policy
-from cms_common.policy_generators.kms import generate_kms_policy_statement_from_key_arn
+
+# Connected Mobility Solution on AWS
+from .module_integration import ModuleInputsConstruct
 
 
 class S3ToGrafanaConstruct(Construct):
@@ -33,8 +35,8 @@ class S3ToGrafanaConstruct(Construct):
         self,
         scope: Construct,
         construct_id: str,
-        app_unique_id: str,
         solution_config_inputs: SolutionConfigInputs,
+        module_inputs: ModuleInputsConstruct,
         dependency_layer: aws_lambda.LayerVersion,
         grafana_api_key_secret_arn: str,
         grafana_workspace_endpoint: str,
@@ -44,15 +46,16 @@ class S3ToGrafanaConstruct(Construct):
     ) -> None:
         super().__init__(scope, construct_id)
 
-        self.grafana_assets_bucket = CMKEncryptedS3Construct(
+        self.grafana_assets_bucket = EncryptedS3Construct(
             self,
             "grafana-assets",
             retain_on_stack_delete=False,
+            log_lifecycle_rules=module_inputs.s3_log_lifecycle_rules,
         )
 
         s3_to_grafana_lambda_function_name = ResourceName.hyphen_separated(
             prefix=ResourcePrefix.hyphen_separated(
-                app_unique_id=app_unique_id,
+                app_unique_id=module_inputs.app_unique_id,
                 module_name=solution_config_inputs.module_short_name,
             ),
             name="s3-to-grafana",
@@ -88,10 +91,6 @@ class S3ToGrafanaConstruct(Construct):
                                 f"{self.grafana_assets_bucket.bucket.bucket_arn}/{alerts_s3_object_key_prefix}*",
                             ],
                         ),
-                        generate_kms_policy_statement_from_key_arn(
-                            kms_encryption_key_arn=self.grafana_assets_bucket.key.key_arn,
-                            allow_encrypt=False,
-                        ),
                     ]
                 ),
                 "cloudwatch-policy": generate_lambda_cloudwatch_logs_policy_document(
@@ -114,7 +113,7 @@ class S3ToGrafanaConstruct(Construct):
             handler="function.main.handler",
             function_name=s3_to_grafana_lambda_function_name,
             runtime=aws_lambda.Runtime.PYTHON_3_12,
-            code=aws_lambda.Code.from_asset("dist/lambda/s3_to_grafana.zip"),
+            code=aws_lambda.Code.from_asset("deployment/dist/lambda/s3_to_grafana.zip"),
             timeout=Duration.seconds(60),
             role=s3_to_grafana_lambda_role,
             log_retention=aws_logs.RetentionDays.THREE_MONTHS,

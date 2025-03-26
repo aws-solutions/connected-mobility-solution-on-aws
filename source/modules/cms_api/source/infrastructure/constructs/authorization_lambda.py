@@ -73,7 +73,7 @@ class AuthorizationLambdaConstruct(Construct):
             handler="main.handler",
             function_name=authorization_lambda_function_name,
             runtime=aws_lambda.Runtime.PYTHON_3_12,
-            code=aws_lambda.Code.from_asset("dist/lambda/authorization.zip"),
+            code=aws_lambda.Code.from_asset("deployment/dist/lambda/authorization.zip"),
             timeout=Duration.seconds(60),
             role=authorization_lambda_role,
             layers=[dependency_layer],

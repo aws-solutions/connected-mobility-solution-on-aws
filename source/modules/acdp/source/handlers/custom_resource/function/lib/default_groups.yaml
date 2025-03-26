@@ -1,0 +1,40 @@
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: viewers
+  namespace: acdp
+  description: Viewer group created by default during ACDP deployment.
+spec:
+  type: default
+  profile:
+    displayName: Viewers
+  children: [managers, admins]
+  members: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: admins
+  namespace: acdp
+  description: Admin group created by default during ACDP deployment.
+spec:
+  type: default
+  profile:
+    displayName: Admins
+  parent: viewers
+  children: []
+  members: [!ENV ADMIN_USERNAME]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: managers
+  namespace: acdp
+  description: Manager group created by default during ACDP deployment.
+spec:
+  type: default
+  profile:
+    displayName: Managers
+  parent: viewers
+  children: []
+  members: []

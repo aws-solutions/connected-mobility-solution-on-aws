@@ -123,8 +123,8 @@ class CmsAlertsConstruct(Construct):
         lambda_dependencies_construct = LambdaDependenciesConstruct(
             self,
             "dependency-layer",
-            pipfile_path=f"{dirname(dirname(dirname(abspath(__file__))))}/Pipfile",
-            dependency_layer_path=f"{os.getcwd()}/source/infrastructure/cms_alerts_dependency_layer",
+            pipfile_lock_dir=dirname(dirname(dirname(abspath(__file__)))),
+            dependency_layer_path=f"{os.getcwd()}/deployment/dist/lambda/cms_alerts_dependency_layer",
         )
 
         authorization_construct = AuthorizationLambdaConstruct(  # nosec

@@ -101,7 +101,7 @@ class InitialConnectionConstruct(Construct):
             self,
             "lambda-function",
             function_name=initial_connection_lambda_function_name,
-            code=aws_lambda.Code.from_asset("dist/lambda/provisioning.zip"),
+            code=aws_lambda.Code.from_asset("deployment/dist/lambda/provisioning.zip"),
             description="CMS Provisioning initial connection lambda function",
             handler="function.initial_connection.handler",
             runtime=aws_lambda.Runtime.PYTHON_3_12,
