@@ -1,8 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import React from "react";
-
 import { makeStyles, Theme, Grid, Paper } from "@material-ui/core";
 
 import { CatalogSearchResultListItem } from "@backstage/plugin-catalog";

@@ -18,10 +18,9 @@ from constructs import Construct
 # CMS Common Library
 from cms_common.config.resource_names import ResourceName, ResourcePrefix
 from cms_common.config.stack_inputs import SolutionConfigInputs
-from cms_common.policy_generators.kms import generate_kms_policy_statement_from_key_id
 
 # Connected Mobility Solution on AWS
-from .cmk_encrypted_log_group import CMKEncryptedLogGroupConstruct
+from .log_group import LogGroupConstruct
 from .s3_to_glue import GlueResources
 
 
@@ -38,7 +37,7 @@ class IoTCoreToS3ParquetConstruct(Construct):
     ) -> None:
         super().__init__(scope, construct_id)
 
-        cmk_encrypted_log_group = CMKEncryptedLogGroupConstruct(
+        cmk_encrypted_log_group = LogGroupConstruct(
             self,
             "iot-kinesis-log-group",
         )
@@ -140,11 +139,6 @@ class IoTCoreToS3ParquetConstruct(Construct):
                                 root_s3_bucket.bucket_arn,
                                 root_s3_bucket.bucket_arn + "/*",
                             ],
-                        ),
-                        generate_kms_policy_statement_from_key_id(
-                            self,
-                            kms_encryption_key_id=root_s3_bucket.encryption_key.key_id,  # type: ignore[union-attr]
-                            allow_encrypt=True,
                         ),
                     ],
                 ),

@@ -20,6 +20,12 @@ MODULE_PATH := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 # ========================================================
 export ACDP_UNIQUE_ID ?= acdp
 
+# Multi Acct Variables for Local Development
+export ORGS_ACCOUNT_DIRECTORY_ASSUME_ROLE_NAME ?= acdp-orgs-trust-role
+export ORGS_AVAILABLE_REGIONS_SSM_PARAMETER_NAME ?= /solution/acdp/multi-acct-setup/available-regions
+export ORGS_ENROLLED_ORGS_SSM_PARAMETER_NAME ?= /solution/acdp/multi-acct-setup/enrolled-organizations
+export METRICS_ROLE_NAME ?= acdp-metrics-role
+
 include ${SOLUTION_PATH}/makefiles/common_config.mk
 include ${SOLUTION_PATH}/makefiles/global_targets.mk
 include ${SOLUTION_PATH}/makefiles/module_targets.mk
@@ -27,22 +33,19 @@ include ${SOLUTION_PATH}/makefiles/module_targets.mk
 .PHONY: yarn-install
 yarn-install: ## Using yarn, installs node dependencies from yarn.lock.
 	@printf "%bInstalling node dependencies from yarn.lock.%b\n" "${MAGENTA}" "${NC}"
-	@yarn install --frozen-lockfile
+	@yarn install --immutable --refresh-lockfile
 
-# Classic yarn does not natively support upgrading yarn.lock without performing an install. Upgrade therefore will perform an install.
-# This behavior is different from the pipenv-lock targets, which do not perform an install, and only upgrade Pipfile.lock.
-# If upgrading to modern yarn, this target should be updated to only perform a lockfile upgrade without install.
-.PHONY: yarn-upgrade
-yarn-upgrade: ## Checks for node dependency upgrades and updates yarn.lock, then performs an install.
-	@printf "%bUpgrading yarn.lock and installing node dependencies.%b\n" "${MAGENTA}" "${NC}"
-	@yarn upgrade
+.PHONY: yarn-up
+yarn-up: ## Checks for node dependency updates and upgrades yarn.lock.
+	@printf "%bUpgrading yarn.lock dependencies.%b\n" "${MAGENTA}" "${NC}"
+	@yarn up --mode=update-lockfile
 
 .PHONY: upgrade
-upgrade: pipenv-lock yarn-upgrade ## Checks for dependency upgrades and updates lock files. Does not install python dependencies.
+upgrade: pipenv-lock yarn-up ## Checks for dependency upgrades and updates lock files. Does not install upgraded dependencies.
 	@printf "%bUpgrading Backstage CDK pip dependencies.%b\n" "${MAGENTA}" "${NC}"
 	@cd "${MODULE_PATH}/cdk" && make upgrade
-	@printf "%bFinished updating lock files. Node dependency upgrades have also been installed.%b\n" "${GREEN}" "${NC}"
-	@printf "%bRun \"make install\" to install upgraded python dependencies.%b\n" "${CYAN}" "${NC}"
+	@printf "%bFinished updating lock files.%b\n" "${GREEN}" "${NC}"
+	@printf "%bRun \"make install\" to install upgraded dependencies.%b\n" "${CYAN}" "${NC}"
 
 .PHONY: install
 install: pipenv-sync yarn-install ## Installs the resources and dependencies required to build the solution.
@@ -91,11 +94,11 @@ run-backstage-frontend-local: ## Start a local instance of Backstage's frontend
 
 .PHONY: run-postgres-local
 run-postgres-local: ## Start a local instance of postgres for use with Backstage
-	@docker-compose up &> ./docker_postgres.log &
+	@finch compose -f ./finch-compose.yaml up &> ./finch_postgres.log &
 	@RETRIES=3; \
 	for i in $$(seq 1 $$RETRIES); do \
 		echo "Attempt $$i: Checking if 'backstage-local-db' container is running..."; \
-		STATUS=$$(docker inspect --format='{{.State.Running}}' backstage-local-db 2>/dev/null); \
+		STATUS=$$(finch inspect --format='{{.State.Running}}' backstage-local-db 2>/dev/null); \
 		if [ "$$STATUS" == "true" ]; then \
 			echo "'backstage-local-db' is up and running." && break; \
 		elif [ $$i -lt $$RETRIES ]; then \
@@ -106,5 +109,5 @@ run-postgres-local: ## Start a local instance of postgres for use with Backstage
 	done
 
 .PHONY: stop-backstage-local
-stop-backstage-local:
-	docker-compose stop && rm -f ./docker_postgres.log
+stop-backstage-local: ## Stop the Backstage local docker instance
+	finch compose stop && rm -f ./finch_postgres.log

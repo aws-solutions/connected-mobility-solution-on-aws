@@ -76,7 +76,7 @@ spec:
           description: ${{parameters.description}}
           labels:
             templateName: cms-example-on-aws
-          name: ${{parameters.componentId}}
+          name: ${{parameters.componentId}}-${{parameters.targetAwsAccountId}}-${{parameters.targetAwsRegion}}
         spec:
           lifecycle: experimental
           owner: ${{parameters.owner}}

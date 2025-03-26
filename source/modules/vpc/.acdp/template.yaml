@@ -9,7 +9,7 @@ metadata:
     - network
   title: CMS VPC Module
   annotations:
-    backstage.io/techdocs-ref: dir:../docs/components/vpc/
+    backstage.io/techdocs-ref: dir:../../docs/components/vpc/
 spec:
   type: infrastructure
   output:
@@ -45,6 +45,23 @@ spec:
         - componentId
         - owner
       title: Provide the required information
+    - properties:
+        targetAwsAccountId:
+          description: Target AWS Account ID to deploy the module
+          pattern: '^\d{12}$'
+          title: Target AWS Account Id
+          type: string
+          ui:field: AwsAccountId
+        targetAwsRegion:
+          description: Target AWS Region to deploy module
+          pattern: '^(us|eu|ap|sa|ca|me|af|il)-(north|south|east|west|central)-(1|2|3|4)$'
+          title: Target AWS Region
+          type: string
+          ui:field: AwsRegion
+      required:
+        - targetAwsAccountId
+        - targetAwsRegion
+      title: Provide the target account information
     - properties:
         isolatedSubnet1CIDR:
           default: 10.0.150.0/22
@@ -115,16 +132,18 @@ spec:
     name: ACDP S3 Catalog Create
     input:
       componentId: ${{ parameters.componentId }}
-      assetsSourcePath: dir:../acdp/vpc/
-      docsSiteSourcePath: dir:../docs/components/vpc/site/
+      assetsSourcePath: dir:../../acdp/vpc/
+      docsSiteSourcePath: dir:../../docs/components/vpc/site/
       entity:
         apiVersion: backstage.io/v1alpha1
         kind: Component
         metadata:
           annotations:
             aws.amazon.com/acdp-deploy-on-create: "true"
+            aws.amazon.com/acdp-deployment-target-account: ${{parameters.targetAwsAccountId}}
+            aws.amazon.com/acdp-deployment-target-region: ${{parameters.targetAwsRegion}}
           description: ${{parameters.description}}
-          name: ${{parameters.componentId}}
+          name: ${{parameters.componentId}}-${{parameters.targetAwsAccountId}}-${{parameters.targetAwsRegion}}
           namespace: acdp
         spec:
           lifecycle: experimental

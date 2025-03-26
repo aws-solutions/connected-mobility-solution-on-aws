@@ -8,7 +8,7 @@ from os.path import abspath, dirname
 from typing import Any
 
 # AWS Libraries
-from aws_cdk import Aws, CfnMapping, CfnResource, Stack, Tags
+from aws_cdk import Aws, CfnMapping, Stack, Tags
 from constructs import Construct
 
 # CMS Common Library
@@ -126,8 +126,8 @@ class CmsVehicleSimulatorConstruct(Construct):
         dependency_layer_construct = LambdaDependenciesConstruct(
             self,
             "dependency-layer-construct",
-            pipfile_path=f"{dirname(dirname(dirname(abspath(__file__))))}/Pipfile",
-            dependency_layer_path=f"{os.getcwd()}/source/infrastructure/cms_vehicle_simulator_dependency_layer",
+            pipfile_lock_dir=dirname(dirname(dirname(abspath(__file__)))),
+            dependency_layer_path=f"{os.getcwd()}/deployment/dist/lambda/cms_vehicle_simulator_dependency_layer",
         )
 
         custom_resource_construct = CustomResourceLambdaConstruct(
@@ -136,7 +136,7 @@ class CmsVehicleSimulatorConstruct(Construct):
             dependency_layer=dependency_layer_construct.dependency_layer,
             unique_id=module_inputs_construct.app_unique_id,
             name=solution_config_inputs.module_short_name,
-            asset_path="dist/lambda/custom_resource.zip",
+            asset_path=f"{os.getcwd()}/deployment/dist/lambda/custom_resource.zip",
             user_agent_string=solution_config_inputs.get_user_agent_string(),
             vpc_construct=vpc_construct,
         )
@@ -222,22 +222,3 @@ class CmsVehicleSimulatorConstruct(Construct):
                 },
             }
         }
-
-        api_handler = (
-            vs_api_construct.node.find_child("vs-api-chalice")
-            .node.find_child("ChaliceApp")
-            .node.find_child("APIHandler")
-        )
-        CfnResource.add_metadata(
-            api_handler,  # type: ignore[arg-type]
-            "cfn_nag",
-            {
-                "rules_to_suppress": [
-                    {"id": "W89", "reason": "Ignore VPC requirements for now"},
-                    {
-                        "id": "W92",
-                        "reason": "Ignore reserved concurrent executions for now",
-                    },
-                ]
-            },
-        )

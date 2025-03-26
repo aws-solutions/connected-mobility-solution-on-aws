@@ -167,7 +167,7 @@ class PostProvisioningConstruct(Construct):
             self,
             "lambda-function",
             function_name=post_provisioning_lambda_function_name,
-            code=aws_lambda.Code.from_asset("dist/lambda/provisioning.zip"),
+            code=aws_lambda.Code.from_asset("deployment/dist/lambda/provisioning.zip"),
             description="CMS Provisioning post-provisioning lambda function",
             handler="function.post_provision.handler",
             runtime=aws_lambda.Runtime.PYTHON_3_12,

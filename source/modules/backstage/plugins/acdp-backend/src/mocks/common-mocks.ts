@@ -4,7 +4,7 @@
 import { AwsStub } from "aws-sdk-client-mock";
 import { GetParameterCommand } from "@aws-sdk/client-ssm";
 
-import { UrlReader } from "@backstage/backend-common";
+import { UrlReaderService } from "@backstage/backend-plugin-api/index";
 import {
   CatalogClient,
   CatalogRequestOptions,
@@ -18,7 +18,10 @@ import { ConfigReader } from "@backstage/config";
 import { ScmIntegrations } from "@backstage/integration";
 import { AwsCredentialProvider } from "@backstage/integration-aws-node";
 
-import { mockedConfigData } from "./build-mocks";
+import {
+  mockedConfigDataWithMultiAccount,
+  mockedConfigDataWithoutMultiAccount,
+} from "./build-mocks";
 import { getSsmParameterNameForEntityBuildParameters } from "../service/utils";
 
 export const mockedCatalogEntity = {
@@ -28,7 +31,8 @@ export const mockedCatalogEntity = {
     uid: "uniqueId",
     annotations: {
       "aws.amazon.com/acdp-deploy-on-create": "true",
-      "aws.amazon.com/acdp-deployment-target": "default",
+      "aws.amazon.com/acdp-deployment-target-account": "111111111111",
+      "aws.amazon.com/acdp-deployment-target-region": "us-east-1",
       "aws.amazon.com/techdocs-builder": "external",
       "backstage.io/techdocs-ref": "dir:.",
       "aws.amazon.com/template-entity-ref": "template:default/cms-sample",
@@ -48,7 +52,12 @@ export const mockedCatalogEntity = {
   },
 };
 
-export const mockConfig = new ConfigReader(mockedConfigData);
+export const mockConfigWithMultiAccount = new ConfigReader(
+  mockedConfigDataWithMultiAccount,
+);
+export const mockConfigWithoutMultiAccount = new ConfigReader(
+  mockedConfigDataWithoutMultiAccount,
+);
 
 export const mockCredentialsProvider = {
   sdkCredentialProvider: jest.fn().mockResolvedValue({
@@ -58,7 +67,7 @@ export const mockCredentialsProvider = {
   }),
 } satisfies AwsCredentialProvider;
 
-export const mockUrlReader: jest.Mocked<UrlReader> = {
+export const mockUrlReader: jest.Mocked<UrlReaderService> = {
   readUrl: jest.fn(),
   readTree: jest.fn(),
   search: jest.fn(),
@@ -109,7 +118,9 @@ export const mockCatalogClient = (
   > as jest.Mocked<CatalogClient>;
 };
 
-export const mockIntegrations = ScmIntegrations.fromConfig(mockConfig);
+export const mockIntegrations = ScmIntegrations.fromConfig(
+  mockConfigWithoutMultiAccount,
+);
 
 export const mockSsmClientGetBuildParameters = (
   mockedSsmClient: AwsStub<any, any, any>,
@@ -117,7 +128,8 @@ export const mockSsmClientGetBuildParameters = (
   mockedSsmClient
     .on(GetParameterCommand, {
       Name: getSsmParameterNameForEntityBuildParameters(
-        mockedConfigData.acdp.buildConfig.buildConfigStoreSsmPrefix,
+        mockedConfigDataWithMultiAccount.acdp.buildConfig
+          .buildConfigStoreSsmPrefix,
         mockedCatalogEntity,
       ),
     })

@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-import React from "react";
 import { useEntityTypeFilter } from "@backstage/plugin-catalog-react";
 import { PartnerOfferingCategoryPicker } from "./PartnerOfferingCategoryPicker";
 import { renderInTestApp, TestApiProvider } from "@backstage/test-utils";

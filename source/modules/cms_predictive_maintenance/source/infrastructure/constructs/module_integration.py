@@ -15,6 +15,7 @@ from cms_common.config.resource_names import ResourceName, ResourcePrefix
 from cms_common.config.ssm import resolve_ssm_parameter
 from cms_common.config.stack_inputs import SolutionConfigInputs
 from cms_common.constructs.app_unique_id import AppUniqueId
+from cms_common.constructs.encrypted_s3 import EncryptedS3Construct
 from cms_common.constructs.vpc_construct import create_vpc_config, get_vpc_name
 from cms_common.resource_names.auth import AuthResourceNames
 
@@ -49,6 +50,10 @@ class ModuleInputsConstruct(Construct):
                     app_unique_id=self.app_unique_id
                 ).token_validation_lambda_arn,
             ),
+        )
+
+        self.s3_log_lifecycle_rules = (
+            EncryptedS3Construct.create_log_lifecycle_cfn_parameters(self)
         )
 
 

@@ -9,16 +9,7 @@ import os
 from typing import Any
 
 # AWS Libraries
-from aws_cdk import (
-    ArnFormat,
-    Aws,
-    RemovalPolicy,
-    Stack,
-    aws_ec2,
-    aws_iam,
-    aws_kms,
-    aws_logs,
-)
+from aws_cdk import ArnFormat, Aws, RemovalPolicy, Stack, aws_ec2, aws_iam, aws_logs
 from chalice.cdk import Chalice
 from constructs import Construct
 
@@ -48,31 +39,11 @@ class VSApiConstruct(Construct):
     ):
         super().__init__(scope, stack_id, **kwargs)
 
-        api_log_group_kms_key = aws_kms.Key(
-            self,
-            "vs-api-log-group-kms-key",
-            enable_key_rotation=True,
-        )
-
         self.api_log_group = aws_logs.LogGroup(
             self,
             "vs-api-log-group",
             removal_policy=RemovalPolicy.RETAIN,
             retention=aws_logs.RetentionDays.THREE_MONTHS,
-            encryption_key=api_log_group_kms_key,
-        )
-
-        api_log_group_kms_key.add_to_resource_policy(
-            statement=aws_iam.PolicyStatement(
-                effect=aws_iam.Effect.ALLOW,
-                principals=[
-                    aws_iam.ServicePrincipal(
-                        f"logs.{Stack.of(self).region}.amazonaws.com"
-                    )
-                ],
-                actions=["kms:Encrypt", "kms:Decrypt", "kms:GenerateDataKey"],
-                resources=["*"],
-            )
         )
 
         self.vs_api_lambda_role = aws_iam.Role(

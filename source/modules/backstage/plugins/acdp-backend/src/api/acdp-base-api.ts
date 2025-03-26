@@ -1,8 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { Logger } from "winston";
-
+import { LoggerService } from "@backstage/backend-plugin-api";
 import { CatalogClient } from "@backstage/catalog-client";
 import { Entity } from "@backstage/catalog-model";
 import { NotFoundError } from "@backstage/errors";
@@ -12,10 +11,10 @@ export interface AcdpBaseApiInput {
 }
 
 export class AcdpBaseApi {
-  _logger: Logger;
+  _logger: LoggerService;
   _catalogClient: CatalogClient;
 
-  public constructor(catalogClient: CatalogClient, logger: Logger) {
+  public constructor(catalogClient: CatalogClient, logger: LoggerService) {
     this._catalogClient = catalogClient;
     this._logger = logger;
   }

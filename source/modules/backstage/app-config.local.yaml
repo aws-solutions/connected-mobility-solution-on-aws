@@ -1,4 +1,10 @@
-enableExperimentalRedirectFlow: ${USE_BACKSTAGE_AUTH_REDIRECT_FLOW}
+# README
+# =======================================================================================
+# Local file uses placeholder values which require manual config for local Backstage use.
+# To find and replace all placeholder values, CTRL-F for "PLACEHOLDER" comments and
+# manually update the corresponding values.
+
+enableExperimentalRedirectFlow: true
 
 app:
   title: local
@@ -20,6 +26,19 @@ acdp:
     region: ${AWS_REGION}
   metrics:
     userAgentString: local-user-agent
+  accountDirectory:
+    enableMultiAccountDeployment: ${ENABLE_MULTI_ACCOUNT_DEPLOYMENT}
+    organizationsAccountId: ${ORGS_MANAGEMENT_AWS_ACCOUNT_ID}
+    organizationsManagementAccountRegion: ${ORGS_MANAGEMENT_ACCOUNT_REGION}
+    organizationsAccountAssumeRoleName: ${ORGS_ACCOUNT_DIRECTORY_ASSUME_ROLE_NAME}
+    availableRegionsParameterName: ${ORGS_AVAILABLE_REGIONS_SSM_PARAMETER_NAME}
+    enrolledOrgsParameterName: ${ORGS_ENROLLED_ORGS_SSM_PARAMETER_NAME}
+    metricsRoleName: ${METRICS_ROLE_NAME}
+  operationalMetrics:
+    solutionVersion: ${SOLUTION_VERSION}
+    solutionId: ${SOLUTION_ID}
+    deploymentUuid: ${DEPLOYMENT_UUID}
+    sendAnonymousMetrics: ${SEND_ANONYMOUS_METRICS}
   allow-unsafe-local-dir-access: true
 
 backend:
@@ -75,15 +94,30 @@ auth:
     guest: {}
     oauth2:
       development: # Fill in this information if you want to use an actual OAuth2 IdP login for local development, otherwise login as guest
-        clientId: <oauth2-client-id>
-        clientSecret: <oauth2-client-secret>
-        authorizationUrl: <oauth2-authorize-endpoint>
-        tokenUrl: <oauth2-token-endpoint>
-  config:
-    additionalScopes: ${BACKSTAGE_ADDITIONAL_SCOPES}
+        clientId: <oauth2-client-id> # PLACEHOLDER
+        clientSecret: <oauth2-client-secret> # PLACEHOLDER
+        authorizationUrl: <oauth2-authorize-endpoint> # PLACEHOLDER
+        tokenUrl: <oauth2-token-endpoint> # PLACEHOLDER
+  # config: # Commented out for local use.
+    # additionalScopes: ${BACKSTAGE_ADDITIONAL_SCOPES}
 
+# RBAC Plugin Documentation: https://github.com/backstage/community-plugins/tree/main/workspaces/rbac/plugins/rbac-backend#rbac-backend-plugin-for-backstage
+permission:
+  enabled: false
+  rbac:
+    policies-csv-file: ${SOLUTION_PATH}/source/modules/backstage/deployment/rbac/default_permission_policies.csv
+    policyFileReload: true
+    admin:
+      superUsers:
+        - name: user:acdp/<admin_username> # PLACEHOLDER
+    pluginsWithPermission:
+      - catalog
+      - scaffolder
+      - permission
+      - acdp
+
+# see https://backstage.io/docs/features/software-templates/configuration for software template options
 scaffolder:
-  # see https://backstage.io/docs/features/software-templates/configuration for software template options
   concurrentTasksLimit: 10
 
 catalog:
@@ -97,59 +131,68 @@ catalog:
       rules:
         - allow: [Location, PartnerOffering]
     - type: file
-      target: ${SOLUTION_PATH}/source/modules/cms_api/deployment/regional-s3-assets/backstage/templates/cms-api.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/cms_api/deployment/regional-s3-assets/backstage/entities/templates/cms-api.template.yaml
       rules:
         - allow: [Location, Template]
     - type: file
-      target: ${SOLUTION_PATH}/source/modules/cms_alerts/deployment/regional-s3-assets/backstage/templates/cms-alerts.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/cms_alerts/deployment/regional-s3-assets/backstage/entities/templates/cms-alerts.template.yaml
       rules:
         - allow: [Location, Template]
     - type: file
-      target: ${SOLUTION_PATH}/source/modules/cms_provisioning/deployment/regional-s3-assets/backstage/templates/cms-provisioning.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/cms_provisioning/deployment/regional-s3-assets/backstage/entities/templates/cms-provisioning.template.yaml
       rules:
         - allow: [Location, Template]
     - type: file
-      target: ${SOLUTION_PATH}/source/modules/cms_connect_store/deployment/regional-s3-assets/backstage/templates/cms-connect-store.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/cms_connect_store/deployment/regional-s3-assets/backstage/entities/templates/cms-connect-store.template.yaml
       rules:
         - allow: [Location, Template]
     - type: file
-      target: ${SOLUTION_PATH}/source/modules/cms_ev_battery_health/deployment/regional-s3-assets/backstage/templates/cms-ev-battery-health.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/cms_ev_battery_health/deployment/regional-s3-assets/backstage/entities/templates/cms-ev-battery-health.template.yaml
       rules:
         - allow: [Location, Template]
     - type: file
-      target: ${SOLUTION_PATH}/source/modules/cms_vehicle_simulator/deployment/regional-s3-assets/backstage/templates/cms-vehicle-simulator.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/cms_vehicle_simulator/deployment/regional-s3-assets/backstage/entities/templates/cms-vehicle-simulator.template.yaml
       rules:
         - allow: [Location, Template]
     - type: file
-      target: ${SOLUTION_PATH}/source/modules/cms_auth/deployment/regional-s3-assets/backstage/templates/cms-auth.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/cms_auth/deployment/regional-s3-assets/backstage/entities/templates/cms-auth.template.yaml
       rules:
         - allow: [Location, Template]
     - type: file
-      target: ${SOLUTION_PATH}/source/modules/cms_fleetwise_connector/deployment/regional-s3-assets/backstage/templates/cms-fleetwise-connector.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/cms_fleetwise_connector/deployment/regional-s3-assets/backstage/entities/templates/cms-fleetwise-connector.template.yaml
       rules:
         - allow: [Location, Template]
     - type: file
-      target: ${SOLUTION_PATH}/source/modules/vpc/deployment/regional-s3-assets/backstage/templates/vpc.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/vpc/deployment/regional-s3-assets/backstage/entities/templates/vpc.template.yaml
       rules:
         - allow: [Location, Template]
     - type: file
-      target: ${SOLUTION_PATH}/source/modules/auth_setup/deployment/regional-s3-assets/backstage/templates/auth-setup.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/auth_setup/deployment/regional-s3-assets/backstage/entities/templates/auth-setup.template.yaml
       rules:
         - allow: [Location, Template]
     - type: file
-      target: ${SOLUTION_PATH}/source/modules/cms_sample/deployment/regional-s3-assets/backstage/templates/cms-sample.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/cms_sample/deployment/regional-s3-assets/backstage/entities/templates/cms-sample.template.yaml
       rules:
         - allow: [Location, Template]
     - type: file
-      target: ${SOLUTION_PATH}/source/modules/cms_config/deployment/regional-s3-assets/backstage/templates/cms-config.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/cms_config/deployment/regional-s3-assets/backstage/entities/templates/cms-config.template.yaml
       rules:
         - allow: [Location, Template]
     - type: file
-      target: ${SOLUTION_PATH}/source/modules/cms_predictive_maintenance/deployment/regional-s3-assets/backstage/templates/cms_predictive_maintenance.template.yaml
+      target: ${SOLUTION_PATH}/source/modules/cms_predictive_maintenance/deployment/regional-s3-assets/backstage/entities/templates/cms_predictive_maintenance.template.yaml
       rules:
         - allow: [Location, Template]
+  ## Uncomment these lines to add more example data
+  # - type: url
+  #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
 
-  # For local testing of AWS integration, uncomment this and fill in <PlACEHOLDER>
+  ## Uncomment these lines to add an example org
+  # - type: url
+  #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme-corp.yaml
+  #   rules:
+  #     - allow: [User, Group]
+
+  ## For local testing of AWS integration, uncomment this and fill in <PlACEHOLDER>
   # providers:
   #   rules:
   #   - allow: [Component, System, API, Group, User, Resource, Location, Template, PartnerOffering]
@@ -170,19 +213,8 @@ catalog:
   #         frequency:
   #           minutes: 1
   #         timeout: { minutes: 3 }
-  # locations:
-  ## Uncomment these lines to add more example data
-  # - type: url
-  #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
 
-  ## Uncomment these lines to add an example org
-  # - type: url
-  #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme-corp.yaml
-  #   rules:
-  #     - allow: [User, Group]
-
-
-#Enable this to allow connections to externally hosted repositories. s3 integration works automatically via IAM and isn't needed here
+## Uncomment these lines to allow connections to externally hosted repositories. S3 integration works automatically via IAM and isn't needed here
 # integrations:
 # gitlab:
 #   - host: gitlab.aws.dev
@@ -191,12 +223,14 @@ catalog:
 #     token: ${GITLAB_TOKEN}
 #     allowedKinds: [Component, System, API, Group, User, Resource, Location, Template]
 # github:
+#   ## Example using GitHub Personal Access Token (or PAT).
+#   ## You can find out how to generate this token, and more information about setting up the GitHub integration here:
+#   ## https://backstage.io/docs/getting-started/configuration#setting-up-a-github-integration
 #   - host: github.com
-#     # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
-#     # about setting up the GitHub integration here: https://backstage.io/docs/getting-started/configuration#setting-up-a-github-integration
 #     token: ${GITHUB_TOKEN}
 #     allowedKinds: [Component, System, API, Group, User, Resource, Location, Template]
-### Example for how to add your GitHub Enterprise instance using the API:
-# - host: ghe.example.net
-#   apiBaseUrl: https://ghe.example.net/api/v3
-#   token: ${GHE_TOKEN}
+#
+#   ## Example using GitHub enterprise API:
+#   - host: ghe.example.net
+#     apiBaseUrl: https://ghe.example.net/api/v3
+#     token: ${GHE_TOKEN}

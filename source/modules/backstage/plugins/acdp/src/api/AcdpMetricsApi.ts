@@ -2,15 +2,30 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { createApiRef } from "@backstage/core-plugin-api";
+
 import { AcdpApplication } from "backstage-plugin-acdp-common";
 
 import { AcdpBaseApi, AcdpBaseApiInput } from "./AcdpBaseApi";
 
-export const acdpMetricsApiRef = createApiRef<AcdpMetricsApi>({
-  id: "plugin.acdpmetrics.service",
-});
+export interface AcdpMetricsApi extends AcdpBaseApi {
+  getApplicationByEntity({
+    entityRef,
+  }: {
+    entityRef: string;
+  }): Promise<AcdpApplication>;
 
-export class AcdpMetricsApi extends AcdpBaseApi {
+  getApplicationByArn(arn: string): Promise<AcdpApplication>;
+
+  getNetUnblendedCurrentMonthCost({
+    entityRef,
+    awsApplicationTag,
+  }: {
+    entityRef: string;
+    awsApplicationTag: string;
+  }): Promise<string>;
+}
+
+export class AcdpMetricsImpl extends AcdpBaseApi implements AcdpMetricsApi {
   public constructor(options: AcdpBaseApiInput) {
     super(options);
   }
@@ -53,3 +68,7 @@ export class AcdpMetricsApi extends AcdpBaseApi {
     return await this._fetch<string>(urlSegment);
   }
 }
+
+export const acdpMetricsApiRef = createApiRef<AcdpMetricsApi>({
+  id: "plugin.acdpmetrics.service",
+});

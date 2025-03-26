@@ -4,3 +4,4 @@
 export * from "./acdp-base-router";
 export * from "./acdp-build-router";
 export * from "./acdp-metrics-router";
+export * from "./acdp-account-directory-router";

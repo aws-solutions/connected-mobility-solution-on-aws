@@ -47,7 +47,7 @@ class IncomingAlertsConstruct(Construct):
             self,
             "create-alerts-lambda",
             function_name=alerts_lambda_name,
-            code=aws_lambda.Code.from_asset("dist/lambda/create_alerts.zip"),
+            code=aws_lambda.Code.from_asset("deployment/dist/lambda/create_alerts.zip"),
             description="CMS Alerts Lambda Function",
             environment={
                 "USER_AGENT_STRING": solution_config_inputs.get_user_agent_string(),

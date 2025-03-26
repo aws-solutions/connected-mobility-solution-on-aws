@@ -56,7 +56,9 @@ class FleetWiseTimestreamUnloadToS3:
             construct,
             "timestream-unload-to-s3-lambda",
             function_name=lambda_name,
-            code=aws_lambda.Code.from_asset("dist/lambda/unload_vehicle_data.zip"),
+            code=aws_lambda.Code.from_asset(
+                "deployment/dist/lambda/unload_vehicle_data.zip"
+            ),
             description="CMS FleetWise Connector - Unload Timestream Data to S3",
             environment={
                 "REPORT_METRICS_ENABLED": operational_metrics.report_metrics_enabled,
@@ -142,9 +144,6 @@ class FleetWiseTimestreamUnloadToS3:
                                 telemetry_bucket.bucket_arn,
                                 f"{telemetry_bucket.bucket_arn}/{timestream_unload_s3_prefix_path}/*",
                             ],
-                        ),
-                        generate_kms_policy_statement_from_key_arn(
-                            telemetry_bucket.bucket_key_arn, True
                         ),
                     ]
                 ),

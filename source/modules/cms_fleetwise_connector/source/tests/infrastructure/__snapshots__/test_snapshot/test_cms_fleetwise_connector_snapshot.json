@@ -47,10 +47,10 @@
         "value": "nodejs20.x"
       },
       "cn-north-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "cn-northwest-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "eu-central-1": {
         "value": "nodejs20.x"
@@ -101,10 +101,10 @@
         "value": "nodejs20.x"
       },
       "us-gov-east-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "us-gov-west-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "us-iso-east-1": {
         "value": "nodejs18.x"
@@ -197,16 +197,6 @@
       "DependsOn": [
         "cmsfleetwiseconnectors3glueathenaprefixlistlookupvpcprefixlistcustomresourceroleA1B2E782"
       ],
-      "Metadata": {
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "W92",
-              "reason": "No reserved concurrency required for custom resources"
-            }
-          ]
-        }
-      },
       "Properties": {
         "Code": {
           "S3Bucket": {
@@ -322,20 +312,6 @@
       "Type": "Custom::LogRetention"
     },
     "AWS679f53fac002430cb0da5b7982bd2287SecurityGroupBE06FF8C": {
-      "Metadata": {
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "W5",
-              "reason": "Unable to know egress requirement. leaving open for now"
-            },
-            {
-              "id": "W40",
-              "reason": "Unable to know egress requirement. leaving open for now"
-            }
-          ]
-        }
-      },
       "Properties": {
         "GroupDescription": "Automatic security group for Lambda Function cmsfleetwiseconnectorAWS679f53fac002430cb0da5b7982bd22878A3A31B9",
         "SecurityGroupEgress": [
@@ -562,20 +538,6 @@
       "Type": "AWS::ServiceCatalogAppRegistry::AttributeGroup"
     },
     "cdklambdasvpcconstructsecuritygroupF9971F98": {
-      "Metadata": {
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "W5",
-              "reason": "Unable to know egress requirement. leaving open for now"
-            },
-            {
-              "id": "W40",
-              "reason": "Unable to know egress requirement. leaving open for now"
-            }
-          ]
-        }
-      },
       "Properties": {
         "GroupDescription": "cms-fleetwise-connector/cdk-lambdas-vpc-construct/security-group",
         "SecurityGroupEgress": [
@@ -1780,27 +1742,6 @@
                       ]
                     }
                   ]
-                },
-                {
-                  "Action": [
-                    "kms:Decrypt",
-                    "kms:DescribeKey",
-                    "kms:Encrypt",
-                    "kms:GenerateDataKey"
-                  ],
-                  "Effect": "Allow",
-                  "Resource": {
-                    "Fn::Join": [
-                      "",
-                      [
-                        "{{resolve:ssm:/solution/",
-                        {
-                          "Ref": "AppUniqueId"
-                        },
-                        "/connect-store/s3-storage-bucket/key-arn}}"
-                      ]
-                    ]
-                  }
                 }
               ],
               "Version": "2012-10-17"
@@ -2004,94 +1945,6 @@
         ]
       },
       "Type": "AWS::IAM::Role"
-    },
-    "cmsfleetwiseconnectorfleetwisetimestreamtos3loggroupkmskey4B211BE3": {
-      "DeletionPolicy": "Retain",
-      "DependsOn": [
-        "ssmappuniqueidregistermodule9C5C2C5D"
-      ],
-      "Properties": {
-        "EnableKeyRotation": true,
-        "KeyPolicy": {
-          "Statement": [
-            {
-              "Action": "kms:*",
-              "Effect": "Allow",
-              "Principal": {
-                "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":root"
-                    ]
-                  ]
-                }
-              },
-              "Resource": "*"
-            },
-            {
-              "Action": [
-                "kms:Encrypt",
-                "kms:Decrypt",
-                "kms:GenerateDataKey"
-              ],
-              "Effect": "Allow",
-              "Principal": {
-                "Service": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "logs.",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ".amazonaws.com"
-                    ]
-                  ]
-                }
-              },
-              "Resource": "*"
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "Tags": [
-          {
-            "Key": "awsApplication",
-            "Value": {
-              "Fn::GetAtt": [
-                "appregistryconstructappregistryapplicationAC1A319B",
-                "ApplicationTagValue"
-              ]
-            }
-          },
-          {
-            "Key": "Solutions:DeploymentUUID",
-            "Value": {
-              "Fn::Join": [
-                "",
-                [
-                  "{{resolve:ssm:/solution/",
-                  {
-                    "Ref": "AppUniqueId"
-                  },
-                  "/config/deployment-uuid}}"
-                ]
-              ]
-            }
-          }
-        ]
-      },
-      "Type": "AWS::KMS::Key",
-      "UpdateReplacePolicy": "Retain"
     },
     "cmsfleetwiseconnectorfleetwisetimestreamtos3ssmlastunloadendtimeparametername9B99E2EE": {
       "DependsOn": [
@@ -2332,12 +2185,6 @@
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
-        "KmsKeyId": {
-          "Fn::GetAtt": [
-            "cmsfleetwiseconnectorfleetwisetimestreamtos3loggroupkmskey4B211BE3",
-            "Arn"
-          ]
-        },
         "LogGroupName": {
           "Fn::Join": [
             "",
@@ -2442,11 +2289,7 @@
               {
                 "Ref": "AppUniqueId"
               },
-              "/connect-store/s3-storage-bucket/name}}\",\"telemetryPrefixPath\":\"fleetwise_timestream_to_s3/\",\"telemetryBucketKmsKeyArn\":\"{{resolve:ssm:/solution/",
-              {
-                "Ref": "AppUniqueId"
-              },
-              "/connect-store/s3-storage-bucket/key-arn}}\"},\"timeInfo.$\":\"$.timeInfo\"}}},\"Check for Existence of Data in Query Range\":{\"Type\":\"Choice\",\"Choices\":[{\"Variable\":\"$.getVinsResult.vinBatches[0][0]\",\"IsPresent\":false,\"Next\":\"Skipping Unload: No New Data\"}],\"Default\":\"Process Each VIN Batch\"},\"Process Each VIN Batch\":{\"Type\":\"Map\",\"ResultPath\":\"$.vin_batch\",\"Next\":\"Update Last Unload Query End Time\",\"Parameters\":{\"vinBatch.$\":\"$$.Map.Item.Value\",\"timestream\":{\"databaseName\":\"",
+              "/connect-store/s3-storage-bucket/name}}\",\"telemetryPrefixPath\":\"fleetwise_timestream_to_s3/\"},\"timeInfo.$\":\"$.timeInfo\"}}},\"Check for Existence of Data in Query Range\":{\"Type\":\"Choice\",\"Choices\":[{\"Variable\":\"$.getVinsResult.vinBatches[0][0]\",\"IsPresent\":false,\"Next\":\"Skipping Unload: No New Data\"}],\"Default\":\"Process Each VIN Batch\"},\"Process Each VIN Batch\":{\"Type\":\"Map\",\"ResultPath\":\"$.vin_batch\",\"Next\":\"Update Last Unload Query End Time\",\"Parameters\":{\"vinBatch.$\":\"$$.Map.Item.Value\",\"timestream\":{\"databaseName\":\"",
               {
                 "Ref": "cmsfleetwiseconnectortimestreamtimestreamdatabase51C3291C"
               },
@@ -2461,11 +2304,7 @@
               {
                 "Ref": "AppUniqueId"
               },
-              "/connect-store/s3-storage-bucket/name}}\",\"telemetryPrefixPath\":\"fleetwise_timestream_to_s3/\",\"telemetryBucketKmsKeyArn\":\"{{resolve:ssm:/solution/",
-              {
-                "Ref": "AppUniqueId"
-              },
-              "/connect-store/s3-storage-bucket/key-arn}}\"},\"fleetwise\":{\"vehicleVinAttributeName\":\"",
+              "/connect-store/s3-storage-bucket/name}}\",\"telemetryPrefixPath\":\"fleetwise_timestream_to_s3/\"},\"fleetwise\":{\"vehicleVinAttributeName\":\"",
               {
                 "Ref": "FleetwiseVehicleVinAttributeName"
               },
@@ -3566,27 +3405,6 @@
                       ]
                     }
                   ]
-                },
-                {
-                  "Action": [
-                    "kms:Decrypt",
-                    "kms:DescribeKey",
-                    "kms:Encrypt",
-                    "kms:GenerateDataKey"
-                  ],
-                  "Effect": "Allow",
-                  "Resource": {
-                    "Fn::Join": [
-                      "",
-                      [
-                        "{{resolve:ssm:/solution/",
-                        {
-                          "Ref": "AppUniqueId"
-                        },
-                        "/connect-store/s3-storage-bucket/key-arn}}"
-                      ]
-                    ]
-                  }
                 }
               ],
               "Version": "2012-10-17"
@@ -3943,21 +3761,6 @@
                       ]
                     }
                   ]
-                },
-                {
-                  "Action": [
-                    "kms:Decrypt",
-                    "kms:DescribeKey",
-                    "kms:Encrypt",
-                    "kms:GenerateDataKey"
-                  ],
-                  "Effect": "Allow",
-                  "Resource": {
-                    "Fn::GetAtt": [
-                      "cmsfleetwiseconnectors3glueathenaloggroupkmskeyCCB38341",
-                      "Arn"
-                    ]
-                  }
                 }
               ],
               "Version": "2012-10-17"
@@ -3998,28 +3801,6 @@
       "DependsOn": [
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
-      "Metadata": {
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "W5",
-              "reason": "Glue requires a fully open ingress that is self referencing"
-            },
-            {
-              "id": "W29",
-              "reason": "Glue requires a fully open egress that is self referencing"
-            },
-            {
-              "id": "W40",
-              "reason": "Glue requires a fully open egress that is self referencing"
-            },
-            {
-              "id": "W42",
-              "reason": "Glue requires a fully open ingress that is self referencing"
-            }
-          ]
-        }
-      },
       "Properties": {
         "GroupDescription": "Allow all inbound and outbound traffic as required by Glue.",
         "Tags": [
@@ -4134,109 +3915,6 @@
       },
       "Type": "AWS::EC2::SecurityGroupEgress"
     },
-    "cmsfleetwiseconnectors3glueathenaloggroupkmskeyCCB38341": {
-      "DeletionPolicy": "Retain",
-      "DependsOn": [
-        "ssmappuniqueidregistermodule9C5C2C5D"
-      ],
-      "Properties": {
-        "EnableKeyRotation": true,
-        "KeyPolicy": {
-          "Statement": [
-            {
-              "Action": "kms:*",
-              "Effect": "Allow",
-              "Principal": {
-                "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":root"
-                    ]
-                  ]
-                }
-              },
-              "Resource": "*"
-            },
-            {
-              "Action": [
-                "kms:Encrypt*",
-                "kms:Decrypt*",
-                "kms:ReEncrypt*",
-                "kms:GenerateDataKey*",
-                "kms:Describe*"
-              ],
-              "Condition": {
-                "ArnLike": {
-                  "kms:EncryptionContext:aws:logs:arn": {
-                    "Fn::Join": [
-                      "",
-                      [
-                        "arn:",
-                        {
-                          "Ref": "AWS::Partition"
-                        },
-                        ":logs:",
-                        {
-                          "Ref": "AWS::Region"
-                        },
-                        ":",
-                        {
-                          "Ref": "AWS::AccountId"
-                        },
-                        ":log-group:/aws-glue/*"
-                      ]
-                    ]
-                  }
-                }
-              },
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "logs.amazonaws.com"
-              },
-              "Resource": "*"
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "Tags": [
-          {
-            "Key": "awsApplication",
-            "Value": {
-              "Fn::GetAtt": [
-                "appregistryconstructappregistryapplicationAC1A319B",
-                "ApplicationTagValue"
-              ]
-            }
-          },
-          {
-            "Key": "Solutions:DeploymentUUID",
-            "Value": {
-              "Fn::Join": [
-                "",
-                [
-                  "{{resolve:ssm:/solution/",
-                  {
-                    "Ref": "AppUniqueId"
-                  },
-                  "/config/deployment-uuid}}"
-                ]
-              ]
-            }
-          }
-        ]
-      },
-      "Type": "AWS::KMS::Key",
-      "UpdateReplacePolicy": "Retain"
-    },
     "cmsfleetwiseconnectors3glueathenaprefixlistlookupvpcendpointprefixlistcustomresource4D5D4761": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
@@ -4276,14 +3954,6 @@
             {
               "id": "AwsSolutions-IAM5",
               "reason": "Wildcard permissions required to write to log streams."
-            }
-          ]
-        },
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "W11",
-              "reason": "Wildcard needed for log policy"
             }
           ]
         }
@@ -4534,29 +4204,11 @@
       "Properties": {
         "EncryptionConfiguration": {
           "CloudWatchEncryption": {
-            "CloudWatchEncryptionMode": "SSE-KMS",
-            "KmsKeyArn": {
-              "Fn::GetAtt": [
-                "cmsfleetwiseconnectors3glueathenaloggroupkmskeyCCB38341",
-                "Arn"
-              ]
-            }
+            "CloudWatchEncryptionMode": "DISABLED"
           },
           "S3Encryptions": [
             {
-              "KmsKeyArn": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "{{resolve:ssm:/solution/",
-                    {
-                      "Ref": "AppUniqueId"
-                    },
-                    "/connect-store/s3-storage-bucket/key-arn}}"
-                  ]
-                ]
-              },
-              "S3EncryptionMode": "SSE-KMS"
+              "S3EncryptionMode": "SSE-S3"
             }
           ]
         },

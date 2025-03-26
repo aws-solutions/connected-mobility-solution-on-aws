@@ -135,7 +135,9 @@ class AlertsConstruct(Construct):
             self,
             "lambda-function",
             function_name=vehicle_trigger_alarm_lambda_name,
-            code=aws_lambda.Code.from_asset("dist/lambda/vehicle_trigger_alarm.zip"),
+            code=aws_lambda.Code.from_asset(
+                "deployment/dist/lambda/vehicle_trigger_alarm.zip"
+            ),
             description="Vehicle Trigger Alarm Function",
             handler="function.main.handler",
             runtime=aws_lambda.Runtime.PYTHON_3_12,

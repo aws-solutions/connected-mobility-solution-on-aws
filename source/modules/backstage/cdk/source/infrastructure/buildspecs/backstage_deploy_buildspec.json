@@ -6,7 +6,7 @@
     "phases": {
         "install": {
             "runtime-versions": {
-                "nodejs": 18
+                "nodejs": 22
             },
             "commands": [
                 "cd source/modules/backstage",
@@ -20,6 +20,7 @@
                 "pyenv install -s ${PYTHON_VERSION}",
                 "pyenv global ${PYTHON_VERSION}",
                 "pyenv exec pip install pipenv",
+                "corepack enable",
                 "make install",
                 "cd cdk",
                 "make install"

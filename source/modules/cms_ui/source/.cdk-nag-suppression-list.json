@@ -1,0 +1,90 @@
+{
+    "/cms-ui/cms-ui/authorization-lambda-construct/lambda-role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Wildcard permissions required to write to CloudWatch log groups and for enabling VPC.",
+                "appliesTo": [
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*",
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-ui-authorization:log-stream:*",
+                    "Resource::*"
+                ]
+            }
+        ]
+    },
+    "/cms-ui/cms-ui/fleet-management-api-construct/role/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "Wildcard permissions required for Fleetwise, VPC and CloudWatch actions.",
+                "appliesTo": [
+                    "Resource::*",
+                    "Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/lambda/<AppUniqueId>-ui-fleet-api:log-stream:*",
+                    "Resource::arn:<AWS::Partition>:ec2:<AWS::Region>:<AWS::AccountId>:network-interface/*"
+                ]
+            }
+        ]
+    },
+    "/cms-ui/cms-ui/fleet-management-api-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "Runtime version will be upgraded in later releases."
+            }
+        ]
+    },
+    "/cms-ui/cms-ui/fleet-management-api-construct/fleet-management-api/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-APIG2",
+                "reason": "The REST API does not have request validation enabled."
+            }
+        ]
+    },
+    "/cms-ui/cms-ui/fleet-management-api-construct/fleet-management-api/DeploymentStage.prod/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-APIG1",
+                "reason": "The API does not have access logging enabled."
+            },
+            {
+                "id": "AwsSolutions-APIG6",
+                "reason": "The REST API Stage does not have CloudWatch logging enabled for all methods."
+            },
+            {
+                "id": "AwsSolutions-APIG3",
+                "reason": "The REST API stage is not associated with AWS WAFv2 web ACL."
+            }
+        ]
+    },
+    "/cms-ui/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM4",
+                "reason": "The IAM user, role, or group uses AWS managed policies.",
+                "appliesTo": [
+                    "Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                ]
+            }
+        ]
+    },
+    "/cms-ui/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-IAM5",
+                "reason": "The IAM entity contains wildcard permissions and does not have a cdk-nag rule suppression with evidence for those permission.",
+                "appliesTo": [
+                    "Resource::*"
+                ]
+            }
+        ]
+    },
+    "/cms-ui/cms-ui/authorization-lambda-construct/lambda-function/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "The non-container Lambda function is not configured to use the latest runtime version."
+            }
+        ]
+    }
+}

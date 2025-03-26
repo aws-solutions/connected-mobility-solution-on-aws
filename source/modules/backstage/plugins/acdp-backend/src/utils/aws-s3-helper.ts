@@ -1,7 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { Logger } from "winston";
 import createLimiter from "p-limit";
 import recursiveReadDir from "recursive-readdir";
 import path from "path";
@@ -16,6 +15,7 @@ import {
 } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
 
+import { LoggerService } from "@backstage/backend-plugin-api/index";
 import { Entity, DEFAULT_NAMESPACE } from "@backstage/catalog-model";
 
 import { awsApiCallWithErrorHandling } from "./error-handling-helper";
@@ -33,13 +33,13 @@ const bulkStorageOperation = async <T>(
 export class AwsS3Helper {
   private readonly s3Client: S3Client;
   private readonly bucketName: string;
-  private readonly logger: Logger;
+  private readonly logger: LoggerService;
   private readonly sse?: "aws:kms" | "AES256";
 
   constructor(options: {
     s3Client: S3Client;
     bucketName: string;
-    logger: Logger;
+    logger: LoggerService;
     sse?: "aws:kms" | "AES256";
   }) {
     this.s3Client = options.s3Client;

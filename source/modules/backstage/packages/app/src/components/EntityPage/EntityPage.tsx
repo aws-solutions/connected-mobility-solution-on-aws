@@ -1,8 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import React from "react";
-
 import { Grid } from "@material-ui/core";
 
 import {
@@ -41,6 +39,12 @@ import {
   RELATION_PART_OF,
   RELATION_PROVIDES_API,
 } from "@backstage/catalog-model";
+import { RequirePermission } from "@backstage/plugin-permission-react";
+
+import {
+  acdpBuildReadPermission,
+  acdpMetricsReadPermission,
+} from "backstage-plugin-acdp-common";
 
 import {
   entityWarningContent,
@@ -51,7 +55,14 @@ import {
   techdocsContent,
   apiContent,
 } from "./EntityContent";
-import { hasDocs, hasCicd, hasApis, hasDependencies } from "./EntityConditions";
+import {
+  hasDocs,
+  hasCicd,
+  hasApis,
+  hasDependencies,
+  hasMetrics,
+} from "./EntityConditions";
+import { UnauthorizedErrorPage } from "../ErrorPage";
 
 const componentPage = (
   <EntityLayout>
@@ -60,11 +71,21 @@ const componentPage = (
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/ci-cd" title="CI/CD" if={hasCicd()}>
-      {cicdContent}
+      <RequirePermission
+        permission={acdpBuildReadPermission}
+        errorPage={<UnauthorizedErrorPage />}
+      >
+        {cicdContent}
+      </RequirePermission>
     </EntityLayout.Route>
 
-    <EntityLayout.Route path="/metrics" title="Metrics">
-      {metricsContent}
+    <EntityLayout.Route path="/metrics" title="Metrics" if={hasMetrics()}>
+      <RequirePermission
+        permission={acdpMetricsReadPermission}
+        errorPage={<UnauthorizedErrorPage />}
+      >
+        {metricsContent}
+      </RequirePermission>
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/api" title="API" if={hasApis()}>

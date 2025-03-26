@@ -3,16 +3,19 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # Standard Library
-from typing import Any, Dict, cast
+from typing import Any, Callable, Dict, cast
 
 # Third Party Libraries
 import pytest
+from moto import mock_aws
+from mypy_boto3_s3 import S3Client
 
 # AWS Libraries
+import boto3
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 # Connected Mobility Solution on AWS
-from ....handlers.custom_resource.function import main
+from ....handlers.custom_resource.function.main import CustomResourceTypes
 
 
 @pytest.fixture(name="custom_resource_event")
@@ -33,12 +36,44 @@ def fixture_custom_resource_event() -> Dict[str, Any]:
 def fixture_custom_resource_create_deployment_uuid_event(
     custom_resource_event: Dict[str, Any],
 ) -> Dict[str, Any]:
-    custom_resource_event[
-        "RequestType"
-    ] = main.CustomResourceTypes.RequestTypes.CREATE.value
-    custom_resource_event["ResourceProperties"]["Resource"] = "CreateDeploymentUUID"
+    custom_resource_event["RequestType"] = CustomResourceTypes.RequestTypes.CREATE.value
+    custom_resource_event["ResourceProperties"][
+        "Resource"
+    ] = CustomResourceTypes.ResourceTypes.CREATE_DEPLOYMENT_UUID.value
 
     return custom_resource_event
+
+
+@pytest.fixture(name="custom_resource_create_and_upload_default_users_and_groups_event")
+def fixture_custom_resource_create_and_upload_default_users_and_groups_event(
+    custom_resource_event: Dict[str, Any],
+) -> Dict[str, Any]:
+    custom_resource_event["RequestType"] = CustomResourceTypes.RequestTypes.CREATE.value
+    custom_resource_event["ResourceProperties"][
+        "Resource"
+    ] = (
+        CustomResourceTypes.ResourceTypes.CREATE_AND_UPLOAD_DEFAULT_USERS_AND_GROUPS.value
+    )
+    custom_resource_event["ResourceProperties"]["DestinationBucket"] = "test-bucket"
+    custom_resource_event["ResourceProperties"][
+        "DestinationKeyPrefix"
+    ] = "test-key-prefix"
+    custom_resource_event["ResourceProperties"]["CustomEnvironment"] = {
+        "ADMIN_USER_EMAIL": "admin",
+        "ADMIN_USERNAME": "admin@test.com",
+    }
+
+    return custom_resource_event
+
+
+@pytest.fixture(name="mock_s3_bucket")
+def fixture_mock_s3_bucket() -> Callable[[], None]:
+    @mock_aws
+    def moto_boto() -> None:
+        s3_client: S3Client = boto3.client("s3")
+        s3_client.create_bucket(Bucket="test-bucket")
+
+    return moto_boto
 
 
 @pytest.fixture(name="context")

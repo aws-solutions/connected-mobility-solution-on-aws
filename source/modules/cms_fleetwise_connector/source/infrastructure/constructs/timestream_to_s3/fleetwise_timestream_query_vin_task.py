@@ -52,7 +52,9 @@ class FleetWiseTimestreamQueryVin:
             construct,
             "timestream-query-vins-lambda",
             function_name=lambda_name,
-            code=aws_lambda.Code.from_asset("dist/lambda/query_vehicle_vins.zip"),
+            code=aws_lambda.Code.from_asset(
+                "deployment/dist/lambda/query_vehicle_vins.zip"
+            ),
             description="CMS FleetWise Connector - Query Timestream VINs",
             environment={
                 "REPORT_METRICS_ENABLED": operational_metrics.report_metrics_enabled,

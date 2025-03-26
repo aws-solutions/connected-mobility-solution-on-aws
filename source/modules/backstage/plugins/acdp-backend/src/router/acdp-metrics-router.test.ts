@@ -4,9 +4,9 @@
 import express, { NextFunction, Request, Response } from "express";
 import request from "supertest";
 
-import { getVoidLogger } from "@backstage/backend-common";
 import { mockServices } from "@backstage/backend-test-utils";
 import { stringifyEntityRef } from "@backstage/catalog-model";
+import { AuthorizeResult } from "@backstage/plugin-permission-common";
 
 import { createAcdpMetricsRouter } from ".";
 import {
@@ -20,28 +20,30 @@ import {
 import { MockedAcdpMetricsService } from "../service/mocks";
 import { MockedAcdpMetricsApi } from "../api/mocks";
 
+let mockedAcdpMetricsApi: MockedAcdpMetricsApi;
 let app: express.Express;
+const permissions = mockServices.permissions.mock();
+
 const mockIsAuthenticated = (req: Request, _: Response, next: NextFunction) => {
   req.user = { token: "test-token" };
   return next();
 };
 
-let mockedAcdpMetricsApi: MockedAcdpMetricsApi;
-
-beforeAll(async () => {
+beforeEach(async () => {
   const mockedAcdpMetricsService = new MockedAcdpMetricsService();
   mockedAcdpMetricsApi = new MockedAcdpMetricsApi(
     mockCatalogClient(mockedCatalogEntity),
     mockedAcdpMetricsService,
   );
 
-  const logger = getVoidLogger();
-
+  jest
+    .spyOn(permissions, "authorize")
+    .mockResolvedValue([{ result: AuthorizeResult.ALLOW }]);
   const router = await createAcdpMetricsRouter({
-    logger: logger,
     acdpMetricsApi: mockedAcdpMetricsApi,
     auth: mockServices.auth(),
     httpAuth: mockServices.httpAuth(),
+    permissions: permissions,
   });
 
   app = express().use(mockIsAuthenticated, router);
@@ -70,6 +72,20 @@ describe("GET /application/by-entity", () => {
 
     expect(response.status).toEqual(400);
   });
+
+  it("should return NotAllowedError for unauthorized request", async () => {
+    jest
+      .spyOn(permissions, "authorize")
+      .mockResolvedValue([{ result: AuthorizeResult.DENY }]);
+
+    const response = await request(app).get(
+      `/application/by-entity?entityRef=${stringifyEntityRef(
+        mockedCatalogEntity,
+      )}`,
+    );
+
+    expect(response.text).toContain("NotAllowedError: User is unauthorized.");
+  });
 });
 
 describe("GET /application/by-arn", () => {
@@ -88,6 +104,18 @@ describe("GET /application/by-arn", () => {
     );
 
     expect(response.status).toEqual(400);
+  });
+
+  it("should return NotAllowedError for unauthorized request", async () => {
+    jest
+      .spyOn(permissions, "authorize")
+      .mockResolvedValue([{ result: AuthorizeResult.DENY }]);
+
+    const response = await request(app).get(
+      `/application/by-arn?arn=${mockedApplicationArn}`,
+    );
+
+    expect(response.text).toContain("NotAllowedError: User is unauthorized.");
   });
 });
 
@@ -111,5 +139,19 @@ describe("GET /cost/current-month-net-unblended", () => {
     );
 
     expect(response.status).toEqual(400);
+  });
+
+  it("should return NotAllowedError for unauthorized request", async () => {
+    jest
+      .spyOn(permissions, "authorize")
+      .mockResolvedValue([{ result: AuthorizeResult.DENY }]);
+
+    const response = await request(app).get(
+      `/cost/current-month-net-unblended?entityRef=${stringifyEntityRef(
+        mockedCatalogEntity,
+      )}&awsApplicationTag=${mockedApplicationTag}`,
+    );
+
+    expect(response.text).toContain("NotAllowedError: User is unauthorized.");
   });
 });

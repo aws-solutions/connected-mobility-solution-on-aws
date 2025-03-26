@@ -4,7 +4,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import request from "supertest";
 
-import { getVoidLogger } from "@backstage/backend-common";
+import { mockServices } from "@backstage/backend-test-utils";
 
 import { createAcdpBaseRouter } from ".";
 import { resetUrlReaderMocks } from "../mocks";
@@ -16,7 +16,7 @@ const mockIsAuthenticated = (req: Request, _: Response, next: NextFunction) => {
 };
 
 beforeAll(async () => {
-  const logger = getVoidLogger();
+  const logger = mockServices.logger.mock();
 
   const router = await createAcdpBaseRouter({
     logger: logger,

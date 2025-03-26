@@ -16,6 +16,7 @@ from cms_common.constructs.custom_resource_lambda import CustomResourceLambdaCon
 # Connected Mobility Solution on AWS
 from ...handlers.custom_resource.function.main import CustomResourceTypes
 from .module_integration import (
+    BackstageAuthConfigInputs,
     BackstageS3LocalAssetsConfigInputs,
     BackstageS3RegionalAssetsConfigInputs,
 )
@@ -37,6 +38,7 @@ class BackstageAssetsConstruct(Construct):
         regional_asset_bucket_inputs: BackstageS3RegionalAssetsConfigInputs,
         local_asset_bucket_inputs: BackstageS3LocalAssetsConfigInputs,
         custom_resource_lambda_construct: CustomResourceLambdaConstruct,
+        auth_config_inputs: BackstageAuthConfigInputs,
     ) -> None:
         super().__init__(scope, construct_id)
 
@@ -99,20 +101,27 @@ class BackstageAssetsConstruct(Construct):
                         ),
                     ],
                 ),
-                aws_iam.PolicyStatement(
-                    effect=aws_iam.Effect.ALLOW,
-                    actions=[
-                        "kms:GenerateDataKey",
-                        "kms:Decrypt",
-                        "kms:Encrypt",
-                    ],
-                    resources=[local_asset_bucket_inputs.bucket_key_arn],
-                ),
             ],
         )
 
         custom_resource_lambda_construct.add_policy_to_custom_resource_lambda(
             backstage_asset_custom_resource_policy
+        )
+
+        CustomResource(
+            self,
+            "backstage-default-users-and-groups-custom-resource",
+            service_token=custom_resource_lambda_construct.function.function_arn,
+            resource_type=f"Custom::{CustomResourceTypes.ResourceTypes.CREATE_AND_UPLOAD_DEFAULT_USERS_AND_GROUPS.value}",
+            properties={
+                "Resource": CustomResourceTypes.ResourceTypes.CREATE_AND_UPLOAD_DEFAULT_USERS_AND_GROUPS.value,
+                "DestinationBucket": local_asset_bucket_inputs.bucket_name,
+                "DestinationKeyPrefix": local_asset_bucket_inputs.catalog_key_prefix,
+                "CustomEnvironment": {
+                    "ADMIN_USER_EMAIL": auth_config_inputs.admin_user_email,
+                    "ADMIN_USERNAME": auth_config_inputs.admin_username,
+                },
+            },
         )
 
         backstage_zip_copy_custom_resource = CustomResource(
@@ -139,9 +148,6 @@ class BackstageAssetsConstruct(Construct):
         )
 
         backstage_template_assets_source_key = f"{solution_config_inputs.solution_name}/{solution_config_inputs.solution_version}/backstage.zip"
-        backstage_template_assets_destination_key = (
-            local_asset_bucket_inputs.backstage_default_assets_prefix
-        )
 
         CustomResource(
             self,
@@ -153,6 +159,6 @@ class BackstageAssetsConstruct(Construct):
                 "SourceBucket": f'{solution_mapping.find_in_map("AssetsConfig", "S3AssetBucketBaseName")}-{Stack.of(self).region}',
                 "SourceZipKey": backstage_template_assets_source_key,
                 "DestinationBucket": local_asset_bucket_inputs.bucket_name,
-                "DestinationKeyPrefix": backstage_template_assets_destination_key,
+                "DestinationKeyPrefix": local_asset_bucket_inputs.default_assets_prefix,
             },
         )

@@ -15,7 +15,7 @@ export AWS_REGION ?= ${DEFAULTS.AWS_REGION}
 # ========================================================
 export SOLUTION_NAME ?= connected-mobility-solution-on-aws
 export SOLUTION_DESCRIPTION ?= Accelerate development and deployment of connected vehicle assets with purpose-built, deployment-ready accelerators, and an Automotive Cloud Developer Portal
-export SOLUTION_VERSION ?= v2.0.6
+export SOLUTION_VERSION ?= v2.1.0
 export SOLUTION_AUTHOR = AWS Industrial Solutions Team
 export SOLUTION_ID = SO0241
 # Path is relative to this file's location, moving this file requires updating this path.
@@ -54,17 +54,25 @@ export S3_ASSET_KEY_PREFIX = ${SOLUTION_NAME}/${SOLUTION_VERSION}/${MODULE_NAME}
 # Used by CDK apps
 export S3_ASSET_BUCKET_BASE_NAME ?= ${REGIONAL_ASSET_BUCKET_BASE_NAME}
 
+export LOG_BUCKET_RETENTION_DAYS ?= 90
+
 # ==================================================================================
 # PRINT COLORS
-# 	To use, simply add ${<color>}<text> to get the colored text.
-#   To disable color, add ${NC} at the point you'd like it to stop.
+# 	To use: printf "%b<text>%b" "${<COLOR>}" "${NC}"
 #   printf is recommended over echo if wanting color because of more multi-platform support.
 #   https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
+#
+# COLOR USAGE
+# 	MAGENTA: Start, Progress, etc.
+# 	RED: Failure, Stop, Cancel, Error, etc.
+# 	GREEN: Success, Finished, Done, etc.
+# 	YELLOW: Relevant extra prints or notes
+# 	CYAN: Emphasis within a print or note. Links, commands, paths, etc. Typically combined with YELLOW
+#	NC: No Color. Only use to end color, otherwise use nothing.
 # ==================================================================================
+export MAGENTA = \033[0;35m
 export RED = \033[0;31m
 export GREEN = \033[0;32m
 export YELLOW = \033[0;33m
-export BLUE = \033[0;34m
-export MAGENTA = \033[0;35m
 export CYAN = \033[0;36m
 export NC = \033[00m

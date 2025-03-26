@@ -28,7 +28,6 @@ def _build_unload_query_sql(
     timestream_table: str,
     s3_bucket: str,
     s3_prefix: str,
-    s3_kms_key_arn: str,
     last_unload_end_time: str,
     next_unload_end_time: str,
     available_measure_value_types_select_statement: str,
@@ -62,8 +61,7 @@ def _build_unload_query_sql(
         TO 's3://{s3_bucket}/{s3_prefix}'
         WITH (
             partitioned_by = ARRAY[ 'vin' ],
-            encryption = 'SSE_KMS',
-            kms_key = '{s3_kms_key_arn}',
+            encryption = 'SSE_S3',
             {unload_format_properties}
         )
     """  # nosec
@@ -143,7 +141,6 @@ def handler(event: Dict[str, Any], _: Any) -> Dict[str, Any]:
     timestream_table = event["timestream"]["tableName"]
     s3_bucket = event["cmsConnectStore"]["telemetryBucketName"]
     s3_prefix = event["cmsConnectStore"]["telemetryPrefixPath"]
-    s3_kms_key_arn = event["cmsConnectStore"]["telemetryBucketKmsKeyArn"]
     last_unload_end_time = event["timeInfo"]["lastUnloadEndTime"]
     next_unload_end_time = event["timeInfo"]["nextUnloadEndTime"]
     vehicle_vin_attribute_name = event["fleetwise"]["vehicleVinAttributeName"]
@@ -162,7 +159,6 @@ def handler(event: Dict[str, Any], _: Any) -> Dict[str, Any]:
         timestream_table=timestream_table,
         s3_bucket=s3_bucket,
         s3_prefix=s3_prefix,
-        s3_kms_key_arn=s3_kms_key_arn,
         last_unload_end_time=last_unload_end_time,
         next_unload_end_time=next_unload_end_time,
         available_measure_value_types_select_statement=available_measure_value_types_select_statement,

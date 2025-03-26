@@ -5,7 +5,7 @@ import { stringifyEntityRef } from "@backstage/catalog-model";
 
 import { AcdpBuildAction } from "backstage-plugin-acdp-common";
 
-import { AcdpBuildApi } from ".";
+import { AcdpBuildImpl } from ".";
 import {
   mockCodeBuildEntity,
   mockGlobalFetch,
@@ -13,7 +13,7 @@ import {
   baseUrl,
 } from "../mocks";
 
-const acdpBuildApiClient = new AcdpBuildApi(mockAcdpBaseApiInput);
+const acdpBuildApiClient = new AcdpBuildImpl(mockAcdpBaseApiInput);
 
 let mockedFetch: jest.SpyInstance;
 beforeEach(() => {
@@ -33,7 +33,7 @@ describe("AcdpBuildApi", () => {
     const fetchCall = mockedFetch.mock.calls[0][0].valueOf() as Request;
     expect(fetchCall.method).toEqual("GET");
     expect(fetchCall.url).toEqual(
-      `${baseUrl}/api/acdp-backend/project?entityRef=component%3Aacdp-build%2Fcms-sample`,
+      `${baseUrl}/api/acdp/project?entityRef=component%3Aacdp-build%2Fcms-sample`,
     );
   });
 
@@ -45,7 +45,7 @@ describe("AcdpBuildApi", () => {
     const fetchCall = mockedFetch.mock.calls[0][0].valueOf() as Request;
     expect(fetchCall.method).toEqual("GET");
     expect(fetchCall.url).toEqual(
-      `${baseUrl}/api/acdp-backend/builds?entityRef=component%3Aacdp-build%2Fcms-sample`,
+      `${baseUrl}/api/acdp/builds?entityRef=component%3Aacdp-build%2Fcms-sample`,
     );
   });
 
@@ -58,7 +58,7 @@ describe("AcdpBuildApi", () => {
 
     const fetchCall = mockedFetch.mock.calls[0][0].valueOf() as Request;
     expect(fetchCall.method).toEqual("POST");
-    expect(fetchCall.url).toEqual(`${baseUrl}/api/acdp-backend/start-build`);
+    expect(fetchCall.url).toEqual(`${baseUrl}/api/acdp/start-build`);
     expect(await fetchCall.json()).toStrictEqual(startBuildInput);
   });
 
@@ -71,7 +71,7 @@ describe("AcdpBuildApi", () => {
 
     const fetchCall = mockedFetch.mock.calls[0][0].valueOf() as Request;
     expect(fetchCall.method).toEqual("POST");
-    expect(fetchCall.url).toEqual(`${baseUrl}/api/acdp-backend/start-build`);
+    expect(fetchCall.url).toEqual(`${baseUrl}/api/acdp/start-build`);
     expect(await fetchCall.json()).toStrictEqual(startBuildInput);
   });
 
@@ -84,7 +84,7 @@ describe("AcdpBuildApi", () => {
 
     const fetchCall = mockedFetch.mock.calls[0][0].valueOf() as Request;
     expect(fetchCall.method).toEqual("POST");
-    expect(fetchCall.url).toEqual(`${baseUrl}/api/acdp-backend/start-build`);
+    expect(fetchCall.url).toEqual(`${baseUrl}/api/acdp/start-build`);
     expect(await fetchCall.json()).toStrictEqual(startBuildInput);
   });
 });

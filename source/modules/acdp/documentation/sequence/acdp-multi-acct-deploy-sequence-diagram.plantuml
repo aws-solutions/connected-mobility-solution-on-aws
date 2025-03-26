@@ -1,0 +1,107 @@
+@startuml acdp-multi-acct-deploy-sequence-diagram
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v18.0/dist
+!include AWSPuml/AWSCommon.puml
+
+!include AWSPuml/General/Globe.puml
+!include AWSPuml/ManagementGovernance/CloudFormation.puml
+!include AWSPuml/ManagementGovernance/CloudFormationStack.puml
+!include AWSPuml/SecurityIdentityCompliance/IdentityandAccessManagement.puml
+!include AWSPuml/Containers/Fargate.puml
+!include AWSPuml/DeveloperTools/CodeBuild.puml
+!include AWSPuml/Storage/SimpleStorageServiceBucket.puml
+!include AWSPuml/ManagementGovernance/ServiceCatalog.puml
+!include AWSPuml/CloudFinancialManagement/CostExplorer.puml
+
+actor "Authenticated User" as user
+
+box Client Machine
+participant "$GlobeIMG()\nBackstage" as browser << Backstage >>
+endbox
+
+box ACDP Account
+participant "$SimpleStorageServiceBucketIMG()\nACDP Assets Bucket" as acdp_asset_bucket <<ACDP Assets Bucket>>
+participant "$FargateIMG()\nBackstage Backend" as backstage_backend <<Backstage Backend>>
+participant "$CodeBuildIMG()\nModule Deploy Project" as acdp_codebuild <<Module Deploy Project>>
+endbox
+
+box Target Account
+participant "$IdentityandAccessManagementIMG()\nIAM" as iam <<IAM>>
+participant "$CloudFormationIMG()\nCloudFormation" as cloudformation <<CloudFormation>>
+participant "$CloudFormationStackIMG()\nStack" as stack <<CloudFormation>>
+participant "$ServiceCatalogIMG()\nServiceCatalog" as catalog <<ServiceCatalog>>
+participant "$CostExplorerIMG()\nCostExplorer" as cost_explorer <<CostExplorer>>
+endbox
+
+user -> browser: Deploy module to target account and region
+browser --> backstage_backend
+activate backstage_backend $AWS_COLOR_SMILE
+backstage_backend -> acdp_codebuild: Kick off build pipeline
+activate acdp_codebuild $AWS_COLOR_NEBULA
+acdp_codebuild -> iam: Assume ACDPCrossAccountDeployRole to deploy cloudformation template
+activate iam $AWS_COLOR_MARS
+acdp_codebuild <-[#red]- iam: Account not properly enrolled: No Role found to assume
+acdp_codebuild <-[#green]- iam: Role assumption successful
+deactivate iam
+acdp_codebuild -> cloudformation: Trigger cloudformation deploy
+activate cloudformation $AWS_COLOR_COSMOS
+iam <- cloudformation: Assume the CloudFormationRole role for deployment
+activate iam $AWS_COLOR_MARS
+iam --> cloudformation
+deactivate iam
+acdp_asset_bucket <- cloudformation: Read CloudFormation template
+activate acdp_asset_bucket $AWS_COLOR_ENDOR
+acdp_asset_bucket -[#red]-> cloudformation: Permission Denied
+acdp_asset_bucket -[#green]-> cloudformation: Permission Granted
+deactivate acdp_asset_bucket
+cloudformation -> stack: Deploy stack
+acdp_codebuild <-[#red]- cloudformation: Stack deployment failed
+backstage_backend <-[#red]- acdp_codebuild: Pipeline failed
+stack -> catalog: register stack as an application
+activate catalog $AWS_COLOR_COSMOS
+deactivate catalog
+acdp_codebuild <-[#green]- cloudformation: Stack deployment succeeded
+deactivate cloudformation
+backstage_backend <-[#green]- acdp_codebuild: pipeline succeeded
+deactivate acdp_codebuild
+browser <-- backstage_backend
+user <- browser
+deactivate backstage_backend
+user -> browser: View status of deployed stack
+browser --> backstage_backend
+activate backstage_backend $AWS_COLOR_SMILE
+backstage_backend -> iam: Assume AcdpBuildApiRole to check status of cloudformation
+activate iam $AWS_COLOR_MARS
+backstage_backend <-[#red]- iam: Account not properly enrolled: No Role found to assume
+backstage_backend <-[#green]- iam: Role assumption successful
+deactivate iam
+backstage_backend -> cloudformation: Check Status of Stack
+activate cloudformation $AWS_COLOR_COSMOS
+backstage_backend <-- cloudformation: Report Status to Backstage Backend
+deactivate cloudformation
+browser <-- backstage_backend: Report status
+deactivate backstage_backend
+user -> browser: View metrics of deployed Stack
+browser --> backstage_backend
+activate backstage_backend $AWS_COLOR_SMILE
+backstage_backend -> iam: Assume AcdpMetricsApiRole to collect metrics
+activate iam $AWS_COLOR_MARS
+backstage_backend <-[#red]- iam: Account not properly enrolled: No Role found to assume
+backstage_backend <-[#green]- iam: Role assumption successful
+deactivate iam
+backstage_backend -> catalog: Get application info from ServiceCatalog
+activate catalog $AWS_COLOR_COSMOS
+backstage_backend <-- catalog
+deactivate catalog
+backstage_backend -> cost_explorer: Get Cost metric for the application
+activate cost_explorer $AWS_COLOR_ENDOR
+backstage_backend <-- cost_explorer: Return metrics data
+deactivate cost_explorer
+browser <-- backstage_backend
+deactivate backstage_backend
+user <- browser
+
+
+@enduml

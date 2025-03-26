@@ -7,7 +7,6 @@ predictor:
 chatbot:
   data_source:
     s3:
-      bucket_name: test-bucket-us-east-1
       object_key_prefix: predictive-maintenance/docs
     chunking_configuration:
       strategy: FIXED_SIZE

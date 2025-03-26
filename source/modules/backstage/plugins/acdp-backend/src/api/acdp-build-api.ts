@@ -23,10 +23,8 @@ export class AcdpBuildApi extends AcdpBaseApi {
     this.acdpBuildService = acdpBuildService;
   }
 
-  public async getProject(
-    entity: Entity,
-  ): Promise<AcdpBuildProject | undefined> {
-    const codeBuildProject = await this.acdpBuildService.getProject(entity);
+  public async getProject(): Promise<AcdpBuildProject | undefined> {
+    const codeBuildProject = await this.acdpBuildService.getProject();
 
     return codeBuildProject
       ? {

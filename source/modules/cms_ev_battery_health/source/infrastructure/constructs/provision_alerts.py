@@ -96,7 +96,9 @@ class ProvisionAlertsConstruct(Construct):
             handler="main.handler",
             function_name=check_workspace_active_lambda_name,
             runtime=aws_lambda.Runtime.PYTHON_3_12,
-            code=aws_lambda.Code.from_asset("dist/lambda/check_workspace_active.zip"),
+            code=aws_lambda.Code.from_asset(
+                "deployment/dist/lambda/check_workspace_active.zip"
+            ),
             timeout=Duration.seconds(60),
             role=check_workspace_active_lambda_role,
             log_retention=aws_logs.RetentionDays.THREE_MONTHS,

@@ -191,7 +191,9 @@ class ProcessAlertsConstruct(Construct):
             handler="function.main.handler",
             function_name=process_alerts_lambda_name,
             runtime=aws_lambda.Runtime.PYTHON_3_12,
-            code=aws_lambda.Code.from_asset("dist/lambda/process_alerts.zip"),
+            code=aws_lambda.Code.from_asset(
+                "deployment/dist/lambda/process_alerts.zip"
+            ),
             timeout=Duration.seconds(60),
             role=process_alerts_lambda_role,
             log_retention=aws_logs.RetentionDays.THREE_MONTHS,

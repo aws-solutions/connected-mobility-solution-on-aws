@@ -3,24 +3,25 @@
 
 import authPlugin from "@backstage/plugin-auth-backend";
 import authModuleGuestProvider from "@backstage/plugin-auth-backend-module-guest-provider";
-import appPlugin from "@backstage/plugin-app-backend/alpha";
-import catalogPlugin from "@backstage/plugin-catalog-backend/alpha";
-import catalogModuleAwsS3EntityProvider from "@backstage/plugin-catalog-backend-module-aws/alpha";
+import appPlugin from "@backstage/plugin-app-backend";
+import catalogPlugin from "@backstage/plugin-catalog-backend";
+import catalogModuleAwsS3EntityProvider from "@backstage/plugin-catalog-backend-module-aws";
 import catalogModuleScaffolderEntityModel from "@backstage/plugin-catalog-backend-module-scaffolder-entity-model";
 import { createBackend } from "@backstage/backend-defaults";
 import { rootHttpRouterServiceFactory } from "@backstage/backend-defaults/rootHttpRouter";
-import scaffolderPlugin from "@backstage/plugin-scaffolder-backend/alpha";
-import techdocsPlugin from "@backstage/plugin-techdocs-backend/alpha";
-import proxyPlugin from "@backstage/plugin-proxy-backend/alpha";
-import searchPlugin from "@backstage/plugin-search-backend/alpha";
-import searchTechdocsCollator from "@backstage/plugin-search-backend-module-techdocs/alpha";
-import searchCatalogCollator from "@backstage/plugin-search-backend-module-catalog/alpha";
+import scaffolderPlugin from "@backstage/plugin-scaffolder-backend";
+import techdocsPlugin from "@backstage/plugin-techdocs-backend";
+import proxyPlugin from "@backstage/plugin-proxy-backend";
+import searchPlugin from "@backstage/plugin-search-backend";
+import searchTechdocsCollator from "@backstage/plugin-search-backend-module-techdocs";
+import searchCatalogCollator from "@backstage/plugin-search-backend-module-catalog";
+import rbac from "@backstage-community/plugin-rbac-backend";
 
 import acdpPlugin, {
   scaffolderModuleAcdpActions,
 } from "backstage-plugin-acdp-backend";
-import acdpPartnerOfferingPlugin from "backstage-plugin-acdp-partner-offering-backend";
 
+import acdpPartnerOffering from "catalog-acdp-partner-offering-backend-module";
 import authModuleOAuth2Provider from "auth-oauth2-provider-module";
 import techdocsModuleCustomBuildStrategy from "techdocs-custom-build-strategy-module";
 
@@ -61,7 +62,10 @@ backend.add(searchCatalogCollator);
 backend.add(acdpPlugin);
 
 // ACDP Partner Offering
-backend.add(acdpPartnerOfferingPlugin);
+backend.add(acdpPartnerOffering);
+
+// RBAC
+backend.add(rbac);
 
 // Customize the root http router to insert custom error handling middleware which strips the "cause" from the express response
 // Backstage Documentation: https://backstage.io/docs/backend-system/core-services/root-http-router#configuring-the-service

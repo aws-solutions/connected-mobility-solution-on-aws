@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { LinearProgress, Link } from "@material-ui/core";
 

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { createApiRef } from "@backstage/core-plugin-api";
+
 import {
   AcdpBuildAction,
   AcdpBuildProject,
@@ -10,16 +11,24 @@ import {
 
 import { AcdpBaseApi, AcdpBaseApiInput } from "./AcdpBaseApi";
 
-export const acdpBuildApiRef = createApiRef<AcdpBuildApi>({
-  id: "plugin.acdpbuild.service",
-});
-
 export interface StartBuildInput {
   entityRef: string;
   action: AcdpBuildAction;
 }
 
-export class AcdpBuildApi extends AcdpBaseApi {
+export interface AcdpBuildApi extends AcdpBaseApi {
+  getProject({ entityRef }: { entityRef: string }): Promise<AcdpBuildProject>;
+
+  listBuilds({
+    entityRef,
+  }: {
+    entityRef: string;
+  }): Promise<AcdpBuildProjectBuild[]>;
+
+  startBuild(input: StartBuildInput): Promise<AcdpBuildProjectBuild>;
+}
+
+export class AcdpBuildImpl extends AcdpBaseApi implements AcdpBuildApi {
   public constructor(options: AcdpBaseApiInput) {
     super(options);
   }
@@ -58,3 +67,7 @@ export class AcdpBuildApi extends AcdpBaseApi {
     });
   }
 }
+
+export const acdpBuildApiRef = createApiRef<AcdpBuildApi>({
+  id: "plugin.acdpbuild.service",
+});

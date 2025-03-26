@@ -1,7 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import React from "react";
 import { Route } from "react-router-dom";
 
 import { apiDocsPlugin, ApiExplorerPage } from "@backstage/plugin-api-docs";
@@ -38,6 +37,8 @@ import { RequirePermission } from "@backstage/plugin-permission-react";
 import { catalogEntityCreatePermission } from "@backstage/plugin-catalog-common/alpha";
 import { useApi, configApiRef } from "@backstage/core-plugin-api";
 
+import { RbacPage } from "@backstage-community/plugin-rbac";
+
 import { apis } from "./apis/apis";
 import { oauth2ApiRef } from "./apis/oauth2Api";
 import { Root } from "./components/Root";
@@ -45,7 +46,13 @@ import { entityPage } from "./components/EntityPage";
 import { searchPage } from "./components/SearchPage";
 import { homePage } from "./components/HomePage";
 
+import { ScaffolderFieldExtensions } from "@backstage/plugin-scaffolder-react";
+import {
+  AwsAccountIdFieldExtension,
+  AwsRegionFieldExtension,
+} from "backstage-plugin-acdp";
 import { AcdpPartnerOfferingPage } from "backstage-plugin-acdp-partner-offering";
+import { acdpPartnerOfferingReadPermission } from "backstage-plugin-acdp-common";
 
 const app = createApp({
   apis,
@@ -108,6 +115,7 @@ const routes = (
     <Route path="/" element={<HomepageCompositionRoot />}>
       {homePage}
     </Route>
+    <Route path="/rbac" element={<RbacPage />} />;
     <Route path="/catalog" element={<CatalogIndexPage />} />
     <Route
       path="/catalog/:namespace/:kind/:name"
@@ -124,8 +132,20 @@ const routes = (
         <ReportIssue />
       </TechDocsAddons>
     </Route>
-    <Route path="/create" element={<ScaffolderPage />} />
-    <Route path="/partners" element={<AcdpPartnerOfferingPage />} />
+    <Route path="/create" element={<ScaffolderPage />}>
+      <ScaffolderFieldExtensions>
+        <AwsAccountIdFieldExtension />
+        <AwsRegionFieldExtension />
+      </ScaffolderFieldExtensions>
+    </Route>
+    <Route
+      path="/partners"
+      element={
+        <RequirePermission permission={acdpPartnerOfferingReadPermission}>
+          <AcdpPartnerOfferingPage />
+        </RequirePermission>
+      }
+    />
     <Route path="/api-docs" element={<ApiExplorerPage />} />
     <Route
       path="/catalog-import"

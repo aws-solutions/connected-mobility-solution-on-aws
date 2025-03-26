@@ -15,7 +15,6 @@ class EmbeddingModelConfig:
 class S3DataSourceConfig:
     bucket_name: str
     object_key_prefix: str
-    bucket_owner_account_id: str
 
 
 @dataclasses.dataclass(frozen=True)

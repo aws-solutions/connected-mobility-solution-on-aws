@@ -3,3 +3,4 @@
 
 export * from "./acdp-build-api.mock";
 export * from "./acdp-metrics-api.mock";
+export * from "./acdp-account-directory-api.mock";

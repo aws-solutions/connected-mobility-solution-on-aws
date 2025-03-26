@@ -117,9 +117,6 @@ def start_batch_prediction(
 
     try:
         inference_data_bucket_name = os.environ["BATCH_INFERENCE_DATA_S3_BUCKET_NAME"]
-        inference_data_bucket_kms_key_id = os.environ[
-            "BATCH_INFERENCE_DATA_S3_BUCKET_KMS_KEY_ID"
-        ]
         input_data_s3_uri = (
             f"s3://{inference_data_bucket_name}/{request_body['input_data_s3_key']}"
         )
@@ -160,7 +157,6 @@ def start_batch_prediction(
             "S3OutputPath": output_data_s3_uri,
             "Accept": "text/csv",
             "AssembleWith": "Line",
-            "KmsKeyId": inference_data_bucket_kms_key_id,
         },
         TransformResources={
             "InstanceType": inference_instance_type,  # type: ignore[typeddict-item]

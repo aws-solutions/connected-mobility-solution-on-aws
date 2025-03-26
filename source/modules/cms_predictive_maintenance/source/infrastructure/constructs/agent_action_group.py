@@ -21,13 +21,12 @@ from constructs import Construct
 # CMS Common Library
 from cms_common.config.resource_names import ResourceName, ResourcePrefix
 from cms_common.config.stack_inputs import SolutionConfigInputs
-from cms_common.constructs.cmk_encrypted_s3 import CMKEncryptedS3Construct
+from cms_common.constructs.encrypted_s3 import EncryptedS3Construct
 from cms_common.constructs.vpc_construct import VpcConstruct
 from cms_common.policy_generators.cloudwatch import (
     generate_lambda_cloudwatch_logs_policy_document,
 )
 from cms_common.policy_generators.ec2_vpc import generate_ec2_vpc_policy
-from cms_common.policy_generators.kms import generate_kms_policy_statement_from_key_id
 
 
 class AgentActionGroupConstruct(Construct):
@@ -39,7 +38,7 @@ class AgentActionGroupConstruct(Construct):
         solution_config_inputs: SolutionConfigInputs,
         dependency_layer: aws_lambda.LayerVersion,
         vpc_construct: VpcConstruct,
-        sagemaker_assets_bucket_construct: CMKEncryptedS3Construct,
+        sagemaker_assets_bucket_construct: EncryptedS3Construct,
         inference_data_s3_key_prefix: str,
     ) -> None:
         super().__init__(scope, construct_id)
@@ -100,11 +99,6 @@ class AgentActionGroupConstruct(Construct):
                                 ),
                             ],
                         ),
-                        generate_kms_policy_statement_from_key_id(
-                            self,
-                            kms_encryption_key_id=sagemaker_assets_bucket_construct.key.key_id,
-                            allow_encrypt=False,
-                        ),
                     ]
                 ),
             },
@@ -121,7 +115,7 @@ class AgentActionGroupConstruct(Construct):
             self,
             "lambda-function",
             code=aws_lambda.Code.from_asset(
-                "dist/lambda/agent_action_group.zip",
+                "deployment/dist/lambda/agent_action_group.zip",
                 exclude=["**/tests/*"],
             ),
             handler="function.main.handler",

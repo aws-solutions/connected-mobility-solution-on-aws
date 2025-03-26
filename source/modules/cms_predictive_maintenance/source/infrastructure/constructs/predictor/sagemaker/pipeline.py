@@ -28,7 +28,6 @@ from cms_common.policy_generators.cloudwatch import (
     generate_lambda_cloudwatch_logs_policy_document,
 )
 from cms_common.policy_generators.ec2_vpc import generate_ec2_vpc_policy
-from cms_common.policy_generators.kms import generate_kms_policy_statement_from_key_arn
 
 # Connected Mobility Solution on AWS
 from .....handlers.custom_resource.function.lib.custom_resource_type_enum import (
@@ -39,7 +38,6 @@ from .....handlers.custom_resource.function.lib.custom_resource_type_enum import
 @dataclass(frozen=True)
 class PipelineAssetsS3Config:
     bucket_name: str
-    kms_key_arn: str
     pipeline_definition_object_key: str
 
 
@@ -150,7 +148,7 @@ class SageMakerPipelineConstruct(Construct):
             self,
             "deploy-pipeline-model-lambda-function",
             code=aws_lambda.Code.from_asset(
-                "dist/lambda/deploy_pipeline_model.zip",
+                "deployment/dist/lambda/deploy_pipeline_model.zip",
                 exclude=["**/tests/*"],
             ),
             handler="function.main.handler",
@@ -215,10 +213,6 @@ class SageMakerPipelineConstruct(Construct):
                                     arn_format=ArnFormat.SLASH_RESOURCE_NAME,
                                 ),
                             ],
-                        ),
-                        generate_kms_policy_statement_from_key_arn(
-                            kms_encryption_key_arn=pipeline_assets_s3_config.kms_key_arn,
-                            allow_encrypt=True,
                         ),
                     ],
                 ),
@@ -345,10 +339,6 @@ class SageMakerPipelineConstruct(Construct):
                             arn_format=ArnFormat.SLASH_RESOURCE_NAME,
                         ),
                     ],
-                ),
-                generate_kms_policy_statement_from_key_arn(
-                    kms_encryption_key_arn=pipeline_assets_s3_config.kms_key_arn,
-                    allow_encrypt=True,
                 ),
             ],
         )

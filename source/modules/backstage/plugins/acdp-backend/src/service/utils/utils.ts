@@ -25,31 +25,33 @@ export function getCodeBuildSourceTypeForUrl(url: string): SourceType {
 
 export function getDeploymentTargetForEntity(
   entity: Entity,
-  deploymentTargets: AcdpDeploymentTarget[],
+  codebuildArn: string,
 ): AcdpDeploymentTarget {
   const annotations = entity.metadata.annotations!;
 
-  const deploymentTargetName =
-    annotations[constants.ACDP_DEPLOYMENT_TARGET_ANNOTATION];
+  const deploymentTargetAccount =
+    annotations[constants.ACDP_DEPLOYMENT_TARGET_ACCOUNT_ANNOTATION];
 
-  if (!deploymentTargetName) {
+  const deploymentTargetRegion =
+    annotations[constants.ACDP_DEPLOYMENT_TARGET_REGION_ANNOTATION];
+
+  if (!deploymentTargetAccount) {
     throw new InputError(
-      `No deployment target is set under annotation '${constants.ACDP_DEPLOYMENT_TARGET_ANNOTATION}'`,
+      `No deployment account is set under annotation '${constants.ACDP_DEPLOYMENT_TARGET_ACCOUNT_ANNOTATION}'`,
     );
   }
 
-  const deploymentTarget = deploymentTargets.find(
-    (acdpDeploymentTarget) =>
-      acdpDeploymentTarget.name === deploymentTargetName,
-  );
-
-  if (!deploymentTarget) {
+  if (!deploymentTargetRegion) {
     throw new InputError(
-      `No deployment target found with name '${deploymentTargetName}'`,
+      `No deployment region is set under annotation '${constants.ACDP_DEPLOYMENT_TARGET_REGION_ANNOTATION}'`,
     );
   }
 
-  return deploymentTarget;
+  return {
+    awsAccountId: deploymentTargetAccount,
+    awsRegion: deploymentTargetRegion,
+    codeBuildArn: codebuildArn,
+  };
 }
 
 export function formatS3UrlToPath(url: string): string {
@@ -67,12 +69,19 @@ export function formatS3UrlToPath(url: string): string {
   return `${bucket}/${s3_path}`;
 }
 
-export function getRegionFromArn(arn: string): string {
+export function getDeploymentTargetFromArn(
+  arn: string,
+  codebuildArn: string,
+): AcdpDeploymentTarget {
   if (!validate(arn))
     throw new Error(`Value for arn was not a valid ARN: '${arn}'`);
 
   const parsedArn = parse(arn);
-  return parsedArn.region;
+  return {
+    awsAccountId: parsedArn.accountId,
+    awsRegion: parsedArn.region,
+    codeBuildArn: codebuildArn,
+  };
 }
 
 export function parseCodeBuildArn(arn: string): {
@@ -104,7 +113,7 @@ export function updateEnvironmentVariablesForDeploymentTarget(
   const overrideValues = [
     {
       name: "AWS_ACCOUNT_ID",
-      value: deploymentTarget.awsAccount,
+      value: deploymentTarget.awsAccountId,
     },
     {
       name: "AWS_REGION",

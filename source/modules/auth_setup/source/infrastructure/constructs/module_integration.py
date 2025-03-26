@@ -28,6 +28,11 @@ class StackConfigInputs:
     user_client_config_secret_arn: str
 
 
+@define(auto_attribs=True, frozen=True)
+class CognitoConfig:
+    user_pool_id: str
+
+
 class ModuleInputsConstruct(Construct):
     def __init__(self, scope: Construct, construct_id: str) -> None:
         super().__init__(scope, construct_id)
@@ -105,7 +110,7 @@ class ModuleOutputsConstruct(Construct):
         scope: Construct,
         construct_id: str,
         module_inputs_construct: ModuleInputsConstruct,
-        user_pool_id: str,
+        cognito_config: CognitoConfig,
         idp_config_secret_arn: str,
         service_client_config_secret_arn: str,
         user_client_config_secret_arn: str,
@@ -146,7 +151,7 @@ class ModuleOutputsConstruct(Construct):
         aws_ssm.StringParameter(
             self,
             "ssm-cognito-user-pool-id",
-            string_value=user_pool_id,
+            string_value=cognito_config.user_pool_id,
             description="User pool id for Cognito user pool",
             parameter_name=auth_setup_resource_names.user_pool_id,
             simple_name=False,

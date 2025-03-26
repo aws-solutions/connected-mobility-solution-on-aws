@@ -20,7 +20,8 @@ export const mockMetricsEntity: Entity = {
     uid: "uniqueId",
     annotations: {
       "aws.amazon.com/acdp-deploy-on-create": "true",
-      "aws.amazon.com/acdp-deployment-target": "default",
+      "aws.amazon.com/acdp-deployment-target-account": "111111111111",
+      "aws.amazon.com/acdp-deployment-target-region": "us-east-2",
       "aws.amazon.com/techdocs-builder": "external",
       "backstage.io/techdocs-ref": "dir:.",
       "aws.amazon.com/template-entity-ref": "template:default/cms-sample",

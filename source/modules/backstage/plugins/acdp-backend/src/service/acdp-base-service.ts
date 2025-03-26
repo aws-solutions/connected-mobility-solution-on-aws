@@ -1,50 +1,44 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { Logger } from "winston";
-
 import { Entity } from "@backstage/catalog-model";
 import { Config } from "@backstage/config";
 import { AwsCredentialProvider } from "@backstage/integration-aws-node";
+import { LoggerService } from "@backstage/backend-plugin-api/index";
 
 import { EnvironmentVariable } from "@aws-sdk/client-codebuild";
 import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
 
-import { constants, AcdpDeploymentTarget } from "backstage-plugin-acdp-common";
+import { AcdpDeploymentTarget } from "backstage-plugin-acdp-common";
 
-import {
-  getDeploymentTargetForEntity,
-  getSsmParameterNameForEntityBuildParameters,
-} from "./utils";
+import { getSsmParameterNameForEntityBuildParameters } from "./utils";
 
 import { awsApiCallWithErrorHandling } from "../utils";
 
 export interface AcdpBaseServiceOptions {
   config: Config;
   awsCredentialsProvider: AwsCredentialProvider;
-  logger: Logger;
+  logger: LoggerService;
   userAgentString: string;
 }
 
 export class AcdpBaseService {
   _userAgentString: string;
-  _deploymentTargets: AcdpDeploymentTarget[];
+  _defaultDeploymentTarget: AcdpDeploymentTarget;
   _buildConfigSsmPrefix: string;
   _awsCredentialsProvider: AwsCredentialProvider;
-  _logger: Logger;
+  _logger: LoggerService;
 
   constructor(options: AcdpBaseServiceOptions) {
     const { config, awsCredentialsProvider, logger, userAgentString } = options;
 
-    const defaultDeploymentTarget = {
-      name: constants.ACDP_DEFAULT_DEPLOYMENT_TARGET,
-      awsAccount: config.getString("acdp.deploymentDefaults.accountId"),
+    this._defaultDeploymentTarget = {
+      awsAccountId: config.getString("acdp.deploymentDefaults.accountId"),
       awsRegion: config.getString("acdp.deploymentDefaults.region"),
       codeBuildArn: config.getString(
         "acdp.deploymentDefaults.codeBuildProjectArn",
       ),
     };
-    this._deploymentTargets = [defaultDeploymentTarget];
     this._buildConfigSsmPrefix = config.getString(
       "acdp.buildConfig.buildConfigStoreSsmPrefix",
     );
@@ -65,10 +59,6 @@ export class AcdpBaseService {
   async _retrieveBuildEnvironmentVariables(
     entity: Entity,
   ): Promise<EnvironmentVariable[]> {
-    const deploymentTarget = getDeploymentTargetForEntity(
-      entity,
-      this._deploymentTargets,
-    );
     const parameterName = getSsmParameterNameForEntityBuildParameters(
       this._buildConfigSsmPrefix,
       entity,
@@ -80,7 +70,9 @@ export class AcdpBaseService {
     });
 
     const customErrorMessage = "Failed to retrieve build parameters from ssm.";
-    const ssmClient = this._getSSMClient(deploymentTarget.awsRegion);
+    const ssmClient = this._getSSMClient(
+      this._defaultDeploymentTarget.awsRegion,
+    );
     const response = await awsApiCallWithErrorHandling(
       () => ssmClient.send(command),
       customErrorMessage,

@@ -4,20 +4,19 @@ set -e && [[ "$DEBUG" == 'true' ]] && set -x
 
 generate_report=true
 
-while [[ $# -gt 0 ]]
-do
+while [[ $# -gt 0 ]]; do
   case $1 in
-    -r|--no-report)
-        unset generate_report
-        shift
-        ;;
-    -s|--snapshot-update)
-        snapshot_update=true
-        shift
-        ;;
-    *)
-        shift
-        ;;
+  -r | --no-report)
+    unset generate_report
+    shift
+    ;;
+  -s | --snapshot-update)
+    snapshot_update=true
+    shift
+    ;;
+  *)
+    shift
+    ;;
   esac
 done
 
@@ -35,15 +34,15 @@ rm -f "$project_dir/.coverage"
 # <=====UNIQUE TO VEHICLE SIMULATOR=====>
 # Run tests for vehicle simulator front-end console application. This must be done before python testing
 # so the cloudformation distribution can find the front-end asset.
-npm run build --prefix="$console_dir"
-npm run test --prefix="$console_dir"
+yarn --cwd "$console_dir" build
+yarn --cwd "$console_dir" test
 
 rm -rf "$console_dir/coverage/lcov-report"
 # <=====UNIQUE TO VEHICLE SIMULATOR=====>
 
 # Run test on package and save results to coverage_report_path in xml format
 pytest "$source_dir" \
-  --cov="$source_dir"  \
+  --cov="$source_dir" \
   --cov-report=term \
   --cov-config="$project_dir/pyproject.toml" \
   ${generate_report:+--cov-report=xml:$python_coverage_report} \

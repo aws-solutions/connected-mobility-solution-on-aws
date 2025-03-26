@@ -48,10 +48,10 @@
         "value": "nodejs20.x"
       },
       "cn-north-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "cn-northwest-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "eu-central-1": {
         "value": "nodejs20.x"
@@ -102,10 +102,10 @@
         "value": "nodejs20.x"
       },
       "us-gov-east-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "us-gov-west-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "us-iso-east-1": {
         "value": "nodejs18.x"
@@ -138,12 +138,12 @@
             "default": "Console access"
           },
           "Parameters": [
-            "DefaultUserEmail"
+            "AdminUserEmail"
           ]
         }
       ],
       "ParameterLabels": {
-        "DefaultUserEmail": {
+        "AdminUserEmail": {
           "default": "* Console Administrator Email"
         }
       }
@@ -176,7 +176,7 @@
     "adminuseremail": {
       "Description": "Admin User Email",
       "Value": {
-        "Ref": "DefaultUserEmail"
+        "Ref": "AdminUserEmail"
       }
     },
     "apigatewaystage": {
@@ -232,6 +232,12 @@
     }
   },
   "Parameters": {
+    "AdminUserEmail": {
+      "AllowedPattern": "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$",
+      "ConstraintDescription": "User E-Mail must be a valid E-Mail address",
+      "Description": "The user E-Mail to access the UI",
+      "Type": "String"
+    },
     "AppUniqueId": {
       "AllowedPattern": "^(?!-)[a-z0-9-]+(?<!-)$",
       "ConstraintDescription": "AppUniqueId must contain min 3 and max 10 characters, and contain only lowercase alphanumeric characters and dashes.",
@@ -244,12 +250,6 @@
       "Default": "/cdk-bootstrap/hnb659fds/version",
       "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
       "Type": "AWS::SSM::Parameter::Value<String>"
-    },
-    "DefaultUserEmail": {
-      "AllowedPattern": "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$",
-      "ConstraintDescription": "User E-Mail must be a valid E-Mail address",
-      "Description": "The user E-Mail to access the UI",
-      "Type": "String"
     }
   },
   "Resources": {
@@ -257,20 +257,6 @@
       "DependsOn": [
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
-      "Metadata": {
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "W89",
-              "reason": "Ignore VPC requirements for now"
-            },
-            {
-              "id": "W92",
-              "reason": "Ignore reserved concurrent executions for now"
-            }
-          ]
-        }
-      },
       "Properties": {
         "CodeUri": {
           "Bucket": {
@@ -340,7 +326,7 @@
               ]
             ]
           },
-          "aws-chalice": "version=1.31.2:stage=cms-vehicle-simulator-stack/cms-vehicle-simulator/vs-api-construct:app=vs_api",
+          "aws-chalice": "version=1.31.4:stage=cms-vehicle-simulator-stack/cms-vehicle-simulator/vs-api-construct:app=vs_api",
           "awsApplication": {
             "Fn::GetAtt": [
               "appregistryconstructappregistryapplicationAC1A319B",
@@ -2223,20 +2209,6 @@
       "DependsOn": [
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
-      "Metadata": {
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "W5",
-              "reason": "Unable to know egress requirement. leaving open for now"
-            },
-            {
-              "id": "W40",
-              "reason": "Unable to know egress requirement. leaving open for now"
-            }
-          ]
-        }
-      },
       "Properties": {
         "GroupDescription": "cms-vehicle-simulator-stack/cms-vehicle-simulator/cdk-lambdas-vpc-construct/security-group",
         "SecurityGroupEgress": [
@@ -2689,6 +2661,19 @@
             }
           ]
         },
+        "LifecycleConfiguration": {
+          "Rules": [
+            {
+              "AbortIncompleteMultipartUpload": {
+                "DaysAfterInitiation": 1
+              },
+              "ExpirationInDays": 90,
+              "Id": "expire-current-version-and-delete-old-objects",
+              "NoncurrentVersionExpirationInDays": 1,
+              "Status": "Enabled"
+            }
+          ]
+        },
         "OwnershipControls": {
           "Rules": [
             {
@@ -2952,7 +2937,7 @@
           {
             "Name": "email",
             "Value": {
-              "Ref": "DefaultUserEmail"
+              "Ref": "AdminUserEmail"
             }
           },
           {
@@ -2961,7 +2946,7 @@
           }
         ],
         "Username": {
-          "Ref": "DefaultUserEmail"
+          "Ref": "AdminUserEmail"
         },
         "UserpoolId": {
           "Ref": "cmsvehiclesimulatorcognitoconstructuserpoolB9BCF5A6"
@@ -3102,9 +3087,6 @@
           }
         },
         "SmsVerificationMessage": "The verification code to your new account is {####}",
-        "UserPoolAddOns": {
-          "AdvancedSecurityMode": "ENFORCED"
-        },
         "UserPoolName": {
           "Fn::Join": [
             "",
@@ -4046,16 +4028,6 @@
         "cmsvehiclesimulatorcustomresourceconstructlambdarole96B82A97",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
-      "Metadata": {
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "W92",
-              "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
-            }
-          ]
-        }
-      },
       "Properties": {
         "Code": {
           "S3Bucket": {
@@ -4212,18 +4184,6 @@
                 "Resource::*"
               ],
               "id": "AwsSolutions-IAM5",
-              "reason": "ec2 Network Interfaces permissions need to be wildcard"
-            }
-          ]
-        },
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "Wildcard permissions required to write to log streams."
-            },
-            {
-              "id": "W11",
               "reason": "ec2 Network Interfaces permissions need to be wildcard"
             }
           ]
@@ -4445,20 +4405,6 @@
       "DependsOn": [
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
-      "Metadata": {
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "W40",
-              "reason": "Lambdas need outbound communication to contact other resources in VPC"
-            },
-            {
-              "id": "W5",
-              "reason": "Lambdas are inside Private Subnets and may need to communicate to services over internet. So the CIDR is wide open on egress for now"
-            }
-          ]
-        }
-      },
       "Properties": {
         "GroupDescription": "cms-vehicle-simulator-stack/cms-vehicle-simulator/custom-resource-construct/security-group",
         "SecurityGroupEgress": [
@@ -6704,12 +6650,6 @@
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
-        "KmsKeyId": {
-          "Fn::GetAtt": [
-            "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211",
-            "Arn"
-          ]
-        },
         "LogGroupName": {
           "Fn::Join": [
             "",
@@ -6760,94 +6700,6 @@
         ]
       },
       "Type": "AWS::Logs::LogGroup",
-      "UpdateReplacePolicy": "Retain"
-    },
-    "cmsvehiclesimulatorsimulatorconstructvssimulatorloggroupkmskey06188211": {
-      "DeletionPolicy": "Retain",
-      "DependsOn": [
-        "ssmappuniqueidregistermodule9C5C2C5D"
-      ],
-      "Properties": {
-        "EnableKeyRotation": true,
-        "KeyPolicy": {
-          "Statement": [
-            {
-              "Action": "kms:*",
-              "Effect": "Allow",
-              "Principal": {
-                "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":root"
-                    ]
-                  ]
-                }
-              },
-              "Resource": "*"
-            },
-            {
-              "Action": [
-                "kms:Encrypt",
-                "kms:Decrypt",
-                "kms:GenerateDataKey"
-              ],
-              "Effect": "Allow",
-              "Principal": {
-                "Service": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "logs.",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ".amazonaws.com"
-                    ]
-                  ]
-                }
-              },
-              "Resource": "*"
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "Tags": [
-          {
-            "Key": "awsApplication",
-            "Value": {
-              "Fn::GetAtt": [
-                "appregistryconstructappregistryapplicationAC1A319B",
-                "ApplicationTagValue"
-              ]
-            }
-          },
-          {
-            "Key": "Solutions:DeploymentUUID",
-            "Value": {
-              "Fn::Join": [
-                "",
-                [
-                  "{{resolve:ssm:/solution/",
-                  {
-                    "Ref": "AppUniqueId"
-                  },
-                  "/config/deployment-uuid}}"
-                ]
-              ]
-            }
-          }
-        ]
-      },
-      "Type": "AWS::KMS::Key",
       "UpdateReplacePolicy": "Retain"
     },
     "cmsvehiclesimulatorstorageconstructvsdevicetypestable74C0B6F1": {
@@ -7512,12 +7364,6 @@
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Properties": {
-        "KmsKeyId": {
-          "Fn::GetAtt": [
-            "cmsvehiclesimulatorvsapiconstructvsapiloggroupkmskeyC6B79A62",
-            "Arn"
-          ]
-        },
         "RetentionInDays": 90,
         "Tags": [
           {
@@ -7547,94 +7393,6 @@
         ]
       },
       "Type": "AWS::Logs::LogGroup",
-      "UpdateReplacePolicy": "Retain"
-    },
-    "cmsvehiclesimulatorvsapiconstructvsapiloggroupkmskeyC6B79A62": {
-      "DeletionPolicy": "Retain",
-      "DependsOn": [
-        "ssmappuniqueidregistermodule9C5C2C5D"
-      ],
-      "Properties": {
-        "EnableKeyRotation": true,
-        "KeyPolicy": {
-          "Statement": [
-            {
-              "Action": "kms:*",
-              "Effect": "Allow",
-              "Principal": {
-                "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":root"
-                    ]
-                  ]
-                }
-              },
-              "Resource": "*"
-            },
-            {
-              "Action": [
-                "kms:Encrypt",
-                "kms:Decrypt",
-                "kms:GenerateDataKey"
-              ],
-              "Effect": "Allow",
-              "Principal": {
-                "Service": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "logs.",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ".amazonaws.com"
-                    ]
-                  ]
-                }
-              },
-              "Resource": "*"
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "Tags": [
-          {
-            "Key": "awsApplication",
-            "Value": {
-              "Fn::GetAtt": [
-                "appregistryconstructappregistryapplicationAC1A319B",
-                "ApplicationTagValue"
-              ]
-            }
-          },
-          {
-            "Key": "Solutions:DeploymentUUID",
-            "Value": {
-              "Fn::Join": [
-                "",
-                [
-                  "{{resolve:ssm:/solution/",
-                  {
-                    "Ref": "AppUniqueId"
-                  },
-                  "/config/deployment-uuid}}"
-                ]
-              ]
-            }
-          }
-        ]
-      },
-      "Type": "AWS::KMS::Key",
       "UpdateReplacePolicy": "Retain"
     },
     "moduleinputsconstructvpcnamecustomresource12726E51": {

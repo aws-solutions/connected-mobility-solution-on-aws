@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { PluginEndpointDiscovery } from "@backstage/backend-common";
+import { DiscoveryService } from "@backstage/backend-plugin-api";
 import { stringifyEntityRef } from "@backstage/catalog-model";
 import { mockedCatalogEntity } from "../../mocks";
 
@@ -136,7 +136,7 @@ export const mockedTemplateEntity = {
   },
 };
 
-export const mockDiscovery: jest.Mocked<PluginEndpointDiscovery> = {
+export const mockDiscovery: jest.Mocked<DiscoveryService> = {
   getBaseUrl: jest.fn().mockResolvedValue("http://localhost:8080/api/acdp"),
   getExternalBaseUrl: jest.fn(),
 };

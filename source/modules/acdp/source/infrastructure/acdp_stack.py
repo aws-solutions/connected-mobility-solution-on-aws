@@ -18,8 +18,8 @@ from cms_common.constructs.app_unique_id import AppUniqueId
 from cms_common.constructs.cdk_lambda_vpc_config_construct import (
     CDKLambdasVpcConfigConstruct,
 )
-from cms_common.constructs.cmk_encrypted_s3 import CMKEncryptedS3Construct
 from cms_common.constructs.custom_resource_lambda import CustomResourceLambdaConstruct
+from cms_common.constructs.encrypted_s3 import EncryptedS3Construct
 from cms_common.constructs.lambda_dependencies import LambdaDependenciesConstruct
 from cms_common.constructs.vpc_construct import VpcConstruct
 
@@ -29,6 +29,7 @@ from .constructs.cloudformation_role import CloudFormationRoleConstruct
 from .constructs.deployment_uuid_construct import DeploymentUUIDConstruct
 from .constructs.module_deploy import ModuleDeployCodeBuildConstruct
 from .constructs.module_integration import ModuleInputsConstruct, ModuleOutputsConstruct
+from .constructs.multi_account_construct import MultiAccountConstruct
 from .constructs.pipelines import Pipelines
 
 
@@ -70,8 +71,14 @@ class AcdpStack(Stack):
             ),
         )
 
-        local_asset_bucket_construct = CMKEncryptedS3Construct(
-            self, "backstage-asset-bucket-construct"
+        s3_log_lifecycle_rules = (
+            EncryptedS3Construct.create_log_lifecycle_cfn_parameters(self)
+        )
+
+        local_asset_bucket_construct = EncryptedS3Construct(
+            self,
+            "backstage-asset-bucket-construct",
+            log_lifecycle_rules=s3_log_lifecycle_rules,
         )
 
         module_inputs_construct = ModuleInputsConstruct(
@@ -80,13 +87,14 @@ class AcdpStack(Stack):
             solution_mapping=solution_mapping,
             local_asset_bucket_construct=local_asset_bucket_construct,
             backstage_s3_assets_key_prefix=backstage_s3_assets_key_prefix,
+            log_lifecycle_rules=s3_log_lifecycle_rules,
         )
 
         lambda_dependencies_construct = LambdaDependenciesConstruct(
             self,
             "acdp-dependency-layer",
-            pipfile_path=f"{dirname(dirname(dirname(abspath(__file__))))}/Pipfile",
-            dependency_layer_path=f"{os.getcwd()}/source/infrastructure/acdp_dependency_layer",
+            pipfile_lock_dir=dirname(dirname(dirname(abspath(__file__)))),
+            dependency_layer_path=f"{os.getcwd()}/deployment/dist/lambda/acdp_dependency_layer",
         )
 
         # SSM Parameter to register an app unique ID. This is done before initializing
@@ -113,7 +121,7 @@ class AcdpStack(Stack):
             dependency_layer=lambda_dependencies_construct.dependency_layer,
             unique_id=module_inputs_construct.acdp_uid,
             name=solution_config_inputs.module_short_name,
-            asset_path="dist/lambda/custom_resource.zip",
+            asset_path=f"{os.getcwd()}/deployment/dist/lambda/custom_resource.zip",
             user_agent_string=solution_config_inputs.get_user_agent_string(),
             vpc_construct=vpc_construct,
         )
@@ -165,6 +173,7 @@ class AcdpConstruct(Construct):
             regional_asset_bucket_inputs=module_inputs.regional_asset_bucket_inputs,
             local_asset_bucket_inputs=module_inputs.local_asset_bucket_inputs,
             custom_resource_lambda_construct=custom_resource_lambda_construct,
+            auth_config_inputs=module_inputs.backstage_auth_config_inputs,
         )
 
         pipelines_construct = Pipelines(
@@ -177,6 +186,7 @@ class AcdpConstruct(Construct):
             private_subnet_selection=vpc_construct.private_subnet_selection,
             backstage_source_asset_zip_location=backstage_assets.backstage_source_asset_zip_location,
             solution_config_inputs=solution_config_inputs,
+            custom_resource_lambda_construct=custom_resource_lambda_construct,
         )
         pipelines_construct.node.add_dependency(backstage_assets)
 
@@ -184,10 +194,17 @@ class AcdpConstruct(Construct):
             self,
             "module-deploy-project",
             solution_mapping=solution_mapping,
-            cloudformation_role_arn=cloudformation_role.role.role_arn,
+            cloudformation_role_name=cloudformation_role.role.role_name,
             vpc=vpc_construct.vpc,
             private_subnet_selection=vpc_construct.private_subnet_selection,
             module_inputs=module_inputs,
+        )
+
+        MultiAccountConstruct(
+            self,
+            "multi-account-construct",
+            module_inputs=module_inputs,
+            module_deploy_construct=module_deploy_construct,
         )
 
         ModuleOutputsConstruct(
@@ -198,8 +215,10 @@ class AcdpConstruct(Construct):
             backstage_pipeline_name=pipelines_construct.backstage_pipeline.pipeline_name,
             codebuild_project_arn=module_deploy_construct.codebuild_project.project_arn,
             acdp_config_ssm_prefix=module_inputs.acdp_config_ssm_prefix,
+            acdp_multi_acct_ssm_prefix=module_inputs.acdp_multi_acct_ssm_prefix,
             backstage_general_config_inputs=module_inputs.backstage_general_config_inputs,
             backstage_auth_config_inputs=module_inputs.backstage_auth_config_inputs,
             backstage_regional_asset_config_inputs=module_inputs.regional_asset_bucket_inputs,
             backstage_local_asset_bucket_config_inputs=module_inputs.local_asset_bucket_inputs,
+            backstage_multi_acct_setup_inputs=module_inputs.backstage_multi_acct_setup_inputs,
         )

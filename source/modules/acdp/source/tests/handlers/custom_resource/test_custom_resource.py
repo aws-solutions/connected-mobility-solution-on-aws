@@ -3,14 +3,22 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # Standard Library
-from typing import Any, Dict
+from typing import Any, Callable, Dict
 from unittest.mock import MagicMock
+
+# Third Party Libraries
+import pytest
+from moto import mock_aws
 
 # AWS Libraries
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 # Connected Mobility Solution on AWS
-from ....handlers.custom_resource.function.main import create_deployment_uuid, handler
+from ....handlers.custom_resource.function.main import (
+    create_and_upload_default_users_and_groups,
+    create_deployment_uuid,
+    handler,
+)
 
 
 def test_handler(
@@ -43,3 +51,23 @@ def test_create_deployment_uuid(
     deployment_uuid = response["SolutionUUID"]
     assert isinstance(deployment_uuid, str)
     assert len(deployment_uuid) == 36
+
+
+@mock_aws
+def test_create_and_upload_default_users_and_groups_success(
+    custom_resource_create_and_upload_default_users_and_groups_event: Dict[str, Any],
+    mock_s3_bucket: Callable[[], None],
+) -> None:
+    mock_s3_bucket()
+    create_and_upload_default_users_and_groups(
+        custom_resource_create_and_upload_default_users_and_groups_event
+    )
+
+
+def test_create_and_upload_default_users_and_groups_failure(
+    custom_resource_create_and_upload_default_users_and_groups_event: Dict[str, Any]
+) -> None:
+    with pytest.raises(Exception):
+        create_and_upload_default_users_and_groups(
+            custom_resource_create_and_upload_default_users_and_groups_event
+        )

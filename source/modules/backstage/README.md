@@ -25,10 +25,11 @@
     - [Delete](#delete)
     - [Local Development](#local-development)
   - [Usage](#usage)
+    - [Auth](#auth)
     - [S3 Buckets](#s3-buckets)
-    - [Definitions](#definitions)
-    - [Public / Published Solution Assets](#public--published-solution-assets)
-    - [Local Solution Assets](#local-solution-assets)
+      - [Definitions](#definitions)
+      - [Public / Published Solution Assets](#public--published-solution-assets)
+      - [Local Solution Assets](#local-solution-assets)
   - [Cost Scaling](#cost-scaling)
   - [Collection of Operational Metrics](#collection-of-operational-metrics)
   - [License](#license)
@@ -72,8 +73,7 @@ In addition to the AWS Solutions Constructs, the solution uses AWS CDK directly 
 
 Required For Local Development Only:
 
-- [Docker](https://www.docker.com/products/docker-desktop/)
-- [Docker Compose v1](https://docs.docker.com/compose/install/) (v2 is included with Docker)
+- [Finch](https://runfinch.com/)
 
 ### MacOS Installation Instructions
 
@@ -107,8 +107,7 @@ nvm use 18
 For local development:
 
 ```bash
-brew cask install docker
-brew install docker-compose
+brew install finch
 ```
 
 ### Clone the Repository
@@ -179,9 +178,32 @@ There are Make targets available to separately run each component when required.
 
 ## Usage
 
+### Auth
+
+The Backstage deployment includes both authentication and authorization by default.
+
+Authentication is implemented via a bespoke
+OAuth 2.0 provider plugin. This plugin is configured by integrating with the Auth Setup module. A CfnParameter is provided
+to control whether the initial Backstage portal login is a redirect, or popup flow. If using the default Cognito infrastructure
+provided by the Auth Setup module, the redirect flow must be used.
+
+> For more information on integrating the Backstage authentication with the Auth Setup module, see the Auth Setup
+> [README](../auth_setup/README.md#integration-with-acdp--backstage)
+
+Authorization is implemented via the Backstage community RBAC plugin. The plugin uses a Deny by default policy for all
+authenticated users. However, there is a single "super user" created as part of the initial Backstage deployment. This user
+has full access throughout all of Backstage, including the ability to configure permissions and roles for users. This user
+is created from the `Admin User Email` CfnParameter and environment variable. For additional users, there is currently no
+user or group management mechanism from the Backstage portal. One way to manage Users and groups is to manually upload
+Group and User entities to the Backtage catalog S3 bucket. To make this unnecessary however,
+we have also implemented a mechanism to create a User entity automatically on every initial user login.
+Therefore, to grant a new user permissions, first that user must login for the first time. Then, the super user
+can use the RBAC page in the Backstage portal to create any number of roles with any number of permissions, and assign the
+aforementioned user to these roles. The user will immediately be granted these permissions for their next login session.
+
 ### S3 Buckets
 
-### Definitions
+#### Definitions
 
 - Global Solution Assets
   - CloudFormation templates. Unique templates for each CMS module.
@@ -198,7 +220,7 @@ There are Make targets available to separately run each component when required.
     as well as entities generated during Backstage usage such as components and users. See the referenced Backstage catalog
     documentation for more details.
 
-### Public / Published Solution Assets
+#### Public / Published Solution Assets
 
 | S3 Bucket | Description | Usage / Content |
 |-----------|-------------|-------|
@@ -206,7 +228,7 @@ There are Make targets available to separately run each component when required.
 | Solutions Regional Reference Bucket | Public, region specific, AWS Solution's reference bucket. | Regional solution assets and Backstage assets in the form of a Backstage zip. Backstage assets are not used from this location, but are included here to be copied into the Local Asset Bucket. | <!-- markdownlint-disable-line -->
 | Local Asset Bucket | Backstage Catalog bucket created during deployment. | Backstage assets and Backstage catalog entities. Initially populated by copying the Backstage assets zip from the Solutions Regional Reference Bucket. | <!-- markdownlint-disable-line -->
 
-### Local Solution Assets
+#### Local Solution Assets
 
 | S3 Bucket | Description | Usage |
 | :-------- | :---------- | :---- |
@@ -218,7 +240,7 @@ There are Make targets available to separately run each component when required.
 Cost will scale depending on the amount of templates and assets used, network traffic, and number of deployments.
 
 - [Amazon S3 Cost](https://aws.amazon.com/s3/pricing/)
-- [Amazon EC2 Cost](https://aws.amazon.com/ec2/pricing/)
+- [Amazon ECS Cost](https://aws.amazon.com/ecs/pricing/)
 - [Amazon ELB Cost](https://aws.amazon.com/elasticloadbalancing/pricing/)
 - [Amazon CodeBuild Cost](https://aws.amazon.com/codebuild/pricing/)
 

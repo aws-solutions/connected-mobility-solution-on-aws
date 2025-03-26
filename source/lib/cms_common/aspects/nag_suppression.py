@@ -17,7 +17,6 @@ from constructs import IConstruct
 
 class NagType(Enum):
     CDK_NAG = "cdk_nag"
-    CFN_NAG = "cfn_nag"
 
 
 @jsii.implements(IAspect)

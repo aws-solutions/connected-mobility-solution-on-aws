@@ -4,6 +4,7 @@
 
 # Connected Mobility Solution on AWS
 from .metrics import OperationalMetricsInput
+from .multi_account import MultiAccountConfig
 from .resource_names import (
     ResourceName,
     ResourcePrefix,

@@ -1,22 +1,24 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { getVoidLogger } from "@backstage/backend-common";
 import { mockClient } from "aws-sdk-client-mock";
 import { CodeBuild, StartBuildCommand } from "@aws-sdk/client-codebuild";
+
+import { stringifyEntityRef } from "@backstage/catalog-model";
+import {
+  createMockDirectory,
+  mockServices,
+} from "@backstage/backend-test-utils";
+import { createMockActionContext } from "@backstage/plugin-scaffolder-node-test-utils";
 
 import { createAcdpConfigureAction } from ".";
 import {
   mockCatalogClient,
   mockUrlReader,
-  mockConfig,
+  mockConfigWithoutMultiAccount,
   mockedCatalogEntity,
   mockIntegrations,
 } from "../mocks";
-import { stringifyEntityRef } from "@backstage/catalog-model";
-import { createMockDirectory } from "@backstage/backend-test-utils";
-import { createMockActionContext } from "@backstage/plugin-scaffolder-node-test-utils";
-import { mockServices } from "@backstage/backend-test-utils";
 
 jest.mock("../service/acdp-build-service");
 const mockedCodeBuildClient = mockClient(CodeBuild);
@@ -49,12 +51,12 @@ describe("createAcdpConfigureAction", () => {
 
     await (
       await createAcdpConfigureAction({
-        config: mockConfig,
+        config: mockConfigWithoutMultiAccount,
         reader: mockUrlReader,
         integrations: mockIntegrations,
         catalogClient: mockCatalogClient(mockedCatalogEntity),
         auth: mockServices.auth(),
-        logger: getVoidLogger(),
+        logger: mockServices.logger.mock(),
       })
     ).handler(mockContext);
 

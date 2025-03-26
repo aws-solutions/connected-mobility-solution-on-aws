@@ -1,7 +1,7 @@
 {
   "name": "backstage-plugin-acdp",
   "description": "ACDP plugin for Backstage",
-  "version": "2.0.6",
+  "version": "2.1.0",
   "main": "src/index.ts",
   "types": "src/index.ts",
   "license": "Apache-2.0",
@@ -28,13 +28,17 @@
     "@aws-sdk/client-codebuild": "^3.621.0",
     "@aws-sdk/client-service-catalog-appregistry": "^3.621.0",
     "@aws-sdk/util-arn-parser": "^3.495.0",
-    "@backstage/catalog-model": "^1.5.0",
-    "@backstage/core-components": "^0.14.9",
-    "@backstage/core-plugin-api": "^1.9.3",
-    "@backstage/errors": "^1.2.4",
-    "@backstage/plugin-catalog-react": "^1.12.2",
-    "@backstage/test-utils": "^1.5.9",
-    "@backstage/theme": "^0.5.6",
+    "@backstage/catalog-model": "^1.7.2",
+    "@backstage/core-compat-api": "^0.3.4",
+    "@backstage/core-components": "^0.16.2",
+    "@backstage/core-plugin-api": "^1.10.2",
+    "@backstage/errors": "^1.2.6",
+    "@backstage/frontend-plugin-api": "^0.9.3",
+    "@backstage/plugin-catalog-react": "^1.15.0",
+    "@backstage/plugin-scaffolder": "^1.28.0",
+    "@backstage/plugin-scaffolder-react": "^1.14.5",
+    "@backstage/test-utils": "^1.7.3",
+    "@backstage/theme": "^0.6.3",
     "@material-ui/core": "^4.12.2",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.60",
@@ -42,14 +46,18 @@
     "backstage-plugin-acdp-common": "*",
     "classnames": "^2.5.1",
     "date-fns": "^2.30.0",
+    "react-dom": "^18.0.2",
+    "react-router-dom": "^6.3.0",
     "react-use": "^17.5.1"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.26.11",
-    "@backstage/core-app-api": "^1.14.1",
-    "@backstage/dev-utils": "^1.0.36",
+    "@backstage/cli": "^0.29.4",
+    "@backstage/dev-utils": "^1.1.5",
+    "@rjsf/utils": "^5.24.3",
+    "@rjsf/validator-ajv8": "^5.24.3",
+    "@testing-library/dom": "^10.0.0",
     "@testing-library/jest-dom": "^6.0.0",
-    "@testing-library/react": "^14.0.0",
+    "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.0.0",
     "@types/react": "*",
     "@types/react-dom": "*",
@@ -57,7 +65,7 @@
     "prettier": "^3.1.0"
   },
   "peerDependencies": {
-    "react": "^18.0.2"
+    "react": "^18.3.1"
   },
   "files": [
     "dist"

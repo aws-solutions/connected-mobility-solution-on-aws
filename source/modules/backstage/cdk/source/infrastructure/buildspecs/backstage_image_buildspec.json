@@ -3,12 +3,12 @@
     "phases": {
         "install": {
             "runtime-versions": {
-                "nodejs": 18
+                "nodejs": 22
             },
             "commands": [
                 "cd source/modules/backstage",
-                "npm install -g yarn",
-                "yarn install --frozen-lockfile"
+                "corepack enable",
+                "yarn install --immutable --refresh-lockfile"
             ]
         },
         "build": {

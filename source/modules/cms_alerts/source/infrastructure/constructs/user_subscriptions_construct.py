@@ -83,7 +83,9 @@ class UserSubscriptionsConstruct(Construct):
             self,
             "user-subscriptions-lambda",
             function_name=user_subscriptions_lambda_name,
-            code=aws_lambda.Code.from_asset("dist/lambda/user_subscriptions.zip"),
+            code=aws_lambda.Code.from_asset(
+                "deployment/dist/lambda/user_subscriptions.zip"
+            ),
             description="CMS Alerts User Subscriptions Function",
             environment={
                 "USER_AGENT_STRING": solution_config_inputs.get_user_agent_string(),

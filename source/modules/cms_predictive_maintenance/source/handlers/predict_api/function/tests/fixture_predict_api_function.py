@@ -27,7 +27,6 @@ def fixture_predict_api_env_vars() -> Generator[None, Any, Any]:
         "SAGEMAKER_MODEL_ENDPOINT_NAME": "test-model-endpoint",
         "RESOURCE_NAME_SUFFIX": "cms-predictive-maintenance",
         "BATCH_INFERENCE_DATA_S3_BUCKET_NAME": "test-bucket",
-        "BATCH_INFERENCE_DATA_S3_BUCKET_KMS_KEY_ID": "test-key-id",
         "BATCH_INFERENCE_DATA_OUTPUT_S3_KEY_PREFIX": "inference/",
         "BATCH_INFERENCE_INSTANCE_TYPE": "ml.m5.xlarge",
         "BATCH_INFERENCE_INSTANCE_COUNT": "1",

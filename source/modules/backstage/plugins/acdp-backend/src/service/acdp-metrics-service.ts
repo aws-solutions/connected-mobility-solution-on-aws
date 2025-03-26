@@ -1,59 +1,95 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { Logger } from "winston";
-
 import { Entity } from "@backstage/catalog-model";
 import { Config } from "@backstage/config";
 import { AwsCredentialProvider } from "@backstage/integration-aws-node";
+import { LoggerService } from "@backstage/backend-plugin-api";
 
 import {
   Application,
   GetApplicationCommand,
   ServiceCatalogAppRegistryClient,
 } from "@aws-sdk/client-service-catalog-appregistry";
-
 import {
   GetCostAndUsageCommand,
   CostExplorerClient,
   GetCostAndUsageCommandInput,
 } from "@aws-sdk/client-cost-explorer";
+import { fromTemporaryCredentials } from "@aws-sdk/credential-providers";
 
 import { constants } from "backstage-plugin-acdp-common";
 
-import { getDeploymentTargetForEntity, getRegionFromArn } from "./utils";
+import {
+  getDeploymentTargetForEntity,
+  getDeploymentTargetFromArn,
+} from "./utils";
 import { AcdpBaseService } from "./acdp-base-service";
-
 import { awsApiCallWithErrorHandling } from "../utils";
 
 export interface AcdpMetricsServiceOptions {
   config: Config;
   awsCredentialsProvider: AwsCredentialProvider;
-  logger: Logger;
+  logger: LoggerService;
 }
 
 export class AcdpMetricsService extends AcdpBaseService {
+  metricsRoleName: string;
+  enableMultiAccountDeployment: boolean;
+
   constructor(options: AcdpMetricsServiceOptions) {
     super({
       ...options,
       userAgentString: options.config.getString("acdp.metrics.userAgentString"),
     });
+    this.enableMultiAccountDeployment = options.config.getBoolean(
+      "acdp.accountDirectory.enableMultiAccountDeployment",
+    );
+    this.metricsRoleName = options.config.getString(
+      "acdp.accountDirectory.metricsRoleName",
+    );
   }
 
   private getAppRegistryClient(
-    region?: string,
+    accountId: string,
+    region: string,
   ): ServiceCatalogAppRegistryClient {
+    if (this.enableMultiAccountDeployment) {
+      return new ServiceCatalogAppRegistryClient({
+        region: region,
+        customUserAgent: this._userAgentString,
+        credentials: fromTemporaryCredentials({
+          params: {
+            RoleArn: `arn:aws:iam::${accountId}:role/${this.metricsRoleName}-${region}`,
+          },
+        }),
+      });
+    }
     return new ServiceCatalogAppRegistryClient({
-      region: region,
+      region: this._defaultDeploymentTarget.awsRegion,
       customUserAgent: this._userAgentString,
       credentialDefaultProvider: () =>
         this._awsCredentialsProvider.sdkCredentialProvider,
     });
   }
 
-  private getCostExplorerClient(region?: string): CostExplorerClient {
+  private getCostExplorerClient(
+    accountId: string,
+    region: string,
+  ): CostExplorerClient {
+    if (this.enableMultiAccountDeployment) {
+      return new CostExplorerClient({
+        region: region,
+        customUserAgent: this._userAgentString,
+        credentials: fromTemporaryCredentials({
+          params: {
+            RoleArn: `arn:aws:iam::${accountId}:role/${this.metricsRoleName}-${region}`,
+          },
+        }),
+      });
+    }
     return new CostExplorerClient({
-      region: region,
+      region: this._defaultDeploymentTarget.awsRegion,
       customUserAgent: this._userAgentString,
       credentialDefaultProvider: () =>
         this._awsCredentialsProvider.sdkCredentialProvider,
@@ -63,9 +99,10 @@ export class AcdpMetricsService extends AcdpBaseService {
   public async getApplicationByEntity(entity: Entity): Promise<Application> {
     const deploymentTarget = getDeploymentTargetForEntity(
       entity,
-      this._deploymentTargets,
+      this._defaultDeploymentTarget.codeBuildArn,
     );
     const appRegistryClient = this.getAppRegistryClient(
+      deploymentTarget.awsAccountId,
       deploymentTarget.awsRegion,
     );
 
@@ -79,7 +116,7 @@ export class AcdpMetricsService extends AcdpBaseService {
         variable.name === constants.MODULE_STACK_NAME_ENVIRONMENT_VARIABLE,
     )?.value;
 
-    const applicationName = `${moduleStackName}-${deploymentTarget.awsRegion}-${deploymentTarget.awsAccount}`;
+    const applicationName = `${moduleStackName}-${deploymentTarget.awsRegion}-${deploymentTarget.awsAccountId}`;
 
     const getApplicationOutput = await awsApiCallWithErrorHandling(
       () =>
@@ -101,8 +138,14 @@ export class AcdpMetricsService extends AcdpBaseService {
   }
 
   public async getApplicationByArn(arn: string): Promise<Application> {
-    const region = getRegionFromArn(arn);
-    const appRegistryClient = this.getAppRegistryClient(region);
+    const deploymentTarget = getDeploymentTargetFromArn(
+      arn,
+      this._defaultDeploymentTarget.codeBuildArn,
+    );
+    const appRegistryClient = this.getAppRegistryClient(
+      deploymentTarget.awsAccountId,
+      deploymentTarget.awsRegion,
+    );
 
     const getApplicationOutput = await awsApiCallWithErrorHandling(
       () =>
@@ -129,9 +172,10 @@ export class AcdpMetricsService extends AcdpBaseService {
   ): Promise<string> {
     const deploymentTarget = getDeploymentTargetForEntity(
       entity,
-      this._deploymentTargets,
+      this._defaultDeploymentTarget.codeBuildArn,
     );
     const costExplorerClient = this.getCostExplorerClient(
+      deploymentTarget.awsAccountId,
       deploymentTarget.awsRegion,
     );
 

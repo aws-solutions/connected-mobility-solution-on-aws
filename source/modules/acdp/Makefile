@@ -29,6 +29,15 @@ export ACDP_UNIQUE_ID ?= acdp
 export BACKSTAGE_LOG_LEVEL ?= info
 export BACKSTAGE_S3_DISCOVERY_REFRESH_MINS ?= 30
 
+# Backstage Multi-Acct Setup Directory Inputs
+export ENABLE_MULTI_ACCOUNT_DEPLOYMENT ?= false
+export ORGS_MANAGEMENT_AWS_ACCOUNT_ID ?= null
+export ORGS_MANAGEMENT_ACCOUNT_REGION ?= null
+
+# Multi account guidance inputs
+export TRANSFORM_STACK_NAME ?= OuArnListMacroStack
+export ACDP_MULTI_ACCT_SETUP_STACK_NAME ?= AcdpMultiAcctStack
+
 # NOTE:
 # Assess whether this needs to be an environment variable. It's only read in the ACDP CDK, and shouldn't be customized. Can it be set in the CDK?
 export BACKSTAGE_ASSETS_PREFIX ?= ${SOLUTION_NAME}/${SOLUTION_VERSION}/backstage
@@ -59,7 +68,8 @@ deploy: verify-environment ## Deploy the stack for the module.
 			"AcdpUniqueId"="${ACDP_UNIQUE_ID}" \
 			"VpcName"="${VPC_NAME}" \
 			"IdentityProviderId"="${IDENTITY_PROVIDER_ID}" \
-			"DefaultUserEmail"="${DEFAULT_USER_EMAIL}" \
+			"AdminUserEmail"="${ADMIN_USER_EMAIL}" \
+			"ShouldCreateCognitoUser"="${SHOULD_CREATE_COGNITO_USER}" \
 			"UseBackstageAuthRedirectFlow"="${USE_BACKSTAGE_AUTH_REDIRECT_FLOW}" \
 			"BackstageAdditionalScopes"="${BACKSTAGE_ADDITIONAL_SCOPES}" \
 			"FullyQualifiedDomainName"="${FULLY_QUALIFIED_DOMAIN_NAME}" \
@@ -70,7 +80,10 @@ deploy: verify-environment ## Deploy the stack for the module.
 			"BackstageOrg"="${BACKSTAGE_ORG}" \
 			"BackstageLogLevel"="${BACKSTAGE_LOG_LEVEL}" \
 			"BackstageLocalAssetDiscoveryRefreshMins"="${BACKSTAGE_S3_DISCOVERY_REFRESH_MINS}" \
-
+			"S3LogExpirationDays"="${LOG_BUCKET_RETENTION_DAYS}" \
+			"EnableMultiAccountDeployment"="${ENABLE_MULTI_ACCOUNT_DEPLOYMENT}" \
+			"OrgsManagementAwsAccountId"="${ORGS_MANAGEMENT_AWS_ACCOUNT_ID}" \
+			"OrgsManagementAccountRegion"="${ORGS_MANAGEMENT_ACCOUNT_REGION}"
 
 .PHONY: destroy-backstage
 destroy-backstage: ## Delete the backstage stack and ecr repository
@@ -82,6 +95,46 @@ destroy-backstage: ## Delete the backstage stack and ecr repository
 destroy: destroy-backstage destroy-stack ## Delete the stack for the module.
 	@printf "%bDestroy finished.%b\n" "${GREEN}" "${NC}"
 
+.PHONY: deploy-ou-arn-list-macro
+deploy-ou-arn-list-macro: ## Deploy the OU Arn List Macro stack
+	@printf "%bDeploy the multi account guidance macro stack.%b\n" "${MAGENTA}" "${NC}"
+	aws cloudformation create-stack --stack-name ${TRANSFORM_STACK_NAME} \
+        --template-body file://guidance/ou_arn_list_macro.template.yaml \
+        --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+	aws cloudformation wait stack-create-complete --stack-name "${TRANSFORM_STACK_NAME}"
+
+.PHONY: destroy-ou-arn-list-macro
+destroy-ou-arn-list-macro: ## Delete the OU Arn List Macro stack
+	@printf "%Destroy the multi account guidance macro stack.%b\n" "${MAGENTA}" "${NC}"
+	aws cloudformation delete-stack --stack-name "${TRANSFORM_STACK_NAME}"
+    
+	aws cloudformation wait stack-delete-complete --stack-name "${TRANSFORM_STACK_NAME}"
+
+.PHONY: deploy-multi-account-guidance
+deploy-multi-account-guidance: ## Deploy the Multi Account Setup stack
+	@printf "%bDeploy the multi account guidance stack.%b\n" "${MAGENTA}" "${NC}"
+	aws cloudformation create-stack --stack-name ${ACDP_MULTI_ACCT_SETUP_STACK_NAME} \
+        --template-body file://guidance/acdp_multi_acct_setup.template.yaml \
+        --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_NAMED_IAM \
+        --parameters \
+            ParameterKey=AcdpAwsAccountId,ParameterValue=${ACDP_AWS_ACCOUNT_ID} \
+            ParameterKey=AcdpUniqueId,ParameterValue=${ACDP_UNIQUE_ID} \
+            ParameterKey=AcdpDeploymentRegion,ParameterValue=${ACDP_DEPLOYMENT_REGION} \
+            ParameterKey=OrgId,ParameterValue=${ORG_ID} \
+            ParameterKey=OuIdList,ParameterValue=\"${OU_ID_LIST}\" \
+            ParameterKey=AllowedRegions,ParameterValue=\"${ALLOWED_REGIONS}\" \
+            ParameterKey=PrivateAssetsBucketName,ParameterValue=${PRIVATE_ASSETS_BUCKET_NAME}
+
+	aws cloudformation wait stack-create-complete --stack-name "${ACDP_MULTI_ACCT_SETUP_STACK_NAME}"
+
+.PHONY: destroy-multi-account-guidance
+destroy-multi-account-guidance: ## Delete the Multi Account Setup stack
+	@printf "%Destroy the multi account guidance stack.%b\n" "${MAGENTA}" "${NC}"
+	aws cloudformation delete-stack --stack-name "${ACDP_MULTI_ACCT_SETUP_STACK_NAME}"
+    
+	aws cloudformation wait stack-delete-complete --stack-name "${ACDP_MULTI_ACCT_SETUP_STACK_NAME}"
+
 ## ========================================================
 ## UTILITY
 ## ========================================================
@@ -89,6 +142,12 @@ destroy: destroy-backstage destroy-stack ## Delete the stack for the module.
 verify-environment: ## Checks the cdk environment for the required environment variables, as set via .cmsrc or manual export.
 ifneq (, $(wildcard ./cdk.context.json))
 	$(error 'cdk.context.json' cannot exist. Please delete the file and try again)
+endif
+ifndef ADMIN_USER_EMAIL
+	$(error ADMIN_USER_EMAIL is undefined. Set the variable using `export ADMIN_USER_EMAIL=...`, run `source .cmsrc` if it exists, or run `make create-rc-file` to generate .cmsrc)
+endif
+ifndef SHOULD_CREATE_COGNITO_USER
+	$(error SHOULD_CREATE_COGNITO_USER is undefined. Set the variable using `export SHOULD_CREATE_COGNITO_USER=...`, run `source .cmsrc` if it exists, or run `make create-rc-file` to generate .cmsrc)
 endif
 ifndef FULLY_QUALIFIED_DOMAIN_NAME
 	$(error FULLY_QUALIFIED_DOMAIN_NAME is undefined. Set the variable using `export FULLY_QUALIFIED_DOMAIN_NAME=...`, run `source .cmsrc` if it exists, or run `make create-rc-file` to generate .cmsrc)
@@ -110,5 +169,8 @@ ifndef BACKSTAGE_NAME
 endif
 ifndef BACKSTAGE_ORG
 	$(error BACKSTAGE_ORG is undefined. Set the variable using `export BACKSTAGE_ORG=...`, run `source .cmsrc` if it exists, or run `make create-rc-file` to generate .cmsrc)
+ifndef ENABLE_MULTI_ACCOUNT_DEPLOYMENT
+	$(error ENABLE_MULTI_ACCOUNT_DEPLOYMENT is undefined. Set the variable using `export ENABLE_MULTI_ACCOUNT_DEPLOYMENT=...`, run `source .cmsrc` if it exists, or run `make create-rc-file` to generate .cmsrc)
+endif
 endif
 	@printf "%bEnvironment variables verified.%b\n" "${GREEN}" "${NC}"

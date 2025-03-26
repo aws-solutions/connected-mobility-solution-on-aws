@@ -58,11 +58,7 @@ aws_cdk.Aspects.of(app).add(
         f"{dirname(realpath(__file__))}/.cdk-nag-suppression-list.json", NagType.CDK_NAG
     )
 )
-aws_cdk.Aspects.of(app).add(
-    NagSuppression(
-        f"{dirname(realpath(__file__))}/.cfn-nag-suppression-list.json", NagType.CFN_NAG
-    )
-)
+
 if os.environ.get("CDK_NAG_ENFORCE") == "true":
     aws_cdk.Aspects.of(app).add(AwsSolutionsChecks())
 

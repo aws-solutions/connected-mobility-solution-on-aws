@@ -23,19 +23,21 @@ from constructs import Construct
 # CMS Common Library
 from cms_common.config.resource_names import ResourceName, ResourcePrefix
 from cms_common.config.stack_inputs import SolutionConfigInputs
-from cms_common.constructs.cmk_encrypted_s3 import CMKEncryptedS3Construct
+from cms_common.constructs.encrypted_s3 import EncryptedS3Construct
 from cms_common.constructs.vpc_construct import VpcConstruct
 from cms_common.policy_generators.cloudwatch import (
     generate_lambda_cloudwatch_logs_policy_document,
 )
 from cms_common.policy_generators.ec2_vpc import generate_ec2_vpc_policy
 
+# Connected Mobility Solution on AWS
+from .module_integration import ModuleInputsConstruct
+
 
 @dataclass(frozen=True)
 class AppSyncAthenaDataSourceConstructInputs:
     appsync_api: aws_appsync.GraphqlApi
     bucket_arn: str
-    bucket_key_arn: str
     glue_registry_name: str
     glue_database_name: str
     glue_schema_arn: str
@@ -52,14 +54,16 @@ class AppSyncAthenaDataSourceConstruct(Construct):
         self,
         scope: Construct,
         construct_id: str,
-        app_unique_id: str,
         solution_config_inputs: SolutionConfigInputs,
+        module_inputs: ModuleInputsConstruct,
         app_sync_athena_data_source_construct_inputs: AppSyncAthenaDataSourceConstructInputs,
     ) -> None:
         super().__init__(scope, construct_id)
 
-        self.athena_result_bucket = CMKEncryptedS3Construct(
-            self, "athena-result-cmk-s3"
+        self.athena_result_bucket = EncryptedS3Construct(
+            self,
+            "athena-result-s3",
+            log_lifecycle_rules=module_inputs.s3_log_lifecycle_rules,
         )
 
         self.athena_workgroup = aws_athena.CfnWorkGroup(
@@ -67,7 +71,7 @@ class AppSyncAthenaDataSourceConstruct(Construct):
             "workgroup",
             name=ResourceName.hyphen_separated(
                 prefix=ResourcePrefix.hyphen_separated(
-                    app_unique_id=app_unique_id,
+                    app_unique_id=module_inputs.app_unique_id,
                     module_name=solution_config_inputs.module_short_name,
                 ),
                 name="athena-workgroup",
@@ -78,8 +82,7 @@ class AppSyncAthenaDataSourceConstruct(Construct):
                 result_configuration=aws_athena.CfnWorkGroup.ResultConfigurationProperty(
                     output_location=f"s3://{self.athena_result_bucket.bucket.bucket_name}",
                     encryption_configuration=aws_athena.CfnWorkGroup.EncryptionConfigurationProperty(
-                        encryption_option="SSE_KMS",
-                        kms_key=self.athena_result_bucket.key.key_arn,
+                        encryption_option="SSE_S3",
                     ),
                 ),
                 enforce_work_group_configuration=True,
@@ -89,7 +92,7 @@ class AppSyncAthenaDataSourceConstruct(Construct):
 
         athena_data_source_lambda_name = ResourceName.hyphen_separated(
             prefix=ResourcePrefix.hyphen_separated(
-                app_unique_id=app_unique_id,
+                app_unique_id=module_inputs.app_unique_id,
                 module_name=solution_config_inputs.module_short_name,
             ),
             name="athena-data-source",
@@ -122,17 +125,6 @@ class AppSyncAthenaDataSourceConstruct(Construct):
                                 f"{app_sync_athena_data_source_construct_inputs.bucket_arn}/*",
                                 self.athena_result_bucket.bucket.bucket_arn,
                                 f"{self.athena_result_bucket.bucket.bucket_arn}/*",
-                            ],
-                        ),
-                        aws_iam.PolicyStatement(
-                            effect=aws_iam.Effect.ALLOW,
-                            actions=[
-                                "kms:Decrypt",
-                                "kms:GenerateDataKey",
-                            ],
-                            resources=[
-                                app_sync_athena_data_source_construct_inputs.bucket_key_arn,
-                                self.athena_result_bucket.key.key_arn,
                             ],
                         ),
                     ]
@@ -212,7 +204,9 @@ class AppSyncAthenaDataSourceConstruct(Construct):
             self,
             "lambda",
             function_name=athena_data_source_lambda_name,
-            code=aws_lambda.Code.from_asset("dist/lambda/athena_data_source.zip"),
+            code=aws_lambda.Code.from_asset(
+                "deployment/dist/lambda/athena_data_source.zip"
+            ),
             description="CMS API Athena data source Lambda",
             handler="function.main.handler",
             runtime=aws_lambda.Runtime.PYTHON_3_12,

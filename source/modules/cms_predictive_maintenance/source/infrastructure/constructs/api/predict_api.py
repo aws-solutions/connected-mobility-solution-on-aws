@@ -19,7 +19,7 @@ from constructs import Construct
 # CMS Common Library
 from cms_common.config.resource_names import ResourceName, ResourcePrefix
 from cms_common.config.stack_inputs import SolutionConfigInputs
-from cms_common.constructs.cmk_encrypted_s3 import CMKEncryptedS3Construct
+from cms_common.constructs.encrypted_s3 import EncryptedS3Construct
 from cms_common.constructs.vpc_construct import VpcConstruct
 from cms_common.policy_generators.cloudwatch import (
     generate_lambda_cloudwatch_logs_policy_document,
@@ -42,7 +42,7 @@ class PredictApiConstruct(Construct):
         vpc_construct: VpcConstruct,
         authorization_lambda_construct: AuthorizationLambdaConstruct,
         sagemaker_model_endpoint_name: str,
-        sagemaker_assets_bucket_construct: CMKEncryptedS3Construct,
+        sagemaker_assets_bucket_construct: EncryptedS3Construct,
         batch_inference_config: BatchInferenceConfig,
     ) -> None:
         super().__init__(scope, construct_id)
@@ -82,7 +82,7 @@ class PredictApiConstruct(Construct):
             self,
             "lambda-function",
             code=aws_lambda.Code.from_asset(
-                "dist/lambda/predict_api.zip",
+                "deployment/dist/lambda/predict_api.zip",
                 exclude=["**/tests/*"],
             ),
             handler="function.main.handler",
@@ -101,7 +101,6 @@ class PredictApiConstruct(Construct):
                 ),
                 "BATCH_INFERENCE_DATA_OUTPUT_S3_KEY_PREFIX": batch_inference_config.data_s3_key_prefix,
                 "BATCH_INFERENCE_DATA_S3_BUCKET_NAME": sagemaker_assets_bucket_construct.bucket.bucket_name,
-                "BATCH_INFERENCE_DATA_S3_BUCKET_KMS_KEY_ID": sagemaker_assets_bucket_construct.key.key_id,
                 "BATCH_INFERENCE_INSTANCE_TYPE": batch_inference_config.instance_type,
                 "BATCH_INFERENCE_INSTANCE_COUNT": str(
                     batch_inference_config.instance_count

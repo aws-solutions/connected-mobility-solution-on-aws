@@ -25,7 +25,7 @@ p.add_argument("--component-template-path", default="./.acdp/template.yaml")
 p.add_argument("--mkdocs-yml-path", default="./mkdocs.yml")
 p.add_argument(
     "--component-template-output-path",
-    default=f"deployment/regional-s3-assets/backstage/templates/{module_name}.template.yaml",
+    default=f"deployment/regional-s3-assets/backstage/entities/templates/{module_name}.template.yaml",
 )
 p.add_argument(
     "--mkdocs-yml-output-path",
@@ -33,6 +33,7 @@ p.add_argument(
 )
 
 
+# Custom constructor to replace environment variables (denoted by !ENV tag) with value from actual os.environ
 def env_constructor(loader: SafeLoader, node: yaml.Node) -> str:
     value = str(loader.construct_scalar(cast(yaml.ScalarNode, node)))
     return os.environ[value]

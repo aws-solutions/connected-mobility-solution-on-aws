@@ -166,7 +166,9 @@ def _get_config(
         config_object = json.loads(config_secret_value)
 
         try:
-            config_dataclass: Union[CMSIdPConfig, CMSClientConfig] = structure(obj=config_object, cl=config_dataclass_type)  # type: ignore[assignment]
+            config_dataclass: Union[CMSIdPConfig, CMSClientConfig] = structure(
+                obj=config_object, cl=config_dataclass_type
+            )
         except ClassValidationError as e:
             raise AuthConfigError(
                 "Auth Config Error: error while converting the auth config into the expected data format. Ensure your secret value matches the expected format."

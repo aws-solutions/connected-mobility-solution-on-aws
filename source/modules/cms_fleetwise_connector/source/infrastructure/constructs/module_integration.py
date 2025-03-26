@@ -28,7 +28,6 @@ MINUTES_IN_A_WEEK = 10080
 class TelemetryBucketInputs:
     bucket_arn: str
     bucket_name: str
-    bucket_key_arn: str
 
 
 @define(auto_attribs=True, frozen=True)
@@ -133,12 +132,6 @@ class ModuleInputsConstruct(Construct):
                 parameter_name=ResourceName.slash_separated(
                     prefix=connect_store_module_ssm_prefix_with_leading_slash,
                     name="s3-storage-bucket/name",
-                )
-            ),
-            bucket_key_arn=resolve_ssm_parameter(
-                parameter_name=ResourceName.slash_separated(
-                    prefix=connect_store_module_ssm_prefix_with_leading_slash,
-                    name="s3-storage-bucket/key-arn",
                 )
             ),
         )

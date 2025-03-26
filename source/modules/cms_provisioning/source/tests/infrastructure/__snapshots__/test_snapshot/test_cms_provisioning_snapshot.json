@@ -47,10 +47,10 @@
         "value": "nodejs20.x"
       },
       "cn-north-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "cn-northwest-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "eu-central-1": {
         "value": "nodejs20.x"
@@ -101,10 +101,10 @@
         "value": "nodejs20.x"
       },
       "us-gov-east-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "us-gov-west-1": {
-        "value": "nodejs18.x"
+        "value": "nodejs20.x"
       },
       "us-iso-east-1": {
         "value": "nodejs18.x"
@@ -336,20 +336,6 @@
       "DependsOn": [
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
-      "Metadata": {
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "W5",
-              "reason": "Unable to know egress requirement. leaving open for now"
-            },
-            {
-              "id": "W40",
-              "reason": "Unable to know egress requirement. leaving open for now"
-            }
-          ]
-        }
-      },
       "Properties": {
         "GroupDescription": "Default/cms-provisioning-stack/cms-provisioning/cdk-lambdas-vpc-construct/security-group",
         "SecurityGroupEgress": [
@@ -408,16 +394,6 @@
         "cmsprovisioningcustomresourcelambdaconstructlambdaroleCDCF3E1C",
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
-      "Metadata": {
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "W92",
-              "reason": "Ignore reserved concurrent execution requirements for Lambda functions for now."
-            }
-          ]
-        }
-      },
       "Properties": {
         "Code": {
           "S3Bucket": {
@@ -574,18 +550,6 @@
                 "Resource::*"
               ],
               "id": "AwsSolutions-IAM5",
-              "reason": "ec2 Network Interfaces permissions need to be wildcard"
-            }
-          ]
-        },
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "Wildcard permissions required to write to log streams."
-            },
-            {
-              "id": "W11",
               "reason": "ec2 Network Interfaces permissions need to be wildcard"
             }
           ]
@@ -807,20 +771,6 @@
       "DependsOn": [
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
-      "Metadata": {
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "W40",
-              "reason": "Lambdas need outbound communication to contact other resources in VPC"
-            },
-            {
-              "id": "W5",
-              "reason": "Lambdas are inside Private Subnets and may need to communicate to services over internet. So the CIDR is wide open on egress for now"
-            }
-          ]
-        }
-      },
       "Properties": {
         "GroupDescription": "Default/cms-provisioning-stack/cms-provisioning/custom-resource-lambda-construct/security-group",
         "SecurityGroupEgress": [

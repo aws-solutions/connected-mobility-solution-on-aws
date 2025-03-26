@@ -1,0 +1,32 @@
+{
+    "version": "1.0",
+    "sources": ["model/"],
+    "maven": {
+        "dependencies": [
+            "software.amazon.smithy:smithy-aws-traits:1.53.0",
+            "software.amazon.smithy:smithy-aws-apigateway-traits:1.53.0",
+            "software.amazon.smithy:smithy-validation-model:1.53.0",
+            "software.amazon.smithy.typescript:smithy-aws-typescript-codegen:0.26.0",
+            "software.amazon.smithy:smithy-openapi:1.53.0",
+            "software.amazon.smithy:smithy-aws-apigateway-openapi:1.53.0"
+        ]
+    },
+    "plugins": {
+        "typescript-client-codegen": {
+            "package": "@cms.fleet-management/api-client",
+            "packageVersion": "0.0.1"
+        },
+        "typescript-ssdk-codegen": {
+            "package" : "@cms.fleet-management/api-server",
+            "packageVersion": "0.0.1"
+        },
+        "openapi": {
+            "service": "com.cms.fleetmanagement#FleetManagement",
+            "protocol": "aws.protocols#restJson1",
+            "version": "3.0.2",
+            "apiGatewayType": "REST",
+            "apiGatewayDefaults": "2023-08-11",
+            "tags": true
+        }
+    }
+}

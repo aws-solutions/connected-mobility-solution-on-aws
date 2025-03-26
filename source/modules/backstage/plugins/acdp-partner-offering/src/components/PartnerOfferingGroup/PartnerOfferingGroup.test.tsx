@@ -20,7 +20,6 @@ jest.mock("../PartnerOfferingCard", () => ({
   PartnerOfferingCard: jest.fn(() => null),
 }));
 
-import React from "react";
 import { PartnerOfferingGroup } from "./PartnerOfferingGroup";
 import { render } from "@testing-library/react";
 import { PartnerOfferingCard } from "../PartnerOfferingCard";

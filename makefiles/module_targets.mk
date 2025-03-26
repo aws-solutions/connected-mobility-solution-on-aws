@@ -21,18 +21,18 @@ export JSII_RUNTIME_PACKAGE_CACHE_ROOT = ${MODULE_PATH}/.cdk_cache
 .PHONY: pipenv-lock
 pipenv-lock: verify-required-tools ## Using pipenv, updates Pipfile.lock.
 	@printf "%bUpdating Pipfile.lock: %s%b\n" "${MAGENTA}" "${MODULE_NAME}" "${NC}"
-	@pipenv lock --python ${PYTHON_VERSION}
+	@pipenv lock --python ${PYTHON_VERSION} --clear
+	@pipenv clean --python ${PYTHON_VERSION}
 
 .PHONY: pipenv-sync
 pipenv-sync: verify-required-tools ## Using pipenv, installs python dependencies from Pipfile.lock.
 	@printf "%bInstalling python dependencies: %s%b\n" "${MAGENTA}" "${MODULE_NAME}" "${NC}"
 	@pipenv sync --python ${PYTHON_VERSION}
-	@pipenv clean --python ${PYTHON_VERSION}
 
 .PHONY: cdk-solution-helper-clean-install
-cdk-solution-helper-clean-install: verify-required-tools ## Using npm, installs node modules for cdk-solution-helper.
+cdk-solution-helper-clean-install: verify-required-tools ## Using yarn, installs node modules for cdk-solution-helper.
 	@printf "%bInstalling cdk-solution-helper node dependencies: %s%b\n" "${MAGENTA}" "${MODULE_NAME}" "${NC}"
-	@npm ci --prefix deployment/cdk-solution-helper
+	@yarn --cwd deployment/cdk-solution-helper install --immutable
 
 .PHONY: build
 build: verify-required-tools ## Build templates and assets for the module.
@@ -57,22 +57,17 @@ all: build upload deploy ## Rebuild modules, upload assets to s3, and deploy
 ## TESTING
 ## ========================================================
 .PHONY: verify-module
-verify-module: pre-commit cfn-nag unit-tests ## Run all pre-commits and testing for the module.
+verify-module: pre-commit unit-tests ## Run all pre-commits and testing for the module.
 	@printf "%bFinished pre-commit and testing.%b\n" "${GREEN}" "${NC}"
 
 .PHONY: test
-test: cfn-nag unit-tests ## Run all testing for the module.
+test: unit-tests ## Run all testing for the module.
 	@printf "%bFinished testing.%b\n" "${GREEN}" "${NC}"
 
 .PHONY: pre-commit
 pre-commit: ## Run pre-commit for the module.
 	@printf "%bRunning pre-commit.%b\n" "${MAGENTA}" "${NC}"
 	-pipenv run pre-commit run ${MODULE_NAME} --all-files -c ${SOLUTION_PATH}/.pre-commit-config.yaml
-
-.PHONY: cfn-nag
-cfn-nag: ## Run cfn-nag for the module.
-	@printf "%bRunning cfn-nag checks.%b\n" "${MAGENTA}" "${NC}"
-	pipenv run ${MODULE_PATH}/deployment/run-cfn-nag.sh
 
 .PHONY: unit-tests
 unit-tests: ## Run unit-tests for the module.

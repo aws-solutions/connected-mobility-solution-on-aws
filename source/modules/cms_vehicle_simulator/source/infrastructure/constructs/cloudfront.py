@@ -12,6 +12,7 @@ from constructs import Construct
 # CMS Common Library
 from cms_common.config.resource_names import ResourceName, ResourcePrefix
 from cms_common.config.stack_inputs import SolutionConfigInputs
+from cms_common.constructs.encrypted_s3 import EncryptedS3Construct
 
 
 class CloudFrontConstruct(Construct):
@@ -35,6 +36,8 @@ class CloudFrontConstruct(Construct):
             enforce_ssl=True,
             versioned=True,
         )
+
+        EncryptedS3Construct.add_lifecycle_to_bucket(self.s3_logging_bucket)
 
         cloudfront_response_header_policy = aws_cloudfront.ResponseHeadersPolicyProps(
             response_headers_policy_name=ResourceName.hyphen_separated(

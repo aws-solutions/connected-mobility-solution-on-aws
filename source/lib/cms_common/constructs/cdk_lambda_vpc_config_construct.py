@@ -10,7 +10,6 @@ from aws_cdk import Stack, aws_ec2
 from constructs import Construct
 
 # Connected Mobility Solution on AWS
-from ..aspects.nag_suppression import NagSuppression, NagType
 from ..policy_generators.ec2_vpc import generate_ec2_vpc_policy
 from .vpc_construct import VpcConstruct
 
@@ -39,21 +38,4 @@ class CDKLambdasVpcConfigConstruct(Construct):
             vpc_construct=vpc_construct,
             subnet_selection=vpc_construct.private_subnet_selection,
             authorized_service="lambda.amazonaws.com",
-        )
-
-        NagSuppression.add_inline_suppression(
-            node=base_security_group.node.default_child,
-            suppression={
-                "rules_to_suppress": [
-                    {
-                        "id": "W5",
-                        "reason": "Unable to know egress requirement. leaving open for now",
-                    },
-                    {
-                        "id": "W40",
-                        "reason": "Unable to know egress requirement. leaving open for now",
-                    },
-                ]
-            },
-            nag_type=NagType.CFN_NAG,
         )

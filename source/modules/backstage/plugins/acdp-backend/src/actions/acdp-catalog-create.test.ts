@@ -1,11 +1,18 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { getVoidLogger } from "@backstage/backend-common";
 import { mockClient } from "aws-sdk-client-mock";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+
+import {
+  createMockDirectory,
+  mockServices,
+} from "@backstage/backend-test-utils";
 import { CatalogClient } from "@backstage/catalog-client";
+import { stringifyEntityRef } from "@backstage/catalog-model";
 import { fetchContents } from "@backstage/plugin-scaffolder-node";
+import { createMockActionContext } from "@backstage/plugin-scaffolder-node-test-utils";
+import { Publisher, PublisherBase } from "@backstage/plugin-techdocs-node";
 
 import { createAcdpCatalogCreateAction } from ".";
 import {
@@ -15,15 +22,10 @@ import {
 } from "./mocks";
 import {
   mockUrlReader,
-  mockConfig,
   mockIntegrations,
   mockedCatalogEntity,
+  mockConfigWithoutMultiAccount,
 } from "../mocks";
-import { stringifyEntityRef } from "@backstage/catalog-model";
-import { Publisher, PublisherBase } from "@backstage/plugin-techdocs-node";
-import { createMockDirectory } from "@backstage/backend-test-utils";
-import { createMockActionContext } from "@backstage/plugin-scaffolder-node-test-utils";
-import { mockServices } from "@backstage/backend-test-utils";
 
 const mockedS3Client = mockClient(S3Client);
 jest.mock("../service/acdp-build-service");
@@ -99,13 +101,13 @@ describe("createAcdpCatalogCreateAction", () => {
 
     await (
       await createAcdpCatalogCreateAction({
-        config: mockConfig,
+        config: mockConfigWithoutMultiAccount,
         reader: mockUrlReader,
         integrations: mockIntegrations,
         catalogClient: catalogClient,
         discovery: mockDiscovery,
         auth: mockServices.auth(),
-        logger: getVoidLogger(),
+        logger: mockServices.logger.mock(),
       })
     ).handler(mockContext);
 

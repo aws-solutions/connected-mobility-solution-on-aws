@@ -173,5 +173,29 @@
                 "reason": "VPC items must be accessed as * resource"
             }
         ]
+    },
+    "/cms-fleetwise-connector/cms-fleetwise-connector/fleetwise-timestream-to-s3/time-range-handler-lambda/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "The non-container Lambda function is not configured to use the latest runtime version."
+            }
+        ]
+    },
+    "/cms-fleetwise-connector/cms-fleetwise-connector/fleetwise-timestream-to-s3/timestream-query-vins-lambda/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "The non-container Lambda function is not configured to use the latest runtime version."
+            }
+        ]
+    },
+    "/cms-fleetwise-connector/cms-fleetwise-connector/fleetwise-timestream-to-s3/timestream-unload-to-s3-lambda/Resource": {
+        "rules_to_suppress": [
+            {
+                "id": "AwsSolutions-L1",
+                "reason": "The non-container Lambda function is not configured to use the latest runtime version."
+            }
+        ]
     }
 }

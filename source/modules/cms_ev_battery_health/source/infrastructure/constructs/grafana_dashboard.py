@@ -11,7 +11,6 @@ from constructs import Construct
 
 # CMS Common Library
 from cms_common.constructs.custom_resource_lambda import CustomResourceLambdaConstruct
-from cms_common.policy_generators.kms import generate_kms_policy_statement_from_key_arn
 
 # Connected Mobility Solution on AWS
 from ...handlers.custom_resource.function.lib.custom_resource_type_enum import (
@@ -26,7 +25,6 @@ class GrafanaDashboardConstruct(Construct):
         construct_id: str,
         grafana_s3_bucket_name: str,
         grafana_s3_bucket_arn: str,
-        grafana_s3_bucket_key_arn: str,
         data_sources: Dict[str, Any],
         custom_resource_lambda_construct: CustomResourceLambdaConstruct,
         dashboard_s3_object_key_prefix: str,
@@ -45,10 +43,6 @@ class GrafanaDashboardConstruct(Construct):
                     resources=[
                         f"{grafana_s3_bucket_arn}/{dashboard_s3_object_key_prefix}*",
                     ],
-                ),
-                generate_kms_policy_statement_from_key_arn(
-                    kms_encryption_key_arn=grafana_s3_bucket_key_arn,
-                    allow_encrypt=True,
                 ),
             ],
         )

@@ -115,7 +115,7 @@ class CmsAuthConstruct(Construct):
         lambda_dependencies_construct = LambdaDependenciesConstruct(
             self,
             "dependency-layer",
-            pipfile_path=f"{dirname(dirname(dirname(abspath(__file__))))}/Pipfile",
+            pipfile_lock_dir=dirname(dirname(dirname(abspath(__file__)))),
             dependency_layer_path=f"{os.getcwd()}/deployment/dist/lambda/cms_auth_dependency_layer",
         )
 

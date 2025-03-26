@@ -20,7 +20,7 @@ from cms_common.constructs.app_unique_id import AppUniqueId
 from cms_common.constructs.cdk_lambda_vpc_config_construct import (
     CDKLambdasVpcConfigConstruct,
 )
-from cms_common.constructs.cmk_encrypted_s3 import CMKEncryptedS3Construct
+from cms_common.constructs.encrypted_s3 import EncryptedS3Construct
 from cms_common.constructs.lambda_dependencies import LambdaDependenciesConstruct
 from cms_common.constructs.vpc_construct import VpcConstruct
 
@@ -125,13 +125,17 @@ class CmsConnectStoreConstruct(Construct):
             subnets=module_inputs_construct.vpc_config.private_subnets,
         )
 
-        root_s3 = CMKEncryptedS3Construct(self, "root-s3-construct")
+        root_s3 = EncryptedS3Construct(
+            self,
+            "root-s3-construct",
+            log_lifecycle_rules=module_inputs_construct.s3_log_lifecycle_rules,
+        )
 
         dependency_layer_construct = LambdaDependenciesConstruct(
             self,
             "dependency-layer-construct",
-            pipfile_path=f"{dirname(dirname(dirname(abspath(__file__))))}/Pipfile",
-            dependency_layer_path=f"{os.getcwd()}/source/infrastructure/cms_connect_store_dependency_layer",
+            pipfile_lock_dir=dirname(dirname(dirname(abspath(__file__)))),
+            dependency_layer_path=f"{os.getcwd()}/deployment/dist/lambda/cms_connect_store_dependency_layer",
         )
 
         s3_to_glue = S3ToGlueConstruct(

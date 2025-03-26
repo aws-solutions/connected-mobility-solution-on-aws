@@ -1,7 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { IconButton } from "@material-ui/core";
@@ -32,7 +31,10 @@ export const AcdpBuildWidget = (props: AcdpBuildWidgetProps) => {
     <QueryClientProvider client={queryClient}>
       {!isDeploymentTargetAvailable(entity) ? (
         <MissingAnnotationEmptyState
-          annotation={constants.ACDP_DEPLOYMENT_TARGET_ANNOTATION}
+          annotation={[
+            constants.ACDP_DEPLOYMENT_TARGET_ACCOUNT_ANNOTATION,
+            constants.ACDP_DEPLOYMENT_TARGET_REGION_ANNOTATION,
+          ]}
         />
       ) : (
         <InfoCard

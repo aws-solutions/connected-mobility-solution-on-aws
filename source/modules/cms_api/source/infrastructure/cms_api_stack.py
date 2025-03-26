@@ -119,8 +119,8 @@ class CmsAPIConstruct(Construct):
         dependency_layer_construct = LambdaDependenciesConstruct(
             self,
             "dependency-layer",
-            pipfile_path=f"{dirname(dirname(dirname(abspath(__file__))))}/Pipfile",
-            dependency_layer_path=f"{os.getcwd()}/source/infrastructure/cms_api_dependency_layer",
+            pipfile_lock_dir=dirname(dirname(dirname(abspath(__file__)))),
+            dependency_layer_path=f"{os.getcwd()}/deployment/dist/lambda/cms_api_dependency_layer",
         )
 
         # Authorization Lambda
@@ -159,7 +159,6 @@ class CmsAPIConstruct(Construct):
         app_sync_api_inputs = AppSyncAthenaDataSourceConstructInputs(
             appsync_api=appsync_api.graphql_api,
             bucket_arn=module_inputs_construct.root_bucket.bucket_arn,
-            bucket_key_arn=module_inputs_construct.root_bucket.bucket_key_arn,
             glue_registry_name=module_inputs_construct.glue.registry_name,
             glue_schema_arn=module_inputs_construct.glue.schema_arn,
             glue_database_name=module_inputs_construct.glue.database_name,
@@ -175,8 +174,8 @@ class CmsAPIConstruct(Construct):
         appsync_athena_data_source = AppSyncAthenaDataSourceConstruct(
             self,
             "appsync-athena-data-source",
-            app_unique_id=module_inputs_construct.app_unique_id,
             solution_config_inputs=solution_config_inputs,
+            module_inputs=module_inputs_construct,
             app_sync_athena_data_source_construct_inputs=app_sync_api_inputs,
         )
 
@@ -187,7 +186,6 @@ class CmsAPIConstruct(Construct):
             solution_config_inputs=solution_config_inputs,
             athena_result_bucket_name=appsync_athena_data_source.athena_result_bucket.bucket.bucket_name,
             athena_result_bucket_arn=appsync_athena_data_source.athena_result_bucket.bucket.bucket_arn,
-            athena_result_bucket_key_arn=appsync_athena_data_source.athena_result_bucket.key.key_arn,
             athena_workgroup_name=appsync_athena_data_source.athena_workgroup.name,
             appsync_graphql_url=appsync_api.graphql_api.graphql_url,
         )

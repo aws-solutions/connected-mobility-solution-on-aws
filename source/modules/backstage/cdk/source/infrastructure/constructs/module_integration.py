@@ -6,13 +6,23 @@
 from dataclasses import dataclass
 
 # AWS Libraries
-from aws_cdk import CfnCondition, CfnParameter, Fn, Stack, aws_secretsmanager, aws_ssm
+from aws_cdk import (
+    CfnCondition,
+    CfnMapping,
+    CfnParameter,
+    Fn,
+    Stack,
+    Token,
+    aws_secretsmanager,
+    aws_ssm,
+)
 from constructs import Construct
 
 # CMS Common Library
 from cms_common.config.regex import RegexPattern
 from cms_common.config.resource_names import ResourceName, ResourcePrefix
 from cms_common.config.stack_inputs import SolutionConfigInputs
+from cms_common.constructs.encrypted_s3 import EncryptedS3Construct
 from cms_common.constructs.identity_provider_config import IdentityProviderConfig
 from cms_common.constructs.vpc_construct import create_vpc_config
 from cms_common.resource_names.auth import AuthSetupResourceNames
@@ -30,15 +40,17 @@ class BackstageConfigurationProperties:
     node_env: str
     log_level: str
     user_agent_string: str
+    default_target_account_id: aws_ssm.IStringParameter
+    default_target_region: aws_ssm.IStringParameter
 
 
 @dataclass(frozen=True)
 class AcdpAssetProperties:
     regional_asset_bucket_name: str
     local_asset_bucket_name: str
-    local_asset_bucket_key_arn: str
-    local_asset_bucket_root_key: str
+    local_asset_bucket_entities_prefix: str
     local_asset_bucket_default_assets_prefix: str
+    local_asset_bucket_default_entities_prefix: str
 
 
 @dataclass(frozen=True)
@@ -65,13 +77,8 @@ class BackstageTaskDefinitionSecrets:  # pylint: disable=too-many-instance-attri
     regional_asset_bucket_discovery_refresh_frequency: aws_ssm.IStringParameter
     local_asset_bucket_name: aws_ssm.IStringParameter
     local_asset_bucket_region: aws_ssm.IStringParameter
-    local_asset_bucket_kms_key_arn: aws_ssm.IStringParameter
-    local_asset_bucket_root_key_parameter: aws_ssm.IStringParameter
-    local_asset_bucket_default_assets_prefix_parameter: aws_ssm.IStringParameter
-    local_asset_bucket_backstage_user_provided_template_key_prefix: (
-        aws_ssm.IStringParameter
-    )
-    local_asset_bucket_backstage_default_template_key_prefix: aws_ssm.IStringParameter
+    local_asset_bucket_entities_prefix_parameter: aws_ssm.IStringParameter
+    local_asset_bucket_default_entities_prefix_parameter: aws_ssm.IStringParameter
     local_asset_bucket_catalog_key_prefix: aws_ssm.IStringParameter
     local_asset_bucket_techdocs_key_prefix: aws_ssm.IStringParameter
     local_asset_bucket_discovery_refresh_frequency_mins: aws_ssm.IStringParameter
@@ -79,12 +86,20 @@ class BackstageTaskDefinitionSecrets:  # pylint: disable=too-many-instance-attri
     acdp_build_config_path_root_parameter: aws_ssm.IStringParameter
 
 
-class ModuleInputsConstruct(Construct):
-    def __init__(  # pylint: disable=too-many-locals
+@dataclass(frozen=True)
+class BackstageAccountDirectorySecrets:
+    enable_multi_account_deployment: aws_ssm.IStringParameter
+    orgs_management_aws_account_id: aws_ssm.IStringParameter
+    orgs_management_account_region: aws_ssm.IStringParameter
+
+
+class ModuleInputsConstruct(Construct):  # pylint: disable=too-many-instance-attributes
+    def __init__(  # pylint: disable=too-many-locals,too-many-statements
         self,
         scope: Construct,
         construct_id: str,
         solution_config_inputs: SolutionConfigInputs,
+        solution_mapping: CfnMapping,
     ) -> None:
         super().__init__(scope, construct_id)
 
@@ -97,14 +112,50 @@ class ModuleInputsConstruct(Construct):
             type="String",
         ).value_as_string
 
-        self.default_user_email = CfnParameter(
+        self.send_anonymous_metrics = Token.as_string(
+            Fn.condition_if(
+                CfnCondition(
+                    self,
+                    "is-send-anonymous-metrics-on",
+                    expression=Fn.condition_equals(
+                        solution_mapping.find_in_map("Config", "SendAnonymousUsage"),
+                        "Yes",
+                    ),
+                ).logical_id,
+                "true",
+                "false",
+            )
+        )
+
+        self.admin_user_email = CfnParameter(
             Stack.of(self),
-            "DefaultUserEmail",
+            "AdminUserEmail",
             type="String",
-            description="The user to create default user for cognito",
+            description="The user email for the initial admin user.",
             allowed_pattern=RegexPattern.OPTIONAL_EMAIL,
             constraint_description="User E-Mail must be a valid E-Mail address",
-            default="",
+        ).value_as_string
+
+        self.enable_multi_account_deployment_cfn_parameter = CfnParameter(
+            Stack.of(self),
+            "EnableMultiAccountDeployment",
+            type="String",
+            description="Boolean flag that configures multi account deployment support",
+            allowed_values=["true", "false"],
+            constraint_description=("Value must be boolean (true, false)"),
+        ).value_as_string  # CfnCondition only works with CfnParameter
+
+        # Admin username is used for default Cognito user, and for RBAC default Admin/SuperUser
+        self.admin_username = Fn.select(0, Fn.split("@", self.admin_user_email))
+
+        self.should_create_cognito_user = CfnParameter(
+            Stack.of(self),
+            "ShouldCreateCognitoUser",
+            type="String",
+            description="Boolean flag that determined whether to create an Amazon Cognito user using the Admin user email.",
+            allowed_values=["true", "false"],
+            constraint_description=("Value must be boolean (true, false)"),
+            default="true",
         ).value_as_string
 
         self.acdp_config_ssm_prefix_with_slash_prefix = ResourcePrefix.slash_separated(
@@ -115,12 +166,22 @@ class ModuleInputsConstruct(Construct):
             app_unique_id=self.acdp_uid, module_name="acdp-build", leading_slash=True
         )
 
+        self.acdp_multi_acct_ssm_prefix = ResourcePrefix.slash_separated(
+            app_unique_id=self.acdp_uid,
+            module_name="multi-acct",
+            leading_slash=True,
+        )
+
         self.acdp_build_ssm_prefix_without_slash_prefix = (
             ResourcePrefix.slash_separated(
                 app_unique_id=self.acdp_uid,
                 module_name="acdp-build",
                 leading_slash=False,
             )
+        )
+
+        self.s3_log_lifecycle_rules = (
+            EncryptedS3Construct.create_log_lifecycle_cfn_parameters(self)
         )
 
         # Auth
@@ -355,7 +416,7 @@ class ModuleInputsConstruct(Construct):
         local_asset_bucket_name_parameter = (
             aws_ssm.StringParameter.from_string_parameter_attributes(
                 self,
-                "ssm-local-asset-bucket-name-parameter",
+                "ssm-local-asset-bucket-config-name",
                 parameter_name=ResourceName.slash_separated(
                     prefix=self.acdp_config_ssm_prefix_with_slash_prefix,
                     name=f"{local_asset_config_ssm_path}/asset-bucket/name",
@@ -365,23 +426,10 @@ class ModuleInputsConstruct(Construct):
             )
         )
 
-        local_asset_bucket_kms_key_arn_parameter = (
-            aws_ssm.StringParameter.from_string_parameter_attributes(
-                self,
-                "ssm-local-asset-config-bucket-key-arn",
-                parameter_name=ResourceName.slash_separated(
-                    prefix=self.acdp_config_ssm_prefix_with_slash_prefix,
-                    name=f"{local_asset_config_ssm_path}/asset-bucket/key-arn",
-                ),
-                simple_name=False,
-                force_dynamic_reference=True,
-            )
-        )
-
         local_asset_bucket_region_parameter = (
             aws_ssm.StringParameter.from_string_parameter_attributes(
                 self,
-                "ssm-local-asset-bucket-region-parameter",
+                "ssm-local-asset-bucket-config-region",
                 parameter_name=ResourceName.slash_separated(
                     prefix=self.acdp_config_ssm_prefix_with_slash_prefix,
                     name=f"{local_asset_config_ssm_path}/asset-bucket/region",
@@ -391,13 +439,13 @@ class ModuleInputsConstruct(Construct):
             )
         )
 
-        local_asset_bucket_root_key_parameter = (
+        local_asset_bucket_entities_prefix_parameter = (
             aws_ssm.StringParameter.from_string_parameter_attributes(
                 self,
-                "ssm-local-asset-config-asset-bucket-root-key",
+                "ssm-local-asset-bucket-config-entities-prefix",
                 parameter_name=ResourceName.slash_separated(
                     prefix=self.acdp_config_ssm_prefix_with_slash_prefix,
-                    name=f"{local_asset_config_ssm_path}/root-s3-key",
+                    name=f"{local_asset_config_ssm_path}/entities-prefix",
                 ),
                 simple_name=False,
                 force_dynamic_reference=True,
@@ -407,7 +455,7 @@ class ModuleInputsConstruct(Construct):
         local_asset_bucket_default_assets_prefix_parameter = (
             aws_ssm.StringParameter.from_string_parameter_attributes(
                 self,
-                "ssm-local-asset-config-asset-default-assets-prefix",
+                "ssm-local-asset-bucket-config-default-assets-prefix",
                 parameter_name=ResourceName.slash_separated(
                     prefix=self.acdp_config_ssm_prefix_with_slash_prefix,
                     name=f"{local_asset_config_ssm_path}/default-assets-prefix",
@@ -417,32 +465,23 @@ class ModuleInputsConstruct(Construct):
             )
         )
 
-        local_asset_bucket_custom_template_key_prefix_parameter = aws_ssm.StringParameter.from_string_parameter_attributes(
-            self,
-            "ssm-local-asset-config-asset-bucket-backstage-custom-template-key-prefix",
-            parameter_name=ResourceName.slash_separated(
-                prefix=self.acdp_config_ssm_prefix_with_slash_prefix,
-                name=f"{local_asset_config_ssm_path}/backstage-custom-template-key-prefix",
-            ),
-            simple_name=False,
-            force_dynamic_reference=True,
-        )
-
-        local_asset_bucket_default_template_key_prefix_parameter = aws_ssm.StringParameter.from_string_parameter_attributes(
-            self,
-            "ssm-local-asset-config-asset-bucket-backstage-default-template-key-prefix",
-            parameter_name=ResourceName.slash_separated(
-                prefix=self.acdp_config_ssm_prefix_with_slash_prefix,
-                name=f"{local_asset_config_ssm_path}/backstage-default-template-key-prefix",
-            ),
-            simple_name=False,
-            force_dynamic_reference=True,
+        local_asset_bucket_default_entities_prefix_parameter = (
+            aws_ssm.StringParameter.from_string_parameter_attributes(
+                self,
+                "ssm-local-asset-bucket-config-default-entities-prefix",
+                parameter_name=ResourceName.slash_separated(
+                    prefix=self.acdp_config_ssm_prefix_with_slash_prefix,
+                    name=f"{local_asset_config_ssm_path}/default-entities-prefix",
+                ),
+                simple_name=False,
+                force_dynamic_reference=True,
+            )
         )
 
         local_asset_bucket_catalog_key_prefix_parameter = (
             aws_ssm.StringParameter.from_string_parameter_attributes(
                 self,
-                "ssm-local-asset-config-asset-bucket-catalog-key-prefix",
+                "ssm-local-asset-bucket-config-asset-bucket-catalog-key-prefix",
                 parameter_name=ResourceName.slash_separated(
                     prefix=self.acdp_config_ssm_prefix_with_slash_prefix,
                     name=f"{local_asset_config_ssm_path}/catalog-key-prefix",
@@ -455,7 +494,7 @@ class ModuleInputsConstruct(Construct):
         local_asset_bucket_techdocs_key_prefix_parameter = (
             aws_ssm.StringParameter.from_string_parameter_attributes(
                 self,
-                "ssm-local-asset-config-asset-bucket-techdocs-key-prefix",
+                "ssm-local-asset-bucket-config-techdocs-key-prefix",
                 parameter_name=ResourceName.slash_separated(
                     prefix=self.acdp_config_ssm_prefix_with_slash_prefix,
                     name=f"{local_asset_config_ssm_path}/techdocs-key-prefix",
@@ -467,7 +506,7 @@ class ModuleInputsConstruct(Construct):
 
         local_asset_bucket_discovery_refresh_frequency_mins_parameter = aws_ssm.StringParameter.from_string_parameter_attributes(
             self,
-            "ssm-local-asset-config-backstage-discovery-refresh-freq-mins",
+            "ssm-local-asset-bucket-config-discovery-refresh-freq-mins",
             parameter_name=ResourceName.slash_separated(
                 prefix=self.acdp_config_ssm_prefix_with_slash_prefix,
                 name=f"{local_asset_config_ssm_path}/discovery-refresh-frequency-mins",
@@ -554,6 +593,70 @@ class ModuleInputsConstruct(Construct):
             simple_name=False,
         )
 
+        default_target_account_id = aws_ssm.StringParameter(
+            self,
+            "ssm-backstage-default-target-account-id",
+            string_value=Stack.of(self).account,
+            description="Backstage Deployment Target Account Id",
+            parameter_name=ResourceName.slash_separated(
+                prefix=self.acdp_config_ssm_prefix_with_slash_prefix,
+                name="deployment-targets/default/account-id",
+            ),
+            simple_name=False,
+        )
+
+        default_target_region = aws_ssm.StringParameter(
+            self,
+            "ssm-backstage-default-target-region",
+            string_value=Stack.of(self).region,
+            description="Backstage Deployment Target Region",
+            parameter_name=ResourceName.slash_separated(
+                prefix=self.acdp_config_ssm_prefix_with_slash_prefix,
+                name="deployment-targets/default/region",
+            ),
+            simple_name=False,
+        )
+
+        # Backstage Account Directory Inputs
+        enable_multi_account_deployment = (
+            aws_ssm.StringParameter.from_string_parameter_attributes(
+                self,
+                "ssm-multi-acct-orgs-enable-multi-account-deployment",
+                parameter_name=ResourceName.slash_separated(
+                    prefix=self.acdp_multi_acct_ssm_prefix,
+                    name="enable-multi-account-deployment",
+                ),
+                simple_name=False,
+                force_dynamic_reference=True,
+            )
+        )
+
+        org_management_aws_account_id = (
+            aws_ssm.StringParameter.from_string_parameter_attributes(
+                self,
+                "ssm-orgs-account-id",
+                parameter_name=ResourceName.slash_separated(
+                    prefix=self.acdp_multi_acct_ssm_prefix,
+                    name="orgs-management-account-id",
+                ),
+                simple_name=False,
+                force_dynamic_reference=True,
+            )
+        )
+
+        orgs_management_account_region = (
+            aws_ssm.StringParameter.from_string_parameter_attributes(
+                self,
+                "ssm-orgs-account-region",
+                parameter_name=ResourceName.slash_separated(
+                    prefix=self.acdp_multi_acct_ssm_prefix,
+                    name="orgs-management-account-region",
+                ),
+                simple_name=False,
+                force_dynamic_reference=True,
+            )
+        )
+
         # Property consolidation
         self.auth_configuration_properties = AuthConfigurationProperties(
             idp_config=idp_config_secret,
@@ -563,9 +666,9 @@ class ModuleInputsConstruct(Construct):
         self.acdp_asset_properties = AcdpAssetProperties(
             regional_asset_bucket_name=regional_asset_bucket_name_parameter.string_value,
             local_asset_bucket_name=local_asset_bucket_name_parameter.string_value,
-            local_asset_bucket_key_arn=local_asset_bucket_kms_key_arn_parameter.string_value,
-            local_asset_bucket_root_key=local_asset_bucket_root_key_parameter.string_value,
+            local_asset_bucket_entities_prefix=local_asset_bucket_entities_prefix_parameter.string_value,
             local_asset_bucket_default_assets_prefix=local_asset_bucket_default_assets_prefix_parameter.string_value,
+            local_asset_bucket_default_entities_prefix=local_asset_bucket_default_entities_prefix_parameter.string_value,
         )
 
         self.backstage_configuration = BackstageConfigurationProperties(
@@ -573,6 +676,8 @@ class ModuleInputsConstruct(Construct):
             node_env="production",
             log_level=backstage_log_level_parameter.string_value,
             user_agent_string=solution_config_inputs.get_user_agent_string(),
+            default_target_account_id=default_target_account_id,
+            default_target_region=default_target_region,
         )
 
         self.backstage_task_definition_secrets = BackstageTaskDefinitionSecrets(
@@ -587,14 +692,17 @@ class ModuleInputsConstruct(Construct):
             regional_asset_bucket_discovery_refresh_frequency=regional_asset_bucket_discovery_refresh_frequency_mins_parameter,
             local_asset_bucket_name=local_asset_bucket_name_parameter,
             local_asset_bucket_region=local_asset_bucket_region_parameter,
-            local_asset_bucket_kms_key_arn=local_asset_bucket_kms_key_arn_parameter,
-            local_asset_bucket_root_key_parameter=local_asset_bucket_root_key_parameter,
-            local_asset_bucket_default_assets_prefix_parameter=local_asset_bucket_default_assets_prefix_parameter,
-            local_asset_bucket_backstage_user_provided_template_key_prefix=local_asset_bucket_custom_template_key_prefix_parameter,
-            local_asset_bucket_backstage_default_template_key_prefix=local_asset_bucket_default_template_key_prefix_parameter,
+            local_asset_bucket_entities_prefix_parameter=local_asset_bucket_entities_prefix_parameter,
+            local_asset_bucket_default_entities_prefix_parameter=local_asset_bucket_default_entities_prefix_parameter,
             local_asset_bucket_catalog_key_prefix=local_asset_bucket_catalog_key_prefix_parameter,
             local_asset_bucket_techdocs_key_prefix=local_asset_bucket_techdocs_key_prefix_parameter,
             local_asset_bucket_discovery_refresh_frequency_mins=local_asset_bucket_discovery_refresh_frequency_mins_parameter,
             codebuild_project_arn=codebuild_project_arn_parameter,
             acdp_build_config_path_root_parameter=acdp_build_config_path_root_parameter,
+        )
+
+        self.backstage_account_directory_secrets = BackstageAccountDirectorySecrets(
+            enable_multi_account_deployment=enable_multi_account_deployment,
+            orgs_management_aws_account_id=org_management_aws_account_id,
+            orgs_management_account_region=orgs_management_account_region,
         )

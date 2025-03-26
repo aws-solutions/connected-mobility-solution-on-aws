@@ -1,0 +1,35 @@
+{
+  "name": "fleet-management",
+  "description": "Fleet Management API",
+  "version": "2.0.1",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build:smithy": "cd ../../smithy/ && smithy build",
+    "build:smithy-codegen": "cp -r ../../smithy/build/smithy/source/typescript-ssdk-codegen/ ./smithy-build && touch ./smithy-build/yarn.lock && yarn --cwd ./smithy-build install --no-immutable && yarn --cwd ./smithy-build build",
+    "build:smithy-all": "yarn run build:smithy && yarn run build:smithy-codegen",
+    "build": "npx tsc --skipLibCheck true",
+    "test": "jest --coverage"
+  },
+  "dependencies": {
+    "@aws-sdk/client-iot": "^3.723.0",
+    "@aws-sdk/client-iotfleetwise": "^3.723.0",
+    "@aws-sdk/types": "^3.723.0",
+    "@com.cms.fleetmanagement/api-server": "link:smithy-build",
+    "@smithy/protocol-http": "^5.0.0"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@smithy/types": "^4.0.0",
+    "@types/aws-lambda": "^8.10.147",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.10.5",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.6",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.16.2",
+    "typescript": "^5.4.5"
+  },
+  "packageManager": "yarn@4.6.0"
+}

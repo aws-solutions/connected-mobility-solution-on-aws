@@ -15,11 +15,24 @@ export function hasDocs(): (entity: Entity) => boolean {
 
 export function hasCicd(): (entity: Entity) => boolean {
   return (entity: Entity) => {
-    return Boolean(
-      entity.metadata.annotations?.[
-        constants.ACDP_DEPLOYMENT_TARGET_ANNOTATION
-      ],
+    return (
+      Boolean(
+        entity.metadata.annotations?.[
+          constants.ACDP_DEPLOYMENT_TARGET_ACCOUNT_ANNOTATION
+        ],
+      ) &&
+      Boolean(
+        entity.metadata.annotations?.[
+          constants.ACDP_DEPLOYMENT_TARGET_REGION_ANNOTATION
+        ],
+      )
     );
+  };
+}
+
+export function hasMetrics(): (entity: Entity) => boolean {
+  return (entity: Entity) => {
+    return Boolean(entity.spec?.type === "service");
   };
 }
 

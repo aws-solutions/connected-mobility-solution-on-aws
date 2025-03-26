@@ -8,6 +8,7 @@ import json
 import mimetypes
 import os
 import posixpath
+import re
 import uuid
 import zipfile
 from enum import Enum
@@ -16,6 +17,8 @@ from typing import TYPE_CHECKING, Any, Dict
 
 # Third Party Libraries
 import requests
+import yaml
+from yaml.loader import SafeLoader
 
 # AWS Libraries
 import boto3
@@ -26,10 +29,7 @@ from botocore.config import Config
 if TYPE_CHECKING:
     # Third Party Libraries
     from mypy_boto3_s3.client import S3Client
-    from mypy_boto3_s3.type_defs import (
-        CopySourceTypeDef,
-        HeadObjectRequestRequestTypeDef,
-    )
+    from mypy_boto3_s3.type_defs import CopySourceTypeDef
 else:
     CopySourceTypeDef = object
     S3Client = object
@@ -58,16 +58,16 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
         match event["ResourceProperties"]["Resource"]:
             case CustomResourceTypes.ResourceTypes.CREATE_DEPLOYMENT_UUID.value:
                 response["Data"] = create_deployment_uuid(event)
+            case CustomResourceTypes.ResourceTypes.CREATE_AND_UPLOAD_DEFAULT_USERS_AND_GROUPS.value:
+                create_and_upload_default_users_and_groups(event)
             case CustomResourceTypes.ResourceTypes.COPY_S3_OBJECT.value:
                 response["Data"] = copy_s3_object_from_source_to_destination_bucket(
                     event
                 )
             case CustomResourceTypes.ResourceTypes.EXTRACT_S3_ZIP_TO_TARGET_BUCKET.value:
-                response[
-                    "Data"
-                ] = extract_s3_zip_object_from_source_to_destination_bucket(
-                    event
-                )  # type: ignore
+                extract_s3_zip_object_from_source_to_destination_bucket(event)
+            case CustomResourceTypes.ResourceTypes.VALIDATE_MULTI_ACCOUNT_PARAMETERS.value:
+                validate_multi_account_parameters(event)
             case _:
                 raise KeyError(
                     f"No Custom Resource Type: {event['ResourceProperties']['Resource']}"
@@ -122,6 +122,78 @@ def create_deployment_uuid(event: Dict[str, Any]) -> Dict[str, Any]:
         response["SolutionUUID"] = str(uuid.uuid4())
 
     return response
+
+
+@tracer.capture_method
+def create_and_upload_default_users_and_groups(event: Dict[str, Any]) -> None:
+    if event["RequestType"] in [
+        CustomResourceTypes.RequestTypes.CREATE.value,
+        CustomResourceTypes.RequestTypes.UPDATE.value,
+    ]:
+        destination_bucket = event["ResourceProperties"]["DestinationBucket"]
+        destination_key_prefix = event["ResourceProperties"]["DestinationKeyPrefix"]
+        environment = event["ResourceProperties"]["CustomEnvironment"]
+
+        # Custom constructor to replace environment variables (denoted by !ENV tag) with value from supplied environment dict
+        def env_constructor(loader: SafeLoader, node: yaml.Node) -> str:
+            value = str(loader.construct_scalar(node))  # type: ignore[arg-type]
+            return str(environment.get(value, ""))
+
+        yaml.add_constructor(tag="!ENV", constructor=env_constructor, Loader=SafeLoader)
+
+        def update_yaml_env_variables_to_s3(
+            input_path: str,
+        ) -> bool:
+            try:
+                failure_occurred = False
+                # Load and process the YAML file (which might have yaml subfiles inside)
+                consistent_relative_path = os.path.join(
+                    os.path.dirname(__file__), input_path
+                )
+                with open(
+                    consistent_relative_path, "r", encoding="utf-8"
+                ) as yaml_file_stream:
+                    updated_yamls = list(
+                        yaml.load_all(yaml_file_stream, Loader=SafeLoader)
+                    )
+
+                # For each yaml subfile, convert to string, and upload to the appropriate S3 key
+                s3_client = boto3.client("s3")
+                for yaml_doc in updated_yamls:
+                    namespace = yaml_doc.get("metadata").get("namespace").lower()
+                    kind = yaml_doc.get("kind").lower()
+                    name = yaml_doc.get("metadata").get("name").lower()
+                    full_s3_key = f"{destination_key_prefix}/{namespace}/{kind}/{name}/catalog-info.yaml"
+
+                    yaml_as_string = yaml.dump(
+                        yaml_doc,
+                        Dumper=yaml.SafeDumper,
+                        default_flow_style=False,
+                    )
+
+                    s3_client.put_object(
+                        Bucket=destination_bucket,
+                        Key=full_s3_key,
+                        Body=yaml_as_string,
+                        ContentType="application/x-yaml",
+                    )
+            except Exception as exception:  # pylint: disable=broad-exception-caught
+                # Individually recatch and throw exceptions in the loop, so that failure on one file will still allow other file attempts to continue
+                logger.error(
+                    "CustomResource CreateAndUploadDefaultUsersAndGroups error: %s",
+                    str(exception),
+                    exc_info=True,
+                )
+                failure_occurred = True
+            return failure_occurred
+
+        users_failure = update_yaml_env_variables_to_s3("lib/default_admin_user.yaml")
+        groups_failure = update_yaml_env_variables_to_s3("lib/default_groups.yaml")
+
+        if users_failure or groups_failure:
+            raise Exception(  # pylint: disable=broad-exception-raised
+                "One or more yaml files failed to parse and upload to the destination S3 bucket. See prior CloudWatch logs for individual failures."
+            )
 
 
 @tracer.capture_method
@@ -184,6 +256,35 @@ def extract_s3_zip_object_from_source_to_destination_bucket(
                         )
 
 
+@tracer.capture_method
+def validate_multi_account_parameters(event: Dict[str, Any]) -> None:
+
+    if event["RequestType"] in [
+        CustomResourceTypes.RequestTypes.CREATE.value,
+        CustomResourceTypes.RequestTypes.UPDATE.value,
+    ]:
+        if event["ResourceProperties"]["EnableMultiAccountDeployment"] == "true" and (
+            not (
+                re.match(
+                    ArnPatterns.ACCOUNT_ID.value,
+                    event["ResourceProperties"]["OrgsManagementAwsAccountId"],
+                )
+                and re.match(
+                    ArnPatterns.REGION.value,
+                    event["ResourceProperties"]["OrgsManagementAccountRegion"],
+                )
+            )
+        ):
+            raise ValueError(
+                "Multi-Account deployment feature is enabled, Provide valid AWS Account ID and AWS Region"
+            )
+
+
+class ArnPatterns(Enum):
+    ACCOUNT_ID = r"^(?!null$)\d{12}$"
+    REGION = r"^(?!null$)(us|eu|ap|sa|ca|me|af|il)-(north|south|east|west|central)-(1|2|3|4)$"
+
+
 class CustomResourceTypes:
     class RequestTypes(Enum):
         CREATE = "Create"
@@ -192,8 +293,12 @@ class CustomResourceTypes:
 
     class ResourceTypes(Enum):
         CREATE_DEPLOYMENT_UUID = "CreateDeploymentUUID"
+        CREATE_AND_UPLOAD_DEFAULT_USERS_AND_GROUPS = (
+            "CreateAndUploadDefaultUsersAndGroups"
+        )
         COPY_S3_OBJECT = "CopyS3Object"
         EXTRACT_S3_ZIP_TO_TARGET_BUCKET = "ExtractS3ZipToTargetBucket"
+        VALIDATE_MULTI_ACCOUNT_PARAMETERS = "ValidateMultiAccountParameters"
 
     class StatusTypes(Enum):
         SUCCESS = "SUCCESS"

@@ -186,7 +186,7 @@ After deploying the solution a Postman collection can be generated to test and i
 
 ```bash
 cd ./deployment/postman_collection
-npm ci
+yarn install --immutable
 node index.js --stack-name <name-of-cloud-formation-stack> --region <region-of-cloud-formation-stack>
 ```
 

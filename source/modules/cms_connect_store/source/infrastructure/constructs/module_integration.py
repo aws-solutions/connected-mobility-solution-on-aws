@@ -13,6 +13,7 @@ from constructs import Construct
 from cms_common.config.resource_names import ResourceName, ResourcePrefix
 from cms_common.config.stack_inputs import SolutionConfigInputs
 from cms_common.constructs.app_unique_id import AppUniqueId
+from cms_common.constructs.encrypted_s3 import EncryptedS3Construct
 from cms_common.constructs.identity_provider_config import IdentityProviderConfig
 from cms_common.constructs.vpc_construct import create_vpc_config, get_vpc_name
 from cms_common.resource_names.module_short_names import CMSModuleShortNames
@@ -42,6 +43,10 @@ class ModuleInputsConstruct(Construct):
                 leading_slash=True,
             ),
             name="publish-api/endpoint",
+        )
+
+        self.s3_log_lifecycle_rules = (
+            EncryptedS3Construct.create_log_lifecycle_cfn_parameters(self)
         )
 
 
@@ -151,16 +156,5 @@ class ModuleOutputsConstruct(Construct):
                 name="s3-storage-bucket/arn",
             ),
             string_value=root_s3_bucket.bucket_arn,
-            simple_name=False,
-        )
-        aws_ssm.StringParameter(
-            self,
-            "ssm-telemetry-storage-bucket-key-arn",
-            description="The ARN of the encryption key for the S3 bucket in which the telemetry data is stored.",
-            parameter_name=ResourceName.slash_separated(
-                prefix=ssm_parameter_name_prefix_with_leading_slash,
-                name="s3-storage-bucket/key-arn",
-            ),
-            string_value=root_s3_bucket.encryption_key.key_arn,  # type: ignore[union-attr]
             simple_name=False,
         )

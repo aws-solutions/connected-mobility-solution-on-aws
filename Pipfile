@@ -6,8 +6,8 @@ name = "pypi"
 [packages]
 
 [dev-packages]
-boto3 = ">=1.26.0"
-boto3-stubs = {extras = ["essential", "dynamodb", "iot"], version = "*"}
+boto3 = ">=1.37.0"
+boto3-stubs = {extras = ["essential", "dynamodb", "iot"], version = ">=1.37.0"}
 jinja2 = "*"
 markdown-to-json = "*"
 mypy = "*"
@@ -16,7 +16,7 @@ pycln = "*"
 pylint = "*"
 requests = ">=2.32.0"
 setuptools = ">=71.0.0"
-types-boto3 = ">=1.0.2"
+types-boto3 = ">=1.37.0"
 types-pyyaml = "*"
 types-python-dateutil = "*"
 types-requests = ">=2.32.0"

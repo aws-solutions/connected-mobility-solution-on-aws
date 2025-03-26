@@ -3,14 +3,14 @@
 set -e && [[ "$DEBUG" == 'true' ]] && set -x
 
 # Get reference for all important folders
-root_dir="$(dirname "$(dirname "$(realpath "$0")")")"
-export MODULE_ROOT_DIR="$root_dir"
-export DEPLOYMENT_DIR="$root_dir/deployment"
+ROOT_DIR="$(dirname "$(dirname "$(realpath "$0")")")"
+export MODULE_ROOT_DIR="$ROOT_DIR"
+export DEPLOYMENT_DIR="$ROOT_DIR/deployment"
 export STAGING_DIST_DIR="$DEPLOYMENT_DIR/staging"
 export GLOBAL_ASSETS_DIR="$DEPLOYMENT_DIR/global-s3-assets"
 export REGIONAL_ASSETS_DIR="$DEPLOYMENT_DIR/regional-s3-assets"
 
-cd "$root_dir"
+cd "$ROOT_DIR"
 
 printf "%b\n[Init] Removing old dist files from previous runs\n%b" "${GREEN}" "${NC}"
 rm -rf "$GLOBAL_ASSETS_DIR"

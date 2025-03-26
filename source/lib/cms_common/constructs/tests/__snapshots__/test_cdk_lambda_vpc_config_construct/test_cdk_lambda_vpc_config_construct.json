@@ -8,20 +8,6 @@
   },
   "Resources": {
     "testcdklambdavpcconfigconstructlambdasecuritygroup9BD08407": {
-      "Metadata": {
-        "cfn_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "W5",
-              "reason": "Unable to know egress requirement. leaving open for now"
-            },
-            {
-              "id": "W40",
-              "reason": "Unable to know egress requirement. leaving open for now"
-            }
-          ]
-        }
-      },
       "Properties": {
         "GroupDescription": "Default/test-cdk-lambda-vpc-config-construct-lambda/security-group",
         "SecurityGroupEgress": [

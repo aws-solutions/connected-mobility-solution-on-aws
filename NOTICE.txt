@@ -3239,7 +3239,6 @@ importlib_resources under the Apache-2.0 license.
 Jinja2 under the 0BSD license.
 jsii under the Apache-2.0 license.
 Markdown under the 0BSD license.
-markdown-inline-graphviz-extension under the MIT license.
 MarkupSafe under the 0BSD license.
 mdx-truly-sane-lists under the MIT license.
 mergedeep under the MIT license.

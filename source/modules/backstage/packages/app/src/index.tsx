@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import "@backstage/cli/asset-types";
-import React from "react";
+
 import ReactDOM from "react-dom";
 import App from "./App";
 

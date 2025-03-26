@@ -126,8 +126,8 @@ class CmsProvisioningConstruct(Construct):
         lambda_dependencies_construct = LambdaDependenciesConstruct(
             self,
             "dependency-layer-construct",
-            pipfile_path=f"{dirname(dirname(dirname(abspath(__file__))))}/Pipfile",
-            dependency_layer_path=f"{os.getcwd()}/source/infrastructure/cms_provisioning_dependency_layer",
+            pipfile_lock_dir=dirname(dirname(dirname(abspath(__file__)))),
+            dependency_layer_path=f"{os.getcwd()}/deployment/dist/lambda/cms_provisioning_dependency_layer",
         )
 
         custom_resource_lambda_construct = CustomResourceLambdaConstruct(
@@ -136,7 +136,7 @@ class CmsProvisioningConstruct(Construct):
             dependency_layer=lambda_dependencies_construct.dependency_layer,
             unique_id=module_inputs_construct.app_unique_id,
             name=solution_config_inputs.module_short_name,
-            asset_path="dist/lambda/custom_resource.zip",
+            asset_path=f"{os.getcwd()}/deployment/dist/lambda/custom_resource.zip",
             user_agent_string=solution_config_inputs.get_user_agent_string(),
             vpc_construct=vpc_construct,
         )

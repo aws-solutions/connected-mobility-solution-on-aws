@@ -91,9 +91,6 @@ def test_batch_predict_post_success(
     mock_datetime: Any,
 ) -> None:
     inference_data_bucket_name = os.environ["BATCH_INFERENCE_DATA_S3_BUCKET_NAME"]
-    inference_data_bucket_kms_key_id = os.environ[
-        "BATCH_INFERENCE_DATA_S3_BUCKET_KMS_KEY_ID"
-    ]
     input_data_s3_uri = f"s3://{inference_data_bucket_name}/{json.loads(batch_predict_post_event['body'])['input_data_s3_key']}"
     output_data_s3_key_prefix = os.environ["BATCH_INFERENCE_DATA_OUTPUT_S3_KEY_PREFIX"]
     output_data_s3_uri = (
@@ -147,7 +144,6 @@ def test_batch_predict_post_success(
                 "S3OutputPath": output_data_s3_uri,
                 "Accept": "text/csv",
                 "AssembleWith": "Line",
-                "KmsKeyId": inference_data_bucket_kms_key_id,
             },
             "TransformResources": {
                 "InstanceType": inference_instance_type,
@@ -174,7 +170,6 @@ def test_batch_predict_post_success(
     [
         "RESOURCE_NAME_SUFFIX",
         "BATCH_INFERENCE_DATA_S3_BUCKET_NAME",
-        "BATCH_INFERENCE_DATA_S3_BUCKET_KMS_KEY_ID",
         "BATCH_INFERENCE_DATA_OUTPUT_S3_KEY_PREFIX",
         "BATCH_INFERENCE_INSTANCE_TYPE",
         "BATCH_INFERENCE_INSTANCE_COUNT",

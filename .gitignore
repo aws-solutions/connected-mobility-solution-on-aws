@@ -165,3 +165,18 @@ cython_debug/
 
 #draw.io backup files
 **/*.xml.bkp
+
+# smithy
+smithy-build/
+
+# vite
+.vite/
+
+# Yarn files
+**/.pnp.*
+**/.yarn/*
+!**/.yarn/patches
+!**/.yarn/plugins
+!**/.yarn/releases
+!**/.yarn/sdks
+!**/.yarn/versions

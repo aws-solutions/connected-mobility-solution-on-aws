@@ -1,0 +1,9 @@
+
+[
+    {
+      "propertyLabel": "Vehicle name",
+      "key": "name",
+      "groupValuesLabel": "Vehicle name values",
+      "operators": [":", "!:", "=", "!=", "^", "!^"]
+    }
+  ]

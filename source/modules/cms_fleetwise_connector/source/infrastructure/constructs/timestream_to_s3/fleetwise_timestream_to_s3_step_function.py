@@ -18,7 +18,6 @@ from aws_cdk import (
     aws_events,
     aws_events_targets,
     aws_iam,
-    aws_kms,
     aws_lambda,
     aws_logs,
     aws_stepfunctions,
@@ -243,33 +242,13 @@ class FleetWiseTimestreamToS3Construct(Construct):
             step_function_chain
         )
 
-        log_group_kms_key = aws_kms.Key(
-            self,
-            "log-group-kms-key",
-            enable_key_rotation=True,
-        )
-
         unique_stack_id_part = Fn.select(2, Fn.split("/", Aws.STACK_ID))
         log_group = aws_logs.LogGroup(
             self,
             "step-functions-log-group",
             removal_policy=RemovalPolicy.RETAIN,
             retention=aws_logs.RetentionDays.THREE_MONTHS,
-            encryption_key=log_group_kms_key,
             log_group_name=f"/aws/vendedlogs/{module_config.app_unique_id}/{solution_config_inputs.module_short_name}/step-function-{unique_stack_id_part}",
-        )
-
-        log_group_kms_key.add_to_resource_policy(
-            statement=aws_iam.PolicyStatement(
-                effect=aws_iam.Effect.ALLOW,
-                principals=[
-                    aws_iam.ServicePrincipal(
-                        f"logs.{Stack.of(self).region}.amazonaws.com"
-                    )
-                ],
-                actions=["kms:Encrypt", "kms:Decrypt", "kms:GenerateDataKey"],
-                resources=["*"],
-            )
         )
 
         state_machine_name = ResourceName.hyphen_separated(
@@ -405,7 +384,6 @@ def _generate_cms_connect_store_parameter(
     return {
         "telemetryBucketName": telemetry_bucket.bucket_name,
         "telemetryPrefixPath": f"{telemetry_prefix_path}/",
-        "telemetryBucketKmsKeyArn": telemetry_bucket.bucket_key_arn,
     }
 
 

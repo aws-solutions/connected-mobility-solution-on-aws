@@ -13,13 +13,17 @@ import {
   AcdpBuildService,
   AcdpMetricsService,
   AcdpMetricsApi,
+  createAcdpBaseRouter,
+  AcdpAccountDirectoryService,
+  AcdpAccountDirectoryApi,
+  createAcdpAccountDirectoryRouter,
 } from "backstage-plugin-acdp-backend";
-import { loggerToWinstonLogger } from "@backstage/backend-common";
 import { CatalogClient } from "@backstage/catalog-client";
 import { ScmIntegrations } from "@backstage/integration";
+import { OperationalMetrics } from "./utils/operational-metrics";
 
 export const acdpPlugin = createBackendPlugin({
-  pluginId: "acdp-backend",
+  pluginId: "acdp",
   register(env) {
     env.registerInit({
       deps: {
@@ -30,6 +34,7 @@ export const acdpPlugin = createBackendPlugin({
         reader: coreServices.urlReader,
         auth: coreServices.auth,
         httpAuth: coreServices.httpAuth,
+        permissions: coreServices.permissions,
       },
       async init({
         config,
@@ -39,8 +44,10 @@ export const acdpPlugin = createBackendPlugin({
         httpRouter,
         auth,
         httpAuth,
+        permissions,
       }) {
-        const winstonLogger = loggerToWinstonLogger(logger);
+        logger.info("Initializing the acdp backend plugin.");
+
         const credsManager = DefaultAwsCredentialsManager.fromConfig(config);
         const catalogClient = new CatalogClient({
           discoveryApi: discovery,
@@ -48,21 +55,33 @@ export const acdpPlugin = createBackendPlugin({
 
         const integrations = ScmIntegrations.fromConfig(config);
 
+        // ACDP Base
+        httpRouter.use(
+          await createAcdpBaseRouter({
+            logger: logger,
+          }),
+        );
+
         // ACDP Build
         const acdpBuildService = new AcdpBuildService({
           config: config,
           reader: reader,
           integrations: integrations,
           awsCredentialsProvider: await credsManager.getCredentialProvider(),
-          logger: winstonLogger,
+          logger: logger,
+          operationalMetrics: new OperationalMetrics({
+            logger,
+            config,
+          }),
         });
         const acdpBuildApi = new AcdpBuildApi(catalogClient, acdpBuildService);
         httpRouter.use(
           await createAcdpBuildRouter({
-            logger: winstonLogger,
+            logger: logger,
             acdpBuildApi: acdpBuildApi,
             auth: auth,
             httpAuth: httpAuth,
+            permissions: permissions,
           }),
         );
 
@@ -70,7 +89,7 @@ export const acdpPlugin = createBackendPlugin({
         const acdpMetricsService = new AcdpMetricsService({
           config: config,
           awsCredentialsProvider: await credsManager.getCredentialProvider(),
-          logger: winstonLogger,
+          logger: logger,
         });
         const acdpMetricsApi = new AcdpMetricsApi(
           catalogClient,
@@ -78,12 +97,31 @@ export const acdpPlugin = createBackendPlugin({
         );
         httpRouter.use(
           await createAcdpMetricsRouter({
-            logger: winstonLogger,
             acdpMetricsApi: acdpMetricsApi,
+            auth: auth,
+            httpAuth: httpAuth,
+            permissions: permissions,
+          }),
+        );
+
+        // ACDP Account-Directory
+        const acdpAccountDirectoryService = new AcdpAccountDirectoryService({
+          config: config,
+          awsCredentialsProvider: await credsManager.getCredentialProvider(),
+          logger: logger,
+        });
+        const acdpAccountDirectoryApi = new AcdpAccountDirectoryApi(
+          acdpAccountDirectoryService,
+        );
+        httpRouter.use(
+          await createAcdpAccountDirectoryRouter({
+            logger: logger,
+            acdpAccountDirectoryApi: acdpAccountDirectoryApi,
             auth: auth,
             httpAuth: httpAuth,
           }),
         );
+
         httpRouter.addAuthPolicy({
           path: "/health",
           allow: "unauthenticated",
