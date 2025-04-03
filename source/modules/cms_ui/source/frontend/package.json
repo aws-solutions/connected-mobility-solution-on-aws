@@ -86,6 +86,9 @@
       "react-app/jest"
     ]
   },
+  "resolutions": {
+    "esbuild": "^0.25.0"
+  },
   "browserslist": {
     "production": [
       ">0.2%",

@@ -1,7 +1,7 @@
 {
   "name": "auth-oauth2-provider-module",
   "description": "The oauth2-provider backend module for the auth plugin.",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "main": "src/index.ts",
   "types": "src/index.ts",
   "license": "Apache-2.0",
@@ -25,16 +25,16 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.735.0",
-    "@backstage/backend-plugin-api": "^1.1.0",
-    "@backstage/catalog-model": "^1.7.2",
+    "@backstage/backend-plugin-api": "^1.2.1",
+    "@backstage/catalog-model": "^1.7.3",
     "@backstage/integration-aws-node": "^0.1.15",
-    "@backstage/plugin-auth-backend-module-oauth2-provider": "^0.3.3",
-    "@backstage/plugin-auth-node": "^0.5.5",
+    "@backstage/plugin-auth-backend-module-oauth2-provider": "^0.4.1",
+    "@backstage/plugin-auth-node": "^0.6.1",
     "node-fetch": "^3.3.2",
     "yaml": "^2.7.0"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.29.4"
+    "@backstage/cli": "^0.31.0"
   },
   "files": [
     "dist"

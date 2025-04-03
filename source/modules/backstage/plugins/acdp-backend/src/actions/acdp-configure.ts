@@ -1,8 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { z } from "zod";
-
 import { SourceType } from "@aws-sdk/client-codebuild";
 
 import {
@@ -16,7 +14,6 @@ import { Config } from "@backstage/config";
 import { ScmIntegrations } from "@backstage/integration";
 import { DefaultAwsCredentialsManager } from "@backstage/integration-aws-node";
 import { createTemplateAction } from "@backstage/plugin-scaffolder-node";
-import { JsonObject } from "@backstage/types";
 
 import { AcdpBuildAction, constants } from "backstage-plugin-acdp-common";
 
@@ -24,23 +21,6 @@ import { AcdpBuildService } from "../service/acdp-build-service";
 import { OperationalMetrics } from "../utils/operational-metrics";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-interface BuildParameter extends JsonObject {
-  name: string;
-  value: string;
-}
-
-interface SourceOverrideConfig extends JsonObject {
-  sourceType?: SourceType;
-  sourceLocation?: string;
-  sourceVersion?: string;
-}
-
-interface CtxInput extends JsonObject {
-  entityRef: string;
-  buildParameters: BuildParameter[];
-  sourceOverrideConfig?: SourceOverrideConfig;
-}
 
 export const createAcdpConfigureAction = async (options: {
   config: Config;
@@ -68,41 +48,36 @@ export const createAcdpConfigureAction = async (options: {
     }),
   });
 
-  return createTemplateAction<CtxInput>({
+  return createTemplateAction({
     id: "aws:acdp:configure",
     description:
       "Registers and configures the catalog item to be able to run ACDP builds",
     schema: {
-      input: z.object({
-        entityRef: z.string(),
-        sourceOverrideConfig: z
-          .object({
-            sourceType: z.enum(["S3", "GITHUB", "CODECOMMIT", "NO_SOURCE"]),
-            sourceLocation: z.string(),
-            sourceVersion: z.string().optional(),
-          })
-          .optional(),
-        buildParameters: z
-          .array(
-            z.object({
-              name: z.string(),
-              value: z.string(),
-            }),
-          )
-          .optional(),
-      }),
+      input: {
+        entityRef: (z: any) => z.string(),
+        sourceOverrideConfig: (z: any) =>
+          z
+            .object({
+              sourceType: (z2: any) =>
+                z2.enum(["S3", "GITHUB", "CODECOMMIT", "NO_SOURCE"]),
+              sourceLocation: (z2: any) => z2.string(),
+              sourceVersion: (z2: any) => z2.string().optional(),
+            })
+            .optional(),
+        buildParameters: (z: any) =>
+          z
+            .array({
+              name: (z2: any) => z2.string(),
+              value: (z2: any) => z2.string(),
+            })
+            .optional(),
+      },
       output: {
-        type: "object",
-        properties: {
-          codeBuildProjectArn: {
-            title: "CodeBuild Project used to deploy",
-            type: "string",
-          },
-        },
+        codeBuildProjectArn: (z: any) => z.string(),
       },
     },
 
-    async handler(ctx) {
+    handler: async (ctx) => {
       const { token } = await auth.getPluginRequestToken({
         onBehalfOf: await auth.getOwnServiceCredentials(),
         targetPluginId: "catalog",

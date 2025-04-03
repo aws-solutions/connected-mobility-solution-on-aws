@@ -142,6 +142,7 @@ To deploy CMS on AWS, a variety of tools are required. These deploy instructions
 - [Pipenv](https://pipenv.pypa.io/en/latest/installation.html)
 - [AWS CLI](https://docs.aws.amazon.com/cli/)
 - [AWS CDK Toolkit](https://docs.aws.amazon.com/cdk/v2/guide/cli.html)
+- [Smithy](https://smithy.io/2.0/guides/smithy-cli/cli_installation.html)
 
 ### Required Tool Versions
 
@@ -238,6 +239,15 @@ AWS CDK toolkit. Ensure your installation properly set your PATH by running the 
 
 ```bash
 cdk --version
+```
+
+#### Smithy
+
+Follow the [instructions](https://smithy.io/2.0/guides/smithy-cli/cli_installation.html) to install
+the Smithy CLI tool. Ensure the installation works by running the command below.
+
+```bash
+smithy --version
 ```
 
 #### Verify Required Tool Installations

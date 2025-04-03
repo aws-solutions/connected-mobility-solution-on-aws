@@ -3,7 +3,6 @@
 
 import * as path from "path";
 import * as yaml from "yaml";
-import { z } from "zod";
 
 import {
   PutObjectCommand,
@@ -76,7 +75,7 @@ const copyDocsAssetsToCatalog = async (options: {
   techdocsPublisher: PublisherBase;
   catalogConfig: CatalogConfig;
   catalogCreateInput: AcdpCatalogCreateActionInput;
-  ctx: ActionContext<CtxInput, JsonObject>;
+  ctx: ActionContext<CtxInput, JsonObject, "v2">;
   entity: Entity;
 }) => {
   const { techdocsPublisher, catalogConfig, catalogCreateInput, ctx, entity } =
@@ -126,7 +125,7 @@ const copyAssetsToCatalog = async (options: {
   s3Client: S3Client;
   catalogConfig: CatalogConfig;
   catalogCreateInput: AcdpCatalogCreateActionInput;
-  ctx: ActionContext<CtxInput, JsonObject>;
+  ctx: ActionContext<CtxInput, JsonObject, "v2">;
   catalogEntityPathPrefix: string;
   entity: Entity;
 }) => {
@@ -198,7 +197,7 @@ const writeCatalogItemToS3 = async (options: {
   s3Client: S3Client;
   catalogConfig: CatalogConfig;
   catalogEntityPathPrefix: string;
-  ctx: ActionContext<CtxInput, JsonObject>;
+  ctx: ActionContext<CtxInput, JsonObject, "v2">;
 }) => {
   const {
     s3Client,
@@ -295,47 +294,42 @@ export const createAcdpCatalogCreateAction = async (
   });
   await techdocsPublisher.getReadiness();
 
-  return createTemplateAction<CtxInput>({
+  return createTemplateAction({
     id: "aws:acdp:catalog:create",
     description:
       "Writes the catalog-info.yaml and copies assets for your template to the backend s3 bucket",
     schema: {
-      input: z.object({
-        componentId: z
-          .string()
-          .describe(
-            "The unique component id which is used for the catalog-info name",
-          ),
-        assetsSourcePath: z
-          .string()
-          .optional()
-          .describe(
-            "optional: path to the assets used by this component to copy into the catalog item's assets folder",
-          ),
-        docsSiteSourcePath: z
-          .string()
-          .optional()
-          .describe(
-            "optional: path to the techdocs site folder to copy into the techdocs' assets store. Techdocs must be configured for this to work.",
-          ),
-        entity: z
-          .record(z.any())
-          .describe(
-            "YAML body for the catalog-info.yaml content. It will automatically be updated with ACDP Metadata",
-          ),
-      }),
+      input: {
+        componentId: (z: any) =>
+          z
+            .string()
+            .describe(
+              "The unique component id which is used for the catalog-info name",
+            ),
+        assetsSourcePath: (z: any) =>
+          z
+            .string()
+            .optional()
+            .describe(
+              "optional: path to the assets used by this component to copy into the catalog item's assets folder",
+            ),
+        docsSiteSourcePath: (z: any) =>
+          z
+            .string()
+            .optional()
+            .describe(
+              "optional: path to the techdocs site folder to copy into the techdocs' assets store. Techdocs must be configured for this to work.",
+            ),
+        entity: (z: any) =>
+          z
+            .record(z.any())
+            .describe(
+              "YAML body for the catalog-info.yaml content. It will automatically be updated with ACDP Metadata",
+            ),
+      },
       output: {
-        type: "object",
-        properties: {
-          s3Url: {
-            title: "S3 URL Path file was uploaded to",
-            type: "string",
-          },
-          s3Uri: {
-            title: "S3 URI Path file was uploaded to",
-            type: "string",
-          },
-        },
+        s3Url: (z: any) => z.string(),
+        s3Uri: (z: any) => z.string(),
       },
     },
 

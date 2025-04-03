@@ -16,5 +16,5 @@
         "toolsToInstall":"pipenv,pylint"
       }
     },
-    "postCreateCommand": "bash -c 'npm install -g aws-cdk'"
+    "postCreateCommand": "bash -c 'npm install -g aws-cdk && ./.devcontainer/install_smithy.sh'"
   }
