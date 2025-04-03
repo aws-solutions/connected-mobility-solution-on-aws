@@ -108,7 +108,7 @@ deploy-ou-arn-list-macro: ## Deploy the OU Arn List Macro stack
 destroy-ou-arn-list-macro: ## Delete the OU Arn List Macro stack
 	@printf "%Destroy the multi account guidance macro stack.%b\n" "${MAGENTA}" "${NC}"
 	aws cloudformation delete-stack --stack-name "${TRANSFORM_STACK_NAME}"
-    
+
 	aws cloudformation wait stack-delete-complete --stack-name "${TRANSFORM_STACK_NAME}"
 
 .PHONY: deploy-multi-account-guidance
@@ -132,7 +132,7 @@ deploy-multi-account-guidance: ## Deploy the Multi Account Setup stack
 destroy-multi-account-guidance: ## Delete the Multi Account Setup stack
 	@printf "%Destroy the multi account guidance stack.%b\n" "${MAGENTA}" "${NC}"
 	aws cloudformation delete-stack --stack-name "${ACDP_MULTI_ACCT_SETUP_STACK_NAME}"
-    
+
 	aws cloudformation wait stack-delete-complete --stack-name "${ACDP_MULTI_ACCT_SETUP_STACK_NAME}"
 
 ## ========================================================

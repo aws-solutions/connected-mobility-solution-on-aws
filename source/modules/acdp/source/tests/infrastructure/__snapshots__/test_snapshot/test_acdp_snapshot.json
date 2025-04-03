@@ -3663,19 +3663,9 @@
               "Effect": "Allow",
               "Principal": {
                 "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":root"
-                    ]
+                  "Fn::GetAtt": [
+                    "acdppipelinesconstructbackstagepipelineroleC81291F3",
+                    "Arn"
                   ]
                 }
               }
@@ -3759,19 +3749,9 @@
               "Effect": "Allow",
               "Principal": {
                 "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":root"
-                    ]
+                  "Fn::GetAtt": [
+                    "acdppipelinesconstructbackstagepipelineroleC81291F3",
+                    "Arn"
                   ]
                 }
               }
@@ -3855,19 +3835,9 @@
               "Effect": "Allow",
               "Principal": {
                 "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":root"
-                    ]
+                  "Fn::GetAtt": [
+                    "acdppipelinesconstructbackstagepipelineroleC81291F3",
+                    "Arn"
                   ]
                 }
               }
