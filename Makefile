@@ -24,7 +24,7 @@ $(lastword $(subst /, ,$2))-$1:
 	@$(MAKE) -C $2 -f Makefile $1
 endef
 
-MODULES := source/lib $(shell find ${SOLUTION_PATH}/source/modules -type d -maxdepth 1 -mindepth 1 -not -name __pycache__)
+MODULES := source/lib $(shell find ${SOLUTION_PATH}/source/modules -maxdepth 1 -mindepth 1 -type d -not -name __pycache__)
 GLOBAL_TARGETS := $(shell grep -E '^[a-zA-Z0-9-]+:' ${SOLUTION_PATH}/makefiles/global_targets.mk | awk -F: '/^[^.]/ {print $$1;}')
 MODULE_TARGETS := $(shell grep -E '^[a-zA-Z0-9-]+:' ${SOLUTION_PATH}/makefiles/module_targets.mk | awk -F: '/^[^.]/ {print $$1;}')
 
