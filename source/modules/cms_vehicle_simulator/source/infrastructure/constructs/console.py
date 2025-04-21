@@ -287,6 +287,7 @@ class ConsoleConstruct(Construct):
             exclude=["aws_config.js"],
             destination_bucket=source_code_bucket,
             prune=False,
+            memory_limit=1024,
             vpc=vpc_construct.vpc,
             vpc_subnets=vpc_construct.private_subnet_selection,
         )
