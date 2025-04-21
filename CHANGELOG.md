@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.2] - 2025-04-21
+
+### Fixed
+
+- Fix s3 copy cdk construct running out of memory
+- Remove 'United States' region constraint on the Vehicle Simulator Cloudfront Distribution
+to allow other regions to use it out of the box.
+- Update shell find arg order to fix warnings
+
 ## [2.1.1] - 2025-04-03
 
 ### Fixed

@@ -581,10 +581,10 @@
       },
       "Type": "AWS::IAM::Role"
     },
-    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756Cc8c0dea6cecbd0731e114013b423c54e1adb1147edD2E1BB5D": {
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBc8c0dea6cecbd0731e114013b423c54e1adb1147ed9D24310A": {
       "DependsOn": [
-        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756Cc8c0dea6cecbd0731e114013b423c54e1adb1147edServiceRoleDefaultPolicyC7A8FAB8",
-        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756Cc8c0dea6cecbd0731e114013b423c54e1adb1147edServiceRoleD28B42C0"
+        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBc8c0dea6cecbd0731e114013b423c54e1adb1147edServiceRoleDefaultPolicyC5A99A56",
+        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBc8c0dea6cecbd0731e114013b423c54e1adb1147edServiceRole51FAA157"
       ],
       "Properties": {
         "Code": {
@@ -604,9 +604,10 @@
             "Ref": "cmsvehiclesimulatorconsoleconstructconsolebucketdeploymentAwsCliLayer0549F181"
           }
         ],
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756Cc8c0dea6cecbd0731e114013b423c54e1adb1147edServiceRoleD28B42C0",
+            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBc8c0dea6cecbd0731e114013b423c54e1adb1147edServiceRole51FAA157",
             "Arn"
           ]
         },
@@ -627,7 +628,7 @@
           "SecurityGroupIds": [
             {
               "Fn::GetAtt": [
-                "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756Cc8c0dea6cecbd0731e114013b423c54e1adb1147edSecurityGroup376015AC",
+                "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBc8c0dea6cecbd0731e114013b423c54e1adb1147edSecurityGroupDC46EAE6",
                 "GroupId"
               ]
             }
@@ -668,9 +669,9 @@
       },
       "Type": "AWS::Lambda::Function"
     },
-    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756Cc8c0dea6cecbd0731e114013b423c54e1adb1147edSecurityGroup376015AC": {
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBc8c0dea6cecbd0731e114013b423c54e1adb1147edSecurityGroupDC46EAE6": {
       "Properties": {
-        "GroupDescription": "Automatic security group for Lambda Function cmsvehiclesimulatorstackCustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756Cc8c0dea6cecbd0731e114013b423c54e1adb1147ed0A0CC3E9",
+        "GroupDescription": "Automatic security group for Lambda Function cmsvehiclesimulatorstackCustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBc8c0dea6cecbd0731e114013b423c54e1adb1147edC218D4D7",
         "SecurityGroupEgress": [
           {
             "CidrIp": "0.0.0.0/0",
@@ -707,7 +708,7 @@
       },
       "Type": "AWS::EC2::SecurityGroup"
     },
-    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756Cc8c0dea6cecbd0731e114013b423c54e1adb1147edServiceRoleD28B42C0": {
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBc8c0dea6cecbd0731e114013b423c54e1adb1147edServiceRole51FAA157": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -761,7 +762,7 @@
       },
       "Type": "AWS::IAM::Role"
     },
-    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756Cc8c0dea6cecbd0731e114013b423c54e1adb1147edServiceRoleDefaultPolicyC7A8FAB8": {
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBc8c0dea6cecbd0731e114013b423c54e1adb1147edServiceRoleDefaultPolicyC5A99A56": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -846,10 +847,10 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "tomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756Cc8c0dea6cecbd0731e114013b423c54e1adb1147edServiceRoleDefaultPolicyC7A8FAB8",
+        "PolicyName": "ucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBc8c0dea6cecbd0731e114013b423c54e1adb1147edServiceRoleDefaultPolicyC5A99A56",
         "Roles": [
           {
-            "Ref": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756Cc8c0dea6cecbd0731e114013b423c54e1adb1147edServiceRoleD28B42C0"
+            "Ref": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBc8c0dea6cecbd0731e114013b423c54e1adb1147edServiceRole51FAA157"
           }
         ]
       },
@@ -2332,15 +2333,7 @@
                 "OriginAccessIdentity": ""
               }
             }
-          ],
-          "Restrictions": {
-            "GeoRestriction": {
-              "Locations": [
-                "US"
-              ],
-              "RestrictionType": "whitelist"
-            }
-          }
+          ]
         },
         "Tags": [
           {
@@ -3197,7 +3190,7 @@
       },
       "Type": "AWS::Lambda::LayerVersion"
     },
-    "cmsvehiclesimulatorconsoleconstructconsolebucketdeploymentCustomResourcec8c0dea6cecbd0731e114013b423c54e1adb1147edB1C22DD3": {
+    "cmsvehiclesimulatorconsoleconstructconsolebucketdeploymentCustomResource1024MiBc8c0dea6cecbd0731e114013b423c54e1adb1147ed5ACAAFBA": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
         "ssmappuniqueidregistermodule9C5C2C5D"
@@ -3236,7 +3229,7 @@
         "Prune": false,
         "ServiceToken": {
           "Fn::GetAtt": [
-            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756Cc8c0dea6cecbd0731e114013b423c54e1adb1147edD2E1BB5D",
+            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBc8c0dea6cecbd0731e114013b423c54e1adb1147ed9D24310A",
             "Arn"
           ]
         },

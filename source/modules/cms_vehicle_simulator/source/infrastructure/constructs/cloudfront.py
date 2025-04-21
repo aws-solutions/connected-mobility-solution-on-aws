@@ -112,7 +112,6 @@ class CloudFrontConstruct(Construct):
             ),
             cloud_front_distribution_props={
                 "comment": "CMS Vehicle Simulator Distribution",
-                "geoRestriction": aws_cloudfront.GeoRestriction.allowlist("US"),
                 "enableLogging": True,
                 "minimumProtocolVersion": aws_cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
                 "httpVersion": aws_cloudfront.HttpVersion.HTTP2,
