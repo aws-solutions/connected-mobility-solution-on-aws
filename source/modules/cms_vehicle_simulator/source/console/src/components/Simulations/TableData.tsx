@@ -22,7 +22,7 @@ interface IProps {
 export default function TableData(props: IProps): React.JSX.Element {
   const logger = new Logger("Simulation Table Data");
   const [showDevices, setShowDevices] = useState(-1);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteModalIndex, setDeleteModalIndex] = useState<number | null>(null);
 
   /**
    * deletes the given simulation from ddb and reloads the page
@@ -112,7 +112,7 @@ export default function TableData(props: IProps): React.JSX.Element {
               size="sm"
               className="button-theme-alt"
               onClick={() => {
-                setShowDeleteModal(true);
+                setDeleteModalIndex(i);
               }}
             >
               <i className="bi bi-trash-fill" /> {I18n.get("delete")}
@@ -121,8 +121,8 @@ export default function TableData(props: IProps): React.JSX.Element {
               id={sim.sim_id}
               name={sim.name}
               delete={handleDelete}
-              showModal={setShowDeleteModal}
-              show={showDeleteModal}
+              showModal={setDeleteModalIndex}
+              show={deleteModalIndex === i}
               index={i}
             />
           </td>

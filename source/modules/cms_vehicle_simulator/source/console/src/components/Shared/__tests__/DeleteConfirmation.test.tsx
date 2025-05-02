@@ -35,12 +35,12 @@ describe("DeleteConfirmation", () => {
 
   it("should close modal", async () => {
     await userEvent.click(screen.getByRole("button", { name: "cancel" }));
-    expect(mockShowFunction).toBeCalled();
+    expect(mockShowFunction).toHaveBeenCalledWith(null);
   });
 
   it("should call delete and close modal", async () => {
     await userEvent.click(screen.getByRole("button", { name: "confirm" }));
-    expect(mockDeleteFunction).toBeCalled();
-    expect(mockShowFunction).toBeCalled();
+    expect(mockDeleteFunction).toHaveBeenCalledWith("test", 1);
+    expect(mockShowFunction).toHaveBeenCalledWith(null);
   });
 });

@@ -9,7 +9,7 @@ interface IDeleteConfirmProps {
   id: string;
   name: string;
   delete: (id: string, index: number) => void;
-  showModal: React.Dispatch<React.SetStateAction<boolean>>;
+  showModal: React.Dispatch<React.SetStateAction<number | null>>;
   show: boolean;
   index: number;
 }
@@ -24,14 +24,14 @@ export default function DeleteConfirm(
    */
   const deleteItem = (id: string, index: number) => {
     props.delete(id, index);
-    props.showModal(false);
+    props.showModal(null);
   };
 
   return (
     <Modal
       show={props.show}
       onHide={() => {
-        props.showModal(false);
+        props.showModal(null);
       }}
     >
       <Modal.Header closeButton>
@@ -46,7 +46,7 @@ export default function DeleteConfirm(
           size="sm"
           variant="secondary"
           onClick={() => {
-            props.showModal(false);
+            props.showModal(null);
           }}
         >
           {I18n.get("cancel")}
