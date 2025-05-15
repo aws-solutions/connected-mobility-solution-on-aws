@@ -29,12 +29,12 @@ const mockDeviceTypes: IDeviceType[] = [
         type: "id",
       },
     ],
-  }
+  },
 ];
 
 jest.mock("react-router-dom", () => ({
   ...(jest.requireActual("react-router-dom") as any),
-  Link: () => { },
+  Link: () => {},
   useLocation: () => ({
     pathname: "localhost:3000/device/type",
   }),
@@ -80,7 +80,11 @@ describe("DeviceType", () => {
     await userEvent.click(screen.getByRole("button", { name: "confirm" }));
 
     // Verify the API was called with the correct ID
-    expect(API.del).toHaveBeenCalledWith(expect.anything(), "/device/type/type-id-1", expect.anything());
+    expect(API.del).toHaveBeenCalledWith(
+      expect.anything(),
+      "/device/type/type-id-1",
+      expect.anything(),
+    );
 
     // Verify the first device type was removed from the list
     expect(await screen.findByText("device-type-2")).toBeInTheDocument();
@@ -100,7 +104,11 @@ describe("DeviceType", () => {
     await userEvent.click(screen.getByRole("button", { name: "confirm" }));
 
     // Verify the API was called with the correct ID
-    expect(API.del).toHaveBeenCalledWith(expect.anything(), "/device/type/type-id-2", expect.anything());
+    expect(API.del).toHaveBeenCalledWith(
+      expect.anything(),
+      "/device/type/type-id-2",
+      expect.anything(),
+    );
 
     // Verify the second device type was removed from the list
     expect(await screen.findByText("device-type-1")).toBeInTheDocument();

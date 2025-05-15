@@ -243,8 +243,9 @@ def process_schema(vss_schema_raw: str) -> str:
 
 if __name__ == "__main__":
     repository = "https://github.com/COVESA/vehicle_signal_specification"  # pylint: disable=invalid-name
+    tag = "release/4.0"  # pylint: disable=invalid-name
 
-    opts, args = getopt.getopt(sys.argv[1:], "hr:", ["help", "repository="])
+    opts, args = getopt.getopt(sys.argv[1:], "hr:", ["help", "repository=", "tag="])
     for opt, arg in opts:
         if opt == "-h":
             print(
@@ -253,27 +254,68 @@ if __name__ == "__main__":
                 + "Generate data models from VSS repository.\n"
                 + "-h, --help: show help info\n"
                 + "-r, --repository: alternative fork of vss repository to generate models from (defaults to https://github.com/COVESA/vehicle_signal_specification)"
+                + "-t, --tag: alternative tag to checkout (defaults to release/4.0)"
                 + "\n"
             )
             sys.exit()
         elif opt in ("-r", "--repository"):
             repository = arg
+        elif opt in ("-t", "--tag"):
+            tag = arg
 
     try:
         Path(OUTPUT_PATH).mkdir(parents=True, exist_ok=True)
+        git_clone_cmd = [
+            "git",
+            "clone",
+            "--recurse-submodules",
+            "--branch",
+            tag,
+            repository,
+        ]
         with subprocess.Popen(  # nosec
-            f"git clone --recurse-submodules {repository}".split(),
+            git_clone_cmd,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             cwd=OUTPUT_PATH,
         ) as process:
             output, error = process.communicate()
-            if process.returncode != 0:
+            if process.returncode == 128:
+                pass
+            elif process.returncode != 0:
                 raise ScriptException(
                     f"Failed to git clone. returncode: {process.returncode}, error: {str(error)}"
                 )
 
         VSS_TOOLS_PATH = join(OUTPUT_PATH, "vehicle_signal_specification/vss-tools/")
+
+        # Needed patch for PyYAML bug on M arch macs
+        pipfile_path = join(VSS_TOOLS_PATH, "Pipfile")
+        try:
+            with open(pipfile_path, "r", encoding="utf-8") as f:
+                pipfile_content = f.read()
+            pipfile_content = re.sub(
+                r'pyyaml\s*=\s*".+?"',
+                'pyyaml = "==5.3"',
+                pipfile_content,
+                flags=re.IGNORECASE,
+            )
+            with open(pipfile_path, "w", encoding="utf-8") as f:
+                f.write(pipfile_content)
+        except Exception as e:
+            raise ScriptException(f"Failed to patch Pipfile: {e}") from e
+
+        with subprocess.Popen(  # nosec
+            "pipenv install --dev",
+            shell=True,
+            cwd=VSS_TOOLS_PATH,
+        ) as process:
+            output, error = process.communicate()
+            if process.returncode != 0:
+                raise ScriptException(
+                    f"Failed to install dependencies. returncode: {process.returncode}, error: {str(error)}"
+                )
+
         with subprocess.Popen(  # nosec
             "pipenv install --dev",
             stdout=subprocess.PIPE,
@@ -288,7 +330,7 @@ if __name__ == "__main__":
                 )
 
         with subprocess.Popen(  # nosec
-            "python vspec2x.py --format json -I ../spec ../spec/VehicleSignalSpecification.vspec ../../vss.json",
+            "pipenv run python vspec2x.py --format json -I ../spec ../spec/VehicleSignalSpecification.vspec ../../vss.json",
             stdout=subprocess.PIPE,
             shell=True,
             cwd=VSS_TOOLS_PATH,
@@ -300,7 +342,7 @@ if __name__ == "__main__":
                 )
 
         with subprocess.Popen(  # nosec
-            "python vspec2graphql.py ../spec/VehicleSignalSpecification.vspec ../../vss_types.graphql",
+            "pipenv run python vspec2graphql.py ../spec/VehicleSignalSpecification.vspec ../../vss_types.graphql",
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             shell=True,
