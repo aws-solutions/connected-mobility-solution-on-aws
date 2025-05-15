@@ -21,7 +21,7 @@ export default function DeviceTypes(props: IPageProps): JSX.Element {
   const logger = new Logger("Device Types");
   const [deviceTypes, setDeviceTypes] = useState<IDeviceType[]>([]);
   const [showAlert, setShowAlert] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteModalIndex, setDeleteModalIndex] = useState<number | null>(null);
 
   /**
    * retrieves device types and sets to state
@@ -94,7 +94,7 @@ export default function DeviceTypes(props: IPageProps): JSX.Element {
               className="button-theme-alt"
               size="sm"
               onClick={() => {
-                setShowDeleteModal(true);
+                setDeleteModalIndex(i);
               }}
             >
               <i className="bi bi-trash-fill" /> {I18n.get("delete")}
@@ -103,8 +103,8 @@ export default function DeviceTypes(props: IPageProps): JSX.Element {
               id={dtype.type_id}
               name={dtype.name}
               delete={handleDelete}
-              showModal={setShowDeleteModal}
-              show={showDeleteModal}
+              showModal={setDeleteModalIndex}
+              show={deleteModalIndex === i}
               index={i}
             />
           </td>
