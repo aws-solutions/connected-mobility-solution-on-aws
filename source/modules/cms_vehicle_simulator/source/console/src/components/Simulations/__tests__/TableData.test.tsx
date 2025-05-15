@@ -10,7 +10,7 @@ import { API } from "@aws-amplify/api";
 
 jest.mock("react-router-dom", () => ({
   ...(jest.requireActual("react-router-dom") as any),
-  Link: () => { },
+  Link: () => {},
 }));
 
 jest.mock("@aws-amplify/api");
@@ -94,7 +94,11 @@ describe("TableData", () => {
     await userEvent.click(screen.getByRole("button", { name: "confirm" }));
 
     // Verify the API was called with the correct ID
-    expect(API.del).toHaveBeenCalledWith(expect.anything(), "/simulation/sim-id-1", expect.anything());
+    expect(API.del).toHaveBeenCalledWith(
+      expect.anything(),
+      "/simulation/sim-id-1",
+      expect.anything(),
+    );
 
     // Verify setSimulations was called with updated simulations array
     expect(mockSetSimulations).toHaveBeenCalled();
@@ -124,7 +128,11 @@ describe("TableData", () => {
     await userEvent.click(screen.getByRole("button", { name: "confirm" }));
 
     // Verify the API was called with the correct ID
-    expect(API.del).toHaveBeenCalledWith(expect.anything(), "/simulation/sim-id-2", expect.anything());
+    expect(API.del).toHaveBeenCalledWith(
+      expect.anything(),
+      "/simulation/sim-id-2",
+      expect.anything(),
+    );
 
     // Verify setSimulations was called with updated simulations array
     expect(mockSetSimulations).toHaveBeenCalled();
@@ -152,7 +160,7 @@ describe("TableData", () => {
     await userEvent.click(infoButtons[0]);
 
     // Verify the modal shows with correct simulation name
-    const modal = screen.getByRole('dialog');
+    const modal = screen.getByRole("dialog");
     expect(modal).toBeInTheDocument();
 
     // Verify the content within the modal
