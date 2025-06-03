@@ -67,7 +67,8 @@
     "@octokit/request-error@^5.0.0": "^5.1.1",
     "@octokit/request-error@^6.0.0": "^6.1.7",
     "tar-fs": "^3.0.9",
-    "@rjsf/utils": "=5.24.0"
+    "@rjsf/utils": "=5.24.0",
+    "multer": "^2.0.0"
   },
   "packageManager": "yarn@4.6.0"
 }
