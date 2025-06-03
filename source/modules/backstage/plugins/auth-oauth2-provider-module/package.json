@@ -1,7 +1,7 @@
 {
   "name": "auth-oauth2-provider-module",
   "description": "The oauth2-provider backend module for the auth plugin.",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "main": "src/index.ts",
   "types": "src/index.ts",
   "license": "Apache-2.0",
