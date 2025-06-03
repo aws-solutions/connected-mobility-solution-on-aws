@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- update setuptools to resolve CVEs.
+- updated setuptools to resolve CVEs.
+- updated tar-fs to resolve CVE.
 
 ## [2.1.3] - 2025-05-15
 
