@@ -9,7 +9,7 @@ attrs = ">=22.1.0"
 aws-lambda-powertools = {extras=["tracer", "validation"], version=">=3.7.0"}
 cattrs = ">=22.1.0"
 cms_common = {path = "./../../lib", editable = true}
-requests = ">=2.32.0"
+requests = ">=2.32.4"
 
 [dev-packages]
 aws-cdk-lib = ">=2.176.0"
@@ -37,10 +37,10 @@ toml = ">=0.10.2"
 types-boto3 = ">=1.37.0"
 types-python-dateutil = "*"
 types-pyyaml = "*"
-types-requests = ">=2.32.0"
+types-requests = ">=2.32.4"
 types-setuptools = ">=65.6.0.1"
 types-toml = ">=0.10.2"
-urllib3 = ">=2.2.2"
+urllib3 = ">=2.5.0"
 zipp = "*"
 
 [requires]

@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 aws-lambda-powertools = {extras=["tracer", "validation"], version=">=3.7.0"}
-requests = ">=2.32.0"
+requests = ">=2.32.4"
 pyyaml = "*"
 
 [dev-packages]
@@ -33,11 +33,11 @@ toml = "*"
 types-boto3 = ">=1.37.0"
 types-python-dateutil = "*"
 types-pyyaml = "*"
-types-requests = ">=2.32.0"
+types-requests = ">=2.32.4"
 types-setuptools = "*"
 types-urllib3 = "*"
 types-toml = "*"
-urllib3 = ">=2.2.2"
+urllib3 = ">=2.5.0"
 wheel = "*"
 wrapt = "*"
 

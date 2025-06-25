@@ -3471,6 +3471,7 @@
         "ssmappuniqueidregistermodule9C5C2C5D"
       ],
       "Metadata": {
+        "aws:cdk:do-not-refactor": true,
         "cfn_nag": {
           "rules_to_suppress": [
             {

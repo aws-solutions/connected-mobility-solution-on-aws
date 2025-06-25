@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 aws-lambda-powertools = {extras=["tracer", "validation"], version=">=3.7.0"}
 pyjwt = {extras=["crypto"], version="*"}
-requests = ">=2.32.0"
+requests = ">=2.32.4"
 cms_common = {path = "./../../lib", editable = true}
 
 [dev-packages]
@@ -29,10 +29,10 @@ toml = ">=0.10.2"
 types-boto3 = ">=1.37.0"
 types-python-dateutil = "*"
 types-pyyaml = "*"
-types-requests = ">=2.32.0"
+types-requests = ">=2.32.4"
 types-setuptools = "*"
 types-toml = ">=0.10.2"
-urllib3 = ">=2.2.2"
+urllib3 = ">=2.5.0"
 wheel = "*"
 
 [requires]

@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 aws-lambda-powertools = {extras=["tracer", "validation"], version=">=3.7.0"}
-requests = ">=2.32.0"
+requests = ">=2.32.4"
 cms_common = {path = "./../../lib", editable = true}
 
 [dev-packages]
@@ -29,11 +29,11 @@ syrupy = "*"
 toml = "*"
 types-boto3 = "*"
 types-pyyaml = "*"
-types-requests = ">=2.32.0"
+types-requests = ">=2.32.4"
 types-setuptools = "*"
 types-urllib3 = "*"
 types-toml = "*"
-urllib3 = ">=2.2.2"
+urllib3 = ">=2.5.0"
 wheel = "*"
 wrapt = "*"
 
