@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 aws-lambda-powertools = {extras=["tracer", "validation"], version=">=3.7.0"}
 pyjwt = {extras=["crypto"], version="*"}
-requests = ">=2.32.0"
+requests = ">=2.32.4"
 cms_common = {path = "./../../../../../../lib", editable = true}
 
 [dev-packages]

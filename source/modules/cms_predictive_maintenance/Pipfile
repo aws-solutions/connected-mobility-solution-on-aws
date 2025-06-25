@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 "cms_common" = {path = "./../../lib", editable = true}
 aws-lambda-powertools = {extras=["tracer", "validation"], version=">=3.7.0"}
-requests = ">=2.31.0"
+requests = ">=2.31.4"
 opensearch-py = ">=2.5.0"
 pydantic = ">=2.7.1"
 pydantic-core = ">=2.18.2"
@@ -45,7 +45,7 @@ types-requests = "*"
 types-setuptools = "*"
 types-urllib3 = "*"
 types-toml = "*"
-urllib3 = ">=2.2.2"
+urllib3 = ">=2.5.0"
 wrapt = "*"
 freezegun="*"
 

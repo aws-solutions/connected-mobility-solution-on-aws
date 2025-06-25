@@ -54,8 +54,8 @@ def fixture_cleanup_event() -> Dict[str, Any]:
     return {"simulation": {"sim_id": "test_simulation_id"}}
 
 
-@mock_aws
 @pytest.fixture(name="provisioned_secrets")
+@mock_aws
 def fixture_provisioned_secrets() -> Dict[str, Any]:
     device_name = "test-device"
     iot_client = boto3.client("iot")
@@ -75,8 +75,8 @@ def fixture_provisioned_secrets() -> Dict[str, Any]:
     }
 
 
-@mock_aws
 @pytest.fixture(name="provisioned_thing")
+@mock_aws
 def fixture_provisioned_thing() -> Dict[str, Any]:
     device_name = "test-device"
     iot_client = boto3.client("iot")
@@ -93,8 +93,8 @@ def fixture_provisioned_thing() -> Dict[str, Any]:
     return thing  # type: ignore
 
 
-@mock_aws
 @pytest.fixture(name="provisioned_policy")
+@mock_aws
 def fixture_provisioned_policy() -> Dict[str, Any]:
     device_name = "test-device"
     iot_client = boto3.client("iot")
